@@ -2,7 +2,7 @@
   "0001": {
 	  "Name": "WordPress SQL Injection Vulnerability",
 	  "Trigger_Condition": "A SQL injection vulnerability is detected in the WordPress content management system. Attackers can exploit this vulnerability to execute malicious SQL queries.",
-	  "ATT&CK_Category": "Execution",
+	  "ATT&CK_Category": ["Execution"],
 	  "ATT&CK_Tag": ["Command and Scripting Interpreter", "Scripting"],
 	  "ATT&CK_ID": ["T1059", "T1064"],
 	  "Minimum_Log_Source_Requirement": ["Web Application Firewall"],
@@ -11,7 +11,7 @@
   "0002": {
 	  "Name": "Phishing Email Campaign Detected",
 	  "Trigger_Condition": "A phishing email campaign is detected. The emails contain malicious links that may lead to credential harvesting websites.",
-	  "ATT&CK_Category": "Credential Access",
+	  "ATT&CK_Category": ["Credential Access"],
 	  "ATT&CK_Tag": ["Spearphishing Link"],
 	  "ATT&CK_ID": ["T1566"],
 	  "Minimum_Log_Source_Requirement": ["Email Security Gateway"],
@@ -20,7 +20,7 @@
   "0003": {
 	  "Name": "AADInternals PowerShell Cmdlet Execution",
 	  "Trigger_Condition": "Detection has identified the execution of AADInternals cmdlets. AADInternals (S0677) is a PowerShell toolkit equipped with tools designed for the administration and security testing of Azure AD and Office 365. Adversaries exploit AADInternals to extract credentials from the system where the AAD Connect server is installed, leading to the compromise of the Azure AD environment.",
-	  "ATT&CK_Category": "Execution",
+	  "ATT&CK_Category": ["Execution"],
 	  "ATT&CK_Tag": ["Command and Scripting Interpreter", "PowerShell"],
 	  "ATT&CK_ID": ["T1059", "T1059.001"],
 	  "Minimum_Log_Source_Requirement": ["Windows", "PowerShell"],
@@ -155,7 +155,7 @@
   "0018": {
     "Name": "LSASS Process Access by Mimikatz",
     "Trigger_Condition": "Process access to LSASS is detected, which is typical for Mimikatz (0x1000 PROCESS_QUERY_LIMITED_INFORMATION, 0x0400 PROCESS_QUERY_INFORMATION 'only old versions', 0x0010 PROCESS_VM_READ).",
-    "ATT&CK_Category": "Credential Access",
+    "ATT&CK_Category": ["Credential Access"],
     "ATT&CK_Tag": ["Credential Dumping"],
     "ATT&CK_ID": ["T1003"],
     "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
@@ -164,7 +164,7 @@
   "0019": {
     "Name": "UAC Bypass via Sdclt Detected",
     "Trigger_Condition": "User Account Control (UAC) bypass methods via changes to HKCU:\\Software\\Classes\\exefile\\shell\\runas\\command\\isolatedCommand and HKCU:\\Software\\Classes\\Folder\\shell\\open\\command.",
-    "ATT&CK_Category": "Defense Evasion, Privilege Escalation",
+    "ATT&CK_Category": ["Defense Evasion, Privilege Escalation"],
     "ATT&CK_Tag": ["Bypass User Account Control"],
     "ATT&CK_ID": ["T1548", "T1548.002"],
     "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
@@ -173,7 +173,7 @@
   "0020": {
     "Name": "Unsigned Image Loaded Into LSASS Process",
     "Trigger_Condition": "Loading of unsigned images like DLL or EXE into the LSASS process is detected.",
-    "ATT&CK_Category": "Credential Access",
+    "ATT&CK_Category": ["Credential Access"],
     "ATT&CK_Tag": ["OS Credential Dumping", "LSASS Memory"],
     "ATT&CK_ID": ["T1003", "T1003.001"],
     "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
@@ -182,7 +182,7 @@
   "0021": {
     "Name": "Usage of Sysinternals Tools Detected",
     "Trigger_Condition": "The use of Sysinternals tools is detected due to the addition of accepteula key to a registry.",
-    "ATT&CK_Category": "Defense Evasion",
+    "ATT&CK_Category": ["Defense Evasion"],
     "ATT&CK_Tag": ["Masquerading"],
     "ATT&CK_ID": ["T1036"],
     "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
@@ -191,7 +191,7 @@
   "0022": {
     "Name": "Microsoft SharePoint Remote Code Execution Detected",
     "Trigger_Condition": "The execution of a remote code in Microsoft SharePoint (CVE2019-19781).",
-    "ATT&CK_Category": "Initial Access",
+    "ATT&CK_Category": ["Initial Access"],
     "ATT&CK_Tag": ["Exploit Public-Facing Application"],
     "ATT&CK_ID": ["T1190"],
     "Minimum_Log_Source_Requirement": ["Firewall, IDS/IPS, Web server"],
@@ -200,7 +200,7 @@
   "0023": {
     "Name": "DenyAllWAF SQL Injection Attack",
     "Trigger_Condition": "DenyALLWAF detects SQL injection attack.",
-    "ATT&CK_Category": "Initial Access",
+    "ATT&CK_Category": ["Initial Access"],
     "ATT&CK_Tag": ["Exploit Public-Facing Application"],
     "ATT&CK_ID": ["T1190"],
     "Minimum_Log_Source_Requirement": ["DenyAll WAF"],
@@ -209,7 +209,7 @@
   "0024": {
     "Name": "Mitre - Initial Access - Valid Account - Unauthorized IP Access",
     "Trigger_Condition": "A user login event is detected from unauthorized countries. For this alert to work, you must update the KNOWN_COUNTRY list with countries where login is denied.",
-    "ATT&CK_Category": "Initial Access, Persistence, Privilege Escalation, Defense Evasion",
+    "ATT&CK_Category": ["Initial Access", "Persistence", "Privilege Escalation", "Defense Evasion"],
     "ATT&CK_Tag": ["Valid Accounts"],
     "ATT&CK_ID": ["T1078"],
     "Minimum_Log_Source_Requirement": ["Windows"],
@@ -218,7 +218,7 @@
   "0025": {
     "Name": "Windows CryptoAPI Spoofing Vulnerability Detected",
     "Trigger_Condition": "Vulnerability related to CVE-2020-0601 is detected.",
-    "ATT&CK_Category": "Defense Evasion",
+    "ATT&CK_Category": ["Defense Evasion"],
     "ATT&CK_Tag": ["Subvert Trust Controls", "Code Signing"],
     "ATT&CK_ID": ["T1553", "T1553.002"],
     "Minimum_Log_Source_Requirement": ["Windows"],
@@ -227,7 +227,7 @@
   "0026": {
     "Name": "Malicious use of Scriptrunner Detected",
     "Trigger_Condition": "The malicious use of Scriptrunner.exe is detected.",
-    "ATT&CK_Category": "Defense Evasion",
+    "ATT&CK_Category": ["Defense Evasion"],
     "ATT&CK_Tag": ["Signed Binary Proxy Execution"],
     "ATT&CK_ID": ["T1218"],
     "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
@@ -236,7 +236,7 @@
   "0027": {
     "Name": "Suspicious process related to Rundll32 Detected",
     "Trigger_Condition": "A suspicious process related to RunDLL32.exe is detected.",
-    "ATT&CK_Category": "Defense Evasion",
+    "ATT&CK_Category": ["Defense Evasion"],
     "ATT&CK_Tag": ["Rundll32"],
     "ATT&CK_ID": ["T1218.011"],
     "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
@@ -245,7 +245,7 @@
   "0028": {
     "Name": "Javascript conversion to executable Detected",
     "Trigger_Condition": "A windows executable jsc.exe is used to convert javascript files to craft malicious executables.",
-    "ATT&CK_Category": "Defense Evasion",
+    "ATT&CK_Category": ["Defense Evasion"],
     "ATT&CK_Tag": ["Trusted Developer Utilities Proxy Execution"],
     "ATT&CK_ID": ["TT1127"],
     "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
@@ -254,7 +254,7 @@
   "0029": {
     "Name": "Suspicious Execution of Gpscript Detected",
     "Trigger_Condition": "A group policy script gpscript.exe is used to execute logon or startup scripts configured in Group Policy.",
-    "ATT&CK_Category": "Defense Evasion",
+    "ATT&CK_Category": ["Defense Evasion"],
     "ATT&CK_Tag": ["Signed Binary Proxy Execution"],
     "ATT&CK_ID": ["T1218"],
     "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
@@ -263,7 +263,7 @@
   "0030": {
     "Name": "Proxy Execution via Desktop Setting Control Panel",
     "Trigger_Condition": "A windows internal binary rundll32 with desk.cpl is used to execute spoof binary with '.cpl' extension.",
-    "ATT&CK_Category": "Defense Evasion",
+    "ATT&CK_Category": ["Defense Evasion"],
     "ATT&CK_Tag": ["Rundll32"],
     "ATT&CK_ID": ["T1218.011"],
     "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
@@ -272,7 +272,7 @@
   "0031": {
     "Name": "ScreenSaver Registry Key Set Detected",
     "Trigger_Condition": "A file name masqueraded as .scr extension ran via rundll32 with desk.cpl, is detected.",
-    "ATT&CK_Category": "Defense Evasion",
+    "ATT&CK_Category": ["Defense Evasion"],
     "ATT&CK_Tag": ["Rundll32"],
     "ATT&CK_ID": ["T1218.011"],
     "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
@@ -281,7 +281,7 @@
   "0032": {
     "Name": "Xwizard DLL Side Loading Detected",
     "Trigger_Condition": "The use of xwizard binary from the non-default directory is detected.",
-    "ATT&CK_Category": "Defense Evasion",
+    "ATT&CK_Category": ["Defense Evasion"],
     "ATT&CK_Tag": ["DLL Side-Loading"],
     "ATT&CK_ID": ["T1574.002"],
     "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
@@ -290,7 +290,7 @@
   "0033": {
     "Name": "DLL Side Loading Via Microsoft Defender",
     "Trigger_Condition": "An execution of mpcmdrun binary from non default path is detected.",
-    "ATT&CK_Category": "Persistence, Defense Evasion",
+    "ATT&CK_Category": ["Persistence", "Defense Evasion"],
     "ATT&CK_Tag": ["DLL Side-Loading (2)"],
     "ATT&CK_ID": ["T1574.002"],
     "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
@@ -299,7 +299,7 @@
   "0034": {
     "Name": "ZIP File Creation or Extraction via Printer Migration CLITool",
     "Trigger_Condition": "The creation or extraction of .zip file via printbrm utility is detected.",
-    "ATT&CK_Category": "Defense Evasion, Command and Control",
+    "ATT&CK_Category": ["Defense Evasion", "Command and Control"],
     "ATT&CK_Tag": ["Ingress Tool Transfer", "NTFS File Attributes"],
     "ATT&CK_ID": ["T1105", "T1564.004"],
     "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
@@ -308,16 +308,106 @@
   "0035": {
     "Name": "Credentials Capture via Rpcping Detected",
     "Trigger_Condition": "The creation of Remote Procedure Call (RPC) via Rpcping binary is detected.",
-    "ATT&CK_Category": "Credential Access",
+    "ATT&CK_Category": ["Credential Access"],
     "ATT&CK_Tag": ["OS Credential Dumping"],
     "ATT&CK_ID": ["T1003"],
     "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
     "Query": "label=\"Process\" label=\"Create\" \"process\"=\"*\\rpcping.exe\" command=\"*s *\" ( (command=\"*u *\" command=\"*NTLM*\") OR ( command=\"*t *\" command=\"*ncacn_np*\"))"
   },
   "0036": {
+    "Name": "Acceso Inusual al Sistema",
+    "Trigger_Condition": "Detectar accesos inusuales al sistema.",
+    "ATT&CK_Category": ["Defense Evasion"],
+    "ATT&CK_Tag": ["T1562.001"],
+    "ATT&CK_ID": ["TA0002"],
+    "Minimum_Log_Source_Requirement": ["Syslog"],
+    "Query": "grep -i 'Failed password' /var/log/auth.log | awk '$6 ~ /invalid/ || $6 ~ /authentication failure/ {print}'"
+  },
+  "0037": {
+    "Name": "Ejecución de Comandos Sospechosos",
+    "Trigger_Condition": "Monitorear la ejecución de comandos sospechosos.",
+    "ATT&CK_Category": ["Execution"],
+    "ATT&CK_Tag": ["T1059"],
+    "ATT&CK_ID": ["TA0004"],
+    "Minimum_Log_Source_Requirement": ["Syslog"],
+    "Query": "grep -i 'sh -c' /var/log/syslog | awk '$6 ~ /sh/ && $8 ~ /c/ {print}'"
+  },
+  "0038": {
+    "Name": "Modificación de Archivos de Configuración",
+    "Trigger_Condition": "Detectar cambios inusuales en archivos de configuración.",
+    "ATT&CK_Category": ["Defense Evasion"],
+    "ATT&CK_Tag": ["T1564.004"],
+    "ATT&CK_ID": ["TA0002"],
+    "Minimum_Log_Source_Requirement": ["Syslog"],
+    "Query": "grep -i 'modified' /var/log/syslog | grep 'etc/'"
+  },
+  "0039": {
+    "Name": "Exfiltración de Datos",
+    "Trigger_Condition": "Detectar intentos de exfiltración de datos.",
+    "ATT&CK_Category": ["Exfiltration"],
+    "ATT&CK_Tag": ["T1041"],
+    "ATT&CK_ID": ["TA0010"],
+    "Minimum_Log_Source_Requirement": ["Syslog"],
+    "Query": "grep -i 'wget\\|curl' /var/log/syslog | awk '$6 ~ /wget|curl/ {print}'"
+  },
+  "0040": {
+    "Name": "Uso de Privilegios Elevados",
+    "Trigger_Condition": "Monitorear el uso de privilegios elevados.",
+    "ATT&CK_Category": ["Privilege Escalation"],
+    "ATT&CK_Tag": ["T1055"],
+    "ATT&CK_ID": ["TA0004"],
+    "Minimum_Log_Source_Requirement": ["Syslog"],
+    "Query": "grep -i 'sudo' /var/log/auth.log | awk '$6 ~ /sudo/ {print}'"
+  },
+  "0041": {
+    "Name": "Ataques de Fuerza Bruta SSH",
+    "Trigger_Condition": "Detectar ataques de fuerza bruta contra SSH.",
+    "ATT&CK_Category": ["Credential Access"],
+    "ATT&CK_Tag": ["T1110"],
+    "ATT&CK_ID": ["TA0006"],
+    "Minimum_Log_Source_Requirement": ["Syslog"],
+    "Query": "grep -i 'Failed password' /var/log/auth.log | grep 'sshd' | awk '$6 ~ /invalid/ || $6 ~ /authentication failure/ {print}'"
+  },
+  "0042": {
+    "Name": "Creación de Usuarios Inusuales",
+    "Trigger_Condition": "Detectar la creación de usuarios inusuales.",
+    "ATT&CK_Category": ["Defense Evasion"],
+    "ATT&CK_Tag": ["T1136"],
+    "ATT&CK_ID": ["TA0002"],
+    "Minimum_Log_Source_Requirement": ["Syslog"],
+    "Query": "grep -i 'useradd' /var/log/auth.log | awk '$6 ~ /useradd/ {print}'"
+  },
+  "0043": {
+    "Name": "Escaneo de Puertos",
+    "Trigger_Condition": "Identificar escaneos de puertos no autorizados.",
+    "ATT&CK_Category": ["Discovery"],
+    "ATT&CK_Tag": ["T1046"],
+    "ATT&CK_ID": ["TA0007"],
+    "Minimum_Log_Source_Requirement": ["Syslog"],
+    "Query": "grep -i 'nmap' /var/log/syslog | awk '$6 ~ /nmap/ {print}'"
+  },
+  "0044": {
+    "Name": "Comunicación Anómala con IPs Externas",
+    "Trigger_Condition": "Detectar comunicación anómala con IPs externas.",
+    "ATT&CK_Category": ["Exfiltration"],
+    "ATT&CK_Tag": ["T1041"],
+    "ATT&CK_ID": ["TA0010"],
+    "Minimum_Log_Source_Requirement": ["Syslog"],
+    "Query": "grep -i 'OUT=' /var/log/iptables.log | awk '$7 ~ /SRC=/ && $8 !~ /DST=192.168./ {print}'"
+  },
+  "0045": {
+    "Name": "Ataques de Inyección de Comandos",
+    "Trigger_Condition": "Detectar intentos de inyección de comandos.",
+    "ATT&CK_Category": ["Execution"],
+    "ATT&CK_Tag": ["T1059"],
+    "ATT&CK_ID": ["TA0004"],
+    "Minimum_Log_Source_Requirement": ["Syslog"],
+    "Query": "grep -i 'eval' /var/log/syslog | awk '$6 ~ /eval/ {print}'"
+  },
+  "0046": {
     "Name": "Name14",
     "Trigger_Condition": "Condition14",
-    "ATT&CK_Category": "Category14",
+    "ATT&CK_Category": ["Category14"],
     "ATT&CK_Tag": ["Tag14-1", "Tag14-2"],
     "ATT&CK_ID": ["ID14-1", "ID14-2"],
     "Minimum_Log_Source_Requirement": ["Requirement14-1", "Requirement14-2"],
