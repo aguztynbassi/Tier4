@@ -1,0 +1,327 @@
+{
+  "0001": {
+	  "Name": "WordPress SQL Injection Vulnerability",
+	  "Trigger_Condition": "A SQL injection vulnerability is detected in the WordPress content management system. Attackers can exploit this vulnerability to execute malicious SQL queries.",
+	  "ATT&CK_Category": "Execution",
+	  "ATT&CK_Tag": ["Command and Scripting Interpreter", "Scripting"],
+	  "ATT&CK_ID": ["T1059", "T1064"],
+	  "Minimum_Log_Source_Requirement": ["Web Application Firewall"],
+	  "Query": "norm_id=WebApplicationFirewall vuln_type=\"SQL Injection\""
+	},
+  "0002": {
+	  "Name": "Phishing Email Campaign Detected",
+	  "Trigger_Condition": "A phishing email campaign is detected. The emails contain malicious links that may lead to credential harvesting websites.",
+	  "ATT&CK_Category": "Credential Access",
+	  "ATT&CK_Tag": ["Spearphishing Link"],
+	  "ATT&CK_ID": ["T1566"],
+	  "Minimum_Log_Source_Requirement": ["Email Security Gateway"],
+	  "Query": "norm_id=EmailSecurityGateway threat_type=\"Phishing\""
+	},
+  "0003": {
+	  "Name": "AADInternals PowerShell Cmdlet Execution",
+	  "Trigger_Condition": "Detection has identified the execution of AADInternals cmdlets. AADInternals (S0677) is a PowerShell toolkit equipped with tools designed for the administration and security testing of Azure AD and Office 365. Adversaries exploit AADInternals to extract credentials from the system where the AAD Connect server is installed, leading to the compromise of the Azure AD environment.",
+	  "ATT&CK_Category": "Execution",
+	  "ATT&CK_Tag": ["Command and Scripting Interpreter", "PowerShell"],
+	  "ATT&CK_ID": ["T1059", "T1059.001"],
+	  "Minimum_Log_Source_Requirement": ["Windows", "PowerShell"],
+	  "Query": "norm_id=WinServer event_source=\"Microsoft-Windows-PowerShell\" event_id=4104 script_block IN AADINTERNALS_CMDLETS"
+	},
+  "0004": {
+    "Name": "Suspicious Scheduled Task Creation via Masqueraded XML",
+    "Trigger_Condition": "The creation of a suspicious scheduled task using an XML file with a masqueraded extension is detected.",
+    "ATT&CK_Category": ["Persistence", "Defense Evasion"],
+    "ATT&CK_Tag": ["Masquerading", "Match Legitimate Name or Location", "Scheduled Task/Job and Scheduled Task"],
+    "ATT&CK_ID": ["T1036", "T1036.005", "T1053", "T1053.005"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
+    "Query": "label=create label=\"process\" \"process\"=\"*\\schtasks.exe\" command IN [\"*/create*\", \"*-create*\"] command IN [\"*/xml*\",\"*-xml*\"] (-integrity_level=system OR -integrity_label=*system*) -command = *.xml* ((-parent_process IN [\"*:\\ProgramData\\OEM\\UpgradeTool\\CareCenter_*\\BUnzip\\Setup_msi.exe\", \"*:\\Program Files\\Axis Communications\\AXIS Camera Station\\SetupActions.exe\", \"*:\\Program Files\\Axis Communications\\AXIS Device Manager\\AdmSetupActions.exe\", \"*:\\Program Files (x86)\\Zemana\\AntiMalware\\AntiMalware.exe\", \"*:\\Program Files\\Dell\\SupportAssist\\pcdrcui.exe\" ] ) OR (-parent_process = \"*\\rundll32.exe\" command = \"*:\\WINDOWS\\Installer\\MSI*.tmp,zzzzInvokeManagedCustomActionOutOfProc\" ))"
+  },
+  "0005": {
+    "Name": "Suspicious Microsoft Equation Editor Child Process",
+    "Trigger_Condition": "A suspicious child process of Microsoft’s equation editor is detected as a sign of possible exploitation of CVE-2017-11882. CVE-2017-11882 is a vulnerability in Microsoft Office’s Equation Editor component.",
+    "ATT&CK_Category": ["Execution"],
+    "ATT&CK_Tag": ["Exploitation for Client Execution"],
+    "ATT&CK_ID": ["T1203"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
+    "Query": "label=\"Process\" label=Create parent_process=\"*\\EQNEDT32.exe\" -\"process\" IN [\"C:\\Windows\\System32\\WerFault.exe\", \"C:\\Windows\\SysWOW64\\WerFault.exe\"]"
+  },
+  "0006": {
+    "Name": "Windows Error Process Masquerading",
+    "Trigger_Condition": "Suspicious Windows error reporting process behavior, where network connections are made after execution is detected.",
+    "ATT&CK_Category": ["Defense Evasion"],
+    "ATT&CK_Tag": ["Masquerading"],
+    "ATT&CK_ID": ["T1036"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "[norm_id=WindowsSysmon event_id=1 \"process\" IN [\"*\\WerMgr.exe\", \"*\\WerFault.exe\"]] as s1 followed by [norm_id=WindowsSysmon event_id=3 \"process\" IN [\"*\\WerMgr.exe\", \"*\\WerFault.exe\"]] as s2 within 1 minute on s1.process_guid=s2.process_guid | rename s1.host as host, s1.user as user, s1.domain as domain, s1.image as image, s2.destination_address as destination_address, s2.destination_port as destination_port"
+  },
+  "0007": {
+    "Name": "Bypass UAC via CMSTP Detected",
+    "Trigger_Condition": "Child processes of automatically elevated instances of Microsoft Connection Manager Profile Installer (cmstp.exe) are detected.",
+    "ATT&CK_Category": ["Privilege Escalation", "Defense Evasion"],
+    "ATT&CK_Tag": ["CMSTP", "Abuse Elevation Control Mechanism", "Bypass User Account Control"],
+    "ATT&CK_ID": ["T1218.003", "T1548", "T1548.002"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
+    "Query": "label=\"Process\" label=Create \"process\"=\"*\\cmstp.exe\" command IN [\"*/s*\", \"*/au*\", \"*/ni*\", \"*-s*\", \"*-au*\", \"*-ni*\"] -user IN EXCLUDED_USERS"
+  },
+  "0008": {
+    "Name": "Application Whitelisting Bypass via Dxcap Detected",
+    "Trigger_Condition": "Adversaries bypass process and/or signature-based defenses by execution of Dxcap.exe is detected.",
+    "ATT&CK_Category": ["Defense Evasion"],
+    "ATT&CK_Tag": ["Trusted Developer Utilities Proxy Execution"],
+    "ATT&CK_ID": ["T1127"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
+    "Query": "label=\"Process\" label=Create \"process\"=\"*\\dxcap.exe\" command=\"*-c*\" command=\"*.exe*\" -user IN EXCLUDED_USERS"
+  },
+  "0009": {
+    "Name": "Suspicious WMIC XSL Script Execution",
+    "Trigger_Condition": "Loading of a Windows Script module through wmic by Microsoft Core XML Services (MSXML) process is detected to bypass application whitelisting.",
+    "ATT&CK_Category": ["Defense Evasion"],
+    "ATT&CK_Tag": ["XSL Script Processing"],
+    "ATT&CK_ID": ["T1220"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "[norm_id=WindowsSysmon event_id=1 file=\"wmic.exe\" command IN [\"* format*:*\", \"*/format*:*\", \"*-format*:*\"] -command IN [\"*format:list*\", \"*format:table*\", \"*format:htable\", \"*format:texttablewsys*\", \"*format:texttable*\", \"*format:text valuelist*\", \"*format:TEXTVALUELIST*\", \"*format:csv*\", \"*format:value*\"]] as s1 followed by [norm_id=WindowsSysmon event_id=7 image IN [\"*\\jscript.dll\", \"*\\vbscript.dll\"]] as s2 within 2 minutes on s1.process_guid=s2.process_guid | rename s1.image as image, s1.host as host, s1.domain as domain, s1.command as command, s2.image as loaded_image"
+  },
+  "0010": {
+    "Name": "Suspicious File Execution via MSHTA",
+    "Trigger_Condition": "Execution of javascript or VBScript files and other abnormal extension files executed via mshta binary is detected.",
+    "ATT&CK_Category": ["Execution", "Defense Evasion"],
+    "ATT&CK_Tag": ["JavaScript", "Deobfuscate/Decode Files or Information", "Mshta"],
+    "ATT&CK_ID": ["T1059.007", "T1140", "T1218.005"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
+    "Query": "label=\"process\" label=\"create\" \"process\"=\"*\\mshta.exe\" command IN [\"*javascript*\", \"*vbscript*\", \"*.jpg*\", \"*.png*\", \"*.lnk*\", \"*.xls*\", \"*.doc*\", \"*.zip*\"] -user IN EXCLUDED_USERS"
+  },
+  "0011": {
+    "Name": "Regsvr32 Anomalous Activity Detected",
+    "Trigger_Condition": "Various anomalies concerning regsvr32.exe are detected.",
+    "ATT&CK_Category": ["Defense Evasion"],
+    "ATT&CK_Tag": ["Signed Binary Proxy Execution", "Regsvr32"],
+    "ATT&CK_ID": ["T1218", "T1218.010"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon event_id=1 ((image=\"*\\regsvr32.exe\" command=\"*\\Temp\\*\") OR (image=\"*\\regsvr32.exe\" parent_image=\"*\\powershell.exe\") OR (image=\"*\\regsvr32.exe\" parent_image=\"*\\cmd.exe\") OR (image=\"*\\regsvr32.exe\" command IN [\"*/i:http* scrobj.dll\", \"*/i:ftp* scrobj.dll\"]) OR (image=\"*\\wscript.exe\" parent_image=\"*\\regsvr32.exe\") OR (image=\"*\\EXCEL.EXE\" command=\"*..\\..\\..\\Windows\\System32\\regsvr32.exe *\")) -user IN EXCLUDED_USERS"
+  },
+  "0012": {
+    "Name": "Remote File Execution via MSIEXEC",
+    "Trigger_Condition": "Suspicious use of msiexec.exe to install remote Microsoft Software Installer (MSI) files is detected.",
+    "ATT&CK_Category": ["Defense Evasion"],
+    "ATT&CK_Tag": ["Signed Binary Proxy Execution", "Msiexec"],
+    "ATT&CK_ID": ["T1218", "T1218.007"],
+    "Minimum_Log_Source_Requirement": ["Windows"],
+    "Query": "norm_id=WindowsSysmon event_id=1 file=\"msiexec.exe\" command=\"*http://*\" command IN [\"*/i*\", \"*-i*\"] command IN [\"*/q*\", \"*/quiet*\", \"*/qn*\", \"*-q*\", \"*-quiet*\", \"*-qn*\"] -(parent_image=\"*setup*\") -integrity_level=SYSTEM"
+  },
+  "0013": {
+    "Name": "Execution of Trojanized 3CX Application",
+    "Trigger_Condition": "Execution of the trojanized version of the 3CX Desktop is detected. 3CX Desktop versions 18.12.407 and 18.12.416 are known to be trojanized by the Lazarus Group and are also signed using the 3CX signature.",
+    "ATT&CK_Category": ["Defense Evasion"],
+    "ATT&CK_Tag": ["Masquerading"],
+    "ATT&CK_ID": ["T1036"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon event_id=1 file=\"3CXDesktopApp.exe\" product IN [\"*3CX Ltd*\",\"*3CX Desktop App*\"] file_version IN [\"*18.12.407*\",\"18.12.416*\"]"
+  },
+  "0014": {
+    "Name": "Msbuild Spawned by Unusual Parent Process",
+    "Trigger_Condition": "Suspicious use of msbuild.exe by an uncommon parent process is detected. msbuild.exe is a legitimate Microsoft tool used for building and deploying software applications.",
+    "ATT&CK_Category": ["Defense Evasion"],
+    "ATT&CK_Tag": ["Trusted Developer Utilities Proxy Execution", "MSBuild"],
+    "ATT&CK_ID": ["T1127", "T1127.001"],
+    "Minimum_Log_Source_Requirement": ["Windows", "Windows Sysmon"],
+    "Query": "label=Create label=\"Process\" \"process\"=\"*\\MSBuild.exe\" -parent_process in [\"*\\devenv.exe\", \"*\\cmd.exe\", \"*\\msbuild.exe\", \"*\\python.exe\", \"*\\explorer.exe\", \"*\\nuget.exe\"]"
+  },
+  "0015": {
+    "Name": "Suspicious Files Designated as System Files Detected",
+    "Trigger_Condition": "The execution of the +s option of the attrib command is detected to designate scripts or executable files in suspicious locations as system files, hiding them from users and making them difficult to detect or remove. attrib.exe is a Windows command-line utility that allows users to adjust file or folder attributes such as read-only, hidden, and system.",
+    "ATT&CK_Category": ["Defense Evasion"],
+    "ATT&CK_Tag": ["Hide Artifacts", "Hidden Files and Directories"],
+    "ATT&CK_ID": ["T1564", "T1564.001"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
+    "Query": "label=Create label=\"Process\" \"process\"=\"*\\attrib.exe\" command = \"* +s *\" command in [\"* %*\", \"*\\Users\\Public\\*\", \"*\\AppData\\Local\\*\", \"*\\ProgramData\\*\", \"*\\Windows\\Temp\\*\"] command in [\"*.bat*\", \"*.dll*\", \"*.exe*\", \"*.hta*\", \"*.ps1*\", \"*.vbe*\", \"*.vbs*\"] -command=\"*\\Windows\\TEMP\\*.exe*\""
+  },
+  "0016": {
+    "Name": "UAC Bypass Attempt via Windows Directory Masquerading",
+    "Trigger_Condition": "User Account Control (UAC) bypass attempt is detected by masquerading as a Microsoft trusted Windows directory. Masquerading is a technique where adversaries manipulate features of their artifacts to make them appear legitimate or benign to users and security tools.",
+    "ATT&CK_Category": ["Privilege Escalation"],
+    "ATT&CK_Tag": ["Abuse Elevation Control Mechanism", "Bypass User Account Control"],
+    "ATT&CK_ID": ["T1548", "T1548.002"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
+    "Query": "label=\"Process\" label=Create integrity_level=High \"process\" IN [\"C:\\Windows\\System32\\*.exe\", \"C:\\Windows\\SysWOW64\\*.exe\", \"C:\\Windows*\\System32\\*.exe\", \"C:\\Windows*\\SysWOW64\\*.exe\"]"
+  },
+  "0017": {
+    "Name": "Bypass User Account Control using Registry",
+    "Trigger_Condition": "Bypass of User Account Control (UAC) is detected. Adversaries bypass UAC mechanisms to elevate process privileges on the system. The alert queries for *\\mscfile\\shell\\open\\command\\* or *\\ms-settings\\shell\\open\\command\\*.",
+    "ATT&CK_Category": ["Defense Evasion", "Privilege Escalation"],
+    "ATT&CK_Tag": ["Bypass User Account Control"],
+    "ATT&CK_ID": ["T1548"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon (event_id=12 or event_id=13 or event_id=14) (target_object=\"*\\mscfile\\shell\\open\\command\\*\" or target_object=\"*\\ms-settings\\shell\\open\\command\\*\") -user IN EXCLUDED_USER"
+  },
+  "0018": {
+    "Name": "LSASS Process Access by Mimikatz",
+    "Trigger_Condition": "Process access to LSASS is detected, which is typical for Mimikatz (0x1000 PROCESS_QUERY_LIMITED_INFORMATION, 0x0400 PROCESS_QUERY_INFORMATION 'only old versions', 0x0010 PROCESS_VM_READ).",
+    "ATT&CK_Category": "Credential Access",
+    "ATT&CK_Tag": ["Credential Dumping"],
+    "ATT&CK_ID": ["T1003"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon event_id=10 image=\"C:\\windows\\system32\\lsass.exe\" access IN [\"0x1410\", \"0x1010\"] -user IN EXCLUDED_USERS"
+  },
+  "0019": {
+    "Name": "UAC Bypass via Sdclt Detected",
+    "Trigger_Condition": "User Account Control (UAC) bypass methods via changes to HKCU:\\Software\\Classes\\exefile\\shell\\runas\\command\\isolatedCommand and HKCU:\\Software\\Classes\\Folder\\shell\\open\\command.",
+    "ATT&CK_Category": "Defense Evasion, Privilege Escalation",
+    "ATT&CK_Tag": ["Bypass User Account Control"],
+    "ATT&CK_ID": ["T1548", "T1548.002"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon event_id=\"13\" target_object IN [\"HKU\\*Classes\\exefile\\shell\\runas\\command\\isolatedCommand\", \"HKU\\*Classes\\Folder\\shell\\open\\command\"]"
+  },
+  "0020": {
+    "Name": "Unsigned Image Loaded Into LSASS Process",
+    "Trigger_Condition": "Loading of unsigned images like DLL or EXE into the LSASS process is detected.",
+    "ATT&CK_Category": "Credential Access",
+    "ATT&CK_Tag": ["OS Credential Dumping", "LSASS Memory"],
+    "ATT&CK_ID": ["T1003", "T1003.001"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon event_id=7 image=\"*\\lsass.exe\" signed=\"false\" -user IN EXCLUDED_USERS"
+  },
+  "0021": {
+    "Name": "Usage of Sysinternals Tools Detected",
+    "Trigger_Condition": "The use of Sysinternals tools is detected due to the addition of accepteula key to a registry.",
+    "ATT&CK_Category": "Defense Evasion",
+    "ATT&CK_Tag": ["Masquerading"],
+    "ATT&CK_ID": ["T1036"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "(event_id=\"13\" target_object=\"*\\EulaAccepted\") OR (event_id=\"1\" command=\"* -accepteula*\")"
+  },
+  "0022": {
+    "Name": "Microsoft SharePoint Remote Code Execution Detected",
+    "Trigger_Condition": "The execution of a remote code in Microsoft SharePoint (CVE2019-19781).",
+    "ATT&CK_Category": "Initial Access",
+    "ATT&CK_Tag": ["Exploit Public-Facing Application"],
+    "ATT&CK_ID": ["T1190"],
+    "Minimum_Log_Source_Requirement": ["Firewall, IDS/IPS, Web server"],
+    "Query": "request_method=POST (url='*_layouts/15/Picker.aspx*WebControls.ItemPickerDialog*' OR resource='*_layouts/15/Picker.aspx*WebControls.ItemPickerDialog*')"
+  },
+  "0023": {
+    "Name": "DenyAllWAF SQL Injection Attack",
+    "Trigger_Condition": "DenyALLWAF detects SQL injection attack.",
+    "ATT&CK_Category": "Initial Access",
+    "ATT&CK_Tag": ["Exploit Public-Facing Application"],
+    "ATT&CK_ID": ["T1190"],
+    "Minimum_Log_Source_Requirement": ["DenyAll WAF"],
+    "Query": "norm_id=DenyAllWAF label=SQL label=Injection"
+  },
+  "0024": {
+    "Name": "Mitre - Initial Access - Valid Account - Unauthorized IP Access",
+    "Trigger_Condition": "A user login event is detected from unauthorized countries. For this alert to work, you must update the KNOWN_COUNTRY list with countries where login is denied.",
+    "ATT&CK_Category": "Initial Access, Persistence, Privilege Escalation, Defense Evasion",
+    "ATT&CK_Tag": ["Valid Accounts"],
+    "ATT&CK_ID": ["T1078"],
+    "Minimum_Log_Source_Requirement": ["Windows"],
+    "Query": "label=User label=Login source_address=* | process geoip(source_address) as country | search -country IN KNOWN_COUNTRY"
+  },
+  "0025": {
+    "Name": "Windows CryptoAPI Spoofing Vulnerability Detected",
+    "Trigger_Condition": "Vulnerability related to CVE-2020-0601 is detected.",
+    "ATT&CK_Category": "Defense Evasion",
+    "ATT&CK_Tag": ["Subvert Trust Controls", "Code Signing"],
+    "ATT&CK_ID": ["T1553", "T1553.002"],
+    "Minimum_Log_Source_Requirement": ["Windows"],
+    "Query": "norm_id=WinServer label=CVE label=Exploit label=Detect cve_id=\"CVE-2020-0601\" user IN EXCLUDED_USERS"
+  },
+  "0026": {
+    "Name": "Malicious use of Scriptrunner Detected",
+    "Trigger_Condition": "The malicious use of Scriptrunner.exe is detected.",
+    "ATT&CK_Category": "Defense Evasion",
+    "ATT&CK_Tag": ["Signed Binary Proxy Execution"],
+    "ATT&CK_ID": ["T1218"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
+    "Query": "label=\"create\" label=\"process\" (\"process\"=\"*\\ScriptRunner.exe\" OR file=\"ScriptRunner.exe\") command=\"* -appvscript *\""
+  },
+  "0027": {
+    "Name": "Suspicious process related to Rundll32 Detected",
+    "Trigger_Condition": "A suspicious process related to RunDLL32.exe is detected.",
+    "ATT&CK_Category": "Defense Evasion",
+    "ATT&CK_Tag": ["Rundll32"],
+    "ATT&CK_ID": ["T1218.011"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
+    "Query": "label=\"create\" label=\"process\" (command IN [\"*javascript:*\", \"*.RegisterXLL*\"] OR (command=\"*url.dll*\" command=\"*OpenURL*\") OR (command=\"*url.dll*\" command=\"*OpenURLA*\") OR (command=\"*url.dll*\" command=\"*FileProtocolHandler*\") OR (command=\"*zipfldr.dll*\" command=\"*RouteTheCall*\") OR (command=\"*shell32.dll*\" command=\"*Control_RunDLL*\") OR (command=\"*shell32.dll*\" command=\"*ShellExec_RunDLL*\") OR (command=\"*mshtml.dll*\" command=\"*PrintHTML*\") OR (command=\"*advpack.dll*\" command=\"*LaunchINFSection*\") OR (command=\"*advpack.dll*\" command=\"*RegisterOCX*\") OR (command=\"*ieadvpack.dll*\" command=\"*LaunchINFSection*\") OR (command=\"*ieadvpack.dll*\" command=\"*RegisterOCX*\") OR (command=\"*ieframe.dll*\" command=\"*OpenURL*\") OR (command=\"*shdocvw.dll*\" command=\"*OpenURL*\") OR (command=\"*syssetup.dll*\" command=\"*SetupInfObjectInstallAction'*\") OR (command=\"*setupapi.dll*\" command=\"*InstallHinfSection*\") OR (command=\"*pcwutl.dll*\" command=\"*LaunchApplication*\") OR (command=\"*dfshim.dll*\" command=\"*ShOpenVerbApplication*\"))"
+  },
+  "0028": {
+    "Name": "Javascript conversion to executable Detected",
+    "Trigger_Condition": "A windows executable jsc.exe is used to convert javascript files to craft malicious executables.",
+    "ATT&CK_Category": "Defense Evasion",
+    "ATT&CK_Tag": ["Trusted Developer Utilities Proxy Execution"],
+    "ATT&CK_ID": ["TT1127"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
+    "Query": "label=\"create\" label=\"process\" \"process\"=\"*\\jsc.exe\" command=\"*.js*\""
+  },
+  "0029": {
+    "Name": "Suspicious Execution of Gpscript Detected",
+    "Trigger_Condition": "A group policy script gpscript.exe is used to execute logon or startup scripts configured in Group Policy.",
+    "ATT&CK_Category": "Defense Evasion",
+    "ATT&CK_Tag": ["Signed Binary Proxy Execution"],
+    "ATT&CK_ID": ["T1218"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
+    "Query": "label=\"create\" label=\"process\" \"process\"=\"*\\gpscript.exe\" command IN [\"* /logon*\", \"* /startup*\"]"
+  },
+  "0030": {
+    "Name": "Proxy Execution via Desktop Setting Control Panel",
+    "Trigger_Condition": "A windows internal binary rundll32 with desk.cpl is used to execute spoof binary with '.cpl' extension.",
+    "ATT&CK_Category": "Defense Evasion",
+    "ATT&CK_Tag": ["Rundll32"],
+    "ATT&CK_ID": ["T1218.011"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
+    "Query": "label=\"Process\" label=\"Create\" \"process\"=\"*\\rundll32.exe\" command=\"*desk.cpl*InstallScreenSaver*.scr*\""
+  },
+  "0031": {
+    "Name": "ScreenSaver Registry Key Set Detected",
+    "Trigger_Condition": "A file name masqueraded as .scr extension ran via rundll32 with desk.cpl, is detected.",
+    "ATT&CK_Category": "Defense Evasion",
+    "ATT&CK_Tag": ["Rundll32"],
+    "ATT&CK_ID": ["T1218.011"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
+    "Query": "label=Registry label=Value label=Set \"process\"=\"*\\rundll32.exe\" detail=\"*.scr\"-detail in [\"*C:\\Windows\\system32\\*\",\"*C:\\Windows\\SysWOW64\\*\" ] target_object=\"*\\Control Panel\\Desktop\\SCRNSAVE.EXE\""
+  },
+  "0032": {
+    "Name": "Xwizard DLL Side Loading Detected",
+    "Trigger_Condition": "The use of xwizard binary from the non-default directory is detected.",
+    "ATT&CK_Category": "Defense Evasion",
+    "ATT&CK_Tag": ["DLL Side-Loading"],
+    "ATT&CK_ID": ["T1574.002"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
+    "Query": "label=\"Process\" label=Create \"process\"=\"*\\xwizard.exe\" -\"process\"=\"C:\\Windows\\System32\\*\""
+  },
+  "0033": {
+    "Name": "DLL Side Loading Via Microsoft Defender",
+    "Trigger_Condition": "An execution of mpcmdrun binary from non default path is detected.",
+    "ATT&CK_Category": "Persistence, Defense Evasion",
+    "ATT&CK_Tag": ["DLL Side-Loading (2)"],
+    "ATT&CK_ID": ["T1574.002"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
+    "Query": "label=Image label=Load \"process\" IN [\"*\\MpCmdRun.exe\",\"*\\NisSrv.exe\"] -\"process\" IN [\"C:\\Program Files\\Windows Defender\\*\",\"'C:\\ProgramData\\Microsoft\\Windows Defender\\Platform\\*\"] image=\"*\\mpclient.dll\""
+  },
+  "0034": {
+    "Name": "ZIP File Creation or Extraction via Printer Migration CLITool",
+    "Trigger_Condition": "The creation or extraction of .zip file via printbrm utility is detected.",
+    "ATT&CK_Category": "Defense Evasion, Command and Control",
+    "ATT&CK_Tag": ["Ingress Tool Transfer", "NTFS File Attributes"],
+    "ATT&CK_ID": ["T1105", "T1564.004"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
+    "Query": "label=\"Process\" label=\"Create\" \"process\"=\"*\\printbrm.exe\" command=\"*f *\" command=\"*.zip*\""
+  },
+  "0035": {
+    "Name": "Credentials Capture via Rpcping Detected",
+    "Trigger_Condition": "The creation of Remote Procedure Call (RPC) via Rpcping binary is detected.",
+    "ATT&CK_Category": "Credential Access",
+    "ATT&CK_Tag": ["OS Credential Dumping"],
+    "ATT&CK_ID": ["T1003"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
+    "Query": "label=\"Process\" label=\"Create\" \"process\"=\"*\\rpcping.exe\" command=\"*s *\" ( (command=\"*u *\" command=\"*NTLM*\") OR ( command=\"*t *\" command=\"*ncacn_np*\"))"
+  },
+  "0036": {
+    "Name": "Name14",
+    "Trigger_Condition": "Condition14",
+    "ATT&CK_Category": "Category14",
+    "ATT&CK_Tag": ["Tag14-1", "Tag14-2"],
+    "ATT&CK_ID": ["ID14-1", "ID14-2"],
+    "Minimum_Log_Source_Requirement": ["Requirement14-1", "Requirement14-2"],
+    "Query": "Query14"
+  },
+}
+
