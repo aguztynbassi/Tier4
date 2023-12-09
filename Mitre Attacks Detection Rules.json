@@ -498,5 +498,126 @@
     "ATT&CK_ID": ["T1218", "T1218.005"],
     "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
     "Query": "norm_id=WindowsSysmon event_id=1 parent_image=\"*\\mshta.exe\" image IN [\"*\\cmd.exe\", \"*\\powershell.exe\", \"*\\wscript.exe\", \"*\\cscript.exe\", \"*\\sh.exe\", \"*\\bash.exe\", \"*\\reg.exe\", \"*\\regsvr32.exe\", \"*\\BITSADMIN*\"] -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "51",
+    "Name": "Suspicious ConfigSecurityPolicy Execution Detected",
+    "Trigger_Condition": "A local file upload via ConfigSecurityPolicy binary to attack the control server is detected.",
+    "ATT&CK_Category": ["Exfiltration"],
+    "ATT&CK_Tag": ["Exfiltration Over Web Service"],
+    "ATT&CK_ID": ["T1567"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
+    "Query": "label=\"Process\" label=\"Create\" \"process\"=\"*\\ConfigSecurityPolicy.exe\" command IN [\"*https://*\", \"*http://*\", \"*ftp://*\"]"
+  },
+  {
+    "ID": "52",
+    "Name": "C-Sharp Code Compilation Using Ilasm Detected",
+    "Trigger_Condition": "C# code is either compiled into executables or into DLL using Ilasm utility.",
+    "ATT&CK_Category": ["Defense Evasion"],
+    "ATT&CK_Tag": ["Trusted Developer Utilities Proxy Execution"],
+    "ATT&CK_ID": ["T1127"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "label=\"Process\" label=\"Create\" (\"process\"=\"*\\ilasm.exe\" OR file=\"ilasm.exe\")"
+  },
+  {
+    "ID": "53",
+    "Name": "Process Dump via Resource Leak Diagnostic Tool",
+    "Trigger_Condition": "A process dump is detected using a Microsoft Windows native tool rdrleakdiag.exe.",
+    "ATT&CK_Category": ["Credential Access"],
+    "ATT&CK_Tag": ["LSASS Memory"],
+    "ATT&CK_ID": ["T1003.001"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
+    "Query": "label=\"process\" label=create (\"process\"=\"*\\RdrLeakDiag.exe\" or file=\"RdrLeakDiag.exe\") command=\"*fullmemdmp*\""
+  },
+  {
+    "ID": "54",
+    "Name": "Suspicious DLL Execution via Register-Cimprovider",
+    "Trigger_Condition": "A dll file load/execution is detected using a Microsoft Windows native tool Register-Cimprovider.exe.",
+    "ATT&CK_Category": ["Defense Evasion"],
+    "ATT&CK_Tag": ["Hijack Execution Flow"],
+    "ATT&CK_ID": ["TT1574"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
+    "Query": "label=\"process\" label=\"create\" \"process\"=\"*\\register-cimprovider.exe\" command=\"*-path*\" command=\"*dll*\""
+  },
+  {
+    "ID": "55",
+    "Name": "Accessibility Features - Process",
+    "Trigger_Condition": "An adversary establishes persistence and/or elevate privileges by executing malicious content by process features.",
+    "ATT&CK_Category": ["Persistence", "Privilege Escalation"],
+    "ATT&CK_Tag": ["Event Triggered Execution", "Accessibility Features"],
+    "ATT&CK_ID": ["T1546", "T1546.008"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon event_id=1 parent_image=\"*winlogon.exe\" (image=\"*sethc.exe\" or image=\"*utilman.exe\" or image=\"*osk.exe\" or image=\"*magnify.exe\" or image=\"*displayswitch.exe\" or image=\"*narrator.exe\" or image=\"*atbroker.exe\") -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "56",
+    "Name": "Accessibility Features-Registry",
+    "Trigger_Condition": "An adversary establishes persistence and/or elevates privileges by executing malicious content, replacing accessibility feature binaries, pointers, or references to these binaries in the registry.",
+    "ATT&CK_Category": ["Persistence", "Privilege Escalation"],
+    "ATT&CK_Tag": ["Event Triggered Execution", "Accessibility Features"],
+    "ATT&CK_ID": ["T1546", "T1546.008"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon (event_id=12 or event_id=13 or event_id=14) target_object=\"*HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\*\" -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "57",
+    "Name": "Account Discovery Detected",
+    "Trigger_Condition": "Adversaries attempt to get a listing of accounts on a system or within an environment that can help them determine which accounts exist to aid in follow-on behavior.",
+    "ATT&CK_Category": ["Account Discovery"],
+    "ATT&CK_Tag": ["Local Account", "Domain Account"],
+    "ATT&CK_ID": ["T1087", "T1087.001", "T1087.002"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon event_id=1 (image=\"*net.exe\" or image=\"*powershell.exe\") (command=\"*net* user*\" or command=\"*net* group*\" or command=\"*net* localgroup*\" or command=\"*cmdkey*\/list*\" or command=\"*get-localuser*\" or command=\"*get-localgroupmembers*\" or command=\"*get-aduser*\" or command=\"*query*user*\") -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "58",
+    "Name": "Active Directory DLLs Loaded By Office Applications",
+    "Trigger_Condition": "Kerberos DLL or DSParse DLL loaded by the Office products like WinWord, Microsoft PowerPoint, Microsoft Excel, or Microsoft Outlook.",
+    "ATT&CK_Category": ["Initial Access"],
+    "ATT&CK_Tag": ["Phishing", "Spearphishing Attachment"],
+    "ATT&CK_ID": ["T1566", "T1566.001"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon event_id=7 source_image IN [\"*\\winword.exe*\", \"*\\powerpnt.exe*\", \"*\\excel.exe*\", \"*\\outlook.exe*\"] image IN [\"*\\kerberos.dll*\",\"*\\dsparse.dll*\"] -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "59",
+    "Name": "DCSync detected",
+    "Trigger_Condition": "The abuse of Active Directory Replication Service (ADRS) detected from a non-machine account to request credentials or DC Sync by creating a new SPN.",
+    "ATT&CK_Category": ["Credential Access"],
+    "ATT&CK_Tag": ["OS Credential Dumping", "DCSync"],
+    "ATT&CK_ID": ["T1003", "T1003.006"],
+    "Minimum_Log_Source_Requirement": ["Windows"],
+    "Query": "((norm_id=WinServer event_id=4662 access_mask=\"0x100\" properties IN [\"*1131f6aa-9c07-11d1-f79f-00c04fc2dcd2*\", \"*1131f6ad-9c07-11d1-f79f-00c04fc2dcd2*\", \"*89e95b76-444d-4c62-991a-0facbeda640c*\", \"*Replicating Directory Changes All*\"] user=\"*$\" -user=\"MSOL_*\") or (norm_id=WinServer event_id=4742 service=\"*GC/*\"))-user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "60",
+    "Name": "Active Directory Replication User Backdoor",
+    "Trigger_Condition": "Modification of the security descriptor of a domain object for granting Active Directory replication permissions to a user.",
+    "ATT&CK_Category": ["Defense Evasion"],
+    "ATT&CK_Tag": ["File and Directory Permissions Modification", "Windows File and Directory Permissions Modification"],
+    "ATT&CK_ID": ["T1222", "T1222.001"],
+    "Minimum_Log_Source_Requirement": ["Windows"],
+    "Query": "norm_id=WinServer event_id=5136 ldap_display=\"ntsecuritydescriptor\" attribute_value IN [\"*1131f6aa-9c07-11d1-f79f-00c04fc2dcd2*\", \"*1131f6ad-9c07-11d1-f79f00c04fc2dcd2*\", \"*89e95b76-444d-4c62-991a-0facbeda640c*\"] -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "61",
+    "Name": "Active Directory Schema Change Detected",
+    "Trigger_Condition": "The directory service object is changed, created, moved, deleted, or restored.",
+    "ATT&CK_Category": ["Persistence", "Privilege Escalation", "Credential Access"],
+    "ATT&CK_Tag": ["Create or Modify System Process", "Windows Service", "Exploitation for Credential Access", "Exploitation for Privilege Escalation"],
+    "ATT&CK_ID": ["T1212", "T1068", "T1543", "T1543.003"],
+    "Minimum_Log_Source_Requirement": ["Windows"],
+    "Query": "norm_id=WinServer* label=Directory label=Service label=Object (label=Change or label=Create or label=Move or label=Delete or label=Undelete) -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "62",
+    "Name": "Activity Related to NTDS Domain Hash Retrieval",
+    "Trigger_Condition": "Suspicious commands related to an activity that uses volume shadow copy to steal and retrieve hashes from the NTDS.dit file remotely is detected.",
+    "ATT&CK_Category": ["Credential Access"],
+    "ATT&CK_Tag": ["OS Credential Dumping", "NTDS"],
+    "ATT&CK_ID": ["T1003", "T1003.003"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
+    "Query": "label=\"process\" label=create command IN [\"*vssadmin.exe Delete Shadows*\", \"*vssadmin create shadow /for=C:*\", \"*copy \\?\GLOBALROOT\\Device\\*\\windows\\ntds\\ntds.dit*\", \"*copy \\?\GLOBALROOT\\Device\\*\\config\\SAM*\", \"*vssadmin delete shadows /for=C:*\", \"*reg SAVE HKLM\\SYSTEM*\", \"*esentutl.exe /y /vss *\\ntds.dit*\", \"*esentutl.exe /y /vss *\\SAM*\", \"*esentutl.exe /y /vss *\\SYSTEM*\"]"
   }
+  
 ]
