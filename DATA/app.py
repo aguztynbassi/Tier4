@@ -20,17 +20,11 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #  
-
-# FORMAS DE BUSCAR
-#
-# python3 search.py Rules.json --buscar_por_id_attck="T1203"
-# 
-# python3 search.py Rules.json --buscar_por_categoria_attck="Execution"
-#
-
+from flask import Flask, render_template, request
 import json
-import argparse
 from prettytable import PrettyTable
+
+app = Flask(__name__)
 
 def buscar_por_id_attck(data, attck_id):
     resultados = []
@@ -61,46 +55,37 @@ def imprimir_resultados(resultados):
                 resultado.get("Query", "")
             ])
 
-        print(tabla)
+        return tabla.get_html_string()
     else:
-        print("No se encontraron resultados.")
+        return "No se encontraron resultados."
 
-def main():
-    parser = argparse.ArgumentParser(description="Buscar en el JSON de Mitre Attacks Detection Rules.")
-    parser.add_argument("archivo_json", help="Ruta al archivo JSON")
-    parser.add_argument("--buscar_por_id_attck", help="Valor para buscar por ATT&CK_ID")
-    parser.add_argument("--buscar_por_categoria_attck", help="Valor para buscar por ATT&CK_Category")
-    args = parser.parse_args()
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/buscar', methods=['POST'])
+def buscar():
+    archivo_json = 'Rules.json'  # Cambia esto a la ruta correcta
+    attck_id = request.form.get('attck_id')
+    categoria = request.form.get('categoria')
 
     try:
-        with open(args.archivo_json, 'r', encoding='utf-8') as file:
+        with open(archivo_json, 'r', encoding='utf-8') as file:
             datos = json.load(file)
     except FileNotFoundError:
-        print(f"El archivo {args.archivo_json} no se encontró.")
-        return
+        return "El archivo no se encontró."
     except json.JSONDecodeError as e:
-        print(f"Error al decodificar el JSON en {args.archivo_json}: {e}")
-        
-        with open(args.archivo_json, 'r', encoding='utf-8') as file:
-            # Leer el archivo línea por línea para identificar la línea problemática
-            lines = file.readlines()
-            for i, line in enumerate(lines):
-                if e.lineno - 1 == i:
-                    print(f"Línea {i + 1}: {line.strip()}")
-                    break
+        return f"Error al decodificar el JSON: {e}"
 
-        return
-
-    if args.buscar_por_id_attck:
-        # Buscar e imprimir entradas con ATT&CK_ID igual al valor proporcionado
-        resultados = buscar_por_id_attck(datos, args.buscar_por_id_attck)
-        imprimir_resultados(resultados)
-    elif args.buscar_por_categoria_attck:
-        # Buscar e imprimir entradas por ATT&CK_Category igual al valor proporcionado
-        resultados = buscar_por_categoria_attck(datos, args.buscar_por_categoria_attck)
-        imprimir_resultados(resultados)
+    if attck_id:
+        resultados = buscar_por_id_attck(datos, attck_id)
+    elif categoria:
+        resultados = buscar_por_categoria_attck(datos, categoria)
     else:
-        print("Debe proporcionar al menos una función de búsqueda.")
+        return "Debe proporcionar al menos una función de búsqueda."
 
-if __name__ == "__main__":
-    main()
+    tabla_html = imprimir_resultados(resultados)
+    return render_template('resultados.html', tabla_html=tabla_html)
+
+if __name__ == '__main__':
+    app.run(debug=True)
