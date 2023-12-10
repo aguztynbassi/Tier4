@@ -1,229 +1,3 @@
-AD Object WriteDAC Access Detected
-Trigger condition: WRITE_DAC, which can modify the discretionary accesscontrol list (DACL) in the object security descriptor, is detected.
-ATT&CK Category: Defense Evasion
-ATT&CK Tag: File and Directory Permissions Modification
-ATT&CK ID: T1222
-Minimum Log Source Requirement: Windows
-Query:
-norm_id=WinServer event_id=4662 object_server="DS" access_mask=0x40000 object_
-type IN ["19195a5b-6da0-11d0-afd3-00c04fd930c9", "domainDNS"] -user IN EXCLUDE
-D_USERS
-
-AD Privileged Users or Groups Reconnaissance Detected
-Trigger condition: priv users or groups recon based on 4661 event ID and
-privileged users or groups SIDs are detected. The object names must be; domain
-admin, KDC service account, admin account, enterprise admin, group policy
-creators and owners, backup operator, or remote desktop users.
-ATT&CK Category: Discovery
-ATT&CK Tag: Account Discovery, Local Account, Domain Account
-ATT&CK ID: T1087,T1087.001,T1087.002
-Minimum Log Source Requirement: Windows
-Query:
-norm_id=WinServer event_id=4661 object_type IN ["SAM_USER", "SAM_GROUP"] objec
-t_name IN ["*-512", "*-502", "*-500", "*-505", "*-519", "*-520", "*-544", "*-5
-51", "*-555", "*admin*"] -user IN EXCLUDED_USERS
-
-Addition of SID History to Active Directory Object
-Trigger condition: Addition of SID History to Active Directory Object is detected.
-An attacker can use the SID history attribute to gain additional privileges.
-ATT&CK Category: Persistence, Privilege Escalation
-ATT&CK Tag: Access Token Manipulation, SID-History Injection
-ATT&CK ID: T1134,T1134.005
-Minimum Log Source Requirement: Windows
-Query:
-norm_id=WinServer (event_id IN ["4765", "4766"] OR (norm_id=WinServer event_id
-=4738 -SidHistory IN ["-", "%%1793"])) -user IN EXCLUDED_USERS
-
-Admin User Remote Logon Detected
-Trigger condition: Successful remote login by the administrator depending on the
-internal pattern is detected.
-ATT&CK Category: Defense Evasion, Persistence, Privilege Escalation, Initial
-Access
-ATT&CK Tag: Valid Accounts
-ATT&CK ID: T1078
-Minimum Log Source Requirement: Windows
-Query:
-norm_id=WinServer event_id=4624 logon_type="10" (authentication_package="Negot
-iate" OR package="Negotiate") user="Admin-*" -user IN EXCLUDED_USERS | rename p
-ackage as authentication_package
-
-Adobe Flash Use-After-Free Vulnerability Detected
-Trigger condition: The exploitation of use-after-free vulnerability (CVE-20184878) in Adobe Flash is detected.
-ATT&CK Category: Execution
-ATT&CK Tag: User Execution
-ATT&CK ID: T1204
-Minimum Log Source Requirement: Windows Sysmon
-Query:
-norm_id=WindowsSysmon label=Image label=Load source_image IN ["*winword.exe", "
-*excel.exe"] image='*Flash32*.ocx' -user IN EXCLUDED_USERS
-
-Adwind RAT JRAT Detected
-Trigger condition: The applications like javaw.exe, cscript in the AppData folder,
-or set values of Windows Run* register used by Adwind or JRAT are detected.
-ATT&CK Category: Execution
-ATT&CK Tag: Command
-and Scripting
-Interpreter, Visual Basic,
-JavaScript/JScript, Windows Command Shell, PowerShell
-ATT&CK ID: T1059, T1059.001, T1059.003, T1059.005, T1059.007
-Minimum Log Source Requirement: Windows Sysmon
-Query:
-(event_id=1 command IN ["*\AppData\Roaming\Oracle*\java*.exe *", "*cscript.exe
-*Retrive*.vbs *"]) OR (event_id=11 file IN ["*\AppData\Roaming\Oracle\bin\java
-*.exe", "*\Retrive*.vbs"]) OR (event_id=13 target_object="HKLM\SOFTWARE\Micros
-oft\Windows\CurrentVersion\Run*" detail="%AppData%\Roaming\Oracle\bin\*")
-
-Antivirus Exploitation Framework Detection
-Trigger condition: Antivirus’s alert reports exploitation in a framework.
-ATT&CK Category: Execution, Command and Control
-ATT&CK Tag: Exploitation for Client Execution,Remote Access Tools
-ATT&CK ID: T1203,T1219
-Minimum Log Source Requirement: Antivirus
-Query:
-signature IN ["*MeteTool*", "*MPreter*", "*Meterpreter*", "*Metasploit*", "*Po
-werSploit*", "*CobaltSrike*", "*Swrort*", "*Rozena*", "*Backdoor.Cobalt*", "*
-Msfvenom*", "*armor*", "*Empire*" ,"*SilentTrinity*", "*Ntlmrelayx"]
-
-Antivirus Password Dumper Detected
-Trigger condition: Antivirus’s alert reports a password dumper.
-ATT&CK Category: Credential Access
-ATT&CK Tag: OS Credential Dumping
-ATT&CK ID: T1003
-Minimum Log Source Requirement: Windows Sysmon
-Query:
-status IN ["*DumpCreds*", "*Mimikatz*", "*PWCrack*", "HTool/WCE", "*PSWtool*",
-"*PWDump*", "*SecurityTool*", "*PShlSpy*","*laZagne*"]
-
-Antivirus Web Shell Detected
-Trigger condition: Antivirus’s alert reports a Web Shell.
-ATT&CK Category: Persistence
-ATT&CK Tag: Server Software Component, Web Shell
-ATT&CK ID: T1505, T1505.003
-Minimum Log Source Requirement: Antivirus
-Query:
-signature IN ["PHP/Backdoor*", "JSP/Backdoor*", "ASP/Backdoor*", "Backdoor.PHP
-*", "Backdoor.JSP*", "Backdoor.ASP*", "*Webshell*"]
-
-Apache Struts 2 Remote Code Execution Detected
-Trigger condition: A remote code execution vulnerability (CVE-2017-5638) in
-Apache Struts 2 is detected.
-ATT&CK Category: Initial Access
-ATT&CK Tag: Exploit Public-Facing Application
-ATT&CK ID: T1190
-Minimum Log Source Requirement: ApacheTomcat
-Query:
-norm_id=ApacheTomcatServer label=Content label=Invalid label=Type | norm on co
-ntent_type #cmd=<command:quoted>
-
-AppCert DLLs Detected
-Trigger condition: Adversaries establish persistence and/or elevate privileges by
-executing malicious content triggered by AppCert DLLs loaded into processes.
-ATT&CK Category: Persistence, Privilege Escalation
-ATT&CK Tag: Event Triggered Execution, AppCert DLLs
-ATT&CK ID: T1546, T1546.009
-Minimum Log Source Requirement: Windows Sysmon
-Query:
-norm_id=WindowsSysmon (event_id=12 or event_id=13 or event_id=14) target_objec
-t="*\System\CurrentControlSet\Control\Session Manager\AppCertDlls\*" -user IN E
-XCLUDED_USERS
-
-Application Shimming - File Access Detected
-Trigger condition: Adversaries establish persistence and/or elevate privileges by
-executing malicious content initiated by application shims.
-ATT&CK Category: Persistence, Privilege Escalation
-ATT&CK Tag: Event Triggered Execution, Application Shimming
-ATT&CK ID: T1546,T1546.011
-Minimum Log Source Requirement: Windows Sysmon
-Query:
-norm_id=WindowsSysmon ((event_id=11 file="*C:\Windows\AppPatch\Custom\*") or (
-event_id=1 image="*sdbinst.exe") or ((event_id=12 or event_id=13 or event_id=1
-4) target_object="*\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlag
-s\InstalledSDB\*")) -user IN EXCLUDED_USERS
-
-Application Whitelisting Bypass via Bginfo Detected
-Trigger condition: Adversaries bypass the process and/or signature-based
-defenses by executing a VBscript code referenced within the .bgi file.
-ATT&CK Category: Defense Evasion
-ATT&CK Tag: Signed Binary Proxy Execution
-ATT&CK ID: T1218
-Minimum Log Source Requirement: Windows Sysmon
-Query:
-norm_id=WindowsSysmon event_id=1 image="*\bginfo.exe" command="*/popup*" comma
-nd="*/nolicprompt*" -user IN EXCLUDED_USERS
-
-Application Whitelisting Bypass via DLL Loaded by
-odbcconf Detected
-Trigger condition: Adversaries bypass the process and/or signature-based
-defenses via odbcconf.exe execution to load DLL.
-ATT&CK Category: Defense Evasion
-ATT&CK Tag: Signed Binary Proxy Execution, Odbcconf
-ATT&CK ID: T1218, T1218.008
-Minimum Log Source Requirement: Windows Sysmon
-Query:
-norm_id=WindowsSysmon event_id=1 ((image="*\odbcconf.exe" command IN ["*-f*", "
-*regsvr*"]) OR (parent_image="*\odbcconf.exe" image="*\rundll32.exe")) -user I
-N EXCLUDED_USERS
-
-Application Whitelisting Bypass via Dnx Detected
-Trigger condition: Adversaries bypass the process and/or signature-based
-defenses by execution of C# code located in the consoleapp folder.
-ATT&CK Category: Defense Evasion
-ATT&CK Tag: Signed Binary Proxy Execution
-ATT&CK ID: T1218
-Minimum Log Source Requirement: Windows Sysmon
-Query:
-norm_id=WindowsSysmon event_id=1 image="*\dnx.exe" -user IN EXCLUDED_USERS
-
-Audio Capture Detected
-Trigger condition: The use of Powershell, sound recorder application, or
-command to get the audio device is detected. Adversaries attempt to leverage
-peripheral devices or applications to obtain audio recordings for sensitive
-conversations.
-ATT&CK Category: Collection
-ATT&CK Tag: Audio Capture
-ATT&CK ID: T1123
-Minimum Log Source Requirement: Windows Sysmon
-Query:
-norm_id=WindowsSysmon event_id=1 ((image="*SoundRecorder.exe" and command="*/F
-ILE*") or command="*Get-AudioDevice*" or command="*WindowsAudioDevice-Powershe
-ll-Cmdlet*") -user IN EXCLUDED_USERS
-
-Authentication Package Detected
-Trigger Condition: The LSA process is loaded by services other than lssac,
-svchos, msiexec, and services. Windows authentication package DLLs are loaded
-by the Local Security Authority (LSA) process at the system start. Adversaries may
-abuse authentication packages to execute DLLs when the system boots.
-ATT&CK Category: Persistence
-ATT&CK Tag: Boot or Logon Autostart Execution, Authentication Package,
-Security Support Provider
-ATT&CK ID: T1547, T1547.002, T1547.005
-Minimum Log Source Requirement: Windows Sysmon
-Query:
-norm_id=WindowsSysmon (event_id=12 or event_id=13 or event_id=14) (target_obje
-ct="*\SYSTEM\CurrentControlSet\Control\Lsa\*") -image in ["*C:\WINDOWS\system3
-2\lsass.exe","*C:\Windows\system32\svchost.exe","*C:\Windows\system32\services
-.exe","C:\Windows\system32\msiexec.exe","C:\Windows\system32\Msiexec.exe"]
--user IN EXCLUDED_USERS
-
-Autorun Keys Modification Detected
-Trigger Condition: Modification of autostart extensibility point (ASEP) in the
-registry is detected. ASEP allows a particular program to run automatically when
-a user logs into the system. Adversaries may achieve persistence by adding a
-program to a startup folder or referencing it with a Registry run key.
-ATT&CK Category: Persistence, Privilege Escalation
-ATT&CK Tag: T1547 - Boot or Logon Autostart Execution (2), T1547.001 Registry Run Keys / Startup Folder (2)
-Minimum Log Source Requirement: Windows Sysmon
-Query:
-norm_id=WindowsSysmon event_id=13 target_object IN ["*\software\Microsoft\Wind
-ows\CurrentVersion\Run*", "*\software\Microsoft\Windows\CurrentVersion\RunOnce
-*", "*\software\Microsoft\Windows\CurrentVersion\RunOnceEx*", "*\software\Micr
-osoft\Windows\CurrentVersion\RunServices*", "*\software\Microsoft\Windows\Curr
-entVersion\RunServicesOnce*", "*\software\Microsoft\Windows NT\CurrentVersion\
-Winlogon\Userinit*", "*\software\Microsoft\Windows NT\CurrentVersion\Winlogon\
-Shell*", "*\software\Microsoft\Windows NT\CurrentVersion\Windows*", "*\softwar
-e\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders*"] -user IN EXC
-LUDED_USERS
-
 Batch Scripting Detected
 
 Trigger Condition: Adversaries abuse command and script interpreters to
@@ -15393,4 +15167,24 @@ ediafire.com*","*mega.nz*","*ddns.net*",
 "*.paste.ee*","*.hastebin.com/raw/*","*.ghostbin.co/*", "*ufile.io*","*anonfiles.com*
 ", "*send.exploit.in*","*transfer.sh*","*priva
 
+
+
+
+/////////////////////////////////
+
+revisar xq esta roto
+
+/////////////////////////////////
+
+ /* {
+    "ID": "62",
+    "Name": "Activity Related to NTDS Domain Hash Retrieval",
+    "Trigger_Condition": "Suspicious commands related to an activity that uses volume shadow copy to steal and retrieve hashes from the NTDS.dit file remotely is detected.",
+    "ATT&CK_Category": ["Credential Access"],
+    "ATT&CK_Tag": ["OS Credential Dumping", "NTDS"],
+    "ATT&CK_ID": ["T1003", "T1003.003"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
+    "Query": "label=\"process\" label=create command IN [\"*vssadmin.exe Delete Shadows*\", \"*vssadmin create shadow /for=C:*\", \"*copy \\?\GLOBALROOT\\Device\\*\\windows\\ntds\\ntds.dit*\", \"*copy \\?\GLOBALROOT\\Device\\*\\config\\SAM*\", \"*vssadmin delete shadows /for=C:*\", \"*reg SAVE HKLM\\SYSTEM*\", \"*esentutl.exe /y /vss *\\ntds.dit*\", \"*esentutl.exe /y /vss *\\SAM*\", \"*esentutl.exe /y /vss *\\SYSTEM*\"]"
+  },
+*/
 

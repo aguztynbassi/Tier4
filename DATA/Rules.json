@@ -610,14 +610,183 @@
     "Query": "norm_id=WinServer* label=Directory label=Service label=Object (label=Change or label=Create or label=Move or label=Delete or label=Undelete) -user IN EXCLUDED_USERS"
   },
   {
-    "ID": "62",
-    "Name": "Activity Related to NTDS Domain Hash Retrieval",
-    "Trigger_Condition": "Suspicious commands related to an activity that uses volume shadow copy to steal and retrieve hashes from the NTDS.dit file remotely is detected.",
+    "ID": "63",
+    "Name": "AD Object WriteDAC Access Detected",
+    "Trigger_Condition": "WRITE_DAC, which can modify the discretionary access control list (DACL) in the object security descriptor, is detected.",
+    "ATT&CK_Category": ["Defense Evasion"],
+    "ATT&CK_Tag": ["File and Directory Permissions Modification"],
+    "ATT&CK_ID": ["T1222"],
+    "Minimum_Log_Source_Requirement": ["Windows"],
+    "Query": "norm_id=WinServer event_id=4662 object_server=\"DS\" access_mask=0x40000 object_type IN [\"19195a5b-6da0-11d0-afd3-00c04fd930c9\", \"domainDNS\"] -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "64",
+    "Name": "AD Privileged Users or Groups Reconnaissance Detected",
+    "Trigger_Condition": "Privileged users or groups reconnaissance based on 4661 event ID and privileged users or groups SIDs are detected. The object names must be; domain admin, KDC service account, admin account, enterprise admin, group policy creators and owners, backup operator, or remote desktop users.",
+    "ATT&CK_Category": ["Discovery"],
+    "ATT&CK_Tag": ["Account Discovery", "Local Account", "Domain Account"],
+    "ATT&CK_ID": ["T1087", "T1087.001", "T1087.002"],
+    "Minimum_Log_Source_Requirement": ["Windows"],
+    "Query": "norm_id=WinServer event_id=4661 object_type IN [\"SAM_USER\", \"SAM_GROUP\"] object_name IN [\"*-512\", \"*-502\", \"*-500\", \"*-505\", \"*-519\", \"*-520\", \"*-544\", \"*-551\", \"*-555\", \"*admin*\"] -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "65",
+    "Name": "Addition of SID History to Active Directory Object",
+    "Trigger_Condition": "Addition of SID History to Active Directory Object is detected. An attacker can use the SID history attribute to gain additional privileges.",
+    "ATT&CK_Category": ["Persistence", "Privilege Escalation"],
+    "ATT&CK_Tag": ["Access Token Manipulation", "SID-History Injection"],
+    "ATT&CK_ID": ["T1134", "T1134.005"],
+    "Minimum_Log_Source_Requirement": ["Windows"],
+    "Query": "norm_id=WinServer (event_id IN [\"4765\", \"4766\"] OR (norm_id=WinServer event_id=4738 -SidHistory IN [\"-\", \"%%1793\"])) -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "66",
+    "Name": "Admin User Remote Logon Detected",
+    "Trigger_Condition": "Successful remote login by the administrator depending on the internal pattern is detected.",
+    "ATT&CK_Category": ["Defense Evasion", "Persistence", "Privilege Escalation", "Initial Access"],
+    "ATT&CK_Tag": ["Valid Accounts"],
+    "ATT&CK_ID": ["T1078"],
+    "Minimum_Log_Source_Requirement": ["Windows"],
+    "Query": "norm_id=WinServer event_id=4624 logon_type=\"10\" (authentication_package=\"Negotiate\" OR package=\"Negotiate\") user=\"Admin-*\" -user IN EXCLUDED_USERS | rename package as authentication_package"
+  },
+  {
+    "ID": "67",
+    "Name": "Adobe Flash Use-After-Free Vulnerability Detected",
+    "Trigger_Condition": "The exploitation of use-after-free vulnerability (CVE-2018-4878) in Adobe Flash is detected.",
+    "ATT&CK_Category": ["Execution"],
+    "ATT&CK_Tag": ["User Execution"],
+    "ATT&CK_ID": ["T1204"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon label=Image label=Load source_image IN [\"*winword.exe\", \"*excel.exe\"] image='*Flash32*.ocx' -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "68",
+    "Name": "Adwind RAT JRAT Detected",
+    "Trigger_Condition": "The applications like javaw.exe, cscript in the AppData folder, or set values of Windows Run* register used by Adwind or JRAT are detected.",
+    "ATT&CK_Category": ["Execution"],
+    "ATT&CK_Tag": ["Command and Scripting Interpreter", "Visual Basic", "JavaScript/JScript", "Windows Command Shell", "PowerShell"],
+    "ATT&CK_ID": ["T1059", "T1059.001", "T1059.003", "T1059.005", "T1059.007"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "(event_id=1 command IN [\"*\\AppData\\Roaming\\Oracle*\\java*.exe *\", \"*cscript.exe *Retrive*.vbs *\"]) OR (event_id=11 file IN [\"*\\AppData\\Roaming\\Oracle\\bin\\java*.exe\", \"*\\Retrive*.vbs\"]) OR (event_id=13 target_object=\"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run*\" detail=\"%AppData%\\Roaming\\Oracle\\bin\\*\")"
+  },
+  {
+    "ID": "69",
+    "Name": "Antivirus Exploitation Framework Detection",
+    "Trigger_Condition": "Antivirus’s alert reports exploitation in a framework.",
+    "ATT&CK_Category": ["Execution", "Command and Control"],
+    "ATT&CK_Tag": ["Exploitation for Client Execution", "Remote Access Tools"],
+    "ATT&CK_ID": ["T1203", "T1219"],
+    "Minimum_Log_Source_Requirement": ["Antivirus"],
+    "Query": "signature IN [\"*MeteTool*\", \"*MPreter*\", \"*Meterpreter*\", \"*Metasploit*\", \"*PowerSploit*\", \"*CobaltSrike*\", \"*Swrort*\", \"*Rozena*\", \"*Backdoor.Cobalt*\", \"*Msfvenom*\", \"*armor*\", \"*Empire*\" ,\"*SilentTrinity*\", \"*Ntlmrelayx*\"]"
+  },
+  {
+    "ID": "70",
+    "Name": "Antivirus Password Dumper Detected",
+    "Trigger_Condition": "Antivirus’s alert reports a password dumper.",
     "ATT&CK_Category": ["Credential Access"],
-    "ATT&CK_Tag": ["OS Credential Dumping", "NTDS"],
-    "ATT&CK_ID": ["T1003", "T1003.003"],
-    "Minimum_Log_Source_Requirement": ["Windows Sysmon", "Windows"],
-    "Query": "label=\"process\" label=create command IN [\"*vssadmin.exe Delete Shadows*\", \"*vssadmin create shadow /for=C:*\", \"*copy \\?\GLOBALROOT\\Device\\*\\windows\\ntds\\ntds.dit*\", \"*copy \\?\GLOBALROOT\\Device\\*\\config\\SAM*\", \"*vssadmin delete shadows /for=C:*\", \"*reg SAVE HKLM\\SYSTEM*\", \"*esentutl.exe /y /vss *\\ntds.dit*\", \"*esentutl.exe /y /vss *\\SAM*\", \"*esentutl.exe /y /vss *\\SYSTEM*\"]"
+    "ATT&CK_Tag": ["OS Credential Dumping"],
+    "ATT&CK_ID": ["T1003"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "status IN [\"*DumpCreds*\", \"*Mimikatz*\", \"*PWCrack*\", \"HTool/WCE\", \"*PSWtool*\", \"*PWDump*\", \"*SecurityTool*\", \"*PShlSpy*\",\"*laZagne*\"]"
+  },
+  {
+    "ID": "71",
+    "Name": "Antivirus Web Shell Detected",
+    "Trigger_Condition": "Antivirus’s alert reports a Web Shell.",
+    "ATT&CK_Category": ["Persistence"],
+    "ATT&CK_Tag": ["Server Software Component", "Web Shell"],
+    "ATT&CK_ID": ["T1505", "T1505.003"],
+    "Minimum_Log_Source_Requirement": ["Antivirus"],
+    "Query": "signature IN [\"PHP/Backdoor*\", \"JSP/Backdoor*\", \"ASP/Backdoor*\", \"Backdoor.PHP*\", \"Backdoor.JSP*\", \"Backdoor.ASP*\", \"*Webshell*\"]"
+  },
+  {
+    "ID": "72",
+    "Name": "Apache Struts 2 Remote Code Execution Detected",
+    "Trigger_Condition": "A remote code execution vulnerability (CVE-2017-5638) in Apache Struts 2 is detected.",
+    "ATT&CK_Category": ["Initial Access"],
+    "ATT&CK_Tag": ["Exploit Public-Facing Application"],
+    "ATT&CK_ID": ["T1190"],
+    "Minimum_Log_Source_Requirement": ["ApacheTomcat"],
+    "Query": "norm_id=ApacheTomcatServer label=Content label=Invalid label=Type | norm on content_type #cmd=<command:quoted>"
+  },
+  {
+    "ID": "73",
+    "Name": "AppCert DLLs Detected",
+    "Trigger_Condition": "Adversaries establish persistence and/or elevate privileges by executing malicious content triggered by AppCert DLLs loaded into processes.",
+    "ATT&CK_Category": ["Persistence", "Privilege Escalation"],
+    "ATT&CK_Tag": ["Event Triggered Execution", "AppCert DLLs"],
+    "ATT&CK_ID": ["T1546", "T1546.009"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon (event_id=12 or event_id=13 or event_id=14) target_object=\"*\\System\\CurrentControlSet\\Control\\Session Manager\\AppCertDlls\\*\" -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "74",
+    "Name": "Application Shimming - File Access Detected",
+    "Trigger_Condition": "Adversaries establish persistence and/or elevate privileges by executing malicious content initiated by application shims.",
+    "ATT&CK_Category": ["Persistence", "Privilege Escalation"],
+    "ATT&CK_Tag": ["Event Triggered Execution", "Application Shimming"],
+    "ATT&CK_ID": ["T1546", "T1546.011"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon ((event_id=11 file=\"*C:\\Windows\\AppPatch\\Custom\\*\") or (event_id=1 image=\"*sdbinst.exe\") or ((event_id=12 or event_id=13 or event_id=14) target_object=\"*\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\InstalledSDB\\*\")) -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "75",
+    "Name": "Application Whitelisting Bypass via Bginfo Detected",
+    "Trigger_Condition": "Adversaries bypass the process and/or signature-based defenses by executing VBscript code referenced within the .bgi file.",
+    "ATT&CK_Category": ["Defense Evasion"],
+    "ATT&CK_Tag": ["Signed Binary Proxy Execution"],
+    "ATT&CK_ID": ["T1218"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon event_id=1 image=\"*\\bginfo.exe\" command=\"*/popup*\" command=\"*/nolicprompt*\" -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "76",
+    "Name": "Application Whitelisting Bypass via DLL Loaded by odbcconf Detected",
+    "Trigger_Condition": "Adversaries bypass the process and/or signature-based defenses via odbcconf.exe execution to load DLL.",
+    "ATT&CK_Category": ["Defense Evasion"],
+    "ATT&CK_Tag": ["Signed Binary Proxy Execution", "Odbcconf"],
+    "ATT&CK_ID": ["T1218", "T1218.008"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon event_id=1 ((image=\"*\\odbcconf.exe\" command IN [\"*-f*\", \"*regsvr*\"]) OR (parent_image=\"*\\odbcconf.exe\" image=\"*\\rundll32.exe\")) -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "77",
+    "Name": "Application Whitelisting Bypass via Dnx Detected",
+    "Trigger_Condition": "Adversaries bypass the process and/or signature-based defenses by execution of C# code located in the consoleapp folder.",
+    "ATT&CK_Category": ["Defense Evasion"],
+    "ATT&CK_Tag": ["Signed Binary Proxy Execution"],
+    "ATT&CK_ID": ["T1218"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon event_id=1 image=\"*\\dnx.exe\" -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "78",
+    "Name": "Audio Capture Detected",
+    "Trigger_Condition": "The use of Powershell, sound recorder application, or command to get the audio device is detected. Adversaries attempt to leverage peripheral devices or applications to obtain audio recordings for sensitive conversations.",
+    "ATT&CK_Category": ["Collection"],
+    "ATT&CK_Tag": ["Audio Capture"],
+    "ATT&CK_ID": ["T1123"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon event_id=1 ((image=\"*SoundRecorder.exe\" and command=\"*/FILE*\") or command=\"*Get-AudioDevice*\" or command=\"*WindowsAudioDevice-Powershell-Cmdlet*\") -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "79",
+    "Name": "Authentication Package Detected",
+    "Trigger_Condition": "The LSA process is loaded by services other than lssac, svchos, msiexec, and services. Windows authentication package DLLs are loaded by the Local Security Authority (LSA) process at the system start. Adversaries may abuse authentication packages to execute DLLs when the system boots.",
+    "ATT&CK_Category": ["Persistence"],
+    "ATT&CK_Tag": ["Boot or Logon Autostart Execution", "Authentication Package", "Security Support Provider"],
+    "ATT&CK_ID": ["T1547", "T1547.002", "T1547.005"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon (event_id=12 or event_id=13 or event_id=14) (target_object=\"*\\SYSTEM\\CurrentControlSet\\Control\\Lsa\\*\") -image in [\"*C:\\WINDOWS\\system32\\lsass.exe\",\"*C:\\Windows\\system32\\svchost.exe\",\"*C:\\Windows\\system32\\services.exe\",\"C:\\Windows\\system32\\msiexec.exe\",\"C:\\Windows\\system32\\Msiexec.exe\"] -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "80",
+    "Name": "Autorun Keys Modification Detected",
+    "Trigger_Condition": "Modification of autostart extensibility point (ASEP) in the registry is detected. ASEP allows a particular program to run automatically when a user logs into the system. Adversaries may achieve persistence by adding a program to a startup folder or referencing it with a Registry run key.",
+    "ATT&CK_Category": ["Persistence", "Privilege Escalation"],
+    "ATT&CK_Tag": ["T1547 - Boot or Logon Autostart Execution (2)", "T1547.001 Registry Run Keys / Startup Folder (2)"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon event_id=13 target_object IN [\"*\\software\\Microsoft\\Windows\\CurrentVersion\\Run*\", \"*\\software\\Microsoft\\Windows\\CurrentVersion\\RunOnce*\", \"*\\software\\Microsoft\\Windows\\CurrentVersion\\RunOnceEx*\", \"*\\software\\Microsoft\\Windows\\CurrentVersion\\RunServices*\", \"*\\software\\Microsoft\\Windows\\CurrentVersion\\RunServicesOnce*\", \"*\\software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Userinit*\", \"*\\software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Shell*\", \"*\\software\\Microsoft\\Windows NT\\CurrentVersion\\Windows*\", \"*\\software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders*\"] -user IN EXCLUDED_USERS"
   }
   
 ]
