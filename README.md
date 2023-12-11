@@ -15,23 +15,27 @@ python3 search.py -h
 ### Ouput
 
 ```
-usage: search.py [-h] [--id_attck BUSCAR_POR_ID_ATTCK]
-                 [--category_attck BUSCAR_POR_CATEGORIA_ATTCK]
-                 [--show VER_DATA]
+usage: search.py [-h] [--id_attck ID_ATTCK] [--category_attck CATEGORY_ATTCK]
+                 [--show SHOW]
                  archivo_json
 
-Buscar en el JSON de Mitre Attacks Detection Rules.
+Search the JSON of Mitre Attacks Detection Rules.
 
 positional arguments:
-  archivo_json          Ruta al archivo JSON
+  archivo_json          Path to JSON file
 
 options:
   -h, --help            show this help message and exit
-  --id_attck BUSCAR_POR_ID_ATTCK
-                        Valor para buscar por ATT&CK_ID
-  --category_attck BUSCAR_POR_CATEGORIA_ATTCK
-                        Valor para buscar por ATT&CK_Category
-  --show VER_DATA   ID para ver información detallada de una entrada
+  --id_attck ID_ATTCK   Value to search by ATT&CK_ID ... Examples for uses:
+                        python3 search.py Rules.json --id_attck='T1203'
+  --category_attck CATEGORY_ATTCK
+                        Value to search by ATT&CK_Category ... Examples for
+                        uses: python3 search.py Rules.json
+                        --category_attck='Execution'
+  --show SHOW           ID to view detailed information of an entry ...
+                        Examples for uses Search Rule: python3 search.py
+                        Rules.json --show='WIN_5' or python3 search.py
+                        Rules.json --show='WIN_5' > WIN_5.json
 ```
 
 ### --id_attck
