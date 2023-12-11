@@ -46,19 +46,23 @@ def buscar_por_categoria_attck(data, categoria):
             resultados.append(entrada)
     return resultados
 
+def ver_data(data, id_buscar):
+    for entrada in data:
+        if entrada.get("ID") == id_buscar:
+            return entrada
+    return None
+
 def imprimir_resultados(resultados):
     if resultados:
         tabla = PrettyTable()
-        tabla.field_names = ["ID", "Name", "Trigger Condition", "ATT&CK ID", "Minimum Log Source Requirement", "Query"]
+        tabla.field_names = ["ID", "Name", "ATT&CK ID", "ATT&CK_Category"]
 
         for resultado in resultados:
             tabla.add_row([
                 resultado.get("ID", ""),
                 resultado.get("Name", ""),
-                resultado.get("Trigger_Condition", ""),
                 ", ".join(resultado.get("ATT&CK_ID", [])),
-                ", ".join(resultado.get("Minimum_Log_Source_Requirement", [])),
-                resultado.get("Query", "")
+                ", ".join(resultado.get("ATT&CK_Category", []))
             ])
 
         print(tabla)
@@ -70,6 +74,7 @@ def main():
     parser.add_argument("archivo_json", help="Ruta al archivo JSON")
     parser.add_argument("--buscar_por_id_attck", help="Valor para buscar por ATT&CK_ID")
     parser.add_argument("--buscar_por_categoria_attck", help="Valor para buscar por ATT&CK_Category")
+    parser.add_argument("--ver_data", help="ID para ver información detallada de una entrada")
     args = parser.parse_args()
 
     try:
@@ -99,8 +104,16 @@ def main():
         # Buscar e imprimir entradas por ATT&CK_Category igual al valor proporcionado
         resultados = buscar_por_categoria_attck(datos, args.buscar_por_categoria_attck)
         imprimir_resultados(resultados)
+    elif args.ver_data:
+        # Ver información detallada de una entrada por ID
+        resultado = ver_data(datos, args.ver_data)
+        if resultado:
+            print(json.dumps(resultado, indent=2))
+        else:
+            print(f"No se encontró ninguna entrada con ID '{args.ver_data}'.")
     else:
         print("Debe proporcionar al menos una función de búsqueda.")
 
 if __name__ == "__main__":
     main()
+
