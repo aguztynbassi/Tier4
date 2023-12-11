@@ -21,11 +21,9 @@
 #  MA 02110-1301, USA.
 #  
 
-# FORMAS DE BUSCAR
+#  example for uses
 #
-# python3 search.py Rules.json --id_attck="T1203"
-# 
-# python3 search.py Rules.json --category_attck="Execution"
+#  python3 search.py Rules.json -h
 #
 
 import json
@@ -67,24 +65,25 @@ def imprimir_resultados(resultados):
 
         print(tabla)
     else:
-        print("No se encontraron resultados.")
+        print("No results were found.")
 
 def main():
-    parser = argparse.ArgumentParser(description="Buscar en el JSON de Mitre Attacks Detection Rules.")
-    parser.add_argument("archivo_json", help="Ruta al archivo JSON")
-    parser.add_argument("--id_attck", help="Valor para buscar por ATT&CK_ID")
-    parser.add_argument("--category_attck", help="Valor para buscar por ATT&CK_Category")
-    parser.add_argument("--show", help="ID para ver información detallada de una entrada")
+    parser = argparse.ArgumentParser(description="Search the JSON of Mitre Attacks Detection Rules.")
+    parser.add_argument("archivo_json", help="Path to JSON file")
+    parser.add_argument("--id_attck", help="Value to search by ATT&CK_ID ... Examples for uses: python3 search.py Rules.json --id_attck='T1203'")
+    parser.add_argument("--category_attck", help="Value to search by ATT&CK_Category ... Examples for uses: python3 search.py Rules.json --category_attck='Execution'")
+    parser.add_argument("--show", help="ID to view detailed information of an entry ... Examples for uses Search Rule: python3 search.py Rules.json --show='WIN_5' or python3 search.py Rules.json --show='WIN_5' > WIN_5.json")
+
     args = parser.parse_args()
 
     try:
         with open(args.archivo_json, 'r', encoding='utf-8') as file:
             datos = json.load(file)
     except FileNotFoundError:
-        print(f"El archivo {args.archivo_json} no se encontró.")
+        print(f"File {args.archivo_json} was not found.")
         return
     except json.JSONDecodeError as e:
-        print(f"Error al decodificar el JSON en {args.archivo_json}: {e}")
+        print(f"Error decoding JSON in {args.archivo_json}: {e}")
         
         with open(args.archivo_json, 'r', encoding='utf-8') as file:
             # Leer el archivo línea por línea para identificar la línea problemática
@@ -110,9 +109,9 @@ def main():
         if resultado:
             print(json.dumps(resultado, indent=2))
         else:
-            print(f"No se encontró ninguna entrada con ID '{args.show}'.")
+            print(f"No entry found with ID '{args.show}'.")
     else:
-        print("Debe proporcionar al menos una función de búsqueda.")
+        print("It must provide at least one search function.")
 
 if __name__ == "__main__":
     main()
