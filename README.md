@@ -15,9 +15,9 @@ python3 search.py -h
 ### Ouput
 
 ```
-usage: search.py [-h] [--buscar_por_id_attck BUSCAR_POR_ID_ATTCK]
-                 [--buscar_por_categoria_attck BUSCAR_POR_CATEGORIA_ATTCK]
-                 [--ver_data VER_DATA]
+usage: search.py [-h] [--id_attck BUSCAR_POR_ID_ATTCK]
+                 [--category_attck BUSCAR_POR_CATEGORIA_ATTCK]
+                 [--show VER_DATA]
                  archivo_json
 
 Buscar en el JSON de Mitre Attacks Detection Rules.
@@ -27,17 +27,17 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  --buscar_por_id_attck BUSCAR_POR_ID_ATTCK
+  --id_attck BUSCAR_POR_ID_ATTCK
                         Valor para buscar por ATT&CK_ID
-  --buscar_por_categoria_attck BUSCAR_POR_CATEGORIA_ATTCK
+  --category_attck BUSCAR_POR_CATEGORIA_ATTCK
                         Valor para buscar por ATT&CK_Category
-  --ver_data VER_DATA   ID para ver información detallada de una entrada
+  --show VER_DATA   ID para ver información detallada de una entrada
 ```
 
-### --buscar_por_id_attck
+### --id_attck
 
 ```
-python3 search.py Rules.json --buscar_por_id_attck="T1203"
+python3 search.py Rules.json --id_attck="T1203"
 ```
 
 ### Ouput
@@ -51,10 +51,10 @@ python3 search.py Rules.json --buscar_por_id_attck="T1203"
 +--------+----------------------------------------------------+--------------+--------------------------------+
 ```
 
-### --buscar_por_categoria_attck
+### --category_attck
 
 ```
-python3 search.py Rules.json --buscar_por_categoria_attck="Execution"
+python3 search.py Rules.json --category_attck="Execution"
 ```
 
 ### Ouput
@@ -74,10 +74,10 @@ python3 search.py Rules.json --buscar_por_categoria_attck="Execution"
 +--------+----------------------------------------------------+---------------------------------------------------+--------------------------------+
 ```
 
-### --ver_data
+### --show
 
 ```
-python3 search.py Rules.json --ver_data="WIN_5"
+python3 search.py Rules.json --show="WIN_5"
 ```
 
 ### Ouput
@@ -104,3 +104,8 @@ python3 search.py Rules.json --ver_data="WIN_5"
 }
 ```
 
+### Save Rule
+
+```
+python3 search.py Rules.json --show="WIN_5" > WIN_5.json
+```

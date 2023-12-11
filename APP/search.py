@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-#  app.py
+#  search.py
 #  
-#  Copyright 2022 Agustin Bassi <[AT]aguztynbassi>
+#  Copyright 2024 Agustin Bassi <[AT]aguztynbassi>
 #  
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -23,30 +23,30 @@
 
 # FORMAS DE BUSCAR
 #
-# python3 search.py Rules.json --buscar_por_id_attck="T1203"
+# python3 search.py Rules.json --id_attck="T1203"
 # 
-# python3 search.py Rules.json --buscar_por_categoria_attck="Execution"
+# python3 search.py Rules.json --category_attck="Execution"
 #
 
 import json
 import argparse
 from prettytable import PrettyTable
 
-def buscar_por_id_attck(data, attck_id):
+def id_attck(data, attck_id):
     resultados = []
     for entrada in data:
         if "ATT&CK_ID" in entrada and attck_id in entrada["ATT&CK_ID"]:
             resultados.append(entrada)
     return resultados
 
-def buscar_por_categoria_attck(data, categoria):
+def category_attck(data, categoria):
     resultados = []
     for entrada in data:
         if "ATT&CK_Category" in entrada and categoria in entrada["ATT&CK_Category"]:
             resultados.append(entrada)
     return resultados
 
-def ver_data(data, id_buscar):
+def show(data, id_buscar):
     for entrada in data:
         if entrada.get("ID") == id_buscar:
             return entrada
@@ -72,9 +72,9 @@ def imprimir_resultados(resultados):
 def main():
     parser = argparse.ArgumentParser(description="Buscar en el JSON de Mitre Attacks Detection Rules.")
     parser.add_argument("archivo_json", help="Ruta al archivo JSON")
-    parser.add_argument("--buscar_por_id_attck", help="Valor para buscar por ATT&CK_ID")
-    parser.add_argument("--buscar_por_categoria_attck", help="Valor para buscar por ATT&CK_Category")
-    parser.add_argument("--ver_data", help="ID para ver información detallada de una entrada")
+    parser.add_argument("--id_attck", help="Valor para buscar por ATT&CK_ID")
+    parser.add_argument("--category_attck", help="Valor para buscar por ATT&CK_Category")
+    parser.add_argument("--show", help="ID para ver información detallada de una entrada")
     args = parser.parse_args()
 
     try:
@@ -96,21 +96,21 @@ def main():
 
         return
 
-    if args.buscar_por_id_attck:
+    if args.id_attck:
         # Buscar e imprimir entradas con ATT&CK_ID igual al valor proporcionado
-        resultados = buscar_por_id_attck(datos, args.buscar_por_id_attck)
+        resultados = id_attck(datos, args.id_attck)
         imprimir_resultados(resultados)
-    elif args.buscar_por_categoria_attck:
+    elif args.category_attck:
         # Buscar e imprimir entradas por ATT&CK_Category igual al valor proporcionado
-        resultados = buscar_por_categoria_attck(datos, args.buscar_por_categoria_attck)
+        resultados = category_attck(datos, args.category_attck)
         imprimir_resultados(resultados)
-    elif args.ver_data:
+    elif args.show:
         # Ver información detallada de una entrada por ID
-        resultado = ver_data(datos, args.ver_data)
+        resultado = show(datos, args.show)
         if resultado:
             print(json.dumps(resultado, indent=2))
         else:
-            print(f"No se encontró ninguna entrada con ID '{args.ver_data}'.")
+            print(f"No se encontró ninguna entrada con ID '{args.show}'.")
     else:
         print("Debe proporcionar al menos una función de búsqueda.")
 
