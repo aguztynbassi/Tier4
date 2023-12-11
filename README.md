@@ -1,6 +1,6 @@
 # MITRE Enterprise ATT&CK v14 Detection Rules for Windows
 
-The MITRE ATT&amp;CK Alerts For log point
+## The MITRE ATT&amp;CK Alerts For log point
 
 ![MITRE ATT&amp;CK Windows V14](IMG/Mitre_ATTCK_Windows.svg)
 
@@ -49,6 +49,29 @@ python3 search.py Rules.json --buscar_por_id_attck="T1203"
 | WIN_5  | Suspicious Microsoft Equation Editor Child Process |    T1203     |           Execution            |
 | WIN_69 |     Antivirus Exploitation Framework Detection     | T1203, T1219 | Execution, Command and Control |
 +--------+----------------------------------------------------+--------------+--------------------------------+
+```
+
+### --buscar_por_categoria_attck
+
+```
+python3 search.py Rules.json --buscar_por_categoria_attck="Execution"
+```
+
+### Ouput
+
+```
++--------+----------------------------------------------------+---------------------------------------------------+--------------------------------+
+|   ID   |                        Name                        |                     ATT&CK ID                     |        ATT&CK_Category         |
++--------+----------------------------------------------------+---------------------------------------------------+--------------------------------+
+| WIN_3  |      AADInternals PowerShell Cmdlet Execution      |                  T1059, T1059.001                 |           Execution            |
+| WIN_5  | Suspicious Microsoft Equation Editor Child Process |                       T1203                       |           Execution            |
+| WIN_10 |        Suspicious File Execution via MSHTA         |            T1059.007, T1140, T1218.005            |   Execution, Defense Evasion   |
+| WIN_49 |         MSHTA Spwaned by SVCHOST Detected          |                  T1218, T1218.005                 |   Defense Evasion, Execution   |
+| WIN_50 |       MSHTA Spawning Windows Shell Detected        |                  T1218, T1218.005                 |   Defense Evasion, Execution   |
+| WIN_67 | Adobe Flash Use-After-Free Vulnerability Detected  |                       T1204                       |           Execution            |
+| WIN_68 |              Adwind RAT JRAT Detected              | T1059, T1059.001, T1059.003, T1059.005, T1059.007 |           Execution            |
+| WIN_69 |     Antivirus Exploitation Framework Detection     |                    T1203, T1219                   | Execution, Command and Control |
++--------+----------------------------------------------------+---------------------------------------------------+--------------------------------+
 ```
 
 ### --ver_data
