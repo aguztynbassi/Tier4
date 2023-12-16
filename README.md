@@ -1,9 +1,5 @@
 # MITRE ATT&CK Detection Rules
 
-## The MITRE Enterprise ATT&amp;CK V14 Windows Alerts For log point
-
-![MITRE ATT&amp;CK Windows V14](IMG/Mitre_ATTCK_Windows.svg)
-
 ## Usage
 
 ### help

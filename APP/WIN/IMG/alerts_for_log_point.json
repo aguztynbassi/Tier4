@@ -6,13 +6,13 @@
 		"layer": "4.5"
 	},
 	"domain": "enterprise-attack",
-	"description": "",
+	"description": "The MITRE Enterprise ATT&CK V14 Windows Alerts For log point",
 	"filters": {
 		"platforms": [
 			"Windows"
 		]
 	},
-	"sorting": 1,
+	"sorting": 2,
 	"layout": {
 		"layout": "side",
 		"aggregateFunction": "average",
