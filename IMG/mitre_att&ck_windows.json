@@ -1,5 +1,5 @@
 {
-	"name": "Mitre ATT&CK Windows",
+	"name": "Alerts For log point",
 	"versions": {
 		"attack": "14",
 		"navigator": "4.9.1",

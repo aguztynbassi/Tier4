@@ -1,6 +1,6 @@
-# MITRE Enterprise ATT&CK v14 Detection Rules for Windows
+# MITRE ATT&CK Detection Rules
 
-## The MITRE ATT&amp;CK Alerts For log point
+## The MITRE Enterprise ATT&amp;CK V14 Windows Alerts For log point
 
 ![MITRE ATT&amp;CK Windows V14](IMG/Mitre_ATTCK_Windows.svg)
 
@@ -12,7 +12,7 @@
 python3 search.py -h
 ```
 
-### Ouput
+#### Ouput
 
 ```
 usage: search.py [-h] [--id_attck ID_ATTCK] [--category_attck CATEGORY_ATTCK]
@@ -44,7 +44,7 @@ options:
 python3 search.py Rules.json --id_attck="T1203"
 ```
 
-### Ouput
+#### Ouput
 
 ```
 +--------+----------------------------------------------------+--------------+--------------------------------+
@@ -61,7 +61,7 @@ python3 search.py Rules.json --id_attck="T1203"
 python3 search.py Rules.json --category_attck="Execution"
 ```
 
-### Ouput
+#### Ouput
 
 ```
 +--------+----------------------------------------------------+---------------------------------------------------+--------------------------------+
@@ -84,7 +84,7 @@ python3 search.py Rules.json --category_attck="Execution"
 python3 search.py Rules.json --show="WIN_5"
 ```
 
-### Ouput
+#### Ouput
 
 ```
 {
