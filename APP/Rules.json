@@ -648,6 +648,205 @@
     "ATT&CK_ID": ["T1547", "T1547.001"],
     "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
     "Query": "norm_id=WindowsSysmon event_id=13 target_object IN [\"*\\software\\Microsoft\\Windows\\CurrentVersion\\Run*\", \"*\\software\\Microsoft\\Windows\\CurrentVersion\\RunOnce*\", \"*\\software\\Microsoft\\Windows\\CurrentVersion\\RunOnceEx*\", \"*\\software\\Microsoft\\Windows\\CurrentVersion\\RunServices*\", \"*\\software\\Microsoft\\Windows\\CurrentVersion\\RunServicesOnce*\", \"*\\software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Userinit*\", \"*\\software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\Shell*\", \"*\\software\\Microsoft\\Windows NT\\CurrentVersion\\Windows*\", \"*\\software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders*\"] -user IN EXCLUDED_USERS"
-  }
-  
+  },
+  {
+    "ID": "WIN_81",
+    "Name": "Batch Scripting Detected",
+    "Trigger_Condition": "Adversaries abuse command and script interpreters to execute commands, scripts, or binaries.",
+    "ATT&CK_Category": ["Execution"],
+    "ATT&CK_Tag": ["Command and Scripting Interpreter"],
+    "ATT&CK_ID": ["T1059"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon event_id=11 file in [\"*.bat\", \"*.cmd\"] -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "WIN_82",
+    "Name": "BITS Jobs - Network Detected",
+    "Trigger_Condition": "The BITS job network connection is detected. An adversary abuses BITS jobs to execute or clean up after executing a malicious payload.",
+    "ATT&CK_Category": ["Defense Evasion", "Persistence"],
+    "ATT&CK_Tag": ["BITS Jobs"],
+    "ATT&CK_ID": ["T1197"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon event_id=3 image=\"*bitsadmin.exe\" -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "WIN_83",
+    "Name": "BITS Jobs - Process Detected",
+    "Trigger_Condition": "Creation of the BITS job process. An adversary abuses BITS jobs to execute or clean up after executing the malicious payload.",
+    "ATT&CK_Category": ["Defense Evasion", "Persistence"],
+    "ATT&CK_Tag": ["BITS Jobs"],
+    "ATT&CK_ID": ["T1197"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon event_id=1 (image=\"*bitsamin.exe\" or command=\"*Start-BitsTransfer*\") -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "WIN_84",
+    "Name": "Bloodhound and Sharphound Hack Tool Detected",
+    "Trigger_Condition": "Command-line parameters used by Bloodhound and Sharphound hack tools are detected.",
+    "ATT&CK_Category": ["Discovery"],
+    "ATT&CK_Tag": ["Account Discovery"],
+    "ATT&CK_ID": ["T1087"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon event_id=1 (image IN [\"*\\Bloodhound.exe*\", \"*\\SharpHound.exe*\"] OR command IN [\"* -CollectionMethod All *\", \"*.exe -c All -d *\", \"*Invoke-Bloodhound*\", \"*Get-BloodHoundData*\"] OR (command=\"* -JsonFolder *\" command=\"* -ZipFileName *\") OR (command=\"* DCOnly *\" command=\"* --NoSaveCache *\")) user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "WIN_85",
+    "Name": "BlueMashroom DLL Load Detected",
+    "Trigger_Condition": "DLL loading from AppData Local path described in BlueMashroom report is detected.",
+    "ATT&CK_Category": ["Defense Evasion"],
+    "ATT&CK_Tag": ["Signed Binary Proxy Execution", "Regsvr32"],
+    "ATT&CK_ID": ["T1218", "T1218.010"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon event_id=1 command IN [\"*\\regsvr32*\\AppData\\Local\\*\", \"*\\AppData\\Local\\*, DllEntry*\"] -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "WIN_86",
+    "Name": "Browser Bookmark Discovery",
+    "Trigger_Condition": "An enumeration attempt on browser bookmarks to learn more about compromised hosts is detected.",
+    "ATT&CK_Category": ["Discovery"],
+    "ATT&CK_Tag": ["Browser Bookmark Discovery"],
+    "ATT&CK_ID": ["T1217"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "label=\"Process\" label=Create \"process\"=\"*\\where.exe\" command in [\"*places.sqlite*\",\"*cookies.sqlite*\", \"*formhistory.sqlite*\", \"*logins.json*\", \"*key4.db*\",\"*key3.db*\", \"*sessionstore.jsonlz4*\", \"*History*\", \"*Bookmarks*\", \"*Cookies*\", \"*Login Data*\" ]"
+  },
+  {
+    "ID": "WIN_87",
+    "Name": "CACTUSTORCH Remote Thread Creation Detected",
+    "Trigger_Condition": "Creation of a remote thread from CACTUSTORCH.",
+    "ATT&CK_Category": ["Execution"],
+    "ATT&CK_Tag": ["Process Injection", "Command and Scripting Interpreter"],
+    "ATT&CK_ID": ["T1055", "T1059"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon event_id=8 source_image IN [\"*\\System32\\cscript.exe\", \"*\\System32\\wscript.exe\", \"*\\System32\\mshta.exe\", \"*\\winword.exe\", \"*\\excel.exe\"] image=\"*\\SysWOW64\\*\" -start_module=* -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "WIN_88",
+    "Name": "Call to a Privileged Service Failed",
+    "Trigger_Condition": "The privileged service call using LsaRegisterLogonProcess fails.",
+    "ATT&CK_Category": ["Privilege Escalation"],
+    "ATT&CK_Tag": ["Valid Account"],
+    "ATT&CK_ID": ["T1078"],
+    "Minimum_Log_Source_Requirement": ["Windows"],
+    "Query": "norm_id=WinServer event_id=4673 service=\"LsaRegisterLogonProcess()\" event_type=\"*Failure*\" -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "WIN_89",
+    "Name": "Capture a Network Trace with netsh",
+    "Trigger_Condition": "Network trace capture via netsh.exe trace functionality is detected.",
+    "ATT&CK_Category": ["Discovery"],
+    "ATT&CK_Tag": ["Network Sniffing"],
+    "ATT&CK_ID": ["T1040"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon event_id=1 command=\"*netsh*\" command=\"*trace*\" command=\"*start*\" -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "WIN_90",
+    "Name": "CEO Fraud - Possible Fraudulent Email Behavior",
+    "Trigger_Condition": "An email received from a threat source in the internal network exhibits fraudulent behavior. Update HOME_DOMAIN, MANAGERS, and SERVER_ADDRESS.",
+    "ATT&CK_Category": ["Initial Access"],
+    "ATT&CK_Tag": ["Phishing"],
+    "ATT&CK_ID": ["T1566", "T1566.001"],
+    "Minimum_Log_Source_Requirement": ["Exchange MT"],
+    "Query": "norm_id=ExchangeMT event_id=receive sender=* receiver IN HOME_DOMAIN original_client_address=* -original_client_address IN SERVER_ADDRESS | norm on sender < target_manager:all>@<domain:string> | norm on message_id @<original_domain:'.*'><:'\\>' | search target_manager IN MANAGERS"
+  },
+  {
+    "ID": "WIN_91",
+    "Name": "Certutil Encode Detected",
+    "Trigger_Condition": "The certutil command, sometimes used for data exfiltration, is used to encode files.",
+    "ATT&CK_Category": ["Defense Evasion"],
+    "ATT&CK_Tag": ["Obfuscated Files or Information"],
+    "ATT&CK_ID": ["T1027"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon event_id=1 command IN [\"certutil -f -encode *\", \"certutil.exe -f -encode *\", \"certutil -encode -f *\", \"certutil.exe -encode -f *\"] -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "WIN_92",
+    "Name": "Chafer Activity Detected",
+    "Trigger_Condition": "The Chafer activity attributed to OilRig reported in Nyotron report in March 2018 is detected.",
+    "ATT&CK_Category": ["Execution", "Persistence", "Privilege Escalation"],
+    "ATT&CK_Tag": ["Scheduled Task/Job", "Scheduled Task"],
+    "ATT&CK_ID": ["T1053", "T1053.005"],
+    "Minimum_Log_Source_Requirement": ["Windows"],
+    "Query": "norm_id=WindowsSysmon event_id=1 (command=\"*Get-History*\" or command=\"*AppData\\Roaming\\Microsoft\\Windows\\PowerShell\\PSReadline\\ConsoleHost_history.txt*\" or command=\"*(Get-PSReadlineOption).HistorySavePath*\") -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "WIN_93",
+    "Name": "Change of Default File Association Detected",
+    "Trigger_Condition": "A registry value is set to change the file association. Adversaries establish persistence by executing malicious content triggered by a file type association.",
+    "ATT&CK_Category": ["Persistence"],
+    "ATT&CK_Tag": ["Event Triggered Execution", "Change Default File Association"],
+    "ATT&CK_ID": ["T1546", "T1546.001"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon label=Registry label=Set label=Value target_object=\"*HKEY_CLASSES_ROOT\\mscfile*\" detail in [\"*powershell*\", \"*.exe*\", \"*.dat*\"] -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "WIN_94",
+    "Name": "Citrix ADC VPN Directory Traversal Detected",
+    "Trigger_Condition": "The exploitation of directory traversal vulnerability (CVE-2019-19781) in Citrix ADC is detected.",
+    "ATT&CK_Category": ["Initial Access"],
+    "ATT&CK_Tag": ["External Remote Services"],
+    "ATT&CK_ID": ["T1133"],
+    "Minimum_Log_Source_Requirement": ["Webserver", "Firewall"],
+    "Query": "norm_id=* (url=\"*../../vpns/*\" OR resource=\"*../../vpns/*\")"
+  },
+  {
+    "ID": "WIN_95",
+    "Name": "Clear Command History",
+    "Trigger_Condition": "Deletion of command history is detected. Adversaries delete or alter generated artifacts on a host system, including logs or captured files such as quarantined malware.",
+    "ATT&CK_Category": ["Defense Evasion"],
+    "ATT&CK_Tag": ["Indicator Removal on Host", "Clear Command History"],
+    "ATT&CK_ID": ["T1070", "T1070.003"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon event_id=1 (command=\"*rm (Get-PSReadlineOption).HistorySavePath*\" or command=\"*del (Get-PSReadlineOption).HistorySavePath*\" or command=\"*Set-PSReadlineOption -HistorySaveStyle SaveNothing*\" or command=\"*Remove-Item (Get-PSReadlineOption).HistorySavePath*\") -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "WIN_96",
+    "Name": "Clearing of PowerShell Logs Detected",
+    "Trigger_Condition": "Clearance of console history logs is detected.",
+    "ATT&CK_Category": ["Defense Evasion"],
+    "ATT&CK_Tag": ["Indicator Removal on Host"],
+    "ATT&CK_ID": ["T1070"],
+    "Minimum_Log_Source_Requirement": ["Windows"],
+    "Query": "norm_id=WinServer event_id=4103 (command_name=\"Remove-Item\" OR command=\"Remove-Item\") payload=\"*consolehost*history*\" -user IN EXCLUDED_USERS | rename command_name as command"
+  },
+  {
+    "ID": "WIN_97",
+    "Name": "Clipboard Data Access Detected",
+    "Trigger_Condition": "Adversaries collect data stored in a clipboard from users copying information within or between applications.",
+    "ATT&CK_Category": ["Collection"],
+    "ATT&CK_Tag": ["Clipboard Data"],
+    "ATT&CK_ID": ["T1115"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon event_id=1 (image=\"*clip.exe\" or command=\"*Get-Clipboard*\") -user IN EXCLUDED_USERS"
+  },
+  {
+    "ID": "WIN_98",
+    "Name": "Clop Ransomware Emails Sent to Attacker",
+    "Trigger_Condition": "Email communication is established to or from Clop Ransomware listed emails.",
+    "ATT&CK_Category": ["Exfiltration", "Collection"],
+    "ATT&CK_Tag": ["Exfiltration Over C2 Channel", "Email Collection"],
+    "ATT&CK_ID": ["T1041", "T1114"],
+    "Minimum_Log_Source_Requirement": ["Exchange MT"],
+    "Query": "(receiver in CLOP_RANSOMWARE_EMAILS OR sender in CLOP_RANSOMWARE_EMAILS) sender=* receiver=* (host=* OR source_host=*) | rename source_host as host"
+  },
+  {
+    "ID": "WIN_99",
+    "Name": "Clop Ransomware Infected Host Detected",
+    "Trigger_Condition": "Clop ransomware infected host is detected.",
+    "ATT&CK_Category": ["Impact"],
+    "ATT&CK_Tag": ["Data Encrypted for Impact"],
+    "ATT&CK_ID": ["T1486"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "host=* hash=* hash IN CLOP_RANSOMWARE_HASHES"
+  },
+  {
+    "ID": "WIN_100",
+    "Name": "Cmdkey Cached Credentials Recon Detected",
+    "Trigger_Condition": "The usage of cmdkey to detect cached credentials.",
+    "ATT&CK_Category": ["Credential Access"],
+    "ATT&CK_Tag": ["Credential Dumping"],
+    "ATT&CK_ID": ["T1003"],
+    "Minimum_Log_Source_Requirement": ["Windows Sysmon"],
+    "Query": "norm_id=WindowsSysmon event_id=1 image=\"*\\cmdkey.exe\" command=\"* /list *\" -user IN EXCLUDED_USERS"
+  }  
 ]
