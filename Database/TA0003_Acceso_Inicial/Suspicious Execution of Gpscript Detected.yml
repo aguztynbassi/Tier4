@@ -1,0 +1,55 @@
+title: Suspicious Execution of Gpscript Detected
+id: a8b7c6d5-e4f3-2d1c-b0a9-876543210fed # Please generate a unique UUID for each rule
+description: >
+  Detects suspicious execution of `gpscript.exe`, a legitimate Group Policy client
+  utility designed to execute logon or startup scripts. Direct or unexpected
+  invocation of `gpscript.exe` with `/logon` or `/startup` parameters, especially
+  outside of the normal Group Policy processing context, can indicate abuse for
+  defense evasion, persistence, or privilege escalation.
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/05/25 # Updated to current date
+logsource:
+  category: process_creation # Applicable for Sysmon EventID 1 or Windows Security Log 4688
+  product: windows
+  service: sysmon # Explicitly state Sysmon if it's the primary source for process events
+detection:
+  selection:
+    EventID: 1 # Assuming Sysmon Event ID 1 for Process Creation
+    Image|endswith: '\gpscript.exe'
+    CommandLine|contains:
+      - '/logon'
+      - '/startup'
+  # Filter for known legitimate parent processes or specific execution contexts
+  # where gpscript.exe might be legitimately invoked, if not directly by Group Policy.
+  # This filter is crucial to reduce false positives.
+  filter_legitimate_parents:
+    ParentImage|endswith: # Examples of legitimate parents
+      - '\winlogon.exe' # Typical parent for logon scripts
+      - '\services.exe' # Might indirectly launch startup scripts
+      - '\svchost.exe' # Group Policy Client service (gpsvc) runs in svchost.exe
+      - '\explorer.exe' # User might manually run, but still suspicious
+      - '\system.exe' # Very high privilege, might occur during system startup
+      # Add other specific, known legitimate parent processes if observed in your environment
+  condition: selection and not filter_legitimate_parents
+fields:
+  - Image # The process image (gpscript.exe)
+  - CommandLine # The full command line of gpscript.exe
+  - ParentImage # The parent process that launched gpscript.exe
+  - User # User account under which the process ran
+  - ComputerName # Standard field name for the host
+  - RuleName # Sysmon specific field for rule matching
+falsepositives:
+  - Legitimate Group Policy processing during system startup, logon, or background refresh.
+  - Troubleshooting or administrative activities where `gpscript.exe` is manually invoked by an administrator.
+  - Automated scripts that might specifically call `gpscript.exe` for testing or management purposes.
+level: medium # Set to medium initially due to legitimate background activity. Can be raised if FPs are low after tuning.
+tags:
+  - attack.tactic: TA0005 # Defense Evasion
+  - attack.tactic: TA0003 # Persistence
+  - attack.technique: T1218 # Signed Binary Proxy Execution
+references:
+  - https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/gpscript # Microsoft Gpscript documentation
+  - https://lolbas-project.github.io/lolbas/Binaries/Gpscript/ # LoLBas entry for Gpscript.exe
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon # Sysmon official page

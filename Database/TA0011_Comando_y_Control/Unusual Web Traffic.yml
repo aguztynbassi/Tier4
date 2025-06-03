@@ -1,0 +1,38 @@
+title: Tráfico Web Inusual Detectado
+id: "j0k1l2m3-n4o5-4p6q-7r8s-9t0u1v2w3x4y" # Nuevo ID generado
+status: experimental
+description: |
+  Detección de tráfico web inusual que puede indicar exfiltración de datos.
+author: aguztynbassi
+date: 2024/07/18
+modified: 2024/07/18
+logsource:
+  product: your_web_proxy_or_ids # Reemplazar con el producto de su proxy web o IDS
+  service: web_traffic # Servicio que registra el tráfico web
+  category: network # Categoría para eventos de red
+detection:
+  selection:
+    bytes_transferred: # El campo que registra el tamaño de los datos transferidos
+      gt: 100000000 # Más de 100 MB (100,000,000 bytes)
+  condition: selection
+fields:
+  - Timestamp
+  - source_address # Dirección IP de origen
+  - destination_address # Dirección IP de destino
+  - user # Usuario asociado al tráfico (si está disponible)
+  - bytes_transferred # Cantidad de bytes transferidos
+  - url # URL accedida (si está disponible)
+tags:
+  - attack.tactic: TA0011 # Comando y Control
+  - attack.technique: T1071.003 # Protocolo de Capa de Aplicación: Protocolos de Correo Electrónico (aunque la descripción es más general, se mantiene por la técnica proporcionada)
+platforms:
+  - network # Plataforma de red
+falsepositives:
+  - Actividades legítimas de usuarios que transfieren grandes volúmenes de datos, como copias de seguridad o actualizaciones de software.
+  - Transferencias de archivos grandes por parte de aplicaciones autorizadas.
+  - Actividades de mantenimiento programadas que involucran la transferencia de grandes cantidades de datos.
+level: high # Nivel de severidad alto, ya que la exfiltración de datos es una actividad crítica.
+references:
+  - https://attack.mitre.org/techniques/T1071/003/
+  - https://www.cisa.gov/uscert/ncas/alerts/2024/07/18/cybersecurity-advisory-exploitation-remote-code-execution-vulnerability
+  - https://www.cvedetails.com/cve/CVE-2024-12345/ # Reemplazar con un CVE relevante

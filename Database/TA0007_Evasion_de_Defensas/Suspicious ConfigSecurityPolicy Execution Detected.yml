@@ -1,0 +1,64 @@
+title: Suspicious ConfigSecurityPolicy Execution with Network Connections
+id: f0e9d8c7-b6a5-4321-abcd-ef0123456789 # Please generate a unique UUID for each rule
+description: >
+  Detects suspicious execution of `ConfigSecurityPolicy.exe` when its command line
+  contains URL indicators (http://, https://, ftp://). This legitimate Windows
+  Defender binary can be abused by adversaries to download malicious payloads
+  (Ingress Tool Transfer - T1105) or upload data/files (Exfiltration Over Web Service - T1567),
+  bypassing traditional security controls due to its trusted nature.
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/05/25 # Updated to current date
+logsource:
+  category: process_creation # Applicable for Sysmon EventID 1 or Windows Security Log 4688
+  product: windows
+  service: sysmon # Explicitly state Sysmon as the primary source for process events
+detection:
+  selection:
+    EventID: 1 # Sysmon Event ID for Process Creation
+    Image|endswith: '\ConfigSecurityPolicy.exe'
+    CommandLine|contains:
+      - 'http://'
+      - 'https://'
+      - 'ftp://'
+  # Filter for known legitimate scenarios if they cause false positives.
+  # Legitimate use cases for ConfigSecurityPolicy.exe with network connections
+  # are primarily related to Windows Defender updates or policy management via SCCM/Intune.
+  filter_legitimate_sources:
+    ParentImage|endswith: # Exclude if launched by common system management tools
+      - '\MsMpEng.exe' # Windows Defender Antimalware Service
+      - '\MpCmdRun.exe' # Windows Defender command-line utility
+      - '\svchost.exe' # General service host, could be for policy updates
+      - '\sccm.exe' # System Center Configuration Manager components
+      - '\intune.exe' # Microsoft Intune components
+      # Add specific paths or patterns if legitimate applications in your environment
+      # use ConfigSecurityPolicy.exe for downloads/uploads from known trusted sources.
+    CommandLine|contains: # Potentially whitelist specific legitimate URLs/domains
+      - 'update.microsoft.com'
+      - 'configmgr.microsoft.com'
+      # - 'your_company_internal_update_server.com'
+  condition: selection and not filter_legitimate_sources
+fields:
+  - Image # The full path to ConfigSecurityPolicy.exe
+  - CommandLine # The full command line used
+  - ParentImage # The parent process that launched ConfigSecurityPolicy.exe
+  - User # User account under which the process ran
+  - ComputerName # Standard field name for the host
+  - EventID # The Sysmon event ID (1)
+  - RuleName # Sysmon specific field for rule matching
+falsepositives:
+  - Legitimate Windows Defender updates or policy enforcement from Microsoft.
+  - Microsoft Endpoint Configuration Manager (SCCM) or Intune managing Windows Defender policies.
+  - Very rare cases of custom enterprise applications leveraging this binary (should be explicitly whitelisted).
+level: high # Setting to high due to the strong correlation with malicious activity.
+tags:
+  - attack.tactic: TA0007 # Exfiltration
+  - attack.technique: T1567 # Exfiltration Over Web Service
+  - attack.tactic: TA0005 # Defense Evasion
+  - attack.technique: T1105 # Ingress Tool Transfer
+references:
+  - https://lolbas-project.github.io/lolbas/Binaries/ConfigSecurityPolicy/ # LoLBas entry for ConfigSecurityPolicy.exe
+  - https://attack.mitre.org/techniques/T1567/ # MITRE ATT&CK T1567 (Exfiltration Over Web Service)
+  - https://attack.mitre.org/techniques/T1105/ # MITRE ATT&CK T1105 (Ingress Tool Transfer)
+  - https://www.manageengine.com/log-management/correlation-rules/suspicious-execution-configsecuritypolicy.html # Relevant detection context

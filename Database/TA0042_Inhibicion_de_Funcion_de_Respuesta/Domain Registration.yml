@@ -1,0 +1,30 @@
+title: Registro de Dominio Detectado
+id: "a1b2c3d4-e5f6-4g7h-8i9j-0k1l2m3n4o5p" # Nuevo ID generado
+status: experimental
+description: |
+  Detección de nuevos registros de dominio que pueden utilizarse para actividades maliciosas.
+author: aguztynbassi
+date: 2024/07/18
+modified: 2024/07/18
+logsource:
+  product: your_domain_registrar_logs # Reemplazar con el producto de registro de dominios (ej. registrar_api, dns_logs)
+  service: domain_registration # Servicio que registra la actividad de registro de dominios
+  category: network # Categoría para eventos de red
+detection:
+  selection:
+    status: 'new' # El estado del registro es "nuevo"
+  condition: selection
+fields:
+  - Timestamp
+  - domain_name # Nombre del dominio registrado
+  - registrant_email # Correo electrónico del registrante
+  - registrant_name # Nombre del registrante
+  - source_ip # Dirección IP desde la que se realizó el registro
+  - registrar # El registrador de dominios utilizado
+  - status # El estado del registro (nuevo)
+tags:
+  - attack.tactic: TA0042 # Desarrollo de Recursos
+  - attack.technique: T1583.001 # Adquirir Infraestructura: Dominios
+platforms:
+  - network # Plataforma de red, ya que se refiere a la infraestructura.
+level: medium # Nivel de severidad medio, ya que es una actividad de desarrollo, no una explotación directa.

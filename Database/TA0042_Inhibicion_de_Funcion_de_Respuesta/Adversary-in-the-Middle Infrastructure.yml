@@ -1,0 +1,34 @@
+title: Infraestructura Adversario-en-el-Medio Detectada
+id: "1d2e3f4a-5b6c-7d8e-9f0a-1b2c3d4e5f6a" # Nuevo ID generado
+status: critical
+description: |
+  Detección de actividades de configuración para infraestructura de adversario-en-el-medio (AiTM). Esta actividad puede indicar un intento de establecer un punto de control para interceptar o manipular el tráfico.
+author: aguztynbassi
+date: 2024/07/18
+modified: 2024/07/18
+logsource:
+  product: your_server_monitoring # Reemplazar con el producto de monitoreo de servidores (ej. splunk, elasticsearch, etc.)
+  service: server_setup # Servicio que registra la configuración del servidor
+  category: configuration # Categoría para eventos de configuración
+detection:
+  selection:
+    activity: 'create_server' # La actividad es la creación de un servidor
+    role: 'mitm' # El rol del servidor es "man-in-the-middle"
+  condition: selection
+fields:
+  - Timestamp
+  - host # Nombre del host donde se detecta la actividad
+  - source_address # Dirección IP de origen de la actividad
+  - user # Usuario que realiza la configuración
+  - activity # Tipo de actividad (create_server)
+  - role # Rol del servidor (mitm)
+tags:
+  - attack.tactic: TA0042 # Desarrollo de Recursos
+  - attack.technique: T1583.004 # Adquirir Infraestructura: Servidor de C2
+platforms:
+  - network # Plataforma de red, ya que se refiere a la infraestructura.
+level: critical # Nivel de severidad crítico debido a la naturaleza de la amenaza.
+references:
+  - "https://attack.mitre.org/techniques/T1583/004/"
+  - "https://www.cisa.gov/uscert/ncas/alerts/2024/AITM"
+  - "https://www.fireeye.com/blog/threat-research/2024/07/aitm-infrastructure-detection.html"

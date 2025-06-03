@@ -1,0 +1,55 @@
+title: Time-Stomping de Archivos de Directorio de Usuario Detectado
+id: "8c9d0e1f-2a3b-4c5d-6e7f-0123456789ab" # Nuevo ID generado
+status: high
+description: |
+  Detecta el "time-stomping" (modificación de la marca de tiempo de creación) de archivos en directorios de usuario. Sysmon solo puede detectar cambios en `CreationTime`, no en `LastWriteTime` ni `LastAccessTime`. Se requiere una lista blanca de procesos legítimos ruidosos como navegadores, Slack o Teams para reducir los falsos positivos.
+author: aguztynbassi
+date: 2024/07/18
+modified: 2024/07/18
+logsource:
+  product: windows
+  service: sysmon
+  category: file_event # Event ID 2 es para FileTimeChange
+detection:
+  selection:
+    EventID: 2 # Sysmon Event ID para FileTimeChange
+    TargetFilename|startswith: 'C:\Users\'
+  filter_image:
+    Image|endswith:
+      - '\iexplore.exe'
+      - '\cortana.exe'
+      - '\StartMenuExperienceHost.exe'
+      - 'C:\Windows\system32\cleanmgr.exe'
+      - 'C:\Windows\Explorer.EXE'
+      - '\LocalBridge.exe'
+      - '\svchost.exe'
+      - '\RuntimeBroker.exe'
+      - '\msedge.exe'
+      - '\SearchApp.exe'
+      - 'C:\Windows\system32\ServerManager.exe'
+      - '\ServiceHub.RoslynCodeAnalysisService32.exe'
+  filter_path:
+    TargetFilename|contains:
+      - '\AppData\Roaming\Microsoft\Windows\Recent\CustomDestinations'
+  filter_user:
+    User|startswith: # Excluir cuentas del sistema y de servicio. Ajustar según el entorno.
+      - 'NT AUTHORITY\'
+      - 'LOCAL SERVICE'
+      - 'NETWORK SERVICE'
+  condition: selection AND NOT filter_image AND NOT filter_path AND NOT filter_user
+fields:
+  - EventID
+  - Timestamp
+  - User
+  - Computer
+  - Image # Proceso que realiza el cambio
+  - TargetFilename # Archivo afectado
+  - CreationUtcTime # Nueva hora de creación
+  - OldCreationUtcTime # Antigua hora de creación
+tags:
+  - attack.tactic: TA0005 # Evasión de Defensas
+  - attack.technique: T1070 # Remoción de Indicadores
+  - attack.subtechnique: T1070.006 # Remoción de Indicadores: Modificación de Marcas de Tiempo
+platforms:
+  - windows
+level: high # Nivel de severidad de la detección

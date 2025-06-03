@@ -1,0 +1,68 @@
+title: C-Sharp or .NET Code Compilation Using Ilasm Detected
+id: x1y2z3a4-b5c6-7d8e-9f0a-b1c2d3e4f5g6 # Please generate a unique UUID for each rule
+description: >
+  Detects the execution of `ilasm.exe` (IL Assembler), a native Microsoft .NET
+  Framework utility. Adversaries can abuse `ilasm.exe` to compile C# or other
+  .NET Intermediate Language (IL) code directly on a compromised system into
+  executables or DLLs. This technique, often referred to as "compile after delivery,"
+  is a strong indicator of post-exploitation activity, defense evasion, or
+  on-system payload generation, bypassing static signature-based detection.
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/05/25 # Updated to current date
+logsource:
+  category: process_creation # Applicable for Sysmon EventID 1 or Windows Security Log 4688
+  product: windows
+  service: sysmon # Explicitly state Sysmon as the primary source for process events
+detection:
+  selection:
+    EventID: 1 # Sysmon Event ID for Process Creation
+    Image|endswith: '\ilasm.exe'
+    # Optional: Add CommandLine patterns if specific malicious compilation flags are known
+    # CommandLine|contains:
+    #   - '/DLL' # Compiling into a DLL
+    #   - '/EXE' # Compiling into an executable
+    #   - '/resource' # Including resources, potentially embedded payloads
+  # Filter for known legitimate scenarios.
+  # Legitimate use of ilasm.exe is usually confined to development environments
+  # or specific software installations/updates that involve on-the-fly compilation.
+  filter_legitimate_usage:
+    ParentImage|endswith: # Exclude if launched by common development tools or installers
+      - '\devenv.exe' # Visual Studio
+      - '\msbuild.exe' # Microsoft Build Engine
+      - '\setup.exe' # Common installer names
+      - '\install.exe'
+      - '\update.exe'
+    Image|startswith: # Check if ilasm.exe is running from a specific, trusted framework path
+      - 'C:\Program Files (x86)\Microsoft SDKs\Windows\' # Common SDK path for ilasm
+      - 'C:\Program Files\Microsoft SDKs\Windows\'
+      - 'C:\Windows\Microsoft.NET\Framework\' # Common .NET Framework paths
+      - 'C:\Windows\Microsoft.NET\Framework64\'
+    # Exclude specific users if known to perform development/compilation activities
+    # User|contains: 'DEV_TEAM_GROUP'
+  condition: selection and not filter_legitimate_usage
+fields:
+  - Image # The full path to ilasm.exe
+  - CommandLine # The full command line used
+  - ParentImage # The parent process that launched ilasm.exe
+  - User # User account under which the process ran
+  - ComputerName # Standard field name for the host
+  - EventID # The Sysmon event ID (1)
+  - RuleName # Sysmon specific field for rule matching
+falsepositives:
+  - Software development environments (e.g., Visual Studio, .NET SDKs) where developers
+    are actively compiling .NET applications.
+  - Automated build or deployment systems that perform on-the-fly compilation.
+  - Specific software installations or updates that might use `ilasm.exe` for
+    dynamic code generation or component registration.
+level: medium # Setting to medium. While often malicious, legitimate developer use can generate FPs.
+tags:
+  - attack.tactic: TA0005 # Defense Evasion
+  - attack.tactic: TA0007 # Execution
+  - attack.technique: T1127 # Trusted Developer Utilities Proxy Execution
+references:
+  - https://attack.mitre.org/techniques/T1127/ # MITRE ATT&CK T1127 (Compile After Delivery)
+  - https://lolbas-project.github.io/lolbas/Binaries/Ilasm/ # LoLBas entry for Ilasm.exe
+  - https://learn.microsoft.com/en-us/dotnet/framework/tools/ilasm-exe-il-assembler # Microsoft Ilasm.exe documentation
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon # Sysmon official page

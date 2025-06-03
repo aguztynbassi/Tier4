@@ -1,0 +1,47 @@
+title: Transferencia de Archivos RDP Inusual
+id: "t2u3v4w5-x6y7-8z9a-0b1c-2d3e4f5g6h7i" # Nuevo ID generado
+status: experimental
+description: |
+  Detecta transferencias de archivos de gran tamaño a través de RDP, lo que puede
+  indicar exfiltración de datos. Esta regla asume la existencia de logs que
+  registran el volumen de datos transferidos durante sesiones RDP. Se enfoca en
+  sesiones RDP interactivas (LogonType 10) donde se detecta una cantidad inusualmente
+  grande de bytes transferidos.
+author: aguztynbassi
+date: 2025/05/24
+modified: 2025/05/24
+logsource:
+  category: process_creation # Puede ser 'process_creation', 'file_access', o 'network' dependiendo de cómo se capturen los logs de transferencia RDP
+  product: windows # Plataforma Windows
+  service: security # Logs de seguridad de Windows, o logs de RDP específicos
+detection:
+  selection:
+    # Se asume un campo 'LogonType' que indica el tipo de inicio de sesión.
+    # LogonType 10 corresponde a un inicio de sesión interactivo remoto (RDP).
+    LogonType: 10
+    # Se asume un campo 'bytes_transferred' que registra el volumen de datos.
+    # Este campo puede no estar directamente en los eventos de logon, sino en
+    # logs de sesión RDP o de auditoría de archivos/red correlacionados.
+    # El umbral de 10 MB (10 * 1024 * 1024 = 10485760 bytes) es un ejemplo.
+    bytes_transferred:
+      - '>10000000' # Más de 10 MB
+  condition: selection
+fields:
+  - Timestamp
+  - ComputerName # Nombre del equipo donde ocurrió el evento
+  - SubjectUserName # Nombre de usuario de la sesión RDP
+  - SubjectDomainName # Dominio del usuario de la sesión RDP
+  - IpAddress # Dirección IP de origen de la conexión RDP
+  - IpPort # Puerto de origen de la conexión RDP
+  - bytes_transferred # Cantidad de bytes transferidos (asumido)
+tags:
+  - attack.tactic: TA0010 # Exfiltración (más apropiado para exfiltración de datos)
+  - attack.technique: T1021.001 # Acceso Remoto a Servicios: Escritorio Remoto
+  - attack.tactic: TA0008 # Acceso Lateral (si se usa RDP para moverse lateralmente y exfiltrar)
+platforms:
+  - windows # Plataforma Windows
+level: high # Nivel de severidad alto, ya que es una actividad de exfiltración.
+references:
+  - https://attack.mitre.org/techniques/T1021/001/
+  - https://www.sans.org/blog/detecting-data-exfiltration-over-rdp/
+  - https://www.cisecurity.org/controls/windows-security-configuration/

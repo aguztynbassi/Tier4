@@ -1,0 +1,35 @@
+title: Exfiltración de Datos SMB Detectada
+id: "l2m3n4o5-p6q7-4r8s-9t0u-1v2w3x4y5z6a" # Nuevo ID generado
+status: experimental
+description: |
+  Detección de grandes transferencias de archivos a través de SMB que pueden indicar exfiltración de datos.
+author: aguztynbassi
+date: 2024/07/18
+modified: 2024/07/18
+logsource:
+  product: your_file_server # Reemplazar con el producto de su servidor de archivos o dispositivo de red
+  service: smb_transfer # Servicio que registra las transferencias SMB
+  category: network # Categoría para eventos de red
+detection:
+  selection:
+    bytes_transferred: # El campo que registra el tamaño de los datos transferidos
+      gt: 100000000 # Más de 100 MB (100,000,000 bytes)
+  condition: selection
+fields:
+  - Timestamp
+  - source_address # Dirección IP de origen
+  - destination_address # Dirección IP de destino
+  - user # Usuario que realiza la transferencia (si está disponible)
+  - file_name # Nombre del archivo transferido (si está disponible)
+  - bytes_transferred # Cantidad de bytes transferidos
+tags:
+  - attack.tactic: TA0010 # Exfiltración
+  - attack.technique: T1048.002 # Exfiltración sobre Protocolo Alternativo: Exfiltración sobre SMB
+platforms:
+  - network # Plataforma de red
+level: high # Nivel de severidad alto, ya que la exfiltración de datos es una actividad crítica.
+references:
+  - "https://www.splunk.com/en_us/blog/security/splunk-security-essentials-for-splunk-enterprise-security.html"
+  - "https://www.splunk.com/en_us/blog/security/splunk-security-essentials-for-splunk-enterprise-security-part-2.html"
+  - "https://www.splunk.com/en_us/blog/security/splunk-security-essentials-for-splunk-enterprise-security-part-3.html"
+  - "https://www.splunk.com/en_us/blog/security/splunk-security-essentials-for-splunk-enterprise-security-part-4.html"

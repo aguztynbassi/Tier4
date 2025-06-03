@@ -1,0 +1,28 @@
+title: Creación de Cuenta de Correo Electrónico Detectada
+id: "e5f6g7h8-i9j0-4k1l-2m3n-4o5p6q7r8s9t" # Nuevo ID generado
+status: experimental
+description: |
+  Detección de nuevas creaciones de cuentas de correo electrónico que pueden utilizarse para phishing u otras actividades maliciosas.
+author: aguztynbassi
+date: 2024/07/18
+modified: 2024/07/18
+logsource:
+  product: your_email_platform # Reemplazar con el producto de su plataforma de correo electrónico (ej. google_workspace, microsoft_365, internal_mail_server)
+  service: account_activity # Servicio que registra la actividad de la cuenta de correo electrónico
+  category: account_creation # Categoría para eventos de creación de cuentas
+detection:
+  selection:
+    action: 'create_account' # La acción es la creación de una cuenta
+  condition: selection
+fields:
+  - timestamp
+  - user # El usuario o entidad que creó la cuenta
+  - account_id # El ID de la cuenta creada
+  - email_address # La dirección de correo electrónico creada
+  - action # La acción realizada (create_account)
+tags:
+  - attack.tactic: TA0042 # Desarrollo de Recursos
+  - attack.technique: T1585.001 # Adquirir Capacidades: Cuentas de Correo Electrónico
+platforms:
+  - email # Plataforma de correo electrónico
+level: medium # Nivel de severidad medio, ya que es una actividad de desarrollo, no una explotación directa.

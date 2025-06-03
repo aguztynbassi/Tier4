@@ -1,0 +1,50 @@
+title: Application Whitelisting Bypass via Dxcap Detected
+id: f8d7c6b5-a4e3-2d1c-0b9a-876543210fed # Replace with a newly generated UUID
+description: >
+  Adversaries bypassing process and/or signature-based defenses by executing Dxcap.exe,
+  often used for application whitelisting bypass via trusted developer utilities proxy execution.
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/05/25 # Updated to current date
+logsource:
+  category: process_creation # Standard Sigma category for process creation events
+  product: windows
+  service: sysmon # Specifies Sysmon as the logging service
+detection:
+  selection:
+    EventID: 1 # Sysmon Event ID for Process Creation
+    Image|endswith: '\dxcap.exe'
+    CommandLine|contains: # Dxcap.exe is often used with -c for command execution
+      - '-c'
+      - '.exe' # Indicates an executable is being launched
+  # Filter for legitimate users or processes that might use dxcap.exe
+  # This filter is a placeholder. You need to define specific users or groups
+  # that are allowed to legitimately use dxcap.exe in your environment,
+  # or list specific legitimate parent processes.
+  filter_legitimate_users:
+    User|endswith: # Example placeholder for users to exclude
+      - '\SYSTEM'
+      - '\LOCAL SERVICE'
+      - '\NETWORK SERVICE'
+      # - 'MYDOMAIN\LegitUser1'
+      # - 'MYDOMAIN\LegitAdminGroup'
+  condition: selection and not filter_legitimate_users
+fields:
+  - User # Standard field name for the user context
+  - Image # The process image (dxcap.exe)
+  - CommandLine # The full command line of dxcap.exe
+  - ParentImage # The parent process that launched dxcap.exe
+  - RuleName # Sysmon specific field for rule matching
+falsepositives:
+  - Legitimate debugging or profiling activities by developers.
+  - Software installations or updates that might temporarily use dxcap.exe.
+  - Automated tasks or scripts that use dxcap.exe for specific diagnostic purposes.
+level: high
+tags:
+  - attack.tactic: TA0005 # Defense Evasion
+  - attack.technique: T1127 # Trusted Developer Utilities Proxy Execution
+references:
+  - https://docs.microsoft.com/en-us/windows/win32/dxcap/dxcap-exe-command-line-reference # Official Dxcap.exe documentation
+  - https://attack.mitre.org/techniques/T1127/ # MITRE ATT&CK T1127 (Trusted Developer Utilities Proxy Execution)
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon # Sysmon official page

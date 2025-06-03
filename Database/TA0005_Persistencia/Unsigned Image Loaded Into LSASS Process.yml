@@ -1,0 +1,52 @@
+title: Unsigned Image Loaded Into LSASS Process
+id: b2a1c0d3-e4f5-6a7b-8c9d-0e1f2a3b4c5d # Replace with a newly generated UUID
+description: >
+  Detection of unsigned dynamic-link libraries (DLLs) or executables (EXEs)
+  being loaded into the LSASS.exe process. This activity is highly suspicious
+  and often indicative of credential dumping attempts (e.g., Mimikatz modules),
+  persistence mechanisms, or other malicious injections.
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/05/25 # Updated to current date
+logsource:
+  category: image_load # Appropriate category for image load events
+  product: windows
+  service: sysmon # Specifies Sysmon as the logging service
+detection:
+  selection:
+    EventID: 7 # Sysmon Event ID for ImageLoad
+    Image|endswith: '\lsass.exe' # The process into which the image is loaded (LSASS)
+    Signed: 'false' # The loaded image is not digitally signed
+    # Exclude known legitimate unsigned DLLs if they exist and cause false positives.
+    # This filter is crucial for reducing false positives in some environments.
+    # For example, some older legitimate components might not be signed.
+    # You will need to identify and explicitly exclude these based on your environment.
+    LoadedImage|endswith|not:
+      # - '\some_unsigned_legit_dll.dll' # Placeholder for known benign unsigned DLL
+      # - '\another_module.dll'
+      # Exclude specific paths that might contain benign unsigned modules
+      # - 'C:\Program Files\SomeApp\UnsignedLib.dll'
+  condition: selection
+fields:
+  - Image # The process (lsass.exe) into which the image was loaded
+  - LoadedImage # The path to the loaded unsigned DLL/EXE
+  - Signed # Indicates if the loaded image is signed (false)
+  - Signature # Signature information if available (even if signed is false)
+  - SignatureStatus # Status of the signature validation
+  - User # User context under which the event occurred
+  - ComputerName # Standard field name for the host
+  - RuleName # Sysmon specific field for rule matching
+falsepositives:
+  - Very low false positive rate expected. Loading unsigned code into LSASS is highly suspicious.
+  - Extremely rare cases of legitimate, custom, or very old software that might load unsigned components into LSASS. This should be thoroughly investigated and whitelisted if necessary.
+level: critical # Changed from high to critical due to the extreme sensitivity of LSASS.
+tags:
+  - attack.tactic: TA0005 # Defense Evasion
+  - attack.tactic: TA0004 # Credential Access
+  - attack.tactic: TA0003 # Persistence
+  - attack.technique: T1003 # OS Credential Dumping
+  - attack.technique: T1003.001 # OS Credential Dumping: LSASS Memory
+references:
+  - https://attack.mitre.org/techniques/T1003/001/ # MITRE ATT&CK T1003.001 (LSASS Memory)
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon # Sysmon official page

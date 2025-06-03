@@ -1,0 +1,55 @@
+title: Javascript Conversion to Executable Detected
+id: b9a8c7d6-e5f4-3d2c-1b0a-9876543210fe # Please generate a unique UUID for each rule
+description: >
+  Detection of suspicious execution of `jsc.exe` (JScript Compiler) to convert
+  JavaScript files into executable binaries. This legitimate Microsoft utility
+  can be abused by adversaries to compile malicious JavaScript payloads into
+  executables, serving as a defense evasion technique by leveraging a trusted binary.
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/05/25 # Updated to current date
+logsource:
+  category: process_creation # Applicable for Sysmon EventID 1 or Windows Security Log 4688
+  product: windows
+  service: sysmon # Explicitly state Sysmon if it's the primary source for process events
+detection:
+  selection:
+    EventID: 1 # Assuming Sysmon Event ID 1 for Process Creation
+    Image|endswith: '\jsc.exe'
+    CommandLine|contains: # Looking for the compilation of a .js file
+      - '.js' # Indicates an input JScript file
+      - '/out:' # Common parameter to specify output executable name
+  # Filter for known legitimate development or system administration activities.
+  # This filter is crucial to reduce false positives in environments where jsc.exe might be legitimately used.
+  filter_legitimate_usage:
+    ParentImage|endswith: # Exclude if launched by common development tools or IDEs
+      - '\devenv.exe' # Visual Studio
+      - '\cmd.exe' # Sometimes used by developers
+      - '\powershell.exe' # Sometimes used by developers
+      - '\msbuild.exe' # Part of build processes
+    CommandLine|contains|all: # Exclude if compiling known legitimate scripts/paths
+      - 'C:\Program Files (x86)\Microsoft SDKs\' # Common path for .NET SDKs
+      - 'C:\Windows\Microsoft.NET\Framework\' # Common path for .NET Framework components
+      # Add other specific, known legitimate paths or script names if observed in your environment
+  condition: selection and not filter_legitimate_usage
+fields:
+  - Image # The process image (jsc.exe)
+  - CommandLine # The full command line of jsc.exe
+  - ParentImage # The parent process that launched jsc.exe
+  - User # User account under which the process ran
+  - ComputerName # Standard field name for the host
+  - RuleName # Sysmon specific field for rule matching
+falsepositives:
+  - Legitimate software development activities involving JScript.
+  - Automated build processes or CI/CD pipelines that compile JScript.
+  - Legacy applications or scripts that use JScript.
+level: medium # Set to medium initially due to potential for legitimate use in development environments. Can be raised if FPs are low after tuning.
+tags:
+  - attack.tactic: TA0005 # Defense Evasion
+  - attack.technique: T1127 # Trusted Developer Utilities Proxy Execution
+  - attack.technique: T1127.001 # Trusted Developer Utilities Proxy Execution (jsc.exe is a signed binary)
+references:
+  - https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/command-line-options-for-jscript # Microsoft JScript Compiler documentation
+  - https://lolbas-project.github.io/lolbas/Binaries/Jsc/ # LoLBas entry for jsc.exe
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon # Sysmon official page

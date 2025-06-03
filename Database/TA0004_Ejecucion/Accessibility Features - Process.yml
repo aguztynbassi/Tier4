@@ -1,0 +1,65 @@
+title: Accessibility Features - Suspicious Process Launch by Winlogon
+id: u1v2w3x4-y5z6-7a8b-9c0d-e1f2g3h4i5j6 # Please generate a unique UUID for each rule
+description: >
+  Detects highly suspicious process creation where legitimate Windows accessibility
+  feature binaries (e.g., `sethc.exe`, `utilman.exe`, `osk.exe`) are launched by
+  `winlogon.exe` and are NOT located in their standard system paths. This indicates
+  a potential persistence and privilege escalation attempt, as adversaries commonly
+  hijack accessibility features (often via Image File Execution Options registry
+  modifications) to execute malicious code with SYSTEM privileges from the login screen.
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/05/25 # Updated to current date
+logsource:
+  category: process_creation # Applicable for Sysmon EventID 1 or Windows Security Log 4688
+  product: windows
+  service: sysmon # Explicitly state Sysmon as the primary source for process events
+detection:
+  # Selection for accessibility features binaries launched by winlogon.exe
+  # These are the legitimate executables, but we're looking for their malicious launch context.
+  selection_accessibility_executables:
+    EventID: 1 # Sysmon Event ID for Process Creation
+    ParentImage|endswith: '\winlogon.exe'
+    Image|endswith:
+      - '\sethc.exe' # Sticky Keys
+      - '\utilman.exe' # Utility Manager
+      - '\osk.exe' # On-Screen Keyboard
+      - '\magnify.exe' # Magnifier
+      - '\displayswitch.exe' # Display Switcher
+      - '\narrator.exe' # Narrator
+      - '\atbroker.exe' # Assistive Technology Broker
+      - '\dpiscaling.exe' # DPI Scaling (less common, but possible target)
+  # Filter for legitimate cases where these binaries are launched from their expected system paths.
+  # Any launch from a non-standard path is highly suspicious.
+  filter_legitimate_paths:
+    Image|startswith:
+      - 'C:\Windows\System32\'
+      - 'C:\Windows\SysWOW64\' # For 32-bit binaries on 64-bit systems
+      # Add other legitimate system paths if observed (e.g., specific Windows versions)
+  # The original rule had 'User|contains: EXCLUDED_USERS'.
+  # This is problematic for generic rules and better managed at the SIEM level.
+  condition: selection_accessibility_executables and not filter_legitimate_paths
+fields:
+  - EventID # Sysmon event ID (1)
+  - Image # The full path to the spawned accessibility executable
+  - ParentImage # The full path to winlogon.exe
+  - CommandLine # The full command line of the spawned executable
+  - User # User account under which the spawned process ran (should be SYSTEM for winlogon)
+  - ComputerName # Standard field name for the host
+  - RuleName # Sysmon specific field for rule matching
+falsepositives:
+  - Extremely low expected false positives. Legitimate accessibility features
+    should almost exclusively be launched from `C:\Windows\System32\` by `winlogon.exe`.
+  - Rare cases of legitimate system tools or updates that might temporarily
+    alter these paths, but these should be thoroughly investigated.
+level: critical # Setting to critical due to the direct implication of privilege escalation and persistence.
+tags:
+  - attack.tactic: TA0003 # Persistence
+  - attack.tactic: TA0004 # Privilege Escalation
+  - attack.technique: T1546.008 # Event Triggered Execution: Accessibility Features
+  - attack.technique: T1546 # Event Triggered Execution
+references:
+  - https://attack.mitre.org/techniques/T1546/008/ # MITRE ATT&CK T1546.008 (Accessibility Features)
+  - https://docs.microsoft.com/en-us/sysinternals/downloads/sysmon # Sysmon official page
+  - https://learn.microsoft.com/en-us/troubleshoot/windows-server/identity/change-sticky-keys-utility-manager # Context on accessibility features

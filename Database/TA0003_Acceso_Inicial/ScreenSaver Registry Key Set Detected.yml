@@ -1,0 +1,51 @@
+title: Suspicious ScreenSaver Registry Key Set Detected
+id: d1c2b3a4-e5f6-7g8h-9i0j-1k2l3m4n5o6p # Please generate a unique UUID for each rule
+description: >
+  Detects suspicious modification to the `SCRNSAVE.EXE` registry key, indicating
+  that a file (often masquerading with a `.scr` extension) is being set as the
+  system screensaver. This action, especially when performed by `rundll32.exe`,
+  is a common technique for establishing persistence or achieving execution.
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/05/25 # Updated to current date
+logsource:
+  category: registry_event # Specifically looking for registry modifications
+  product: windows
+  service: sysmon # Explicitly state Sysmon as the primary source for registry events
+detection:
+  selection:
+    EventID: 13 # Sysmon Event ID for RegistryValue SET
+    Image|endswith: '\rundll32.exe' # The process performing the registry modification
+    TargetObject|endswith: '\Control Panel\Desktop\SCRNSAVE.EXE' # The specific registry key for screen saver executable
+    Details|endswith: '.scr' # The value being set (the path to the screen saver file)
+  # Filter for legitimate screen saver paths to reduce false positives.
+  # Most legitimate screen savers are located in System32 or SysWOW64.
+  filter_legit_paths:
+    Details|startswith:
+      - 'C:\Windows\System32\'
+      - 'C:\Windows\SysWOW64\'
+  condition: selection and not filter_legit_paths
+fields:
+  - EventID # The Sysmon event ID (13)
+  - Image # The process (rundll32.exe) that set the registry key
+  - TargetObject # The registry key that was modified
+  - Details # The new value of the registry key (the path to the .scr file)
+  - User # User account under which the event occurred
+  - ComputerName # Standard field name for the host
+  - RuleName # Sysmon specific field for rule matching
+falsepositives:
+  - Legitimate user activity when changing their screen saver to a non-standard one.
+  - Desktop management software or Group Policy objects that legitimately set or manage screen savers.
+  - Third-party screensaver installations that place `.scr` files in non-standard locations.
+level: medium # Setting to medium due to potential for legitimate user-driven or managed activity. Can be raised if FPs are low after tuning.
+tags:
+  - attack.tactic: TA0005 # Defense Evasion
+  - attack.tactic: TA0003 # Persistence
+  - attack.technique: T1547 # Boot or Logon Autostart Execution
+  - attack.technique: T1218 # Signed Binary Proxy Execution
+  - attack.technique: T1218.011 # Signed Binary Proxy Execution (Rundll32)
+references:
+  - https://attack.mitre.org/techniques/T1547/001/ # MITRE ATT&CK T1547.001 (Registry Run Keys / Startup Folder)
+  - https://lolbas-project.github.io/lolbas/Binaries/Rundll32/ # LoLBas entry for Rundll32.exe (often used for this)
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon # Sysmon official page

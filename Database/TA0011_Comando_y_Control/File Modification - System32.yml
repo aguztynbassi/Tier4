@@ -1,0 +1,28 @@
+title: File Modification - System32
+id: 7e2b1a3c-9f4d-4e2a-8b1c-2a3e4d5f6a7b  # Reemplaza con un UUID generado si lo deseas
+description: Detects changes in the System32 directory which may indicate tampering with system files.
+status: experimental
+author: aguztynbassi
+date: 2024/05/25
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4663
+    Object_Name|contains: '\Windows\System32\'
+  condition: selection
+fields:
+  - SubjectUserName
+  - Object_Name
+  - ProcessName
+falsepositives:
+  - Legitimate system or administrator file modifications
+level: high
+tags:
+  - attack.tactic: TA0005  # Defense Evasion
+  - attack.technique: t1105 # Ingress Tool Transfer
+  - attack.tactic: TA0011 # Discovery
+references:
+  - https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4663
+  - https://attack.mitre.org/techniques/T1105/ # MITRE ATT&CK T1105 (Ingress Tool Transfer)

@@ -1,0 +1,31 @@
+title: Unusual Network Activity
+id: 6c7d8e9f-1a2b-4c3d-8e7f-5a6b7c8d9e0f  # Reemplaza con un UUID generado si lo deseas
+description: Detecting unusual outbound network connections that may indicate data exfiltration.
+status: experimental
+author: aguztynbassi
+date: 2024/05/25
+logsource:
+  product: network
+detection:
+  selection:
+    dest_ip|not_in:
+      - '10.0.0.0/8'
+      - '192.168.0.0/16'
+    count|gt: 1000
+  condition: selection
+fields:
+  - src_ip
+  - dest_ip
+  - bytes
+  - packets
+falsepositives:
+  - Backup jobs
+  - Software updates
+level: high
+tags:
+  - attack.tactic: TA0010 # Exfiltration
+  - attack.technique: t1041 # Exfiltration Over Command and Control Channel
+references:
+  - https://www.elastic.co/guide/en/security/current/detection-engine-rules-dsl-reference.html
+  - https://www.elastic.co/guide/en/security/current/detection-engine-rules-field-reference.html
+  - https://attack.mitre.org/techniques/T1041/

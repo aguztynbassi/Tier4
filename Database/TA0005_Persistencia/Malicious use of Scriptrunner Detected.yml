@@ -1,0 +1,47 @@
+title: Malicious Use of Scriptrunner Detected
+id: d7c6b5a4-e3f2-1a9b-8c7d-6e5f4d3c2b1a # Replace with a newly generated UUID
+description: >
+  Detection of suspicious execution of `ScriptRunner.exe`, often with the `-appvscript`
+  parameter. This legitimate Microsoft utility can be abused by adversaries to execute
+  scripts (e.g., PowerShell, VBScript) and bypass application whitelisting,
+  serving as a form of defense evasion.
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/05/25 # Updated to current date
+logsource:
+  category: process_creation # Sysmon EventID 1 or Windows Security Log 4688
+  product: windows
+  service: sysmon # Best practice to explicitly state Sysmon if it's the primary source
+detection:
+  selection:
+    EventID: 1 # Assuming Sysmon Event ID 1 for Process Creation
+    Image|endswith: '\ScriptRunner.exe'
+    CommandLine|contains: '-appvscript' # This parameter is often used in malicious contexts
+  # Optional: Add exclusions if legitimate usage of ScriptRunner.exe with -appvscript is common
+  # filter_legitimate_usage:
+  #   ParentImage|endswith: # Exclude if launched by known legitimate installers/updaters
+  #     - '\Installer.exe'
+  #     - '\Updater.exe'
+  #   CommandLine|contains: # Exclude specific benign script paths
+  #     - 'C:\Program Files\AppVClient\Scripts\legitscript.ps1'
+  condition: selection
+fields:
+  - Image # The process image (ScriptRunner.exe)
+  - CommandLine # The full command line of ScriptRunner.exe
+  - ParentImage # The parent process that launched ScriptRunner.exe
+  - User # User account under which the process ran
+  - ComputerName # Standard field name for the host
+  - RuleName # Sysmon specific field for rule matching
+falsepositives:
+  - Legitimate use of App-V (Application Virtualization) clients or software that uses ScriptRunner.exe for package deployment or script execution. This should be thoroughly investigated and potentially whitelisted based on your environment.
+  - Software installations or updates utilizing App-V.
+level: medium # Set to medium as legitimate use exists, requiring tuning. Can be elevated to high if FPs are low.
+tags:
+  - attack.tactic: TA0005 # Defense Evasion
+  - attack.technique: T1218 # Signed Binary Proxy Execution
+  - attack.technique: T1218.00 # Signed Binary Proxy Execution (ScriptRunner.exe)
+references:
+  - https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/event-1 # Generic Windows Event ID 1 (Process Creation)
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon # Sysmon official page
+  - https://lolbas-project.github.io/lolbas/Binaries/Scriptrunner/ # LoLBas entry for ScriptRunner.exe

@@ -1,0 +1,43 @@
+title: Desarrollo de Botnet Detectado
+id: "6b7c8d9e-0f1a-4b2c-3d4e-5f6a7b8c9d0e" # Nuevo ID generado
+status: experimental
+description: |
+  Detección de actividades relacionadas con el desarrollo de botnets. Esta actividad puede indicar un intento de un adversario de crear o mantener una red de bots maliciosos.
+author: aguztynbassi
+date: 2024/07/18
+modified: 2024/07/18
+logsource:
+  product: your_code_repository # Reemplazar con el producto de repositorio de código (ej. GitHub, GitLab, Bitbucket)
+  service: code_repo # Servicio que registra la actividad del repositorio de código
+  category: code # Categoría para eventos de código
+detection:
+  selection:
+    repo_name: '*botnet*' # Detecta "botnet" en el nombre del repositorio
+    # Considerar añadir más filtros si los logs proporcionan detalles sobre el contenido o las operaciones:
+    # file_name: # Ejemplos de nombres de archivo sospechosos
+    #   - '*bot.py'
+    #   - '*client.c'
+    #   - '*server.go'
+    # operation: # Ejemplos de operaciones sospechosas
+    #   - 'create'
+    #   - 'push'
+    #   - 'commit'
+  condition: selection
+fields:
+  - Timestamp
+  - user # Usuario que realiza la actividad del repositorio de código
+  - source_address # Dirección IP de origen de la actividad
+  - repo_name # Nombre del repositorio
+  - file_name # Nombre del archivo (si está disponible)
+  - operation # Operación realizada (si está disponible)
+  - details # Detalles adicionales sobre la actividad (si están disponibles)
+tags:
+  - attack.tactic: TA0042 # Desarrollo de Recursos
+  - attack.technique: T1586.002 # Desarrollar Capacidades: Botnet
+platforms:
+  - windows # Aunque los repositorios son más amplios, la solicitud especifica Windows como plataforma de interés.
+level: medium # Nivel de severidad medio, ya que es una actividad de desarrollo, no una explotación directa.
+references:
+  - "https://attack.mitre.org/techniques/T1586/002/"
+  - "https://www.cisa.gov/uscert/ncas/alerts/2024/Botnet"
+  - "https://www.fireeye.com/blog/threat-research/2024/07/botnet-development.html"

@@ -1,0 +1,58 @@
+title: MSHTA Spawned by SVCHOST Detected
+id: m1n2o3p4-q5r6-7s8t-9u0v-w1x2y3z4a5b6 # Please generate a unique UUID for each rule
+description: >
+  Detects instances where `mshta.exe` (Microsoft HTML Application host) is spawned
+  as a child process of `svchost.exe`. This is a highly suspicious and unusual
+  behavior, as `svchost.exe` primarily hosts legitimate system services and
+  should not typically launch interactive applications like `mshta.exe`. This
+  pattern is a strong indicator of proxy execution, abuse of trusted processes,
+  or advanced persistent threat (APT) activity (e.g., LethalHTA technique).
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/05/25 # Updated to current date
+logsource:
+  category: process_creation # Applicable for Sysmon EventID 1 or Windows Security Log 4688
+  product: windows
+  service: sysmon # Explicitly state Sysmon as the primary source for process events
+detection:
+  selection:
+    EventID: 1 # Sysmon Event ID for Process Creation
+    Image|endswith: '\mshta.exe'
+    ParentImage|endswith: '\svchost.exe'
+  # Given the high criticality and low expected false positives, a general user-based
+  # filter might not be necessary or effective. Any legitimate scenario should be
+  # thoroughly investigated and explicitly whitelisted at the SIEM level if observed.
+  # filter_legitimate_users:
+  #   User|in:
+  #     - 'NT AUTHORITY\SYSTEM' # svchost.exe often runs as SYSTEM
+  #     - 'NT AUTHORITY\LocalService'
+  #     # If a specific service account is known to legitimately trigger this, add it here.
+  condition: selection # No specific filter needed here, as the combination itself is highly suspicious
+fields:
+  - Image # The full path to mshta.exe
+  - ParentImage # The full path to svchost.exe
+  - CommandLine # The full command line of mshta.exe
+  - ParentCommandLine # The full command line of svchost.exe (useful for context)
+  - User # User account under which mshta.exe was spawned
+  - ComputerName # Standard field name for the host
+  - EventID # The Sysmon event ID (1)
+  - RuleName # Sysmon specific field for rule matching
+falsepositives:
+  - Extremely low expected false positives. This behavior is highly atypical for
+    legitimate system operations.
+  - Very rare cases of highly unusual or misconfigured legitimate applications
+    or services that might indirectly cause `svchost.exe` to spawn `mshta.exe`.
+    Such instances should be treated as high priority for investigation and
+    potential whitelisting only after thorough vetting.
+level: critical # Setting to critical due to the extremely high correlation with malicious activity.
+tags:
+  - attack.tactic: TA0005 # Defense Evasion
+  - attack.tactic: TA0002 # Execution
+  - attack.technique: T1218 # Signed Binary Proxy Execution
+  - attack.technique: T1218.005 # Signed Binary Proxy Execution (Mshta)
+references:
+  - https://attack.mitre.org/techniques/T1218/005/ # MITRE ATT&CK T1218.005 (Mshta)
+  - https://lolbas-project.github.io/lolbas/Binaries/Mshta/ # LoLBas entry for Mshta.exe
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon # Sysmon official page
+  - https://research.nccgroup.com/2019/02/19/lethalhta-a-new-lateral-movement-technique/ # LethalHTA research

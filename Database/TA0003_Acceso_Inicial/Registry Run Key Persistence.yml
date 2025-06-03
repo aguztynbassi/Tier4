@@ -1,0 +1,42 @@
+title: Registry Run Key Persistence
+id: 9d1b0c8e-7e6a-4d2c-8f0a-1b3c4e5f6d7g # A unique UUID should be generated for each rule
+description: >
+  Detection has identified changes to the Registry Run keys for persistence.
+  Adversaries may use this technique to maintain access by executing malicious binaries during system startup.
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/04/05
+logsource:
+  product: windows
+  service: security # Event ID 4663 is part of Windows Security Auditing
+detection:
+  selection:
+    EventID: 4663 # Event ID for "An attempt was made to access an object."
+    ObjectName|contains: '\REGISTRY\MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run'
+    # To make this detection more precise for *writes* to the Run keys,
+    # you might want to filter on specific AccessMask values related to
+    # registry key modification/creation. Common AccessMask values for
+    # registry writes include:
+    # 0x2 (FILE_WRITE_DATA / Set Value)
+    # 0x20006 (KEY_SET_VALUE combined with other permissions)
+    # Example for more precise write detection (uncomment if needed):
+    # AccessMask:
+    #   - '0x2'
+    #   - '0x20006'
+  condition: selection
+fields:
+  - SubjectUserName # Standard field name for the user performing the action in Event ID 4663
+  - ProcessName
+  - ObjectName
+  - AccessMask
+falsepositives:
+  - Legitimate software installations
+  - System updates
+level: high # Sigma uses 'level' instead of 'risk'
+tags:
+  - attack.tactic: TA0003 # Persistence
+  - attack.technique: T1547.001 # Registry Run Keys / Startup Folder
+references:
+  - https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4663 # Microsoft documentation for Event ID 4663
+  - https://attack.mitre.org/techniques/T1547/001/ # MITRE ATT&CK T1547.001 (Registry Run Keys / Startup Folder)

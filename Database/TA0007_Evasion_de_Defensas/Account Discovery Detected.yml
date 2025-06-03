@@ -1,0 +1,96 @@
+title: Account Discovery Detected (Local and Domain)
+id: p1q2r3s4-t5u6-7v8w-9x0y-z1a2b3c4d5e6 # Please generate a unique UUID for each rule
+description: >
+  Detects common command-line patterns indicating an adversary's attempt to
+  discover local or domain user accounts and group memberships. This
+  reconnaissance activity often involves using built-in Windows utilities
+  like `net.exe` or `powershell.exe` to enumerate users, groups, and cached
+  credentials, which is crucial for subsequent attack phases such as privilege
+  escalation or lateral movement.
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/05/25 # Updated to current date
+logsource:
+  category: process_creation # Applicable for Sysmon EventID 1 or Windows Security Log 4688
+  product: windows
+  service: sysmon # Explicitly state Sysmon as the primary source for process events
+detection:
+  # Selection for common binaries used for account discovery
+  selection_binaries:
+    EventID: 1 # Sysmon Event ID for Process Creation
+    Image|endswith:
+      - '\net.exe'
+      - '\net1.exe' # Sometimes used as an obfuscation for net.exe
+      - '\powershell.exe'
+      - '\pwsh.exe' # PowerShell Core
+      - '\cmd.exe' # Direct execution of commands
+  # Selection for common command-line arguments used for account discovery
+  selection_commands:
+    CommandLine|contains:
+      # Local Account Discovery
+      - 'net user'
+      - 'net users'
+      - 'net localgroup'
+      - 'get-localuser' # PowerShell equivalent
+      - 'get-localgroupmember' # PowerShell equivalent
+      - 'query user' # Query session users
+      - 'quser' # Alias for query user
+      - 'whoami /all' # Detailed user information
+      - 'whoami /groups' # Detailed group information
+      # Domain Account Discovery
+      - 'net group /domain'
+      - 'net user /domain'
+      - 'net localgroup /domain' # Although localgroup is typically local, this checks domain groups if run on DC
+      - 'get-aduser' # PowerShell Active Directory module
+      - 'get-adgroup' # PowerShell Active Directory module
+      - 'get-adgroupmember' # PowerShell Active Directory module
+      - 'nltest /domain_trusts' # Domain trust discovery
+      - 'nltest /dclist' # Domain controller list
+      # Cached Credential Discovery
+      - 'cmdkey /list' # List cached credentials (often seen with other discovery)
+      - 'dir /s C:\Users\*.lnk' # Looking for LNK files, often related to user profiles
+      # Potential sensitive files/folders for credential material
+      - 'dir /s c:\users\*appdata*microsoft*credentials*'
+      - 'dir /s c:\users\*appdata*roaming*microsoft*credentials*'
+      - 'dir /s c:\users\*appdata*local*microsoft*credentials*'
+  # Filter for known legitimate automation or administrative scripts/users.
+  # This is crucial due to the benign nature of 'net' and 'powershell' for administration.
+  filter_legitimate_activity:
+    # Exclude well-known system accounts that might run these for maintenance/system info
+    User|startswith:
+      - 'NT AUTHORITY\SYSTEM'
+      - 'NT AUTHORITY\LOCAL SERVICE'
+      - 'NT AUTHORITY\NETWORK SERVICE'
+    # Exclude specific administrative tools or scripts that might run these commands
+    ParentImage|endswith:
+      - '\YourAutomatedScriptHost.exe' # e.g., an RMM tool agent
+      - '\SCCMAgent.exe' # SCCM related tools
+      - '\AdminTool.exe' # Specific benign admin tools
+    CommandLine|contains: # Whitelist specific, known legitimate command sequences/parameters
+      - ' -ExecutionPolicy Bypass -File "C:\Program Files\YourApp\LegitScript.ps1"'
+      # Exclude if the command is part of a standard startup script (e.g., GPO scripts)
+      # ParentImage|endswith: '\svchost.exe' AND CommandLine|contains: '-ExecutionPolicy Bypass -File C:\Windows\System32\GroupPolicy\User\Scripts\Startup\LegitStartup.ps1'
+  condition: (selection_binaries and selection_commands) and not filter_legitimate_activity
+fields:
+  - Image # The process image (e.g., net.exe, powershell.exe)
+  - CommandLine # The full command line executed
+  - ParentImage # The parent process
+  - User # The user account
+  - ComputerName # Standard field name for the host
+  - EventID # The Sysmon event ID (1)
+  - RuleName # Sysmon specific field for rule matching
+falsepositives:
+  - Legitimate IT administration, troubleshooting, or auditing activities.
+  - Automated scripts used for system inventory, user management, or security auditing.
+  - Software installation/uninstallation routines that query user or group information.
+level: medium # Setting to medium due to the high volume of legitimate administrative use. Requires significant tuning.
+tags:
+  - attack.tactic: TA0007 # Discovery
+  - attack.technique: T1087 # Account Discovery
+  - attack.technique: T1087.001 # Account Discovery: Local Account
+  - attack.technique: T1087.002 # Account Discovery: Domain Account
+references:
+  - https://attack.mitre.org/techniques/T1087/ # MITRE ATT&CK T1087 (Account Discovery)
+  - https://lolbas-project.github.io/lolbas/ # LoLBas (many binaries listed are used for discovery)
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon # Sysmon official page

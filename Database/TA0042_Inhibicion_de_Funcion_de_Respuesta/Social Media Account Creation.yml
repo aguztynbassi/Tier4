@@ -1,0 +1,32 @@
+title: Creación de Cuenta de Red Social Detectada
+id: "8d9e0f1a-2b3c-4d4e-5f6a-7b8c9d0e1f2b" # Nuevo ID generado
+status: experimental
+description: |
+  Detección de la creación de nuevas cuentas de redes sociales que pueden utilizarse para operaciones de información.
+author: aguztynbassi
+date: 2024/07/18
+modified: 2024/07/18
+logsource:
+  product: social_media_platform # Reemplazar con el producto de la plataforma de redes sociales (ej. facebook, twitter, etc.)
+  service: account_management # Servicio que registra la actividad de la cuenta
+  category: account_creation # Categoría para eventos de creación de cuentas
+detection:
+  selection:
+    action: 'create_account' # La acción es la creación de una cuenta
+  condition: selection
+fields:
+  - timestamp
+  - user # El usuario que crea la cuenta
+  - account_id # El ID de la cuenta creada
+  - platform # La plataforma de red social
+  - action # La acción realizada
+tags:
+  - attack.tactic: TA0042 # Resource Development
+  - attack.technique: T1585.001 # Establish Accounts: Social Media Accounts
+platforms:
+  - Social Media # Plataforma de redes sociales, más específica que "network"
+level: medium
+references:
+  - https://attack.mitre.org/techniques/T1590/001/
+  - https://www.socialmediaaccountsecurity.com/best-practices
+  - https://www.cybersecuritysocialmedia.com/creating-secure-accounts

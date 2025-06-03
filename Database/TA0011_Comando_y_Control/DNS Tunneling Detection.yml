@@ -1,0 +1,44 @@
+title: Detección de Túneles DNS
+id: "k4l5m6n7-o8p9-0q1r-2s3t-4u5v6w7x8y9z" # Nuevo ID generado
+status: experimental
+description: |
+  Detecta solicitudes DNS que son indicativas de tunelización DNS.
+  Esta regla busca un volumen inusualmente alto de consultas DNS para un mismo
+  nombre de dominio dentro de un período de tiempo, lo cual es un patrón común
+  utilizado por herramientas de tunelización DNS para exfiltrar datos o establecer
+  canales de comando y control.
+author: aguztynbassi
+date: 2025/05/24
+modified: 2025/05/24
+logsource:
+  category: dns # Categoría de logs DNS
+  product: network # Producto general de red, o 'dns_server' si es más específico
+detection:
+  # Define la selección base de eventos: cualquier solicitud DNS al puerto 53
+  selection:
+    destination_port: 53 # Puerto estándar para DNS
+  # Define la condición de umbral para detectar el comportamiento inusual
+  # Busca más de 1000 eventos de consulta DNS (definidos en 'selection')
+  # agrupados por 'QueryName' dentro de un período de 1 hora.
+  threshold_condition:
+    count: 1000 # El número mínimo de consultas para activar la alerta
+    timeframe: 1h # El período de tiempo en el que se cuentan las consultas
+    by:
+      - QueryName # Agrupar por el nombre de la consulta DNS (el dominio solicitado)
+  condition: threshold_condition # La condición final es que se cumpla el umbral
+fields:
+  - Timestamp
+  - source_ip # La dirección IP de origen que realiza la consulta
+  - destination_ip # La dirección IP del servidor DNS
+  - QueryName # El nombre de dominio consultado
+  - QueryType # El tipo de consulta DNS (ej. A, AAAA, TXT, CNAME)
+tags:
+  - attack.tactic: TA0011 # Comando y Control
+  - attack.technique: T1071.004 # Protocolo de Capa de Aplicación: DNS
+platforms:
+  - network # Plataformas de red que generan logs DNS
+level: high # Nivel de severidad alto, ya que puede indicar un canal C2.
+references:
+  - https://attack.mitre.org/techniques/T1071/004/
+  - https://www.sans.org/blog/detecting-dns-tunneling/
+  - https://www.cisecurity.org/controls/network-security/

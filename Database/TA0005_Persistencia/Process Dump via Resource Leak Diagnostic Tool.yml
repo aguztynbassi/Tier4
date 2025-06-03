@@ -1,0 +1,51 @@
+title: Process Dump via RdrLeakDiag.exe (Credential Access)
+id: v1w2x3y4-z5a6-7b8c-9d0e-f1g2h3i4j5k6 # Please generate a unique UUID for each rule
+description: >
+  Detects the execution of the native Windows diagnostic tool `RdrLeakDiag.exe`
+  with command-line arguments to perform a full memory dump of a process. This
+  behavior is highly indicative of credential theft attempts, particularly if
+  targeting sensitive processes like `lsass.exe`, as `RdrLeakDiag.exe` is a
+  Living Off The Land Binary (LOLBIN) that can be abused to evade defenses.
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/05/25 # Updated to current date
+logsource:
+  category: process_creation # Applicable for Sysmon EventID 1 or Windows Security Log 4688
+  product: windows
+  service: sysmon # Explicitly state Sysmon as the primary source for process events
+detection:
+  selection:
+    EventID: 1 # Sysmon Event ID for Process Creation
+    Image|endswith: '\RdrLeakDiag.exe'
+    CommandLine|contains: 'fullmemdmp' # Specific argument to perform a full memory dump
+    # Optional: Add target process if known to be dumped frequently (e.g., lsass.exe)
+    # CommandLine|contains: 'lsass.exe'
+  # No specific filter needed here. Legitimate use of 'fullmemdmp' with RdrLeakDiag.exe
+  # by standard users or automated tools is extremely rare and should be investigated.
+  condition: selection
+fields:
+  - Image # The full path to RdrLeakDiag.exe
+  - CommandLine # The full command line used
+  - ParentImage # The parent process that launched RdrLeakDiag.exe
+  - User # User account under which the process ran
+  - ComputerName # Standard field name for the host
+  - EventID # The Sysmon event ID (1)
+  - RuleName # Sysmon specific field for rule matching
+falsepositives:
+  - Extremely low expected false positives. The combination of `RdrLeakDiag.exe`
+    and `fullmemdmp` is highly suspicious and rarely used legitimately by non-debugging
+    personnel or automated systems in a benign context.
+  - Very rare instances of legitimate deep-level troubleshooting or development
+    activities that might use this tool for its intended purpose. Such cases
+    should be thoroughly investigated and explicitly whitelisted if deemed truly benign.
+level: critical # Setting to critical due to the direct implication of credential theft.
+tags:
+  - attack.tactic: TA0006 # Credential Access
+  - attack.technique: T1003 # OS Credential Dumping
+  - attack.technique: T1003.001 # OS Credential Dumping: LSASS Memory
+  - attack.tactic: TA0005 # Defense Evasion
+references:
+  - https://attack.mitre.org/techniques/T1003/001/ # MITRE ATT&CK T1003.001 (LSASS Memory)
+  - https://lolbas-project.github.io/lolbas/Binaries/Rdrleakdiag/ # LoLBas entry for RdrLeakDiag.exe
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon # Sysmon official page

@@ -1,0 +1,46 @@
+title: Execution of Trojanized 3CX Application
+id: a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d # Replace with a newly generated UUID
+description: >
+  Detection of the execution of known trojanized versions of the 3CX Desktop application.
+  Specifically, 3CX Desktop versions 18.12.407 and 18.12.416 have been compromised
+  by the Lazarus Group and are known to be signed with legitimate 3CX signatures,
+  making traditional signature-based detection challenging.
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/05/25 # Updated to current date
+logsource:
+  category: process_creation # Sysmon EventID 1 is for process creation
+  product: windows
+  service: sysmon # Specifies Sysmon as the logging service
+detection:
+  selection:
+    EventID: 1 # Sysmon Event ID for Process Creation
+    Image|endswith: '\3CXDesktopApp.exe'
+    Product|contains: # Ensuring it's the legitimate 3CX product (even if trojanized)
+      - '3CX Ltd'
+      - '3CX Desktop App'
+    FileVersion|contains: # Specific malicious versions identified
+      - '18.12.407'
+      - '18.12.416'
+  condition: selection
+fields:
+  - Image # The process image (3CXDesktopApp.exe)
+  - Product # The product name from file metadata
+  - Company # The company name from file metadata (often "3CX Ltd")
+  - FileVersion # The file version from file metadata
+  - ComputerName # Standard field name for the host
+  - User # User account under which the process ran
+  - RuleName # Sysmon specific field for rule matching
+falsepositives:
+  - None expected as this rule targets specific known malicious versions.
+  - Ensure systems are fully patched to avoid false positives with legitimate, non-compromised versions.
+level: high
+tags:
+  - attack.tactic: TA0005 # Defense Evasion
+  - attack.technique: t1036 # Masquerading
+references:
+  - https://attack.mitre.org/software/S0677/ # If AADInternals is the delivered payload. Otherwise, general Lazarus Group: https://attack.mitre.org/groups/G0032/
+  - https://www.3cx.com/blog/news/desktopapp-update-2-hotfix-1/ # 3CX official advisory (example)
+  - https://www.cisa.gov/news-events/cybersecurity-advisories/aa23-082a # CISA advisory on 3CXDesktopApp supply chain compromise
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon # Sysmon official page

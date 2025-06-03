@@ -1,0 +1,74 @@
+title: Active Directory DLLs Loaded by Office Applications
+id: s1t2u3v4-w5x6-7y8z-9a0b-c1d2e3f4g5h6 # Please generate a unique UUID for each rule
+description: >
+  Detects highly suspicious image loads where Active Directory-related DLLs,
+  specifically `kerberos.dll` or `dsparse.dll`, are loaded by Microsoft Office
+  applications (Word, PowerPoint, Excel, Outlook). This is not a typical behavior
+  for Office applications and may indicate a sophisticated attempt at authentication
+  abuse, credential theft, or an advanced spearphishing attack leveraging embedded
+  malicious code (e.g., macros or OLE objects).
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/05/25 # Updated to current date
+logsource:
+  category: image_load # Sysmon Event ID 7 for DLL load events
+  product: windows
+  service: sysmon # Explicitly state Sysmon as the source for image load events
+detection:
+  selection:
+    EventID: 7 # Sysmon Event ID for ImageLoad (DLL/EXE being loaded)
+    Image|endswith: # The loaded DLLs
+      - '\kerberos.dll'
+      - '\dsparse.dll' # Used for parsing/interacting with Active Directory objects (e.g., in DCSync)
+    ProcessImage|endswith: # The process loading the DLL
+      - '\winword.exe'
+      - '\powerpnt.exe'
+      - '\excel.exe'
+      - '\outlook.exe'
+  # Filter for known legitimate scenarios. This is critical for this rule.
+  # While generally suspicious, some legitimate plugins, add-ins, or very specific
+  # enterprise applications might have a reason to load these DLLs.
+  filter_legitimate_plugins:
+    # Exclude specific, known legitimate Office add-ins or plugins
+    # Example: A legitimate application that integrates with AD directly via an Office plugin.
+    # CommandLine|contains:
+    #   - 'C:\Program Files\YourCompany\OfficeAddIn\legit_plugin.dll'
+    #   - 'C:\Program Files\Microsoft Office\ROOT\Office16\ADDINS\LegitADIntegration.dll'
+    # Exclude if the loaded DLL is from a highly trusted, signed Microsoft Office component path
+    Image|startswith: # Check if the DLL path is from Microsoft's trusted locations
+      - 'C:\Program Files\Microsoft Office\'
+      - 'C:\Program Files (x86)\Microsoft Office\'
+      - 'C:\Windows\System32\' # Kerberos.dll and dsparse.dll are typically in System32, so this requires careful consideration if Image is just dll name.
+      # If Image is full path, then the endswith in selection will catch it and this would filter.
+  # The original rule had 'User|in: EXCLUDED_USERS'.
+  # This is problematic for generic rules and better managed at the SIEM level.
+  condition: selection and not filter_legitimate_plugins
+fields:
+  - EventID # Sysmon event ID (7)
+  - Image # The full path to the loaded DLL (kerberos.dll or dsparse.dll)
+  - ProcessImage # The full path to the process that loaded the DLL (Office app)
+  - OriginalFileName # Original file name of the loaded DLL
+  - Company # Company name of the loaded DLL
+  - CommandLine # Full command line of the ProcessImage
+  - ParentImage # Parent process of the ProcessImage
+  - User # User account under which the process ran
+  - ComputerName # Standard field name for the host
+  - RuleName # Sysmon specific field for rule matching
+falsepositives:
+  - Extremely low false positive rate expected. This behavior is highly unusual for
+    standard Office operations.
+  - Rare cases of legitimate third-party Office add-ins or enterprise applications
+    that genuinely need to interact deeply with Active Directory in this manner.
+    Such instances should be thoroughly investigated and explicitly whitelisted.
+level: critical # Setting to critical due to the strong correlation with advanced credential access and initial access attacks.
+tags:
+  - attack.tactic: TA0001 # Initial Access
+  - attack.tactic: TA0006 # Credential Access
+  - attack.tactic: TA0005 # Defense Evasion
+  - attack.technique: t1566 # Phishing
+  - attack.technique: t1566.001 # Spearphishing Attachment
+references:
+  - https://attack.mitre.org/techniques/T1566/001/ # MITRE ATT&CK T1566.001 (Spearphishing Attachment)
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon # Sysmon official page
+  - https://www.mandiant.com/resources/blog/shining-a-light-on-darkside-ransomware-operations # Example of dsparse.dll abuse in real attacks

@@ -1,0 +1,64 @@
+title: Suspicious File Execution via MSHTA
+id: b2a1c0d3-e4f5-g6h7-i8j9-0k1l2m3n4o5p # Replace with a newly generated UUID
+description: >
+  Detection of MSHTA.exe executing JavaScript, VBScript files, or other
+  abnormal file extensions via its command line. This activity potentially
+  indicates defense evasion or execution of malicious code, often used for
+  remote code execution or download capabilities.
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/05/25 # Updated to current date
+logsource:
+  category: process_creation # Sysmon EventID 1 is for process creation
+  product: windows
+  service: sysmon # Specifies Sysmon as the logging service
+detection:
+  selection:
+    EventID: 1 # Sysmon Event ID for Process Creation
+    Image|endswith: '\mshta.exe'
+    CommandLine|contains:
+      - 'javascript:' # Common for direct JS execution
+      - 'vbscript:' # Common for direct VBS execution
+      - '.hta' # MSHTA often executes HTA files, but malicious ones can be suspicious
+      # These extensions are suspicious when directly loaded by mshta.exe
+      # as mshta is primarily for HTML Applications.
+      - '.jpg'
+      - '.png'
+      - '.lnk'
+      - '.xls'
+      - '.doc'
+      - '.zip'
+  # Filter for legitimate users or processes that might use mshta.exe in a benign way.
+  # This filter is a placeholder. You need to define specific users or groups
+  # that are allowed to legitimately use mshta.exe in your environment.
+  filter_legitimate_users:
+    User|endswith: # Example placeholder for users to exclude (e.g., system accounts or known service accounts)
+      - '\SYSTEM'
+      - '\LOCAL SERVICE'
+      - '\NETWORK SERVICE'
+      # - 'MYDOMAIN\LegitUser1' # Add specific legitimate users/groups here
+      # - 'MYDOMAIN\LegitAdminGroup'
+  condition: selection and not filter_legitimate_users
+fields:
+  - Image # The process image (mshta.exe)
+  - CommandLine # The full command line of mshta.exe
+  - User # User account under which the process ran
+  - ComputerName # Standard field name for the host
+  - ParentImage # The parent process that launched mshta.exe
+  - RuleName # Sysmon specific field for rule matching
+falsepositives:
+  - Legitimate custom HTML applications (.hta files) used in the environment.
+  - Development or testing activities involving mshta.exe.
+  - Some legitimate installers or scripts might use mshta.exe, though less common for the listed suspicious extensions.
+level: high
+tags:
+  - attack.tactic: TA0005 # Defense Evasion
+  - attack.technique: T1218.005 # Mshta
+  - attack.tactic: TA0002 # Execution
+  - attack.technique: T1059.007 # Command and Scripting Interpreter: JavaScript
+  - attack.technique: T1140 # Deobfuscate/Decode Files or Information
+references:
+  - https://attack.mitre.org/techniques/T1218/005/ # MITRE ATT&CK T1218.005 (Mshta)
+  - https://docs.microsoft.com/en-us/windows/win32/mshta/mshta-overview # Microsoft MSHTA documentation
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon # Sysmon official page

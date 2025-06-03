@@ -1,0 +1,48 @@
+title: Archivo Adjunto de Correo Electrónico Sospechoso
+id: "u4v5w6x7-y8z9-0a1b-2c3d-4e5f6g7h8i9j" # Nuevo ID generado
+status: experimental
+description: |
+  Detección de archivos adjuntos de correo electrónico sospechosos que podrían
+  ser malware potencial. Esta regla se enfoca en la detección de tipos de archivos
+  ejecutables o de script comúnmente utilizados para la distribución de malware,
+  como .exe, .dll, .scr, .bat, .cmd, .vbs, .js, .ps1, .hta y .jar, enviados
+  a través de correo electrónico.
+author: aguztynbassi
+date: 2025/05/24
+modified: 2025/05/24
+logsource:
+  category: mail # Categoría de logs de correo
+  service: email # Servicio específico de correo electrónico
+  product: any # Puede ser cualquier producto que genere logs de correo electrónico (ej. servidores de correo, gateways de seguridad de correo)
+detection:
+  selection:
+    # Tipos de archivos adjuntos comúnmente utilizados para malware
+    file_name|endswith:
+      - '.exe' # Archivo ejecutable de Windows
+      - '.dll' # Librería de enlace dinámico
+      - '.scr' # Salvapantallas (a menudo ejecutables)
+      - '.bat' # Archivo de lote de Windows
+      - '.cmd' # Script de comando de Windows
+      - '.vbs' # Script de Visual Basic
+      - '.js' # Archivo JavaScript (puede ser ejecutado por WScript/Cscript)
+      - '.ps1' # Script de PowerShell
+      - '.hta' # Aplicación HTML
+      - '.jar' # Archivo Java (puede contener código ejecutable)
+  condition: selection
+fields:
+  - Timestamp
+  - sender # La dirección de correo electrónico del remitente
+  - recipient # La dirección de correo electrónico del destinatario
+  - subject # El asunto del correo electrónico
+  - file_name # El nombre del archivo adjunto
+  - file_hash # El hash del archivo adjunto (si está disponible en los logs)
+tags:
+  - attack.tactic: TA0002 # Ejecución
+  - attack.technique: T1204.002 # Ejecución por el usuario: Archivo malicioso
+platforms:
+  - email # Plataformas relacionadas con el correo electrónico que generan logs
+level: high # Nivel de severidad alto, ya que es una actividad de malware potencial.
+references:
+  - https://attack.mitre.org/techniques/T1204/002/
+  - https://www.sans.org/blog/detecting-malicious-email-attachments/
+  - https://www.cisecurity.org/controls/email-security/

@@ -1,0 +1,57 @@
+title: MSTSC Shadowing Detected (No Consent)
+id: h1i2j3k4-l5m6-7n8o-9p0q-r1s2t3u4v5w6 # Please generate a unique UUID for each rule
+description: >
+  Detects highly suspicious use of `mstsc.exe` (Microsoft Terminal Services Client)
+  to shadow another RDP session without the user's consent. This is indicated
+  by the presence of both `noconsentprompt` and `shadow:` parameters in the
+  command line. This technique allows an attacker to view or control an active
+  user session, commonly abused for lateral movement, reconnaissance, or
+  surveillance.
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/05/25 # Updated to current date
+logsource:
+  category: process_creation # Applicable for Sysmon EventID 1 or Windows Security Log 4688
+  product: windows
+  service: sysmon # Explicitly state Sysmon as the primary source for process events
+detection:
+  selection:
+    EventID: 1 # Sysmon Event ID for Process Creation
+    Image|endswith: '\mstsc.exe'
+    CommandLine|contains|all:
+      - 'noconsentprompt' # Crucial indicator of hidden shadowing
+      - 'shadow:' # Indicates session shadowing
+  # Filter for known legitimate scenarios if they cause false positives.
+  # This filter is critical. While 'noconsentprompt' is inherently suspicious,
+  # some legitimate administrative tools or highly privileged support personnel
+  # might use it in very specific, approved scenarios.
+  filter_legitimate_users:
+    User|endswith: # Whitelist specific highly privileged administrative or support accounts
+      - '\YourDomain\ServiceDeskAdmin' # Example of a dedicated admin account
+      - '\YourDomain\Tier3Support' # Example of a dedicated support account
+      - '\SYSTEM' # Unlikely to be the direct source, but if seen, investigate
+      # Add other specific user accounts that are authorized for such privileged operations.
+  condition: selection and not filter_legitimate_users
+fields:
+  - Image # The full path to mstsc.exe
+  - CommandLine # The full command line used
+  - ParentImage # The parent process that launched mstsc.exe
+  - User # User account under which the process ran (the attacker or legitimate admin)
+  - TargetUser # The user whose session is being shadowed (if derivable from logs/SIEM enrichment)
+  - ComputerName # Standard field name for the host
+  - EventID # The Sysmon event ID (1)
+  - RuleName # Sysmon specific field for rule matching
+falsepositives:
+  - Legitimate, authorized administrative activities by highly privileged IT support or system administrators
+    who are explicitly permitted to shadow sessions without consent for critical troubleshooting.
+  - Automated or specialized management tools that utilize MSTSC shadowing in a no-consent fashion (highly unusual).
+level: high # Setting to high due to the significant security implications of non-consensual session shadowing.
+tags:
+  - attack.tactic: TA0007 # Lateral Movement
+  - attack.technique: T1563 # Remote Service Session Hijacking
+  - attack.technique: T1563.002 # Remote Service Session Hijacking (RDP Session Hijacking)
+references:
+  - https://attack.mitre.org/techniques/T1563/002/ # MITRE ATT&CK T1563.002 (RDP Session Hijacking)
+  - https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/troubleshoot/remotedesktop-session-shadow # Microsoft MSTSC shadowing documentation
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon # Sysmon official page

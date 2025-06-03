@@ -1,0 +1,40 @@
+title: Ejecución de Impacket PsExec Detectada
+id: "a2b3c4d5-e6f7-4g8h-9i0j-1k2l3m4n5o6p" # Nuevo ID generado
+status: high
+description: |
+  Detecta la ejecución de la utilidad PsExec de Impacket. Impacket es una colección de clases de Python para trabajar con protocolos de red, comúnmente utilizada en Pruebas de Concepto (PoC) y por adversarios para movimiento lateral. Esta regla se enfoca en el acceso a los pipes con nombre de `RemCom` asociados con PsExec.
+author: aguztynbassi
+date: 2024/07/18
+modified: 2024/07/18
+logsource:
+  product: windows
+  service: security # Event ID 5145 es un evento de auditoría de seguridad de Windows.
+  category: file_share # Categoría para eventos de acceso a recursos compartidos.
+detection:
+  selection:
+    EventID: 5145 # Un objeto de recurso compartido de red fue accedido.
+    ShareName: 'IPC$'
+    RelativeTargetName|contains:
+      - 'RemCom_stdint'
+      - 'RemCom_stdoutt'
+      - 'RemCom_stderrt'
+  filter_excluded_users:
+    User|startswith: # Excluye cuentas del sistema y de servicio. Ajustar según el entorno.
+      - 'NT AUTHORITY\'
+      - 'LOCAL SERVICE'
+      - 'NETWORK SERVICE'
+      # Añadir otros usuarios o grupos legítimos que puedan generar esta actividad de forma autorizada.
+  condition: selection AND NOT filter_excluded_users
+fields:
+  - Timestamp
+  - EventID
+  - User
+  - ComputerName
+  - ShareName
+  - RelativeTargetName
+  - SourceAddress # Dirección IP de origen del acceso.
+  - AccessMask # Máscara de acceso al objeto.
+tags:
+  - attack.tactic: TA0008 # Movimiento Lateral
+  - attack.technique: T1570 # Transferencia de Herramientas Lateral
+level: high # Nivel de severidad de la detección.

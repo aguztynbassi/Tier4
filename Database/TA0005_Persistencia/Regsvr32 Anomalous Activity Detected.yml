@@ -1,0 +1,84 @@
+title: Regsvr32 Anomalous Activity Detected
+id: e1d2c3b4-a5f6-7g8h-9i0j-k1l2m3n4o5p6 # Replace with a newly generated UUID
+description: >
+  Various anomalies concerning regsvr32.exe are detected, which may indicate
+  abuse for execution or defense evasion purposes, often by leveraging it
+  as a signed binary proxy execution tool.
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/05/25 # Updated to current date
+logsource:
+  category: process_creation # Sysmon EventID 1 is for process creation
+  product: windows
+  service: sysmon # Specifies Sysmon as the logging service
+detection:
+  # Rule 1: Regsvr32 executing from a temporary directory
+  regsvr32_from_temp:
+    EventID: 1 # Sysmon Event ID for Process Creation
+    Image|endswith: '\regsvr32.exe'
+    CommandLine|contains: # Common temporary directories
+      - ':\Windows\Temp\'
+      - ':\Users\' # Covers AppData\Local\Temp
+      - ':\ProgramData\'
+      - ':\Windows\Installer\'
+      - ':\Windows\System32\config\systemprofile\AppData\Local\Temp\'
+  # Rule 2: Regsvr32 spawned by PowerShell
+  regsvr32_by_powershell:
+    EventID: 1
+    Image|endswith: '\regsvr32.exe'
+    ParentImage|endswith: '\powershell.exe'
+  # Rule 3: Regsvr32 spawned by cmd.exe
+  regsvr32_by_cmd:
+    EventID: 1
+    Image|endswith: '\regsvr32.exe'
+    ParentImage|endswith: '\cmd.exe'
+  # Rule 4: Regsvr32 attempting to load remote scriptlets (SCT files) via scrobj.dll
+  regsvr32_remote_scriptlet:
+    EventID: 1
+    Image|endswith: '\regsvr32.exe'
+    CommandLine|contains:
+      - '/i:http' # Indicates remote URL
+      - '/i:ftp' # Indicates remote URL
+      - 'scrobj.dll' # COM object for scriptlet execution
+  # Rule 5: Wscript.exe spawned by Regsvr32 (uncommon)
+  wscript_spawned_by_regsvr32:
+    EventID: 1
+    Image|endswith: '\wscript.exe'
+    ParentImage|endswith: '\regsvr32.exe'
+  # Rule 6: Excel attempting to execute Regsvr32 (indicating macro or OLE abuse)
+  excel_executing_regsvr32:
+    EventID: 1
+    ParentImage|endswith: '\EXCEL.EXE' # Excel is the parent
+    CommandLine|contains: 'regsvr32.exe' # Regsvr32.exe in Excel's command line
+    # Add more specific paths for regsvr32 if desired, e.g., 'C:\Windows\System32\regsvr32.exe'
+  # Filter for legitimate users or service accounts that might use regsvr32.exe in specific, benign ways.
+  # This filter is a placeholder. You need to define specific users or groups
+  # that are allowed to legitimately use regsvr32.exe in your environment.
+  filter_legitimate_users:
+    User|endswith: # Example placeholder for users to exclude (e.g., system accounts or known service accounts)
+      - '\SYSTEM'
+      - '\LOCAL SERVICE'
+      - '\NETWORK SERVICE'
+      # - 'MYDOMAIN\LegitUser1' # Add specific legitimate users/groups here
+      # - 'MYDOMAIN\LegitAdminGroup'
+  condition: (regsvr32_from_temp or regsvr32_by_powershell or regsvr32_by_cmd or regsvr32_remote_scriptlet or wscript_spawned_by_regsvr32 or excel_executing_regsvr32) and not filter_legitimate_users
+fields:
+  - Image
+  - CommandLine
+  - ParentImage
+  - User
+  - ComputerName # Standard field name for the host
+  - RuleName # Sysmon specific field for rule matching
+falsepositives:
+  - Legitimate software installations or updates that register/unregister DLLs, though typically not from temp or via remote scriptlets.
+  - Development or debugging activities.
+  - Specific legitimate scripts or automation tools that might use regsvr32.exe in unusual ways (should be rare for this set of conditions).
+level: high
+tags:
+  - attack.tactic: TA0005 # Defense Evasion
+  - attack.technique: T1218 # Signed Binary Proxy Execution
+references:
+  - https://attack.mitre.org/techniques/T1218/ # MITRE ATT&CK T1218 (Signed Binary Proxy Execution)
+  - https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/regsvr32 # Microsoft Regsvr32 documentation
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon # Sysmon official page

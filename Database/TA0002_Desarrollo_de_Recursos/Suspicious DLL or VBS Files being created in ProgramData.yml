@@ -1,0 +1,38 @@
+title: Creación Sospechosa de Archivos DLL o VBS en ProgramData
+id: "f9e8d7c6-b5a4-3b2c-1d0e-9f8a7b6c5d4e" # Nuevo ID generado
+status: high
+description: |
+  Detecta la creación de archivos con extensión .dll o .vbs en la carpeta ProgramData. Los atacantes utilizan estas técnicas para la ejecución de cargas útiles maliciosas. Este método se utiliza predominantemente en ataques de Bumblebee.
+author: aguztynbassi
+date: 2024/07/18
+modified: 2024/07/18
+logsource:
+  product: windows
+  service: sysmon # Sysmon es crucial para monitorear la creación de archivos.
+  category: file_event # EventID 11 es un evento de creación de archivo.
+detection:
+  selection:
+    EventID: 11 # Sysmon Event ID para FileCreate
+    TargetFilename|endswith: # El nombre del archivo termina con .dll o .vbs
+      - '.dll'
+      - '.vbs'
+    TargetFilename|startswith: 'C:\ProgramData\' # La ruta del archivo está en ProgramData
+  condition: selection
+fields:
+  - Timestamp
+  - EventID
+  - User
+  - Computer
+  - Image # Proceso que creó el archivo
+  - TargetFilename # Ruta completa del archivo creado
+  - Hashes # Hashes del archivo (si están disponibles)
+tags:
+  - attack.tactic: TA0002 # Ejecución
+  - attack.technique: T1204.002 # Ejecución de Archivo Malicioso
+level: high # Nivel de severidad de la detección
+references:
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon
+  - https://www.elastic.co/guide/en/security/current/detection-engine-rules-dsl-reference.html
+  - https://www.elastic.co/guide/en/security/current/detection-engine-rules-field-reference.html
+  - https://attack.mitre.org/techniques/T1204/002/
+  - https://www.elastic.co/blog/detecting-lateral-movement-with-elastic-security

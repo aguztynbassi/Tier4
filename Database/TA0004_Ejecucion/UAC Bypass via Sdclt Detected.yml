@@ -1,0 +1,49 @@
+title: UAC Bypass via Sdclt Detected
+id: d5c4b3a2-1e0d-9c8b-7a6f-5d4c3b2a1e0d # Replace with a newly generated UUID
+description: >
+  Detection of User Account Control (UAC) bypass attempts leveraging modifications
+  to specific registry keys commonly abused by the 'sdclt.exe' utility. This technique
+  manipulates `HKCU:\Software\Classes\exefile\shell\runas\command\isolatedCommand`
+  or `HKCU:\Software\Classes\Folder\shell\open\command` to execute arbitrary code
+  with elevated privileges.
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/05/25 # Updated to current date
+logsource:
+  category: registry_event # Appropriate category for registry modifications
+  product: windows
+  service: sysmon # Specifies Sysmon as the logging service
+detection:
+  selection:
+    EventID: 13 # Sysmon Event ID for RegistryValue SET
+    TargetObject|contains: # Standard field name for the registry key/value path
+      # Using wildcard for HKU for user-specific hives, e.g., HKU\S-1-5-21-...\Software\Classes
+      - '\Classes\exefile\shell\runas\command\isolatedCommand'
+      - '\Classes\Folder\shell\open\command\'
+    # Exclude system processes that might legitimately modify these keys if any, though highly unlikely for these specific paths.
+    # filter_legitimate_processes:
+    #   Image|endswith:
+    #     - '\legit_installer.exe'
+  condition: selection
+fields:
+  - TargetObject # The registry key or value that was modified
+  - EventID # The Sysmon event ID (13)
+  - User # User account that performed the registry modification
+  - ComputerName # Standard field name for the host
+  - Image # The process that performed the modification
+  - Details # Depending on the SIEM, this might contain the new value
+  - RuleName # Sysmon specific field for rule matching
+falsepositives:
+  - Very low false positive rate expected as these specific registry paths are highly indicative of UAC bypass.
+  - Rare cases of legitimate, custom software installations that might use these exact registry modifications (requires careful investigation).
+level: high
+tags:
+  - attack.tactic: TA0005 # Defense Evasion
+  - attack.tactic: TA0004 # Privilege Escalation
+  - attack.technique: T1548 # Abuse Elevation Control Mechanism
+  - attack.technique: T1548.002 # Abuse Elevation Control Mechanism: Bypass User Account Control
+references:
+  - https://attack.mitre.org/techniques/T1548/002/ # MITRE ATT&CK T1548.002 (Bypass User Account Control)
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon # Sysmon official page
+  - https://lolbas-project.github.io/lolbas/Binaries/Sdclt/ # LoLBas for sdclt.exe UAC bypass

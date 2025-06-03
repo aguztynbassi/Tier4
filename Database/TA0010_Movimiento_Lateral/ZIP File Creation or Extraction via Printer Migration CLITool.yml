@@ -1,0 +1,65 @@
+title: ZIP File Operations via Printer Migration CLITool
+id: i1j2k3l4-m5n6-7o8p-9q0r-s1t2u3v4w5x6 # Please generate a unique UUID for each rule
+description: >
+  Detects suspicious execution of `printbrm.exe` (Printer Migration Wizard
+  Command Line Tool) when it is used to create or extract `.zip` files.
+  Adversaries may leverage this legitimate Windows utility to stage data for
+  exfiltration, transfer tools onto a system (ingress), or hide artifacts,
+  thereby achieving defense evasion by using a trusted binary.
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/05/25 # Updated to current date
+logsource:
+  category: process_creation # Applicable for Sysmon EventID 1 or Windows Security Log 4688
+  product: windows
+  service: sysmon # Explicitly state Sysmon as the primary source for process events
+detection:
+  selection:
+    EventID: 1 # Sysmon Event ID for Process Creation
+    Image|endswith: '\printbrm.exe'
+    CommandLine|contains:
+      - '.zip' # Indicates interaction with a ZIP file
+      - ' -s ' # The '-s' parameter for saving/exporting printer data to a file
+      - ' -r ' # The '-r' parameter for restoring/importing printer data from a file
+      # Note: The original rule had 'f '. This might refer to a specific context
+      # or part of a path. ' -s ' and ' -r ' are more common for zip operations.
+      # Consider if 'f ' was meant to capture a specific file argument.
+  # Filter for known legitimate scenarios if they cause false positives.
+  # Legitimate use is typically for printer migration/backup/restore.
+  filter_legitimate_usage:
+    ParentImage|endswith:
+      - '\printmanagement.msc' # Launched from Printer Management Console
+      - '\mmc.exe' # Management Console itself
+      - '\powershell.exe' # Legitimate administrators might use PowerShell to call this
+      - '\cmd.exe' # Legitimate administrators might use command prompt to call this
+      # Whitelist specific administrative or automation scripts/processes
+      # if they legitimately use printbrm.exe for zip operations.
+    CommandLine|contains: # Whitelist specific, known legitimate ZIP file paths
+      - 'C:\Windows\System32\spool\printers\' # Example: Default printer migration paths
+      # - 'C:\ProgramData\Company\PrinterMigration\backup.zip' # Example for a known legitimate backup location
+  condition: selection and not filter_legitimate_usage
+fields:
+  - Image # The full path to printbrm.exe
+  - CommandLine # The full command line used
+  - ParentImage # The parent process that launched printbrm.exe
+  - User # User account under which the process ran
+  - ComputerName # Standard field name for the host
+  - EventID # The Sysmon event ID (1)
+  - OriginalFileName # If Sysmon captures this, useful to confirm the binary
+  - RuleName # Sysmon specific field for rule matching
+falsepositives:
+  - Legitimate IT administration activities involving printer migration, backup, or restore.
+  - Automated scripts or management tools that manage print services across an enterprise.
+level: medium # Setting to medium initially due to potential for legitimate use. Can be raised if FPs are low after tuning.
+tags:
+  - attack.technique: T1105 # Ingress Tool Transfer
+  - attack.technique: T1564.004 # Hide Artifacts: NTFS File Attributes
+  - attack.tactic: TA0010 # Exfiltration (if used to zip data for exfil)
+  - attack.tactic: TA0008 # Lateral Movement (if used to stage tools for movement)
+  - attack.tactic: TA0005 # Defense Evasion
+references:
+  - https://lolbas-project.github.io/lolbas/Binaries/Printbrm/ # LoLBas entry for printbrm.exe
+  - https://attack.mitre.org/techniques/T1105/ # MITRE ATT&CK T1105 (Ingress Tool Transfer)
+  - https://attack.mitre.org/techniques/T1564/004/ # MITRE ATT&CK T1564.004 (Hide Artifacts: NTFS File Attributes)
+  - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/printbrm # Microsoft Printbrm documentation

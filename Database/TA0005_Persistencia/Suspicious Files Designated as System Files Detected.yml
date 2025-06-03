@@ -1,0 +1,67 @@
+title: Suspicious Files Designated as System Files Detected
+id: 8a7b6c5d-4e3f-2a1b-0c9d-e8f7a6b5c4d3 # Replace with a newly generated UUID
+description: >
+  Detection of `attrib.exe` being used with the `+s` option to designate scripts or
+  executable files in suspicious locations as system files. This technique aims to
+  hide malicious artifacts from users and make them more difficult to detect or remove.
+  `attrib.exe` is a legitimate Windows utility for adjusting file attributes.
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/05/25 # Updated to current date
+logsource:
+  category: process_creation # Sysmon EventID 1 is for process creation
+  product: windows
+  service: sysmon # Specifies Sysmon as the logging service
+detection:
+  selection:
+    EventID: 1 # Sysmon Event ID for Process Creation
+    Image|endswith: '\attrib.exe'
+    CommandLine|contains: ' +s ' # Explicitly looking for the "+s" attribute
+    CommandLine|nocase: # Use nocase for case-insensitive matching
+      - '%TEMP%' # Common temporary paths
+      - '%TMP%'
+      - '\Users\Public\'
+      - '\AppData\Local\'
+      - '\ProgramData\'
+      - '\Windows\Temp\'
+    # Ensure the command line targets a suspicious file type
+    # The original "command_line|contains_any" is correctly formatted as a list
+    CommandLine|contains:
+      - '.bat'
+      - '.dll'
+      - '.exe'
+      - '.hta'
+      - '.ps1'
+      - '.vbe'
+      - '.vbs'
+  # Exclusions for known legitimate use cases if they exist and cause false positives
+  # For example, some installers or system tools might temporarily set +s.
+  # The original exclusion was `command_line|not_contains: "\\Windows\\TEMP\\*.exe"`.
+  # This exclusion would prevent detection of "C:\Windows\TEMP\malware.exe +s",
+  # which is likely malicious. Reassessing this exclusion.
+  # It's better to exclude specific known legitimate binaries or paths if needed.
+  # Here's an example if you find a specific legitimate process.
+  # filter_legitimate_temp_exe:
+  #   CommandLine|contains: 'C:\Windows\TEMP\'
+  #   Image|endswith: '\legitupdater.exe' # Example: if a known updater does this
+  condition: selection
+fields:
+  - Image # The process image (attrib.exe)
+  - CommandLine # The full command line of attrib.exe
+  - ParentImage # The parent process that launched attrib.exe
+  - User # User account under which the process ran
+  - ComputerName # Standard field name for the host
+  - RuleName # Sysmon specific field for rule matching
+falsepositives:
+  - Legitimate administrative scripts or software installations that modify file attributes in a way that matches this rule, particularly in non-standard locations.
+  - Custom deployment tools.
+level: medium # Setting to medium initially due to potential for legitimate admin/scripting activities. Adjust to high if FPs are low.
+tags:
+  - attack.tactic: TA0005 # Defense Evasion
+  - attack.technique: T1564 # Hide Artifacts
+  - attack.technique: T1564.001 # Hide Artifacts: Hidden Files and Directories
+references:
+  - https://attack.mitre.org/techniques/T1564/001/ # MITRE ATT&CK T1564.001 (Hidden Files and Directories)
+  - https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/attrib # Microsoft Attrib documentation
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon # Sysmon official page

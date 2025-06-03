@@ -1,0 +1,30 @@
+title: Aprovisionamiento de Infraestructura Detectado
+id: "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e" # Nuevo ID generado
+status: experimental
+description: |
+  Detección del aprovisionamiento de nueva infraestructura que puede utilizarse para actividades maliciosas.
+author: aguztynbassi
+date: 2024/07/18
+modified: 2024/07/18
+logsource:
+  product: your_cloud_provider # Reemplazar con el producto de su proveedor de la nube (ej. aws, azure, gcp)
+  service: infrastructure # Servicio que registra el aprovisionamiento de infraestructura
+  category: cloud # Categoría para eventos de la nube
+detection:
+  selection:
+    activity: 'provision' # La actividad es "provision"
+  condition: selection
+fields:
+  - Timestamp
+  - user # Usuario que realiza el aprovisionamiento
+  - resource_id # ID del recurso aprovisionado
+  - resource_type # Tipo de recurso (ej. ec2_instance, vm, storage_bucket)
+  - region # Región de la nube
+  - source_ip # Dirección IP de origen de la actividad
+  - activity # La actividad (provision)
+tags:
+  - attack.tactic: TA0042 # Desarrollo de Recursos
+  - attack.technique: T1583.003 # Adquirir Infraestructura: Infraestructura de Alojamiento
+platforms:
+  - cloud # Plataforma de la nube
+level: medium # Nivel de severidad medio, ya que es una actividad de desarrollo, no una explotación directa.

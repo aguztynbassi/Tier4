@@ -1,0 +1,39 @@
+title: Adquisición de Herramientas Detectada
+id: "f6g7h8i9-j0k1-4l2m-3n4o-5p6q7r8s9t0u" # Nuevo ID generado
+status: experimental
+description: |
+  Detección de la adquisición de herramientas que pueden utilizarse para actividades maliciosas.
+author: aguztynbassi
+date: 2024/07/18
+modified: 2024/07/18
+logsource:
+  product: your_network_proxy_or_ids # Reemplazar con el producto de su proxy de red o IDS
+  service: tool_downloads # Servicio que registra las descargas de herramientas
+  category: network # Categoría para eventos de red
+detection:
+  selection:
+    tool_name: '*' # Detecta cualquier nombre de herramienta descargada
+    # Considerar añadir más filtros si los logs proporcionan detalles sobre el contenido o las operaciones:
+    # file_extension: # Ejemplos de extensiones de archivo sospechosas
+    #   - '.exe'
+    #   - '.dll'
+    #   - '.ps1'
+    #   - '.py'
+    # source_url: # Ejemplos de URLs de descarga sospechosas
+    #   - '*github.com/malicious_repo*'
+    #   - '*pastebin.com*'
+  condition: selection
+fields:
+  - Timestamp
+  - user # Usuario que realiza la descarga
+  - source_address # Dirección IP de origen de la descarga
+  - destination_address # Dirección IP de destino de la descarga
+  - tool_name # Nombre de la herramienta descargada
+  - file_hash # Hash del archivo (si está disponible)
+  - source_url # URL de donde se descargó la herramienta (si está disponible)
+tags:
+  - attack.tactic: TA0042 # Desarrollo de Recursos
+  - attack.technique: T1587 # Adquirir Capacidades
+platforms:
+  - network # Plataforma de red
+level: medium # Nivel de severidad medio, ya que es una actividad de adquisición de herramientas, no una explotación directa.

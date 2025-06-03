@@ -1,0 +1,75 @@
+title: Suspicious Execution of Rundll32 Detected
+id: f1e2d3c4-b5a6-7890-1234-567890fedcba # Please generate a unique UUID for each rule
+description: >
+  Detects suspicious execution of `rundll32.exe` with command-line parameters
+  and DLL calls commonly associated with malicious activity. Adversaries frequently
+  abuse `rundll32.exe` to execute arbitrary code from DLLs, serving as a signed
+  binary proxy execution method for defense evasion, initial access, or persistence.
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/05/25 # Updated to current date
+logsource:
+  category: process_creation # Applicable for Sysmon EventID 1 or Windows Security Log 4688
+  product: windows
+  service: sysmon # Explicitly state Sysmon as the primary source for process events
+detection:
+  selection:
+    EventID: 1 # Assuming Sysmon Event ID 1 for Process Creation
+    Image|endswith: '\rundll32.exe'
+    CommandLine|contains:
+      - 'javascript:' # Often used in HTA/JS-based attacks
+      - '.RegisterXLL' # Used by Excel add-ins, but can be abused
+      - 'url.dll,OpenURL'
+      - 'url.dll,OpenURLA'
+      - 'url.dll,FileProtocolHandler'
+      - 'zipfldr.dll,RouteTheCall'
+      - 'shell32.dll,Control_RunDLL'
+      - 'shell32.dll,ShellExec_RunDLL'
+      - 'mshtml.dll,PrintHTML'
+      - 'advpack.dll,LaunchINFSection'
+      - 'advpack.dll,RegisterOCX'
+      - 'ieadvpack.dll,LaunchINFSection' # IE-related DLLs often abused
+      - 'ieadvpack.dll,RegisterOCX'
+      - 'ieframe.dll,OpenURL'
+      - 'shdocvw.dll,OpenURL'
+      - 'syssetup.dll,SetupInfObjectInstallAction'
+      - 'setupapi.dll,InstallHinfSection'
+      - 'pcwutl.dll,LaunchApplication'
+      - 'dfshim.dll,ShOpenVerbApplication'
+  # Filter for known legitimate uses if they cause false positives.
+  # This filter is crucial for reducing false positives in environments where rundll32.exe
+  # might be legitimately used with these parameters by specific applications.
+  filter_legitimate_usage:
+    ParentImage|endswith: # Exclude if launched by common legitimate processes
+      - '\explorer.exe' # User interaction, though can be malicious
+      - '\msiexec.exe' # Installers
+      - '\dllhost.exe' # COM surrogate processes
+      - '\svchost.exe' # System services
+      - '\services.exe' # Windows services
+      # Add other specific, known legitimate parent processes or applications that use these calls
+    CommandLine|contains|all: # Exclude if part of a known legitimate path or specific application context
+      - 'C:\Program Files\Microsoft Office\' # Example for legitimate Office-related calls
+      - 'C:\Windows\System32\some_legit_app.dll,SomeFunction' # Example of a known legitimate DLL call
+  condition: selection and not filter_legitimate_usage
+fields:
+  - Image # The process image (rundll32.exe)
+  - CommandLine # The full command line of rundll32.exe
+  - ParentImage # The parent process that launched rundll32.exe
+  - User # User account under which the process ran
+  - ComputerName # Standard field name for the host
+  - RuleName # Sysmon specific field for rule matching
+falsepositives:
+  - Legitimate software installations, updates, or uninstallations.
+  - Legitimate system processes or background tasks.
+  - Rare cases of legitimate custom applications or scripts that use `rundll32.exe` with these specific parameters.
+  - User activity that triggers `rundll32.exe` for legitimate purposes (e.g., opening a specific type of file).
+level: high # Setting to high due to the common abuse of rundll32.exe by adversaries.
+tags:
+  - attack.tactic: TA0005 # Defense Evasion
+  - attack.technique: T1218 # Signed Binary Proxy Execution
+  - attack.technique: T1218.011 # Signed Binary Proxy Execution: Rundll32
+references:
+  - https://attack.mitre.org/techniques/T1218/011/ # MITRE ATT&CK T1218.011 (Rundll32)
+  - https://lolbas-project.github.io/lolbas/Binaries/Rundll32/ # LoLBas entry for Rundll32.exe
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon # Sysmon official page

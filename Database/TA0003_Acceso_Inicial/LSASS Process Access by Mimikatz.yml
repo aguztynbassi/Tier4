@@ -1,0 +1,66 @@
+title: LSASS Process Access by Mimikatz
+id: cba98765-fedc-ba98-7654-3210fedcba98 # Replace with a newly generated UUID
+description: >
+  Detection of process access to LSASS.exe (Local Security Authority Subsystem Service),
+  which is typical for credential dumping tools like Mimikatz. This rule specifically
+  looks for common access rights requested by such tools
+  (e.g., PROCESS_QUERY_LIMITED_INFORMATION, PROCESS_VM_READ).
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/05/25 # Updated to current date
+logsource:
+  category: process_access # Appropriate category for process access events
+  product: windows
+  service: sysmon # Specifies Sysmon as the logging service
+detection:
+  selection:
+    EventID: 10 # Sysmon Event ID for ProcessAccess
+    TargetImage|endswith: '\lsass.exe' # Standard field name for the target process image
+    GrantedAccess|contains: # Standard field name for the granted access rights
+      # 0x1410 = PROCESS_QUERY_LIMITED_INFORMATION (0x1000) | PROCESS_VM_READ (0x0010) | SYNCHRONIZE (0x00100000) (not always seen)
+      # This is often seen for Mimikatz
+      - '0x1410'
+      # 0x1010 = PROCESS_QUERY_LIMITED_INFORMATION (0x1000) | PROCESS_VM_READ (0x0010)
+      # This is also often seen for Mimikatz, especially older versions or specific configurations
+      - '0x1010'
+      # Additional common access rights for credential dumping (consider adding based on observation)
+      # - '0x0010' # PROCESS_VM_READ alone
+      # - '0x0400' # PROCESS_QUERY_INFORMATION (older versions / less common in newer Mimikatz)
+  # Exclude known legitimate processes that may access LSASS with these rights (e.g., AV/EDR, backup solutions)
+  # This filter is crucial to reduce false positives.
+  filter_legitimate_access:
+    SourceImage|endswith: # Standard field name for the source process image
+      - '\MsMpEng.exe' # Windows Defender
+      - '\SenseNdr.exe' # Microsoft Defender for Endpoint
+      - '\csrss.exe' # Client Server Runtime Process (highly sensitive, but sometimes legitimate interactions)
+      - '\wininit.exe' # Windows Start-Up Application
+      - '\lsass.exe' # LSASS itself (e.g., LSA Protection)
+      # Add other legitimate security software, backup solutions, or domain controllers' processes
+      # - '\YourAV.exe'
+      # - '\YourEDR.exe'
+      # - '\backup_software.exe'
+  condition: selection and not filter_legitimate_access
+fields:
+  - SourceImage # The process that accessed LSASS
+  - TargetImage # The target process (lsass.exe)
+  - GrantedAccess # The access rights granted
+  - SourceProcessId # PID of the source process
+  - TargetProcessId # PID of LSASS
+  - User # User context of the source process
+  - ComputerName # Standard field name for the host
+  - RuleName # Sysmon specific field for rule matching
+falsepositives:
+  - Legitimate security software (AV/EDR) performing memory scanning or protection.
+  - Backup solutions attempting to capture system state.
+  - Domain controller internal processes.
+  - Debuggers or legitimate diagnostic tools (less common in production, but possible).
+level: high
+tags:
+  - attack.tactic: TA0003 # Credential Access
+  - attack.technique: t1003.001 # OS Credential Dumping: LSASS Memory
+  - attack.technique: t1003 # OS Credential Dumping
+references:
+  - https://attack.mitre.org/techniques/T1003/001/ # MITRE ATT&CK T1003.001 (LSASS Memory)
+  - https://github.com/gentilkiwi/mimikatz # Mimikatz GitHub repository
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon # Sysmon official page

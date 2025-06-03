@@ -1,0 +1,52 @@
+title: Proxy Execution via Desktop Setting Control Panel
+id: c1b2a3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d # Please generate a unique UUID for each rule
+description: >
+  Detects proxy execution leveraging `rundll32.exe` and `desk.cpl` to install or
+  execute a screen saver (`.scr`) file. Adversaries can abuse this legitimate
+  functionality to execute arbitrary code contained within a malicious `.scr`
+  file, often as a defense evasion or persistence mechanism.
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/05/25 # Updated to current date
+logsource:
+  category: process_creation # Applicable for Sysmon EventID 1 or Windows Security Log 4688
+  product: windows
+  service: sysmon # Explicitly state Sysmon as the primary source for process events
+detection:
+  selection:
+    EventID: 1 # Assuming Sysmon Event ID 1 for Process Creation
+    Image|endswith: '\rundll32.exe'
+    CommandLine|contains|all: # All these parameters together indicate the suspicious behavior
+      - 'desk.cpl'
+      - 'InstallScreenSaver'
+      - '.scr' # Specifies a screen saver file
+  # Filter for known legitimate scenarios if they cause false positives.
+  # Legitimate use might involve a user changing their screen saver or an automated
+  # desktop management tool, though this specific combination is quite indicative of abuse.
+  filter_legitimate_usage:
+    ParentImage|endswith: # Exclude if launched by common legitimate processes
+      - '\explorer.exe' # User might manually install a screen saver via GUI
+      - '\systemsettings.exe' # Modern settings app
+      # Add other specific, known legitimate parent processes or applications
+      # if they are observed to perform this action.
+  condition: selection and not filter_legitimate_usage
+fields:
+  - Image # The process image (rundll32.exe)
+  - CommandLine # The full command line of rundll32.exe
+  - ParentImage # The parent process that launched rundll32.exe
+  - User # User account under which the process ran
+  - ComputerName # Standard field name for the host
+  - RuleName # Sysmon specific field for rule matching
+falsepositives:
+  - Legitimate user activity related to changing or installing screen savers via the Desktop Control Panel.
+  - Desktop management software or scripts that automate screen saver deployment.
+level: medium # Setting to medium initially due to the potential for legitimate user-driven activity. Can be raised if FPs are low after tuning.
+tags:
+  - attack.tactic: TA0005 # Defense Evasion
+  - attack.technique: T1218 # Signed Binary Proxy Execution
+  - attack.technique: T1218.011 # Signed Binary Proxy Execution: Rundll32
+references:
+  - https://attack.mitre.org/techniques/T1218/011/ # MITRE ATT&CK T1218.011 (Rundll32)
+  - https://lolbas-project.github.io/lolbas/Binaries/Rundll32/ # LoLBas entry for Rundll32.exe
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon # Sysmon official page

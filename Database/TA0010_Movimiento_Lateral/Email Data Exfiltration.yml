@@ -1,0 +1,39 @@
+title: Exfiltración de Datos por Correo Electrónico
+id: "s0t1u2v3-w4x5-6y7z-8a9b-0c1d2e3f4g5h" # Nuevo ID generado
+status: experimental
+description: |
+  Detección de archivos adjuntos de correo electrónico de gran tamaño que se envían,
+  lo que puede indicar exfiltración de datos. Esta regla busca correos electrónicos
+  salientes con archivos adjuntos que superan un umbral de tamaño (más de 10 MB),
+  lo cual es un posible indicador de datos siendo exfiltrados de la organización.
+author: aguztynbassi
+date: 2025/05/24
+modified: 2025/05/24
+logsource:
+  category: mail # Categoría de logs de correo
+  service: email # Servicio específico de correo electrónico
+  product: any # Puede ser cualquier producto que genere logs de correo electrónico (ej. servidores de correo, gateways de seguridad de correo)
+detection:
+  selection:
+    # El campo que contiene el tamaño del archivo adjunto.
+    # Se asume que 'attachment_size' es el nombre del campo en los logs.
+    attachment_size: # El campo debe ser numérico
+      - '>10000000' # Más de 10 MB (10 * 1024 * 1024 = 10485760)
+  condition: selection
+fields:
+  - Timestamp
+  - sender # La dirección de correo electrónico del remitente
+  - recipient # La dirección de correo electrónico del destinatario
+  - subject # El asunto del correo electrónico
+  - attachment_names # Los nombres de los archivos adjuntos
+  - attachment_size # El tamaño total de los archivos adjuntos
+tags:
+  - attack.tactic: TA0010 # Exfiltración
+  - attack.technique: T1071.003 # Exfiltración sobre Protocolos de Capa de Aplicación: Protocolos de Correo
+platforms:
+  - email # Plataformas relacionadas con el correo electrónico que generan logs
+level: high # Nivel de severidad alto, ya que es una actividad de exfiltración.
+references:
+  - https://attack.mitre.org/techniques/T1071/003/
+  - https://www.sans.org/blog/detecting-data-exfiltration-over-email/
+  - https://www.cisecurity.org/controls/email-security/

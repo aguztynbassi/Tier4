@@ -1,0 +1,46 @@
+title: Xwizard DLL Side-Loading Detected
+id: e2d1c0b3-a4f5-6789-0123-456789abcdef # Please generate a unique UUID for each rule
+description: >
+  Detects suspicious execution of `xwizard.exe` (Extensible Wizard Host) from
+  non-standard or unusual directories. This activity can indicate an attempt
+  by adversaries to perform DLL side-loading, where `xwizard.exe` is coerced
+  into loading a malicious DLL placed in the same directory as the executable,
+  bypassing application whitelisting and achieving defense evasion.
+status: experimental
+author: aguztynbassi
+date: 2025/04/05
+modified: 2025/05/25 # Updated to current date
+logsource:
+  category: process_creation # Applicable for Sysmon EventID 1 or Windows Security Log 4688
+  product: windows
+  service: sysmon # Explicitly state Sysmon as the primary source for process events
+detection:
+  selection:
+    EventID: 1 # Sysmon Event ID for Process Creation
+    Image|endswith: '\xwizard.exe'
+  # Filter out legitimate executions of xwizard.exe, which should originate from System32 or SysWOW64.
+  # Any execution from other directories is highly suspicious for DLL side-loading.
+  filter_legitimate_paths:
+    Image|startswith:
+      - 'C:\Windows\System32\'
+      - 'C:\Windows\SysWOW64\'
+  condition: selection and not filter_legitimate_paths
+fields:
+  - Image # The full path to xwizard.exe
+  - CommandLine # The command line used to execute xwizard.exe
+  - ParentImage # The parent process that launched xwizard.exe
+  - User # User account under which the process ran
+  - ComputerName # Standard field name for the host
+  - RuleName # Sysmon specific field for rule matching
+falsepositives:
+  - Very low false positive rate expected if legitimate `xwizard.exe` is strictly confined to standard system directories.
+  - Rare cases of legitimate third-party applications or installers that might temporarily copy and execute `xwizard.exe` in a non-standard location (should be thoroughly investigated and whitelisted if necessary).
+level: high # Setting to high due to the strong correlation with DLL side-loading.
+tags:
+  - attack.tactic: TA0005 # Defense Evasion
+  - attack.technique: T1574 # Hijack Execution Flow
+  - attack.technique: T1574.002 # Hijack Execution Flow: DLL Side-Loading
+references:
+  - https://attack.mitre.org/techniques/T1574/002/ # MITRE ATT&CK T1574.002 (DLL Side-Loading)
+  - https://lolbas-project.github.io/lolbas/Binaries/Xwizard/ # LoLBas entry for Xwizard.exe
+  - https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon # Sysmon official page

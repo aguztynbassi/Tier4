@@ -1,0 +1,50 @@
+title: Creación de Tareas Programadas Sospechosas
+id: "b7c8d9e0-f1g2-3h4i-5j6k-7l8m9n0o1p2q" # Nuevo ID generado
+status: experimental
+description: |
+  Detecta la creación de tareas programadas con nombres sospechosos.
+  Esta regla se enfoca en el EventID 4698 (Una tarea programada fue creada)
+  y excluye las tareas programadas que se encuentran en rutas y con extensiones
+  específicas de Microsoft\Windows que suelen ser legítimas.
+author: aguztynbassi
+date: 2025/05/24
+modified: 2025/05/24
+logsource:
+  category: scheduled_task # Categoría más específica para tareas programadas
+  product: windows
+  service: security # EventID 4698 es un evento de seguridad
+detection:
+  selection:
+    EventID: 4698
+  # Excluye tareas programadas que coinciden con patrones legítimos comunes
+  # en la ruta de Microsoft\Windows, como se indica en la consulta original.
+  # La expresión regular `(?i)` hace que la coincidencia sea insensible a mayúsculas y minúsculas.
+  exclude_legitimate_patterns:
+    TaskName|re: '(?i).*\\Microsoft\\Windows\\.*(\.tmp|\.bat|\.cmd)$'
+  # La consulta original también mencionaba '-user IN EXCLUDED_USERS'.
+  # Esto se puede implementar en Sigma con una selección de exclusión de usuarios.
+  # Por ejemplo, para excluir usuarios del sistema:
+  # exclude_users:
+  #   SubjectUserName:
+  #     - 'SYSTEM'
+  #     - 'LOCAL SERVICE'
+  #     - 'NETWORK SERVICE'
+  # Se recomienda definir una lista de usuarios legítimos conocidos en su entorno
+  # para evitar falsos positivos y adaptar la regla a su contexto.
+  condition: selection and not exclude_legitimate_patterns
+fields:
+  - EventID
+  - TaskName # Nombre de la tarea programada
+  - TaskCommand # Comando ejecutado por la tarea
+  - SubjectUserName # Usuario que creó la tarea
+  - SubjectDomainName # Dominio del usuario
+  - ComputerName # Nombre del equipo donde se creó la tarea
+tags:
+  - attack.tactic: TA0003 # Persistencia
+  - attack.technique: T1053 # Tarea/Trabajo Programado
+platforms:
+  - windows
+level: medium # Nivel de severidad medio, ya que las exclusiones pueden no ser exhaustivas y los nombres pueden variar.
+# Se recomienda ajustar el nivel de severidad según el contexto de su entorno.
+# Referencias:
+# - https://attack.mitre.org/techniques/T1053/
