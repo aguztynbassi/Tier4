@@ -1,0 +1,57 @@
+{
+  "name": "Transferencia FTP Sospechosa",
+  "version": "1.0.0",
+  "creator": "aguztynbassi",
+  "description": "Detecta transferencias FTP inusuales y de gran tamaño que pueden indicar exfiltración de datos. Esta regla busca transferencias de más de 100 MB.",
+  "tags": [
+    "seguridad",
+    "detección",
+    "FTP",
+    "exfiltración",
+    "network",
+    "TA0010",
+    "T1048.001"
+  ],
+  "versions": [
+    {
+      "version": "1.0.0",
+      "date": "2025-06-22",
+      "notes": "Initial release"
+    }
+  ],
+  "prompts": [
+    {
+      "id": "ftp_exfiltration_detection",
+      "prompt": "Se ha detectado una transferencia FTP sospechosa. Detalles del evento: IP de origen {source_ip}, IP de destino {destination_ip}, usuario {user}, archivo {filename}, bytes transferidos {bytes_transferred}. Analiza esta actividad inusual y determina si se trata de un intento de exfiltración de datos. Considera los falsos positivos como transferencias legítimas de archivos grandes por parte de usuarios o aplicaciones autorizadas.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "source_ip",
+      "required": true,
+      "description": "La dirección IP de origen de la transferencia FTP."
+    },
+    {
+      "name": "destination_ip",
+      "required": true,
+      "description": "La dirección IP de destino de la transferencia FTP."
+    },
+    {
+      "name": "user",
+      "required": false,
+      "description": "El usuario de FTP que realizó la transferencia (si está disponible)."
+    },
+    {
+      "name": "filename",
+      "required": false,
+      "description": "El nombre del archivo transferido (si está disponible)."
+    },
+    {
+      "name": "bytes_transferred",
+      "required": true,
+      "description": "La cantidad de bytes transferidos."
+    }
+  ]
+}
