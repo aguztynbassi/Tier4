@@ -1,0 +1,63 @@
+[
+  {
+    "name": "DragonFly - Watering Hole Sources",
+    "description": "Detects access to URLs associated with watering hole attacks attributed to the DragonFly APT group. This rule identifies access to URLs containing specific strings (\"script*iframe*\", \"dwd\", \"dwe\", \"fnd\", \"fne\") from any source address.",
+    "tags": [
+      "security",
+      "detection",
+      "webserver",
+      "firewall",
+      "ids/ips",
+      "initial access",
+      "drive-by compromise",
+      "masquerade victim website",
+      "malware",
+      "Karagany",
+      "APT",
+      "DragonFly",
+      "TA0001",
+      "T1189",
+      "T1622"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Access to a URL associated with DragonFly APT group's watering hole attacks detected. Event Details: **Timestamp** {Timestamp}, **Source Address** {source_address}, **Destination Address** {destination_address}, **User** {user}, **URL** {url}, **HTTP Method** {http_method}. Investigate this high-risk activity immediately for signs of compromise by the DragonFly APT group.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the web access event."
+      },
+      {
+        "name": "source_address",
+        "required": true,
+        "description": "The source IP address accessing the URL."
+      },
+      {
+        "name": "destination_address",
+        "required": true,
+        "description": "The destination IP address."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user accessing the URL, if available."
+      },
+      {
+        "name": "url",
+        "required": true,
+        "description": "The full URL accessed."
+      },
+      {
+        "name": "http_method",
+        "required": true,
+        "description": "The HTTP method used (GET, POST, etc.)."
+      }
+    ]
+  }
+]

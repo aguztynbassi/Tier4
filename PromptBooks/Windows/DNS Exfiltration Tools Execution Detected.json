@@ -1,0 +1,62 @@
+[
+  {
+    "name": "DNS Exfiltration Tools Execution Detected",
+    "description": "Detects the execution of known tools used for DNS exfiltration, such as iodine.exe and dnscat2. Adversaries may use these tools to create covert communication channels and exfiltrate data over the DNS protocol.",
+    "tags": [
+      "security",
+      "detection",
+      "windows",
+      "exfiltration",
+      "data exfiltration",
+      "application layer protocol",
+      "DNS",
+      "command and control",
+      "TA0010",
+      "T1048",
+      "T1048.003",
+      "TA0011",
+      "T1071",
+      "T1071.004"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Execution of a known DNS exfiltration tool detected. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **User** {user}, **Process Name** {process_name}, **Parent Process Name** {parent_process_name}, **Command** {command}. Investigate this critical event to determine if data exfiltration or covert command and control communication is occurring.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for Process Creation (e.g., 1)."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process ran."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the DNS exfiltration tool process (e.g., iodine.exe, dnscat2)."
+      },
+      {
+        "name": "parent_process_name",
+        "required": true,
+        "description": "The parent process that launched the DNS exfiltration tool."
+      },
+      {
+        "name": "command",
+        "required": true,
+        "description": "The full command line used to execute the tool."
+      }
+    ]
+  }
+]

@@ -1,0 +1,52 @@
+[
+  {
+    "name": "DoppelPaymer Ransomware Infected Host Detected",
+    "description": "Detects a host infected with DoppelPaymer ransomware by identifying known DoppelPaymer file hashes. This rule requires you to maintain an up-to-date list of DoppelPaymer hashes in the `doppelpaymer_ransomware_hashes` list.",
+    "tags": [
+      "security",
+      "detection",
+      "windows",
+      "impact",
+      "data encrypted for impact",
+      "malware",
+      "DoppelPaymer",
+      "TA0040",
+      "T1486"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A host infected with DoppelPaymer ransomware detected based on known file hashes. Event Details: **Timestamp** {Timestamp}, **Host Name** {host_name}, **File Path** {file_path}, **File Hash** {file_hash}, **Process Name** {process_name}. Investigate this critical alert immediately to isolate the infected host and contain the ransomware spread.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "host_name",
+        "required": true,
+        "description": "The name of the infected host."
+      },
+      {
+        "name": "file_path",
+        "required": true,
+        "description": "The path to the malicious file."
+      },
+      {
+        "name": "file_hash",
+        "required": true,
+        "description": "The file hash (MD5, SHA256, etc.) of the detected ransomware."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process associated with the file."
+      }
+    ]
+  }
+]

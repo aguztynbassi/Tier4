@@ -1,0 +1,59 @@
+[
+  {
+    "name": "Dridex Process Pattern Detected",
+    "description": "Detects process patterns commonly associated with Dridex malware infections. This rule identifies suspicious command-line arguments and parent-child process relationships involving svchost.exe.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "privilege escalation",
+      "process injection",
+      "malware",
+      "Dridex",
+      "TA0005",
+      "TA0004",
+      "T1055",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Dridex malware process pattern detected. This could be svchost.exe running from a user's Desktop or svchost.exe as a parent to recon commands. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **User** {user}, **Process Name** {process_name}, **Parent Process Name** {parent_process_name}, **Command** {command}. Investigate this critical event for signs of a Dridex infection or other malicious activity.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for Process Creation (e.g., 1)."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process ran."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the detected process (e.g., svchost.exe)."
+      },
+      {
+        "name": "parent_process_name",
+        "required": true,
+        "description": "The parent process of the detected process."
+      },
+      {
+        "name": "command",
+        "required": true,
+        "description": "The full command line of the process."
+      }
+    ]
+  }
+]

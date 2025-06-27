@@ -1,0 +1,55 @@
+[
+  {
+    "name": "Domain Trust Discovery Detected",
+    "description": "Detects the use of command-line tools (dsquery.exe, nltest.exe) to gather information about domain trust relationships. Adversaries may use this information to identify potential pathways for lateral movement and privilege escalation.",
+    "tags": [
+      "security",
+      "detection",
+      "windows",
+      "discovery",
+      "domain trust discovery",
+      "TA0007",
+      "T1482"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Domain trust discovery activity detected using command-line tools. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **User** {user}, **Process Name** {process_name}, **Parent Process Name** {parent_process_name}, **Command** {command}. Investigate this activity to determine if it is a legitimate administrative action or an adversary attempting to map your domain trust relationships.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for Process Creation (e.g., 1)."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process ran."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process (e.g., dsquery.exe, nltest.exe)."
+      },
+      {
+        "name": "parent_process_name",
+        "required": true,
+        "description": "The parent process that launched dsquery.exe or nltest.exe."
+      },
+      {
+        "name": "command",
+        "required": true,
+        "description": "The full command line used, indicating domain trust discovery."
+      }
+    ]
+  }
+]

@@ -1,0 +1,71 @@
+[
+  {
+    "name": "DragonFly - File Upload with Trojan Karagany",
+    "description": "Detects file modifications associated with the DragonFly APT group's use of the Trojan Karagany. This rule identifies file writes where the filename contains \"identifiant\", which is a characteristic of this activity.",
+    "tags": [
+      "security",
+      "detection",
+      "windows",
+      "defense evasion",
+      "credential access",
+      "privilege escalation",
+      "exploitation for defense evasion",
+      "exploitation for privilege escalation",
+      "malware",
+      "Karagany",
+      "APT",
+      "DragonFly",
+      "TA0005",
+      "TA0006",
+      "TA0004",
+      "T1211",
+      "T1212",
+      "T1068"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "File modification associated with DragonFly APT group's Trojan Karagany detected. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **User** {user}, **Process Name** {process_name}, **File Name** {file_name}, **File Path** {file_path}, **Details** {details}. Investigate this critical activity immediately for signs of compromise by the DragonFly APT group.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the file write event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for file write events."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account performing the file write."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The process writing the file."
+      },
+      {
+        "name": "file_name",
+        "required": true,
+        "description": "The name of the file being written."
+      },
+      {
+        "name": "file_path",
+        "required": true,
+        "description": "The full path of the file being written."
+      },
+      {
+        "name": "details",
+        "required": true,
+        "description": "Any relevant details about the file modification."
+      }
+    ]
+  }
+]

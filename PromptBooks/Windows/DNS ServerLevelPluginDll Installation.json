@@ -1,0 +1,64 @@
+[
+  {
+    "name": "DNS ServerLevelPluginDll Installation",
+    "description": "Detects the installation of a plugin DLL for the DNS server by monitoring registry modifications and dnscmd.exe commands. This technique is used to execute arbitrary code within the context of the DNS service, potentially leading to privilege escalation and persistence.",
+    "tags": [
+      "security",
+      "detection",
+      "windows",
+      "defense evasion",
+      "hijack execution flow",
+      "DLL side-loading",
+      "modify registry",
+      "TA0005",
+      "T1574",
+      "T1574.002",
+      "T1112"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Suspicious DNS ServerLevelPluginDll installation detected via registry modification or dnscmd.exe. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **User** {user}, **Process Name** {process_name}, **Registry Key** {registry_key}, **Registry Value** {registry_value}, **Command** {command}. Investigate this critical event immediately for signs of privilege escalation or persistence attempts within the DNS service.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for Registry value set (13) or Process Creation (1)."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the event occurred."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that performed the action (e.g., dnscmd.exe)."
+      },
+      {
+        "name": "registry_key",
+        "required": true,
+        "description": "The registry key that was modified (if applicable)."
+      },
+      {
+        "name": "registry_value",
+        "required": true,
+        "description": "The value set in the registry key (if applicable)."
+      },
+      {
+        "name": "command",
+        "required": true,
+        "description": "The full command line used (if applicable, for process creation events)."
+      }
+    ]
+  }
+]
