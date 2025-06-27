@@ -1,0 +1,71 @@
+[
+  {
+    "name": "ZIP File Operations via Printer Migration CLITool",
+    "description": "Detects suspicious execution of `printbrm.exe` (Printer Migration Wizard Command Line Tool) when it is used to create or extract `.zip` files. Adversaries may leverage this legitimate Windows utility to stage data for exfiltration, transfer tools onto a system (ingress), or hide artifacts, thereby achieving defense evasion by using a trusted binary.",
+    "tags": [
+      "security",
+      "detection",
+      "windows",
+      "ingress tool transfer",
+      "hide artifacts",
+      "exfiltration",
+      "lateral movement",
+      "defense evasion",
+      "T1105",
+      "T1564.004",
+      "TA0010",
+      "TA0008",
+      "TA0005"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Suspicious `printbrm.exe` activity involving ZIP file operations has been detected. Event Details: **Image** {Image}, **Command Line** {CommandLine}, **Parent Image** {ParentImage}, **User** {User}, **Computer Name** {ComputerName}, **Event ID** {EventID}, **Original File Name** {OriginalFileName}, **Rule Name** {RuleName}. Investigate whether this is a legitimate printer migration/backup/restore operation or a malicious attempt to stage data, transfer tools, or hide artifacts.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to printbrm.exe."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line used for the printbrm.exe execution."
+      },
+      {
+        "name": "ParentImage",
+        "required": true,
+        "description": "The parent process that launched printbrm.exe."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the process ran."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The name of the host where the event occurred."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Sysmon event ID for process creation (should be 1)."
+      },
+      {
+        "name": "OriginalFileName",
+        "required": true,
+        "description": "The original file name of the executable (if captured by Sysmon)."
+      },
+      {
+        "name": "RuleName",
+        "required": true,
+        "description": "Sysmon specific field for rule matching."
+      }
+    ]
+  }
+]

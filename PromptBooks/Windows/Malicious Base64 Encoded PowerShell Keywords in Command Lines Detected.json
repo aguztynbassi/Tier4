@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Malicious Base64 Encoded PowerShell Keywords in Command Lines Detected",
+    "description": "When base64 encoded strings are used in hidden malicious Command and Scripting Interpreter, PowerShell command lines. Adversaries hide their activities by encoding commands to bypass detection with this technique.",
+    "tags": [
+      "security",
+      "detection",
+      "windows",
+      "command and control",
+      "command and scripting interpreter",
+      "powershell",
+      "TA0002",
+      "T1059",
+      "T1059.001"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Malicious Base64 encoded PowerShell keywords detected in command lines. Event Details: **Event ID** {event_id}, **Image** {image}, **Command** {command}, **User** {user}. Investigate this activity to determine if a malicious PowerShell script is executing encoded commands to evade detection.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Process Creation (should be 1)."
+      },
+      {
+        "name": "image",
+        "required": true,
+        "description": "The process image (e.g., powershell.exe)."
+      },
+      {
+        "name": "command",
+        "required": true,
+        "description": "The full command line containing malicious Base64 encoded keywords."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process ran."
+      }
+    ]
+  }
+]

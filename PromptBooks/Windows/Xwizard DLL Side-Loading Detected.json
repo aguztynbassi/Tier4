@@ -1,0 +1,57 @@
+[
+  {
+    "name": "Xwizard DLL Side-Loading Detected",
+    "description": "Detects suspicious execution of `xwizard.exe` (Extensible Wizard Host) from non-standard or unusual directories. This activity can indicate an attempt by adversaries to perform DLL side-loading, where `xwizard.exe` is coerced into loading a malicious DLL placed in the same directory as the executable, bypassing application whitelisting and achieving defense evasion.",
+    "tags": [
+      "security",
+      "detection",
+      "windows",
+      "defense evasion",
+      "hijack execution flow",
+      "DLL side-loading",
+      "TA0005",
+      "T1574",
+      "T1574.002"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Suspicious `xwizard.exe` execution detected, potentially indicating DLL side-loading. Event Details: **Image** {Image}, **Command Line** {CommandLine}, **Parent Image** {ParentImage}, **User** {User}, **Computer Name** {ComputerName}, **Rule Name** {RuleName}. Investigate whether this execution from a non-standard directory is a legitimate action or an attempt to load a malicious DLL.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to xwizard.exe."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The command line used to execute xwizard.exe."
+      },
+      {
+        "name": "ParentImage",
+        "required": true,
+        "description": "The parent process that launched xwizard.exe."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the process ran."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The name of the host where the event occurred."
+      },
+      {
+        "name": "RuleName",
+        "required": true,
+        "description": "Sysmon specific field for rule matching."
+      }
+    ]
+  }
+]
