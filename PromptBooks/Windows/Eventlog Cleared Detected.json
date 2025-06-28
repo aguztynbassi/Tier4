@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Eventlog Cleared Detected",
+    "description": "Detects the clearing of one of the Windows Event logs, a common technique used by attackers to remove evidence of their activity. This rule specifically looks for Event ID 104 from the Microsoft-Windows-Eventlog source.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "indicator removal",
+      "clear logs",
+      "TA0005",
+      "T1070",
+      "T1070.001",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Windows Event log cleared, indicating potential malicious activity attempting to remove evidence. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **User** {user}, **Process Name** {process_name}, **Details** {details}. Investigate this high-risk event immediately for signs of compromise and to recover forensic data.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for 'The event log was cleared' (104)."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user who cleared the log."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The process that cleared the log, if available."
+      },
+      {
+        "name": "details",
+        "required": true,
+        "description": "Any relevant details from the event log clearing."
+      }
+    ]
+  }
+]

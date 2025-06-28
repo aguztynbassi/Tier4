@@ -1,0 +1,60 @@
+[
+  {
+    "name": "Endpoint Protect Multiple Failed Login Attempts",
+    "description": "Detects a user failing to log in after multiple attempts, potentially indicating brute-force attacks, password spraying, or other credential access attempts on an endpoint.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "persistence",
+      "privilege escalation",
+      "initial access",
+      "exploitation for privilege escalation",
+      "brute force",
+      "TA0005",
+      "TA0003",
+      "TA0004",
+      "TA0001",
+      "T1212",
+      "T1068",
+      "T1211",
+      "T1110",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Multiple failed login attempts detected on an endpoint, possibly indicating a brute-force or password spraying attack. Event Details: **Timestamp** {Timestamp}, **User** {user}, **Source User** {source_user}, **Event ID** {EventID}, **Failure Reason** {failure_reason}. Investigate this activity for unauthorized credential access attempts.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account that is failing to authenticate."
+      },
+      {
+        "name": "source_user",
+        "required": true,
+        "description": "The user account from which the authentication attempt originates."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for the authentication failure."
+      },
+      {
+        "name": "failure_reason",
+        "required": true,
+        "description": "The reason for the failed login."
+      }
+    ]
+  }
+]

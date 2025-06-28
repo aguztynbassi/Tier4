@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Execution from Non-Executable Folder",
+    "description": "Detects the execution of programs from directories where executables are not typically expected, such as the Recycle Bin, user profile directories, or system folders. This can indicate suspicious or malicious activity, as malware may attempt to hide in these locations.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "masquerading",
+      "obfuscated files or information",
+      "TA0005",
+      "T1036",
+      "T1027",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Executable detected running from an unusual or non-executable folder. This is a high-risk indicator of potential malware or defense evasion. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **Image Path** {Image}, **Parent Image Path** {ParentImage}, **Command Line** {CommandLine}, **User** {User}, **Computer** {Computer}. Investigate this critical event immediately for signs of compromise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for Process Creation (1)."
+      },
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path of the executed file."
+      },
+      {
+        "name": "ParentImage",
+        "required": true,
+        "description": "The full path of the parent process."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line used to execute the process."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the process was executed."
+      },
+      {
+        "name": "Computer",
+        "required": true,
+        "description": "The computer on which the event occurred."
+      }
+    ]
+  }
+]

@@ -1,0 +1,67 @@
+[
+  {
+    "name": "Executables Stored in OneDrive",
+    "description": "Detects users storing executable files in OneDrive, which can be a potential indicator of malicious activity, such as preparing for malware deployment or using OneDrive as a staging area for attacks.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "masquerading",
+      "obfuscated files or information",
+      "TA0005",
+      "T1036",
+      "T1027",
+      "Office Suite"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Executable file detected being stored in OneDrive by a user, indicating potential staging for malicious activity. Event Details: **Timestamp** {Timestamp}, **User** {user}, **User ID** {user_id}, **Source IP** {source_ip}, **File Name** {file_name}, **File Extension** {file_extension}, **Destination Folder** {destination_folder}, **URL** {url}. Investigate this suspicious activity for potential malware deployment or data staging.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the file creation/upload event."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user who stored the executable file."
+      },
+      {
+        "name": "user_id",
+        "required": true,
+        "description": "The ID of the user, if available."
+      },
+      {
+        "name": "source_ip",
+        "required": true,
+        "description": "The IP address from which the file was uploaded."
+      },
+      {
+        "name": "file_name",
+        "required": true,
+        "description": "The name of the executable file."
+      },
+      {
+        "name": "file_extension",
+        "required": true,
+        "description": "The extension of the executable file."
+      },
+      {
+        "name": "destination_folder",
+        "required": true,
+        "description": "The OneDrive folder where the file was stored."
+      },
+      {
+        "name": "url",
+        "required": true,
+        "description": "The URL of the file in OneDrive."
+      }
+    ]
+  }
+]
