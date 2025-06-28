@@ -1,0 +1,61 @@
+[
+  {
+    "name": "Execution of Temporary Files Via Office Application",
+    "description": "Detects the execution of a file with a `.tmp` extension by an Office application (Word, PowerPoint, Excel). This behavior is suspicious and can indicate an attempt to execute malicious code disguised as a temporary file.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "masquerading",
+      "TA0005",
+      "T1036",
+      "Windows",
+      "Sysmon"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Medium-severity alert: An Office application (Word, PowerPoint, or Excel) executed a temporary (`.tmp`) file on host '{host}' by user '{user}'. This behavior is highly suspicious and often indicates an attempt to run malicious code disguised as a temporary file, potentially bypassing security controls. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Parent Process Name**: {parent_process_name}\n* **Executed Process Name**: {process_name}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**Immediately investigate this activity.** Examine the temporary file, the full command line, and network connections. Isolate the affected system if malicious activity is confirmed. This could be a vector for initial access or payload delivery.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Process Creation (1)."
+      },
+      {
+        "name": "parent_process_name",
+        "required": true,
+        "description": "The name of the Office application that launched the temporary file (e.g., 'winword.exe', 'powerpnt.exe', 'excel.exe')."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the executed process, ending with '.tmp'."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute the temporary file."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

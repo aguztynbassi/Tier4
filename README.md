@@ -41,7 +41,7 @@ The essence of this project lies in a collection of JSON files (or a single larg
     ],
     "prompts": [
       {
-        "id": "2e7f8a9b-0c1d-4e5f-6a7b-8c9d0e1f2a3b",
+        "id": "1",
         "prompt": "Suspicious `svchost.exe` activity has been detected. Event Details: Event ID {EventID}, Timestamp {Timestamp}, Image {Image}, Command Line {CommandLine}, User {User}, Computer {Computer}, Parent Image {ParentImage}. Investigate whether this activity is a process injection attempt or legitimate system service/application activity. Pay special attention to the command line and parent process.",
         "continueOnError": false,
         "systemCapability": "analyzeSecurityEvent"
@@ -54,34 +54,7 @@ The essence of this project lies in a collection of JSON files (or a single larg
         "description": "The Sysmon Event ID for process creation (should be 1)."
       },
       {
-        "name": "Timestamp",
-        "required": true,
-        "description": "The timestamp of the event."
-      },
-      {
-        "name": "Image",
-        "required": true,
-        "description": "The full path to the executable (should be svchost.exe)."
-      },
-      {
-        "name": "CommandLine",
-        "required": true,
-        "description": "The full command line used to launch svchost.exe."
-      },
-      {
-        "name": "User",
-        "required": true,
-        "description": "The user account under which the process ran."
-      },
-      {
-        "name": "Computer",
-        "required": true,
-        "description": "The name of the computer where the event occurred."
-      },
-      {
-        "name": "ParentImage",
-        "required": false,
-        "description": "The image of the parent process that launched svchost.exe."
+        ...
       }
     ]
   }

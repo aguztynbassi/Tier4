@@ -1,0 +1,57 @@
+[
+  {
+    "name": "Proxy Execution via Pubprn",
+    "description": "Detects the execution of `pubprn.vbs` with the `script:` argument, which is indicative of an attempt to proxy the execution of a malicious payload. Attackers may use this technique to bypass application control or other security measures.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "signed binary proxy execution",
+      "MSHTA",
+      "TA0005",
+      "T1216.001",
+      "Windows",
+      "Sysmon"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: Suspicious proxy execution detected via `pubprn.vbs` on host '{host}' by user '{user}'. The legitimate `pubprn.vbs` script was invoked with the `script:` argument, indicating an attempt to execute an arbitrary payload, likely to bypass security controls. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**IMMEDIATE ACTION REQUIRED:** This is a critical security incident. Analyze the full command line to understand the executed script. Isolate the affected system immediately and conduct a thorough forensic analysis to identify the malicious payload and the extent of the compromise. This behavior is highly indicative of an attacker attempting to gain or maintain access.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Process Creation (1)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was executed, which should be 'pubprn.vbs'."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute 'pubprn.vbs', including the 'script:' argument and the embedded script."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which 'pubprn.vbs' was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

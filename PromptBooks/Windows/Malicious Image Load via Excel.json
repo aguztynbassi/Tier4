@@ -1,0 +1,63 @@
+[
+  {
+    "name": "Malicious Image Load via Excel",
+    "description": "Detects the loading of an unsigned image by `excel.exe` from an Excel add-in file (`.xlam`, `.xla`, or `.xll`). This can indicate potential exploitation or the execution of malicious code embedded within the image or add-in.",
+    "tags": [
+      "security",
+      "detection",
+      "execution",
+      "office application execution",
+      "microsoft excel",
+      "TA0003",
+      "T1137",
+      "T1137.001",
+      "Windows",
+      "Sysmon"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Medium-severity alert: An unsigned image ({image_loaded}) was loaded by `excel.exe` from an Excel add-in file on host '{host}' by user '{user}'. This is a suspicious event that could indicate potential exploitation or the execution of malicious code embedded within an add-in. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Image Loaded**: {image_loaded}\n* **Signed**: {signed}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity.** Examine the loaded image file and the Excel add-in for any signs of malicious content. Determine if the add-in is legitimate and authorized. If not, isolate the system and conduct further analysis.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the image load event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Image Load (7)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that loaded the image, which should be 'excel.exe'."
+      },
+      {
+        "name": "image_loaded",
+        "required": true,
+        "description": "The full path to the loaded image file (an Excel add-in like .xlam, .xla, or .xll)."
+      },
+      {
+        "name": "signed",
+        "required": true,
+        "description": "Indicates whether the loaded image is digitally signed (expected to be 'false' for this detection)."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which Excel is running."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]
