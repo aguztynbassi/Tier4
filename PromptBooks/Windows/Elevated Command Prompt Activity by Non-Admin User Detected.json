@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Elevated Command Prompt Activity by Non-Admin User Detected",
+    "description": "Detects the execution of an elevated command prompt (cmd.exe) by a user who is not a member of a privileged group. This can indicate an.attempt to gain unauthorized access or perform privileged actions.",
+    "tags": [
+      "security",
+      "detection",
+      "execution",
+      "privilege escalation",
+      "command and scripting interpreter",
+      "abuse elevation control mechanism",
+      "bypass user account control",
+      "TA0002",
+      "TA0004",
+      "T1059",
+      "T1548",
+      "T1548.002",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Elevated command prompt activity by a non-administrative user detected. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **User** {user}, **Process Name** {process_name}, **Parent Process Name** {parent_process_name}, **Command** {command}, **Token Elevation Type** {token_elevation_type}. Investigate this high-risk activity immediately for unauthorized privilege escalation.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for process creation (4688)."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account who ran the elevated command prompt."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process (cmd.exe)."
+      },
+      {
+        "name": "parent_process_name",
+        "required": true,
+        "description": "The process that launched cmd.exe."
+      },
+      {
+        "name": "command",
+        "required": true,
+        "description": "The command line used to execute cmd.exe."
+      },
+      {
+        "name": "token_elevation_type",
+        "required": true,
+        "description": "The token elevation type, indicating if the process is elevated."
+      }
+    ]
+  }
+]

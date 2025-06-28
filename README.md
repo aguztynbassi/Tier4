@@ -1,4 +1,4 @@
-# Threat Detection Prompts Collection Mapped to MITRE ATT\&CK
+# Tier 4
 
 This repository contains a vast collection of over 900 **structured prompts for threat detection and response**, each meticulously designed to guide the investigation of security events. Each prompt is encapsulated in a detailed JSON format, including metadata, descriptions, and specific parameters required for its execution and analysis. Most importantly, each entry is directly **mapped to the tactics and techniques of the MITRE ATT\&CK Matrix**, providing a comprehensive framework for understanding and mitigating adversary behavior.
 

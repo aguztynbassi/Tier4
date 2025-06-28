@@ -1,0 +1,61 @@
+[
+  {
+    "name": "EMC Possible Ransomware Detection",
+    "description": "Detects suspicious data activity on EMC storage devices, potentially indicative of ransomware. This rule identifies a high volume of file modifications (more than 200) by a single user, excluding write operations with zero bytes written.",
+    "tags": [
+      "security",
+      "detection",
+      "storage",
+      "impact",
+      "data encrypted for impact",
+      "data manipulation",
+      "proxy",
+      "malware",
+      "ransomware",
+      "TA0040",
+      "T1486",
+      "T1485",
+      "T1090"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Suspicious data activity on EMC storage, possibly indicating ransomware, detected. High volume of file modifications by a single user. Event Details: **Timestamp** {Timestamp}, **User SID** {user_sid}, **Client IP** {client_ip}, **Number of File Modifications** {handle}, **File Path** {file_path}, **File Name** {file_name}. Investigate this critical event immediately to confirm ransomware infection and initiate incident response.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "user_sid",
+        "required": true,
+        "description": "The Security Identifier (SID) of the user performing the file modifications."
+      },
+      {
+        "name": "client_ip",
+        "required": true,
+        "description": "The client IP address initiating the file modifications."
+      },
+      {
+        "name": "handle",
+        "required": true,
+        "description": "The count of file modifications by the user."
+      },
+      {
+        "name": "file_path",
+        "required": true,
+        "description": "The path of the file being modified."
+      },
+      {
+        "name": "file_name",
+        "required": true,
+        "description": "The name of the file being modified."
+      }
+    ]
+  }
+]

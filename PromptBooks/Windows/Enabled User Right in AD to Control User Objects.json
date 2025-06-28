@@ -1,0 +1,54 @@
+[
+  {
+    "name": "Enabled User Right in AD to Control User Objects",
+    "description": "Detects the assignment of the SeEnableDelegationPrivilege user right in Active Directory. This privilege allows a user to delegate authentication, which can be abused to gain control over other Active Directory user objects.",
+    "tags": [
+      "security",
+      "detection",
+      "privilege escalation",
+      "valid accounts",
+      "abuse elevation control mechanism",
+      "domain fronting",
+      "TA0004",
+      "T1078",
+      "T1548",
+      "T1548.004",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Assignment of 'SeEnableDelegationPrivilege' detected in Active Directory. This privilege can be abused for unauthorized control over user objects. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **User (assigner)** {user}, **Target User (assignee)** {target_user}, **Details** {details}. Investigate this high-risk activity immediately for potential privilege escalation or abuse.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for 'A user right was assigned' (4704)."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user who assigned the privilege."
+      },
+      {
+        "name": "target_user",
+        "required": true,
+        "description": "The user who was assigned the privilege."
+      },
+      {
+        "name": "details",
+        "required": true,
+        "description": "Details of the event, including 'SeEnableDelegationPrivilege'."
+      }
+    ]
+  }
+]
