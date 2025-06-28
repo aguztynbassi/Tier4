@@ -1,0 +1,79 @@
+[
+  {
+    "name": "FortiGate Antivirus Botnet Warning",
+    "description": "Detects FortiGate antivirus alerts indicating potential botnet activity.",
+    "tags": [
+      "security",
+      "detection",
+      "command and control",
+      "impact",
+      "proxy",
+      "network denial of service",
+      "TA0011",
+      "TA0040",
+      "T1090",
+      "T1498",
+      "Network Devices"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A FortiGate antivirus alert for potential botnet activity has been triggered. This is a high-risk indicator of compromise and ongoing command-and-control communication. Event Details: **Timestamp** {timestamp}, **Source Address** {source_address}, **Destination Address** {destination_address}, **Source Interface** {srcintf}, **Destination Interface** {dstintf}, **Botnet Signature/Name** {attack}, **Log ID** {log_id}, **Virtual Domain (VDOM)** {vdom}, **Source Country** {source_country}, **Destination Country** {destination_country}. Investigate this critical botnet warning immediately to prevent further compromise and mitigate impact.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the botnet warning."
+      },
+      {
+        "name": "source_address",
+        "required": true,
+        "description": "The source IP address involved in the botnet activity."
+      },
+      {
+        "name": "destination_address",
+        "required": true,
+        "description": "The destination IP address involved in the botnet activity."
+      },
+      {
+        "name": "srcintf",
+        "required": true,
+        "description": "The source network interface on the FortiGate."
+      },
+      {
+        "name": "dstintf",
+        "required": true,
+        "description": "The destination network interface on the FortiGate."
+      },
+      {
+        "name": "attack",
+        "required": true,
+        "description": "The specific botnet signature or name detected."
+      },
+      {
+        "name": "log_id",
+        "required": true,
+        "description": "The FortiGate log ID for the botnet detection (9248)."
+      },
+      {
+        "name": "vdom",
+        "required": true,
+        "description": "The Virtual Domain (VDOM) where the botnet activity was detected."
+      },
+      {
+        "name": "source_country",
+        "required": true,
+        "description": "The country of origin for the source IP (enriched via GeoIP)."
+      },
+      {
+        "name": "destination_country",
+        "required": true,
+        "description": "The country of the destination IP (enriched via GeoIP)."
+      }
+    ]
+  }
+]

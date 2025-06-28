@@ -1,0 +1,50 @@
+[
+  {
+    "name": "File and Directory Discovery via PowerShell",
+    "description": "Detects the use of PowerShell to enumerate files and directories, a common technique used by attackers for reconnaissance.",
+    "tags": [
+      "security",
+      "detection",
+      "discovery",
+      "file and directory discovery",
+      "TA0007",
+      "T1083",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "PowerShell command for file and directory discovery detected, indicating potential reconnaissance activity. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **User** {User}, **Computer** {Computer}, **Script Block Text** {ScriptBlockText}. Investigate this activity for unauthorized system enumeration.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for PowerShell Script Block logging (4103)."
+      },
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account that executed the PowerShell command."
+      },
+      {
+        "name": "Computer",
+        "required": true,
+        "description": "The computer on which the event occurred."
+      },
+      {
+        "name": "ScriptBlockText",
+        "required": true,
+        "description": "The full script block text of the PowerShell command, containing file/directory enumeration cmdlets."
+      }
+    ]
+  }
+]

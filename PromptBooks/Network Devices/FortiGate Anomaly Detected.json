@@ -1,0 +1,95 @@
+[
+  {
+    "name": "FortiGate Anomaly Detected",
+    "description": "Detects anomaly events reported by a FortiGate firewall. This rule focuses on the core anomaly event and enriches it with GeoIP data within Sigma, if supported by the backend.",
+    "tags": [
+      "security",
+      "detection",
+      "discovery",
+      "indicator removal",
+      "TA0007",
+      "T1046",
+      "Network Devices"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A security anomaly has been detected by a FortiGate firewall. This indicates unusual or potentially malicious network activity. Event Details: **Timestamp** {timestamp}, **Source Address** {source_address}, **Destination Address** {destination_address}, **Anomaly Type** {attack}, **Log ID** {log_id}, **Virtual Domain (VDOM)** {vdom}, **User** {user}, **Policy ID** {policyid}, **Session ID** {sessionid}, **Protocol** {proto}, **Source Port** {srcport}, **Destination Port** {dstport}, **Source Country** {source_country}, **Destination Country** {destination_country}. Investigate this anomaly to determine its nature and potential impact.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the anomaly event."
+      },
+      {
+        "name": "source_address",
+        "required": true,
+        "description": "The source IP address involved in the anomaly."
+      },
+      {
+        "name": "destination_address",
+        "required": true,
+        "description": "The destination IP address involved in the anomaly."
+      },
+      {
+        "name": "attack",
+        "required": true,
+        "description": "The specific type of attack or anomaly detected (e.g., 'port_scan', 'brute_force')."
+      },
+      {
+        "name": "log_id",
+        "required": true,
+        "description": "The FortiGate log ID for the event."
+      },
+      {
+        "name": "vdom",
+        "required": true,
+        "description": "The Virtual Domain (VDOM) where the anomaly was detected."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user associated with the anomaly, if applicable."
+      },
+      {
+        "name": "policyid",
+        "required": true,
+        "description": "The firewall policy ID related to the anomalous traffic."
+      },
+      {
+        "name": "sessionid",
+        "required": true,
+        "description": "The session ID associated with the anomaly."
+      },
+      {
+        "name": "proto",
+        "required": true,
+        "description": "The network protocol involved (e.g., TCP, UDP, ICMP)."
+      },
+      {
+        "name": "srcport",
+        "required": true,
+        "description": "The source port of the anomalous traffic."
+      },
+      {
+        "name": "dstport",
+        "required": true,
+        "description": "The destination port of the anomalous traffic."
+      },
+      {
+        "name": "source_country",
+        "required": true,
+        "description": "The country of origin for the source IP (enriched via GeoIP)."
+      },
+      {
+        "name": "destination_country",
+        "required": true,
+        "description": "The country of the destination IP (enriched via GeoIP)."
+      }
+    ]
+  }
+]

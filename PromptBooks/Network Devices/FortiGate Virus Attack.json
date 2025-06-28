@@ -1,0 +1,79 @@
+[
+  {
+    "name": "FortiGate Virus Attack",
+    "description": "Detects virus attacks identified by FortiGate's antivirus engine.",
+    "tags": [
+      "security",
+      "detection",
+      "discovery",
+      "defense evasion",
+      "indicator removal on host",
+      "exploitation for defense evasion",
+      "TA0007",
+      "TA0005",
+      "T1046",
+      "T1211",
+      "Network Devices"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Critical FortiGate alert: A virus attack has been detected by the antivirus engine. This indicates a severe threat to the network. Event Details: **Timestamp** {timestamp}, **Log ID** {log_id}, **User** {user}, **Source Address** {source_address}, **Destination Address** {destination_address}, **Source Country** {source_country}, **Destination Country** {destination_country}, **Infected File Name** {file_name}, **Virus Name** {virus_name}, **Severity** {severity}. Investigate this critical event immediately to contain the infection and mitigate its impact.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the virus detection event."
+      },
+      {
+        "name": "log_id",
+        "required": true,
+        "description": "The FortiGate Log ID for the virus event."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user associated with the virus detection, if applicable."
+      },
+      {
+        "name": "source_address",
+        "required": true,
+        "description": "The source IP address from which the virus traffic originated."
+      },
+      {
+        "name": "destination_address",
+        "required": true,
+        "description": "The destination IP address where the virus traffic was directed."
+      },
+      {
+        "name": "source_country",
+        "required": true,
+        "description": "The country of origin for the source IP (enriched via GeoIP)."
+      },
+      {
+        "name": "destination_country",
+        "required": true,
+        "description": "The country of the destination IP (enriched via GeoIP)."
+      },
+      {
+        "name": "file_name",
+        "required": true,
+        "description": "The name of the file identified as infected."
+      },
+      {
+        "name": "virus_name",
+        "required": true,
+        "description": "The name of the detected virus signature."
+      },
+      {
+        "name": "severity",
+        "required": true,
+        "description": "The severity level reported by FortiGate for the virus detection."
+      }
+    ]
+  }
+]

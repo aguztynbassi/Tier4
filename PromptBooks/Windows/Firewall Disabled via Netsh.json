@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Firewall Disabled via Netsh",
+    "description": "Detects attempts to disable the Windows Firewall using the `netsh` command-line utility.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "impair defenses",
+      "disable or modify system firewall",
+      "TA0005",
+      "T1055",
+      "T1562",
+      "T1562.004",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Windows Firewall disabled via `netsh` command, indicating a high-risk defense evasion attempt. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **User** {User}, **Computer** {Computer}, **Image** {Image}, **Command Line** {CommandLine}. Investigate this critical event immediately for unauthorized system modification and potential follow-on activity.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for Process Creation (1)."
+      },
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account that attempted to disable the firewall."
+      },
+      {
+        "name": "Computer",
+        "required": true,
+        "description": "The computer on which the event occurred."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The executable image used (`netsh.exe`)."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line used to disable the firewall."
+      }
+    ]
+  }
+]

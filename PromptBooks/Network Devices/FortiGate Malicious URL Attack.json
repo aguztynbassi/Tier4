@@ -1,0 +1,72 @@
+[
+  {
+    "name": "FortiGate Malicious URL Attack",
+    "description": "Detects attempts to access malicious URLs, as identified by FortiGate. This rule is specific to FortiOS V6.0.4 due to the message_id.",
+    "tags": [
+      "security",
+      "detection",
+      "initial access",
+      "phishing",
+      "spearphishing link",
+      "TA0001",
+      "T1566",
+      "T1566.002",
+      "Network Devices"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Critical FortiGate alert: Attempted access to a known malicious URL detected. This is a high-risk indicator of potential initial access via phishing or drive-by compromise. Event Details: **Timestamp** {timestamp}, **Log ID** {log_id}, **User** {user}, **Source Address** {source_address}, **Destination Address** {destination_address}, **Source Country** {source_country}, **Destination Country** {destination_country}, **Malicious URL** {url}, **Severity** {severity}. Investigate this critical event immediately to contain potential infection and identify the source of the malicious link.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the malicious URL event."
+      },
+      {
+        "name": "log_id",
+        "required": true,
+        "description": "The FortiGate Log ID for the event (16399 for FortiOS V6.0.4)."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user attempting to access the malicious URL."
+      },
+      {
+        "name": "source_address",
+        "required": true,
+        "description": "The source IP address from which the URL access was attempted."
+      },
+      {
+        "name": "destination_address",
+        "required": true,
+        "description": "The destination IP address of the malicious URL."
+      },
+      {
+        "name": "source_country",
+        "required": true,
+        "description": "The country of origin for the source IP (enriched via GeoIP)."
+      },
+      {
+        "name": "destination_country",
+        "required": true,
+        "description": "The country of the destination IP (enriched via GeoIP)."
+      },
+      {
+        "name": "url",
+        "required": true,
+        "description": "The malicious URL that was accessed."
+      },
+      {
+        "name": "severity",
+        "required": true,
+        "description": "The severity level reported by FortiGate for the event."
+      }
+    ]
+  }
+]

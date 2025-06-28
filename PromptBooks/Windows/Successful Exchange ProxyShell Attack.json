@@ -1,0 +1,63 @@
+[
+  {
+    "name": "Successful Exchange ProxyShell Attack",
+    "description": "Detects successful exploitation of the ProxyShell vulnerability against Microsoft Exchange servers, indicated by specific URL patterns and HTTP status codes.",
+    "tags": [
+      "security",
+      "detection",
+      "initial access",
+      "exploit public-facing application",
+      "CVE-2021-31207",
+      "CVE-2021-34473",
+      "CVE-2021-34523",
+      "TA0001",
+      "T1190",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "CRITICAL ALERT: Successful ProxyShell exploitation detected against Microsoft Exchange server, indicated by specific URL patterns and HTTP status codes. This signifies a confirmed breach and potential system compromise. Event Details: **Timestamp** {timestamp}, **Client IP** {c-ip}, **Client Method** {c-method}, **Client URI** {c-uri}, **Server Status Code** {sc-status}, **Client Username** {cs-username}, **Server Port** {s-port}. **Immediately isolate the affected Exchange server and initiate full incident response procedures.** This is a critical security breach.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the IIS log entry."
+      },
+      {
+        "name": "c-ip",
+        "required": true,
+        "description": "The client IP address making the successful request."
+      },
+      {
+        "name": "c-method",
+        "required": true,
+        "description": "The HTTP method used by the client (e.g., GET, POST)."
+      },
+      {
+        "name": "c-uri",
+        "required": true,
+        "description": "The URI requested by the client, containing the successful ProxyShell patterns."
+      },
+      {
+        "name": "sc-status",
+        "required": true,
+        "description": "The HTTP status code returned by the server (200 or 301) indicating success."
+      },
+      {
+        "name": "cs-username",
+        "required": true,
+        "description": "The username provided by the client, if any."
+      },
+      {
+        "name": "s-port",
+        "required": true,
+        "description": "The server port that received the request."
+      }
+    ]
+  }
+]

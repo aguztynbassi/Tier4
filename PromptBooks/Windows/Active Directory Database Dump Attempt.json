@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Active Directory Database Dump Attempt",
+    "description": "Detects attempts to dump the Active Directory database (ntds.dit), a critical file containing sensitive information like password hashes. Attackers often target this file to obtain credentials for lateral movement and privilege escalation.",
+    "tags": [
+      "security",
+      "detection",
+      "credential access",
+      "OS credential dumping",
+      "NTDS dumping",
+      "TA0006",
+      "T1003",
+      "T1003.003",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "CRITICAL ALERT: A highly suspicious attempt to dump the Active Directory database (ntds.dit) has been detected. This file contains sensitive information, including password hashes, and its exfiltration is a severe security breach often leading to lateral movement and privilege escalation. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **User**: {user}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Parent Process Name**: {parent_process_name}\n* **Command Line**: {command}\n\n**Immediately isolate the affected Domain Controller and initiate a full incident response.** This is a critical compromise requiring urgent attention.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Windows Security event ID related to the detection (e.g., process creation event IDs)."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the suspicious activity occurred."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process involved in the dump attempt (e.g., NTDSDump.exe, powershell.exe, cmd.exe)."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the executable involved in the dump attempt."
+      },
+      {
+        "name": "parent_process_name",
+        "required": true,
+        "description": "The name of the parent process that initiated the suspicious activity."
+      },
+      {
+        "name": "command",
+        "required": true,
+        "description": "The full command line arguments, indicating the attempt to access or copy 'ntds.dit'."
+      }
+    ]
+  }
+]

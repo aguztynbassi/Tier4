@@ -1,0 +1,63 @@
+[
+  {
+    "name": "Exchange ProxyShell Pattern Detected",
+    "description": "Detects URL patterns associated with ProxyShell exploitation attempts against Microsoft Exchange servers.",
+    "tags": [
+      "security",
+      "detection",
+      "initial access",
+      "exploit public-facing application",
+      "CVE-2021-31207",
+      "CVE-2021-34473",
+      "CVE-2021-34523",
+      "TA0001",
+      "T1190",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "High-severity alert: Potential ProxyShell exploitation attempt detected against Microsoft Exchange server. Suspicious URL patterns observed in IIS logs. Event Details: **Timestamp** {timestamp}, **Client IP** {c-ip}, **Client Method** {c-method}, **Client URI** {c-uri}, **Server Status Code** {sc-status}, **Client Username** {cs-username}, **Server Port** {s-port}. Immediately investigate this critical event for signs of compromise and apply necessary patches.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the IIS log entry."
+      },
+      {
+        "name": "c-ip",
+        "required": true,
+        "description": "The client IP address making the request."
+      },
+      {
+        "name": "c-method",
+        "required": true,
+        "description": "The HTTP method used by the client (e.g., GET, POST)."
+      },
+      {
+        "name": "c-uri",
+        "required": true,
+        "description": "The URI requested by the client, containing the suspicious ProxyShell patterns."
+      },
+      {
+        "name": "sc-status",
+        "required": true,
+        "description": "The HTTP status code returned by the server."
+      },
+      {
+        "name": "cs-username",
+        "required": true,
+        "description": "The username provided by the client, if any."
+      },
+      {
+        "name": "s-port",
+        "required": true,
+        "description": "The server port that received the request."
+      }
+    ]
+  }
+]

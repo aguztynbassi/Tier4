@@ -1,0 +1,61 @@
+[
+  {
+    "name": "Execution via HTA using IE JavaScript Engine",
+    "description": "Detects the execution of an HTA (HTML Application) file using the Internet Explorer JavaScript engine, a potential LOLBin abuse.",
+    "tags": [
+      "security",
+      "detection",
+      "execution",
+      "defense evasion",
+      "signed binary proxy execution",
+      "Mshta",
+      "phishing with attachment",
+      "TA0002",
+      "TA0005",
+      "T1218",
+      "T1218.005",
+      "T1566.001",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HTA (HTML Application) execution detected using the Internet Explorer JavaScript engine, a potential Living Off The Land Binary (LOLBin) abuse. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **Source Image (mshta.exe)** {SourceImage}, **Image (jscript9.dll)** {Image}, **User** {User}, **Computer** {Computer}. Investigate this high-risk activity for potential code execution and defense evasion.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for Image Load (7)."
+      },
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "SourceImage",
+        "required": true,
+        "description": "The image that initiated the load (mshta.exe)."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The image that was loaded (jscript9.dll)."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the process was executed."
+      },
+      {
+        "name": "Computer",
+        "required": true,
+        "description": "The computer on which the event occurred."
+      }
+    ]
+  }
+]

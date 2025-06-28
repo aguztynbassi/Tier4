@@ -1,0 +1,60 @@
+[
+  {
+    "name": "First Time Seen Remote Named Pipe",
+    "description": "Detects the first-time use of a remote named pipe, which can indicate lateral movement or remote execution. Excludes common legitimate named pipes.",
+    "tags": [
+      "security",
+      "detection",
+      "lateral movement",
+      "remote services",
+      "TA0008",
+      "T1021",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A remote named pipe, not previously observed, has been detected. This is a potential indicator of lateral movement or remote code execution. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **User** {User}, **Computer Name** {ComputerName}, **Share Name** {ShareName}, **Relative Target Name** {RelativeTargetName}, **Access Mask** {AccessMask}. Investigate this activity to determine if it's legitimate new behavior or malicious lateral movement.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for a network share access (e.g., 5145)."
+      },
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account accessing the named pipe remotely."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The name of the computer where the named pipe access occurred."
+      },
+      {
+        "name": "ShareName",
+        "required": true,
+        "description": "The name of the share involved in the access (e.g., 'IPC$')."
+      },
+      {
+        "name": "RelativeTargetName",
+        "required": true,
+        "description": "The specific named pipe being accessed."
+      },
+      {
+        "name": "AccessMask",
+        "required": true,
+        "description": "The hexadecimal access mask indicating the type of access."
+      }
+    ]
+  }
+]

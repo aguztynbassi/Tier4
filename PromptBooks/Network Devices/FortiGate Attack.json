@@ -1,0 +1,65 @@
+[
+  {
+    "name": "FortiGate Attack",
+    "description": "Detects general attack events on the FortiGate system itself. This could indicate attempts to compromise the firewall.",
+    "tags": [
+      "security",
+      "detection",
+      "impact",
+      "network denial of service",
+      "TA0040",
+      "T1498",
+      "Network Devices"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A general attack event has been detected on the FortiGate system itself, indicating potential compromise attempts. Event Details: **Timestamp** {timestamp}, **Log ID** {log_id}, **Attack Type** {attack}, **Source Address** {source_address}, **Destination Address** {destination_address}, **Source Country** {source_country}, **Destination Country** {destination_country}, **Details** {detail}. Investigate this high-priority attack immediately to secure the firewall and prevent further compromise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the attack event."
+      },
+      {
+        "name": "log_id",
+        "required": true,
+        "description": "The FortiGate log ID for the attack event."
+      },
+      {
+        "name": "attack",
+        "required": true,
+        "description": "The specific type or name of the attack detected."
+      },
+      {
+        "name": "source_address",
+        "required": true,
+        "description": "The source IP address of the attack."
+      },
+      {
+        "name": "destination_address",
+        "required": true,
+        "description": "The destination IP address of the attack."
+      },
+      {
+        "name": "source_country",
+        "required": true,
+        "description": "The country of origin for the source IP (enriched via GeoIP)."
+      },
+      {
+        "name": "destination_country",
+        "required": true,
+        "description": "The country of the destination IP (enriched via GeoIP)."
+      },
+      {
+        "name": "detail",
+        "required": true,
+        "description": "Any additional details or message regarding the attack."
+      }
+    ]
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Usage of Web Request Commands",
+    "description": "Detects the usage of various web request commands with CommandLine tools and Windows PowerShell cmdlets (including aliases).",
+    "tags": [
+      "security",
+      "detection",
+      "execution",
+      "PowerShell",
+      "TA0002",
+      "T1059.001",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A PowerShell script containing web request commands was executed. This could indicate data retrieval, command and control activity, or malicious file download. Event Details: **Timestamp** {timestamp}, **Process GUID** {process_guid}, **Process Name** {process_name}, **User** {user}, **Script Block Text** {ScriptBlockText}. Investigate this activity to determine if it's legitimate network communication or suspicious web-based interaction.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp when the PowerShell script block was executed."
+      },
+      {
+        "name": "process_guid",
+        "required": true,
+        "description": "The unique identifier of the process that executed the PowerShell."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that executed the PowerShell script (e.g., 'powershell.exe')."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the PowerShell command was executed."
+      },
+      {
+        "name": "ScriptBlockText",
+        "required": true,
+        "description": "The full text of the PowerShell script block containing the web request commands."
+      }
+    ]
+  }
+]

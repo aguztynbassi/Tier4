@@ -1,0 +1,62 @@
+[
+  {
+    "name": "File Creation by PowerShell",
+    "description": "Detects the creation of new files by PowerShell, which can indicate malicious activity such as malware installation or data exfiltration preparation.",
+    "tags": [
+      "security",
+      "detection",
+      "execution",
+      "command and scripting interpreter",
+      "PowerShell",
+      "TA0002",
+      "T1059",
+      "T1059.001",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "PowerShell detected creating a new file, which could indicate malware installation or data exfiltration preparation. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **User** {User}, **Computer** {Computer}, **Image** {Image}, **Target Filename** {TargetFilename}, **Creation UTC Time** {CreationUtcTime}. Investigate this activity for potential malicious file creation.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for file creation (11)."
+      },
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account that created the file."
+      },
+      {
+        "name": "Computer",
+        "required": true,
+        "description": "The computer on which the event occurred."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The process image that created the file (powershell.exe)."
+      },
+      {
+        "name": "TargetFilename",
+        "required": true,
+        "description": "The full path and name of the created file."
+      },
+      {
+        "name": "CreationUtcTime",
+        "required": true,
+        "description": "The UTC time when the file was created."
+      }
+    ]
+  }
+]

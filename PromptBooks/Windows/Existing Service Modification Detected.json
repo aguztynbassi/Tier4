@@ -1,0 +1,59 @@
+[
+  {
+    "name": "Existing Service Modification Detected",
+    "description": "Detects the modification of an existing service using the `sc.exe` utility, a common technique for persistence and privilege escalation.",
+    "tags": [
+      "security",
+      "detection",
+      "persistence",
+      "privilege escalation",
+      "create or modify system process",
+      "Windows service",
+      "TA0003",
+      "TA0004",
+      "T1543",
+      "T1543.003",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Modification of an existing Windows service detected via `sc.exe`, PowerShell, or cmd.exe. This is a high-risk indicator for persistence or privilege escalation attempts. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **Image** {Image}, **Command Line** {CommandLine}, **User** {User}, **Computer** {Computer}. Investigate this critical event immediately for unauthorized system changes.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for Process Creation (1)."
+      },
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The executable image that performed the modification (sc.exe, powershell.exe, or cmd.exe)."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line used, including 'config' or 'binPath' parameters."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the modification was attempted."
+      },
+      {
+        "name": "Computer",
+        "required": true,
+        "description": "The computer on which the event occurred."
+      }
+    ]
+  }
+]

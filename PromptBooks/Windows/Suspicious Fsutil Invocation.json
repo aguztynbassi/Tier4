@@ -1,0 +1,60 @@
+[
+  {
+    "name": "Suspicious Fsutil Invocation",
+    "description": "Detects suspicious invocations of the 'fsutil' command, often used by attackers to manipulate the file system, including deleting or creating the USN journal.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "indicator removal on host",
+      "TA0005",
+      "T1070",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "High-severity alert: Suspicious invocation of **'fsutil.exe'** detected. This command is often used by attackers to manipulate the file system, specifically to **delete or create the USN journal**, a common defense evasion technique. This activity could indicate an attempt to hide malicious actions or hinder forensic analysis. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Process GUID**: {process_guid}\n* **Image**: {image}\n* **Command Line**: {command}\n* **User**: {user}\n* **Parent Process Name**: {parent_process_name}\n* **Original File Name**: {original_file_name}\n\n**Immediately investigate this event** to determine if it's a legitimate administrative action or a malicious attempt to impair defenses.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "process_guid",
+        "required": true,
+        "description": "The unique identifier of the process."
+      },
+      {
+        "name": "image",
+        "required": true,
+        "description": "The path to the executable image (fsutil.exe)."
+      },
+      {
+        "name": "command",
+        "required": true,
+        "description": "The full command line arguments, including 'deletejournal' or 'createjournal'."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the 'fsutil' command was executed."
+      },
+      {
+        "name": "parent_process_name",
+        "required": true,
+        "description": "The name of the parent process that invoked 'fsutil.exe'."
+      },
+      {
+        "name": "original_file_name",
+        "required": true,
+        "description": "The original file name of the executable (fsutil.exe)."
+      }
+    ]
+  }
+]

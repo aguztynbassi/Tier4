@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Execution from Outlook Temp Folder",
+    "description": "Detects the execution of programs from the Outlook temporary folder. This is suspicious because executables should not normally be run from this location. Attackers may exploit vulnerabilities in email clients or attachments to place executables in this folder and then execute them.",
+    "tags": [
+      "security",
+      "detection",
+      "initial access",
+      "phishing",
+      "attachment phishing",
+      "defense evasion",
+      "masquerading",
+      "TA0001",
+      "T1566",
+      "T1566.001",
+      "TA0005",
+      "T1036",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Executable detected running from the Outlook temporary folder, a highly suspicious activity often associated with malicious attachments or email client exploitation. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **Image Path** {Image}, **Parent Image Path** {ParentImage}, **Command Line** {CommandLine}, **User** {User}, **Computer** {Computer}. Investigate this critical event immediately for signs of initial access or malware execution.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for Process Creation (1)."
+      },
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path of the executed file, originating from the Outlook temporary folder."
+      },
+      {
+        "name": "ParentImage",
+        "required": true,
+        "description": "The full path of the parent process."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line used to execute the process."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the process was executed."
+      },
+      {
+        "name": "Computer",
+        "required": true,
+        "description": "The computer on which the event occurred."
+      }
+    ]
+  }
+]

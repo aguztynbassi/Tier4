@@ -1,0 +1,62 @@
+[
+  {
+    "name": "GAC DLL Load by Office Application",
+    "description": "Detects the loading of a DLL from the Global Assembly Cache (GAC) by a Microsoft Office application. This is unusual and can indicate an attempt to load malicious code.",
+    "tags": [
+      "security",
+      "detection",
+      "initial access",
+      "phishing",
+      "spearphishing attachment",
+      "TA0001",
+      "T1566",
+      "T1566.001",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "High-severity alert: A Microsoft Office application is attempting to load a DLL from the Global Assembly Cache (GAC). This is an unusual and suspicious behavior that could indicate an attempt to load malicious code, possibly as part of a phishing attack. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Process GUID**: {process_guid}\n* **Source Image (Office App)**: {source_image}\n* **Loaded DLL (GAC)**: {image}\n* **User**: {user}\n* **Signed**: {signed}\n* **Signature**: {signature}\n\n**Immediately investigate this event** to determine if it's a legitimate, albeit rare, software interaction or a malicious attempt to compromise the system.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the image load event."
+      },
+      {
+        "name": "process_guid",
+        "required": true,
+        "description": "The unique identifier of the process loading the DLL."
+      },
+      {
+        "name": "source_image",
+        "required": true,
+        "description": "The executable image of the Microsoft Office application (e.g., winword.exe, powerpnt.exe, excel.exe, outlook.exe)."
+      },
+      {
+        "name": "image",
+        "required": true,
+        "description": "The path to the DLL being loaded from the GAC (e.g., 'C:\\Windows\\Microsoft.NET\\assembly\\GAC_MSIL\\...')."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the DLL was loaded."
+      },
+      {
+        "name": "signed",
+        "required": true,
+        "description": "Indicates whether the loaded DLL is digitally signed."
+      },
+      {
+        "name": "signature",
+        "required": true,
+        "description": "The digital signature of the loaded DLL, if available."
+      }
+    ]
+  }
+]
