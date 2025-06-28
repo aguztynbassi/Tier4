@@ -1,0 +1,71 @@
+[
+  {
+    "name": "Executables Started in Suspicious Folder",
+    "description": "Detects the execution of executable files (EXEs) from directories commonly used by malware for temporary storage or as drop locations. This indicates potential malware activity.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "masquerading",
+      "match legitimate name or location",
+      "execution",
+      "command and scripting interpreter",
+      "TA0005",
+      "T1036",
+      "T1036.005",
+      "TA0002",
+      "T1059",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Medium-severity alert: An executable file was launched from a suspicious folder on a Windows system. These directories (such as temporary folders or the Recycle Bin) are often exploited by malware for staging or execution, indicating potential malicious activity. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Parent Process Name**: {parent_process_name}\n* **Parent Process Path**: {parent_process_path}\n* **User**: {user}\n* **Command Line**: {command_line}\n\n**Investigate this event immediately.** Determine if this execution is legitimate. If not, isolate the affected system and initiate a malware investigation. Pay close attention to the `process_path` and `command_line` to understand the full context.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Process Creation (1)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the executable that was launched."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the executable file, indicating a suspicious directory."
+      },
+      {
+        "name": "parent_process_name",
+        "required": true,
+        "description": "The name of the process that launched the executable."
+      },
+      {
+        "name": "parent_process_path",
+        "required": true,
+        "description": "The full path to the parent process."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the executable was launched."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute the process."
+      }
+    ]
+  }
+]

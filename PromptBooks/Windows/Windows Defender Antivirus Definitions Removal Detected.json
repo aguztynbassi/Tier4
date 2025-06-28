@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Windows Defender Antivirus Definitions Removal Detected",
+    "description": "Detects the removal of Microsoft Defender Antivirus signature definitions using MpCmdRun.exe. This is a significant indicator of an attempt to weaken the system's defenses.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "impair defenses",
+      "disable or modify tools",
+      "TA0005",
+      "T1562",
+      "T1562.001",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: Windows Defender Antivirus definitions removal detected on host '{computer_name}' by user '{user}'. The 'MpCmdRun.exe' utility was used with the 'RemoveDefinitions' command, indicating a critical attempt to weaken the system's defenses and allow malicious activity. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Computer Name**: {computer_name}\n\n**IMMEDIATE ACTION REQUIRED:** Investigate this event as a critical security incident. Isolate the affected system, re-enable/update Windows Defender, and conduct a full forensic analysis to identify the source and extent of the compromise. This action is highly indicative of a sophisticated attacker attempting to gain persistence or execute further malicious payloads.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Windows event ID for process creation (e.g., Sysmon Event ID 1 or Security Event ID 4688)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that executed (should be MpCmdRun.exe)."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the MpCmdRun.exe executable."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The complete command line used, including '*RemoveDefinitions*'."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which MpCmdRun.exe was executed."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      }
+    ]
+  }
+]
