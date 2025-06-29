@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Suspicious Invocation of Microsoft Workflow Compiler",
+    "description": "Detects the invocation of Microsoft Workflow Compiler (Microsoft.Workflow.Compiler.exe), a tool that can be abused by attackers to compile and execute arbitrary code for evasion. Legitimate use is rare in most environments.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "trusted developer utilities proxy execution",
+      "TA0005",
+      "T1127",
+      "Windows",
+      "Sysmon"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Medium-severity alert: Suspicious invocation of `Microsoft.Workflow.Compiler.exe` detected on host '{host}' by user '{user}'. This legitimate Microsoft tool can be abused by attackers to compile and execute arbitrary code, potentially bypassing security controls. Legitimate use of this tool is rare in most enterprise environments. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity immediately.** Determine if this execution is authorized or expected within your environment. If not, analyze the full command line to understand the code being compiled/executed. Isolate the affected system if malicious activity is confirmed and conduct a full forensic analysis.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Windows event ID for process creation (e.g., Sysmon Event ID 1 or Security Event ID 4688)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was created, which should be 'Microsoft.Workflow.Compiler.exe'."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute Microsoft.Workflow.Compiler.exe, including any XML file arguments."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

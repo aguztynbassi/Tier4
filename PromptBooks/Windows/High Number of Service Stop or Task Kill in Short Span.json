@@ -1,0 +1,65 @@
+[
+  {
+    "name": "High Number of Service Stop or Task Kill in Short Span",
+    "description": "Detects a high number of service stop or task kill commands within a short timeframe, which can indicate malicious activity such as attempts to disable security tools or disrupt system operations.",
+    "tags": [
+      "security",
+      "detection",
+      "impact",
+      "service stop",
+      "TA0040",
+      "T1489",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: A high volume of service stop, service delete, or task kill commands ({count} events) initiated by user '{user}' on host '{host}' within a 60-second timeframe. This activity is highly suspicious and can indicate an attacker attempting to disable security tools, disrupt critical services, or cause system impact. Event Details:\n\n* **Timestamp**: {timestamp}\n* **User**: {user}\n* **Host**: {host}\n* **Domain**: {domain}\n* **Process Name**: {process_name}\n* **Parent Process**: {parent_process}\n* **Command Line**: {command_line}\n\n**IMMEDIATE ACTION REQUIRED:** This is a critical security incident. Isolate the affected system immediately. Investigate the `command_line` to identify what services or processes were targeted. Conduct a full forensic analysis to determine the source of the activity, the extent of the impact, and any other indicators of compromise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the last detected service stop or task kill command."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account that initiated the commands."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      },
+      {
+        "name": "domain",
+        "required": true,
+        "description": "The domain of the user."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that executed the commands (e.g., 'taskkill.exe', 'sc.exe', 'net.exe')."
+      },
+      {
+        "name": "parent_process",
+        "required": true,
+        "description": "The parent process of the command."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used, including arguments for stopping services or killing tasks."
+      },
+      {
+        "name": "count",
+        "required": true,
+        "description": "The total number of service stop or task kill commands detected within the timeframe."
+      }
+    ]
+  }
+]

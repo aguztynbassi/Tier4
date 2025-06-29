@@ -1,0 +1,57 @@
+[
+  {
+    "name": "Memory Dump via Adplus",
+    "description": "Detects the use of `adplus.exe` with specific command-line arguments indicative of an attempt to dump the LSASS process memory. This is a common technique used by attackers to obtain credentials.",
+    "tags": [
+      "security",
+      "detection",
+      "credential access",
+      "OS credential dumping",
+      "LSASS memory",
+      "TA0006",
+      "T1003.001",
+      "Windows",
+      "Sysmon"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: An attempt to dump LSASS process memory using `adplus.exe` was detected on host '{host}' by user '{user}'. This is a critical indicator of an attacker attempting to obtain credentials. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**IMMEDIATE ACTION REQUIRED:** This is a critical security incident. Isolate the affected system immediately. Investigate the full command line to confirm the target process and output location. Review recent user activity and other security logs for signs of compromise. Force password resets for any potentially compromised accounts and initiate a full forensic analysis.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Process Creation (1)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was created, which should be 'adplus.exe'."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute adplus.exe, including arguments indicative of memory dumping (e.g., -hang, -pn, -pmn, -p, -po, -c, -sc)."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which adplus.exe was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

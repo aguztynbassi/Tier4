@@ -1,0 +1,60 @@
+[
+  {
+    "name": "LSA Protected Process Light Disabled",
+    "description": "Detects modification of the registry value \"RunAsPPL\" to disable Protected Process Light (PPL), a technique used by attackers to access and dump the LSASS process for credential theft.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "modify registry",
+      "TA0005",
+      "T1112",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "CRITICAL ALERT: LSA Protected Process Light (PPL) has been disabled on host '{host}' by user '{user}'. The 'RunAsPPL' registry value was modified to '0'. This action severely weakens system security and is a critical indicator of an attacker attempting to access and dump the LSASS process for credential theft. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **User**: {user}\n* **Registry Key**: {registry_key}\n* **Registry Value Data**: {registry_value_data}\n\n**IMMEDIATE AND URGENT ACTION REQUIRED:** This is a severe security incident. Isolate the affected system immediately. Re-enable PPL, force password resets for all potentially compromised accounts, and conduct a thorough forensic investigation to identify the source of the compromise and any lateral movement or data exfiltration. This action indicates a high level of attacker capability and intent.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the registry value set event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Registry Value Set (13)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that modified the registry key."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account that initiated the registry modification."
+      },
+      {
+        "name": "registry_key",
+        "required": true,
+        "description": "The full path of the modified registry key, 'System\\CurrentControlSet\\Control\\Lsa\\RunAsPPL'."
+      },
+      {
+        "name": "registry_value_data",
+        "required": true,
+        "description": "The data written to the registry value, which should be '0' indicating PPL is disabled."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

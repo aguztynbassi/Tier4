@@ -1,0 +1,60 @@
+[
+  {
+    "name": "Hacktool Ruler Detected",
+    "description": "Detects the use of the \"Ruler\" hacktool, often associated with exploiting Exchange Web Services (EWS). It looks for specific event patterns on a Windows Server (likely a Domain Controller).",
+    "tags": [
+      "security",
+      "detection",
+      "discovery",
+      "execution",
+      "account discovery",
+      "use alternate authentication material",
+      "pass the hash",
+      "email collection",
+      "command and scripting interpreter",
+      "TA0007",
+      "TA0002",
+      "T1087",
+      "T1550",
+      "T1550.002",
+      "T1114",
+      "T1059",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Medium-severity alert: Potential 'Ruler' hacktool activity detected on a Windows Server. A workstation named 'RULER' has been observed in authentication events (Event ID {event_id}) by user '{user_name}'. This tool is often used to exploit Exchange Web Services (EWS) for malicious purposes. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **User Name**: {user_name}\n* **Workstation Name**: {workstation_name}\n* **Logon Type (if available)**: {logon_type}\n\n**Investigate this activity immediately.** Confirm if 'RULER' is a legitimate workstation in your environment. If not, isolate the affected system, analyze logs for further suspicious activity related to Exchange or credential access, and review the user account's recent actions.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the authentication event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Windows Security Event ID (e.g., 4776, 4624, 4625)."
+      },
+      {
+        "name": "user_name",
+        "required": true,
+        "description": "The user name associated with the authentication attempt."
+      },
+      {
+        "name": "workstation_name",
+        "required": true,
+        "description": "The workstation name 'RULER'."
+      },
+      {
+        "name": "logon_type",
+        "required": false,
+        "description": "The logon type if available in the event logs."
+      }
+    ]
+  }
+]

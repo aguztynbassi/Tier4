@@ -1,0 +1,57 @@
+[
+  {
+    "name": "Suspicious WMIC ActiveScriptEventConsumer Created",
+    "description": "Detects the creation of an ActiveScriptEventConsumer using WMIC, a technique often employed by attackers for persistence and/or executing malicious scripts. This rule looks for specific command-line arguments within WMIC process creation events.",
+    "tags": [
+      "security",
+      "detection",
+      "persistence",
+      "event triggered execution",
+      "Windows Management Instrumentation Event Subscription",
+      "TA0003",
+      "T1546.003",
+      "Windows",
+      "Sysmon"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Medium-severity alert: Suspicious creation of an `ActiveScriptEventConsumer` using `wmic.exe` detected on host '{host}' by user '{user}'. This technique is commonly used by attackers for persistence and to execute malicious scripts via Windows Management Instrumentation (WMI). Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this event immediately.** Analyze the full `command_line` to understand the script being registered. This activity could indicate a persistent backdoor or a mechanism for code execution. Examine the WMI repository for other suspicious `ActiveScriptEventConsumer` instances and consider reviewing related WMI activity.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Process Creation (1)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was created, which should be 'wmic.exe'."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute wmic.exe, including 'ActiveScriptEventConsumer' and 'CREATE'."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which wmic.exe was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]
