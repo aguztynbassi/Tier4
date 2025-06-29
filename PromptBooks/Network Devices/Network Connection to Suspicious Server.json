@@ -1,0 +1,77 @@
+[
+  {
+    "name": "Network Connection to Suspicious Server",
+    "description": "Detects network connections to file sharing, code hosting, and dynamic DNS services commonly used by adversaries for data transfer and command and control. While these services have legitimate uses, connections from unusual processes or hosts should be investigated.",
+    "tags": [
+      "security",
+      "detection",
+      "command and control",
+      "ingress tool transfer",
+      "TA0011",
+      "T1105",
+      "Windows",
+      "Network",
+      "suspicious_destination",
+      "file_transfer",
+      "c2"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Medium-severity alert: Suspicious network connection detected from host '{host}' by user '{user}'. The process '{process_name}' (path: '{process_path}') established a connection to a suspicious domain '{destination_domain}' on port '{destination_port}'. This domain is associated with services frequently abused by adversaries for data transfer or command and control. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Destination Host**: {destination_host}\n* **Destination Domain**: {destination_domain}\n* **Destination Port**: {destination_port}\n* **URL (if available)**: {url}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity immediately.** Determine if this connection is legitimate and expected behavior for the observed process and user in your environment. If not, investigate the process, analyze any transferred data, and block the suspicious destination. This could indicate data exfiltration, ingress tool transfer, or active command and control."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the network connection event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The event ID (e.g., Sysmon Event ID 3 for network connection)."
+      },
+      {
+        "name": "process_name",
+        "required": false,
+        "description": "The name of the process that initiated the network connection."
+      },
+      {
+        "name": "process_path",
+        "required": false,
+        "description": "The full path to the process that initiated the network connection."
+      },
+      {
+        "name": "destination_host",
+        "required": true,
+        "description": "The destination hostname or IP address of the network connection."
+      },
+      {
+        "name": "destination_domain",
+        "required": true,
+        "description": "The resolved destination domain of the network connection."
+      },
+      {
+        "name": "destination_port",
+        "required": true,
+        "description": "The destination port of the network connection."
+      },
+      {
+        "name": "url",
+        "required": false,
+        "description": "The URL involved in the connection, if applicable."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process was running."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

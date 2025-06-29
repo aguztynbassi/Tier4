@@ -1,0 +1,66 @@
+[
+  {
+    "name": "CLR DLL Loaded via Scripting Application",
+    "description": "Detects the loading of Common Language Runtime (CLR) DLLs by scripting applications (mshta.exe, wscript.exe, and cscript.exe). These are legitimate Windows binaries, but this activity can indicate the execution of malicious .NET code within scripts. Adversaries may use this to bypass application control or execute code without compiling an executable.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "system binary proxy execution",
+      "Mshta",
+      "TA0005",
+      "T1218",
+      "T1218.005",
+      "Windows",
+      "Sysmon",
+      "CLR",
+      "scripting",
+      "dll_load"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Medium-severity alert: A Common Language Runtime (CLR) DLL (`{image_loaded}`) was loaded by a scripting application (`{source_image}`) on host '{host}' by user '{user}'. While these are legitimate Windows components, this combination can indicate the execution of malicious .NET code within a script, potentially bypassing application control or executing code without a traditional executable. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Source Image**: {source_image}\n* **Image Loaded**: {image_loaded}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this event immediately.** Determine if this CLR DLL load is expected behavior for the scripting application in your environment. If not, analyze the script being executed and examine the system for any malicious activity associated with this event. This could be an attempt at defense evasion or arbitrary code execution.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the image load event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Image Load (7)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that loaded the DLL (e.g., 'wscript.exe', 'cscript.exe', 'mshta.exe')."
+      },
+      {
+        "name": "source_image",
+        "required": true,
+        "description": "The full path to the scripting application that loaded the DLL."
+      },
+      {
+        "name": "image_loaded",
+        "required": true,
+        "description": "The full path to the loaded CLR DLL (e.g., 'clr.dll', 'mscoree.dll', 'mscorlib.dll')."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

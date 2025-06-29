@@ -1,0 +1,53 @@
+[
+  {
+    "name": "Ngrok RDP Tunnel Detected",
+    "description": "Detects the execution of the Ngrok utility for tunneling an RDP connection. Adversaries frequently use Ngrok to expose internal services, such as RDP, to the internet, bypassing traditional network security measures. The \"::16777216\" artifact (IPv6 loopback with a modified suffix) is a strong indicator of an RDP connection established through Ngrok.",
+    "tags": [
+      "security",
+      "detection",
+      "command and control",
+      "protocol tunneling",
+      "TA0011",
+      "T1572",
+      "Windows",
+      "Ngrok",
+      "RDP",
+      "tunneling"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: Ngrok RDP tunnel activity detected on host '{host}'. An RDP connection originating from a highly suspicious source address ('{source_address}') characteristic of Ngrok tunneling was observed. This indicates a potential adversary exposing internal RDP services to the internet, bypassing perimeter defenses. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Source Address**: {source_address}\n* **User (if available)**: {user}\n* **Host**: {host}\n\n**IMMEDIATE AND URGENT ACTION REQUIRED:** This is a critical security incident. Isolate the affected system from the network immediately. Block the Ngrok service and investigate any associated network connections or processes. Determine if unauthorized RDP access occurred and assess the scope of potential compromise. Ngrok tunnels are frequently used for initial access, persistence, and command and control.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Windows Event ID (e.g., from TerminalServices-LocalSessionManager, TerminalServices-RemoteConnectionManager, or Security)."
+      },
+      {
+        "name": "source_address",
+        "required": true,
+        "description": "The source IP address of the RDP connection, expected to contain '::%16777216'."
+      },
+      {
+        "name": "user",
+        "required": false,
+        "description": "The user associated with the RDP connection (if available in the event data)."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

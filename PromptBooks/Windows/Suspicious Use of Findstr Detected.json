@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Suspicious Use of Findstr Detected",
+    "description": "Detects suspicious use of `findstr.exe` that may indicate malicious activity, such as attempts to access credentials, download files, or create alternate data streams. While `findstr.exe` is a legitimate utility, adversaries may abuse it for defense evasion. Legitimate administrative use can trigger false positives.",
+    "tags": [
+      "security",
+      "detection",
+      "persistence",
+      "valid accounts",
+      "system binary proxy execution",
+      "TA0005",
+      "T1078",
+      "T1218",
+      "Windows",
+      "findstr",
+      "defense_evasion"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Medium-severity alert: Suspicious use of `findstr.exe` detected on host '{host}' by user '{user}'. The process '{process_name}' at '{process_path}' was executed with command line '{command_line}', including arguments such as '/V', '/L', '/S', or '/I'. While `findstr` is a legitimate utility, its combination with these arguments can be indicative of an adversary attempting to search for sensitive information (like credentials), locate files for data exfiltration, or prepare for alternate data stream creation. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity immediately.** Determine if this specific `findstr` execution is legitimate for the observed user and system context. Examine the full command line for targeted files or patterns. This could be an indicator of reconnaissance, credential access attempts, or defense evasion."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Windows Security Event ID for Process Creation (4688)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was executed, which should be 'findstr.exe'."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the findstr.exe executable."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute findstr.exe, including suspicious arguments."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which findstr.exe was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

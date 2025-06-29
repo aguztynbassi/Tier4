@@ -1,0 +1,63 @@
+[
+  {
+    "name": "Process Injection Via Mavinject Detected",
+    "description": "Detects the use of `mavinject.exe` to inject a DLL into a running process. This is a technique used by adversaries to gain arbitrary code execution. `mavinject.exe` is a legitimate Windows utility, but its use for process injection is highly suspicious.",
+    "tags": [
+      "security",
+      "detection",
+      "persistence",
+      "system binary proxy execution",
+      "Mavinject",
+      "process injection",
+      "TA0005",
+      "T1218.013",
+      "T1055",
+      "Windows",
+      "mavinject",
+      "process_injection"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: Possible process injection via `mavinject.exe` detected on host '{host}' by user '{user}'. The process '{process_name}' at '{process_path}' was executed with command line '{command_line}', including arguments to inject a DLL into a running process. This is a critical indicator of an adversary attempting to achieve arbitrary code execution and evade defenses. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**IMMEDIATE AND URGENT ACTION REQUIRED:** This is a critical security incident. Isolate the affected system immediately. Analyze the DLL being injected and the target process for malicious indicators. Conduct a thorough forensic analysis to determine the source of this activity, the purpose of the injection, and any further compromise. This alert signifies a high-priority threat."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Windows Security Event ID for Process Creation (4688)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was executed, which should be 'mavinject.exe'."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the mavinject.exe executable."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute mavinject.exe, including injection arguments and a DLL file."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which mavinject.exe was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

@@ -1,0 +1,64 @@
+[
+  {
+    "name": "Suspicious Execution of Dump64",
+    "description": "Detects suspicious use of dump64.exe, a memory dump tool from Microsoft Visual Studio. Attackers may rename tools (like procdump.exe) to \"dump64.exe\" and place them in Visual Studio folders to bypass defenses and create memory dumps for credential extraction. This rule focuses on command-line arguments \"-ma\" (full dump) and \"accepteula\" (likely non-interactive use), which are often associated with malicious activity.",
+    "tags": [
+      "security",
+      "detection",
+      "credential access",
+      "OS credential dumping",
+      "LSASS memory",
+      "TA0006",
+      "T1003",
+      "T1003.001",
+      "Windows",
+      "Sysmon",
+      "dump64",
+      "credential_dumping",
+      "memory_dump"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: Suspicious execution of `dump64.exe` detected on host '{host}' by user '{user}'. The process '{process_name}' at '{process_path}' was executed with command-line arguments '{command_line}', including '-ma' (full memory dump) and 'accepteula'. This pattern is highly indicative of an attacker attempting to dump LSASS memory for credential extraction, possibly by renaming a tool like Procdump. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**IMMEDIATE AND URGENT ACTION REQUIRED:** This is a critical security incident. Isolate the affected system immediately. Investigate the full command line and the legitimacy of this execution. Conduct a thorough forensic analysis to determine if credentials were compromised and to identify the source of the attack and any further malicious activity. This alert signifies a high-priority threat."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Process Creation (1)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the executed process, which should be 'dump64.exe'."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the dump64.exe executable."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute dump64.exe, including arguments like '-ma' and 'accepteula'."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which dump64.exe was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

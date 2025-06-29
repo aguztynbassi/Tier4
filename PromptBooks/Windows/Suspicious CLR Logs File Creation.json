@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Suspicious CLR Logs File Creation",
+    "description": "Detects the creation of CLR usage logs by suspicious processes. .NET code execution via applications like mshta, cscript, wscript, regsvr32, and wmic is often used by adversaries to execute malicious scripts. This rule identifies a specific file creation pattern associated with this activity.",
+    "tags": [
+      "security",
+      "detection",
+      "privilege escalation",
+      "process injection",
+      "TA0004",
+      "T1055",
+      "Windows",
+      "Sysmon"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: Suspicious creation of Common Language Runtime (CLR) usage logs detected by process '{process_name}' on host '{host}' by user '{user}'. A file was created at '{target_filename}'. This activity, especially when performed by scripting or system utility applications (mshta.exe, cscript.exe, wscript.exe, regsvr32.exe, wmic.exe), strongly indicates the execution of malicious .NET code or an attempt at privilege escalation/process injection. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Target File Name**: {target_filename}\n* **User**: {user}\n* **Host**: {host}\n\n**IMMEDIATE AND URGENT ACTION REQUIRED:** This is a critical security incident. Isolate the affected system immediately. Examine the contents of the created CLR log file and the process that generated it. Investigate any associated scripts or network connections. This activity is a strong indicator of an active threat and potential compromise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the file creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for FileCreate (11)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the suspicious process creating the CLR log file (mshta.exe, cscript.exe, wscript.exe, regsvr32.exe, or wmic.exe)."
+      },
+      {
+        "name": "target_filename",
+        "required": true,
+        "description": "The full path to the created CLR usage log file (e.g., 'C:\\Users\\<user>\\AppData\\Local\\Microsoft\\CLR*\\UsageLogs\\*')."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

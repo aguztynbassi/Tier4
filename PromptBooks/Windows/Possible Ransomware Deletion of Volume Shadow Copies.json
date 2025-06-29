@@ -1,0 +1,57 @@
+[
+  {
+    "name": "Possible Ransomware Deletion of Volume Shadow Copies",
+    "description": "Detects commands commonly used by ransomware to delete Volume Shadow Copies (VSS). Ransomware often deletes VSS to prevent victims from easily recovering their files. This rule identifies the use of `vssadmin` and `wmic` with specific parameters to delete shadow copies. It also includes an `excluded_users` list.",
+    "tags": [
+      "security",
+      "detection",
+      "impact",
+      "inhibit system recovery",
+      "TA0040",
+      "T1490",
+      "Windows",
+      "Sysmon",
+      "Ransomware"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: Possible ransomware activity detected on host '{host}' by user '{user}'. Commands (`{command_line}`) commonly used by ransomware to delete Volume Shadow Copies (VSS) were executed. This action prevents system recovery and is a strong indicator of an ongoing ransomware attack. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**IMMEDIATE AND URGENT ACTION REQUIRED:** This is a critical security incident. Disconnect the affected system from the network immediately to prevent further encryption or lateral movement. Verify the integrity of crucial data and initiate your incident response plan, including forensic analysis, data recovery efforts, and threat containment. This alert likely indicates an active and impactful attack.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Process Creation (1)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that executed the command (e.g., 'vssadmin.exe', 'wmic.exe')."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used, including arguments for deleting shadow copies."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the command was executed, excluding SYSTEM accounts."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

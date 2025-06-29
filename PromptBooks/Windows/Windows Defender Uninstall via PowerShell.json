@@ -1,0 +1,60 @@
+[
+  {
+    "name": "Windows Defender Uninstall via PowerShell",
+    "description": "Detects the use of PowerShell to uninstall Windows Defender. PowerShell is a powerful scripting tool, and this command is a strong indicator of malicious activity, as adversaries often attempt to disable or uninstall security products to evade detection. Microsoft Defender Antivirus is a critical anti-malware component of Windows.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "impair defenses",
+      "disable or modify tools",
+      "TA0005",
+      "T1562",
+      "T1562.001",
+      "Windows",
+      "Sysmon",
+      "PowerShell",
+      "Defender"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: An attempt to uninstall Microsoft Defender Antivirus via PowerShell has been detected on host '{host}' by user '{user}'. The command line '{command_line}' was executed. This is a critical indicator of malicious activity, as adversaries frequently disable security products to evade detection. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**IMMEDIATE AND URGENT ACTION REQUIRED:** This is a critical security incident. Isolate the affected system immediately. Confirm if Windows Defender was successfully uninstalled or disabled. Re-enable Defender, perform a full system scan, and conduct a thorough forensic investigation to identify the source of this malicious activity and any further compromise. This alert signifies a high-priority threat.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Process Creation (1)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that executed the command, which should be 'powershell.exe'."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used, including 'Uninstall-WindowsFeature' and 'Windows-Defender'."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the PowerShell command was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

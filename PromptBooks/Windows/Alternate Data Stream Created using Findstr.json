@@ -1,0 +1,67 @@
+[
+  {
+    "name": "Alternate Data Stream Created using Findstr",
+    "description": "Detects the use of `findstr.exe` to create an Alternate Data Stream (ADS). `findstr` is typically used to search for strings in files, but adversaries can exploit it to create ADSs for defense evasion.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "hide artifacts",
+      "alternate data streams",
+      "TA0005",
+      "T1564.004",
+      "Windows",
+      "findstr",
+      "ADS",
+      "alternate_data_stream"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Medium-severity alert: Suspicious creation of an Alternate Data Stream (ADS) using `findstr.exe` detected on host '{host}' by user '{user}'. The process '{process_name}' at '{process_path}' was executed with command line '{command_line}', and a file '{object_name}' with an ADS was accessed or created. This technique can be used by adversaries to hide malicious code or data. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **Object Name**: {object_name}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity immediately.** Determine if this ADS creation is legitimate for the observed process and user. If not, analyze the content of the ADS within '{object_name}' and examine the system for any malicious payloads or further indicators of compromise. This could be an attempt at defense evasion or data staging."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Windows Security Event ID (either 4688 for Process Creation or 4663 for File System Access)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was executed, which should be 'findstr.exe'."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the findstr.exe executable."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute findstr.exe."
+      },
+      {
+        "name": "object_name",
+        "required": true,
+        "description": "The name of the object (file) where the ADS was created."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account associated with the event."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

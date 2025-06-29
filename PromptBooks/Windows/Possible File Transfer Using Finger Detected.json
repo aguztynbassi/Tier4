@@ -1,0 +1,61 @@
+[
+  {
+    "name": "Possible File Transfer Using Finger Detected",
+    "description": "Detects the execution of `finger.exe`. This Windows utility, designed to display user information on a remote system, can be abused for data transfer and as a rudimentary command-and-control channel. While legitimate use is uncommon, it's suspicious enough to warrant investigation.",
+    "tags": [
+      "security",
+      "detection",
+      "command and control",
+      "ingress tool transfer",
+      "TA0011",
+      "T1105",
+      "Windows",
+      "finger",
+      "file_transfer",
+      "c2"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Medium-severity alert: Suspicious execution of `finger.exe` detected on host '{host}' by user '{user}'. The process '{process_name}' at '{process_path}' was executed with command line '{command_line}'. While a legitimate Windows utility, `finger.exe` can be abused by adversaries for data transfer or as a rudimentary command-and-control channel. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity immediately.** Determine if this execution of `finger.exe` is legitimate and expected in your environment. If not, analyze the command line arguments for any indicators of data transfer or communication with external systems. This could be an attempt at command and control or data exfiltration."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Windows Security Event ID for Process Creation (4688)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was executed, which should be 'finger.exe'."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the finger.exe executable."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute finger.exe."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which finger.exe was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

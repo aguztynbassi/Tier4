@@ -1,0 +1,61 @@
+[
+  {
+    "name": "Suspicious Execution via IE per User Utility",
+    "description": "Detects the execution of ie4uinit.exe (Internet Explorer per-user initialization) from unusual directories. While a legitimate component, adversaries may replace this file with malware to achieve code execution under a trusted name. This rule identifies executions outside the standard system directories.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "system binary proxy execution",
+      "TA0005",
+      "T1218",
+      "Windows",
+      "Sysmon",
+      "ie4uinit",
+      "code_execution"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: Suspicious execution of `ie4uinit.exe` detected from an unusual directory on host '{host}' by user '{user}'. The process '{process_name}' was executed from '{process_path}', which is outside of legitimate system directories. This indicates a potential attempt by an adversary to achieve code execution or defense evasion by hijacking a trusted binary. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**IMMEDIATE AND URGENT ACTION REQUIRED:** This is a critical security incident. Isolate the affected system immediately. Examine the `ie4uinit.exe` file at the suspicious path for malicious indicators (e.g., hash, digital signature). Investigate the parent process and any associated network connections. This activity is a strong indicator of an active threat and potential system compromise."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Process Creation (1)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was executed, which should be 'ie4uinit.exe'."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the ie4uinit.exe executable, expected to be from an unusual directory."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute ie4uinit.exe."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

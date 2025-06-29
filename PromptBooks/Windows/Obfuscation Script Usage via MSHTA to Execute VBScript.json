@@ -1,0 +1,68 @@
+[
+  {
+    "name": "Obfuscation Script Usage via MSHTA to Execute VBScript",
+    "description": "Detects the execution of obfuscated PowerShell scripts using MSHTA to execute VBScript, a technique used by adversaries to bypass defenses. This combination is often used to execute malicious code.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "execution",
+      "obfuscated files or information",
+      "use of windows system tools",
+      "command and scripting interpreter",
+      "PowerShell",
+      "TA0005",
+      "TA0002",
+      "T1027",
+      "T1027.009",
+      "T1059",
+      "T1059.001",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: Obfuscated script execution detected on host '{computer_name}' by user '{user}'. The `mshta.exe` process was used to execute a VBScript with suspicious characteristics, including `CreateObject`, `set`, `&&`, and `window.close` in the command line. This pattern is strongly indicative of an adversary attempting to bypass defenses and execute malicious code. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Computer Name**: {computer_name}\n\n**IMMEDIATE ACTION REQUIRED:** This is a critical security incident. Isolate the affected system immediately. Analyze the full command line and any associated files to understand the payload. Conduct a thorough forensic investigation to identify the source of the attack and any further compromise. This activity is a strong indicator of an active threat.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Windows event ID for process creation (e.g., Sysmon Event ID 1)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that executed (should be mshta.exe)."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the mshta.exe executable."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The complete command line used, including the suspicious VBScript components."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which mshta.exe was executed."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      }
+    ]
+  }
+]

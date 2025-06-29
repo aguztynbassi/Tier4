@@ -1,0 +1,76 @@
+[
+  {
+    "name": "Hijacked Binary Execution via Settings Synchronizer",
+    "description": "Detects the execution of hijacked binaries using SettingSyncHost.exe. SettingSyncHost is a legitimate Windows host process for synchronizing system settings. Adversaries can abuse it to execute arbitrary code, bypassing typical security controls. This detection focuses on the specific command-line pattern involving RoamDiag.cmd and outputpath, which is indicative of this exploitation.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "hijack execution flow",
+      "path interception",
+      "hijacking",
+      "TA0005",
+      "T1574",
+      "T1574.008",
+      "Windows",
+      "Sysmon",
+      "settingsynchost",
+      "binary_hijacking"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: Possible hijacked binary execution detected via `SettingSyncHost.exe` on host '{host}' by user '{user}'. A suspicious process ('{process_name}' at '{process_path}') was launched by `SettingSyncHost.exe`, which typically involves `RoamDiag.cmd` with an `-outputpath` argument. This pattern indicates an adversary is likely abusing this legitimate Windows process to execute arbitrary code and bypass security controls. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Parent Process Name**: {parent_process_name}\n* **Parent Command Line**: {parent_command_line}\n* **Hijacked Binary Name**: {process_name}\n* **Hijacked Binary Path**: {process_path}\n* **Hijacked Binary Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**IMMEDIATE AND URGENT ACTION REQUIRED:** This is a critical security incident. Isolate the affected system immediately. Analyze the hijacked binary (`{process_name}`) and its command line (`{command_line}`) to determine the malicious payload. Investigate the full context of this execution to identify how the hijacking occurred and any further compromise. This activity is a strong indicator of an active and sophisticated threat.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Process Creation (1)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the hijacked binary process that was executed."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the hijacked binary."
+      },
+      {
+        "name": "parent_process_name",
+        "required": true,
+        "description": "The name of the parent process, which should be 'SettingSyncHost.exe'."
+      },
+      {
+        "name": "parent_command_line",
+        "required": true,
+        "description": "The command line of the parent process, including 'RoamDiag.cmd' and '-outputpath'."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line of the hijacked binary."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]
