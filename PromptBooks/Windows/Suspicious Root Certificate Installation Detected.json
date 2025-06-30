@@ -1,0 +1,63 @@
+[
+  {
+    "name": "Suspicious Root Certificate Installation Detected",
+    "description": "Detects the installation of a root certificate, which can be used by adversaries to bypass security warnings.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "subvert trust",
+      "install root certificate",
+      "TA0005",
+      "T1553",
+      "T1553.004",
+      "Windows",
+      "certutil",
+      "certmgr",
+      "root_certificate"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: Suspicious root certificate installation detected on host '{host}' by user '{user}'. A process related to certificate management (`{process_name}` at '{process_path}') was executed with command line '{command_line}', indicating an attempt to add a certificate to the trust store. This is a critical indicator of an adversary attempting to subvert trust, bypass security warnings, or enable man-in-the-middle attacks. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**IMMEDIATE AND URGENT ACTION REQUIRED:** This is a critical security incident. Isolate the affected system immediately. Identify the certificate being installed from the command line or by inspecting the certificate stores (e.g., Trusted Root Certification Authorities). If found, immediately remove the suspicious certificate. Investigate the process that initiated this action and any associated malicious files or network connections. Conduct a thorough forensic analysis to determine the initial compromise vector and overall impact. This alert signifies an active threat and potential system compromise."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Windows Security Event ID for Process Creation (4688)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was executed, which should be 'certutil.exe' or 'CertMgr.exe'."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the certificate utility executable."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute the certificate utility, including '-addstore' or '/add' and the certificate file."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the certificate installation occurred."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

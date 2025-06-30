@@ -1,0 +1,61 @@
+[
+  {
+    "name": "PowerShell Module Logging Setting Discovery",
+    "description": "An attempt to enumerate or modify PowerShell module logging settings has been detected. This could be an adversary performing reconnaissance to understand system logging capabilities.",
+    "tags": [
+      "security",
+      "detection",
+      "discovery",
+      "query registry",
+      "TA0007",
+      "T1012",
+      "Windows",
+      "Sysmon",
+      "PowerShell",
+      "logging"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "LOW-SEVERITY ALERT: PowerShell module logging setting discovery detected on host '{host}' by user '{user}'. A process '{image}' accessed the registry path '{target_object}'. This activity, occurring at '{timestamp}', is not inherently malicious but could indicate an adversary attempting to understand the system's logging capabilities to evade detection. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Image**: {image}\n* **User**: {user}\n* **Host**: {host}\n* **Registry Key Accessed**: {target_object}\n* **Details**: {details}\n\n**RECOMMENDED ACTION:** Investigate the context of this registry access. Is the user '{user}' or the process '{image}' authorized to perform administrative actions or system configuration changes? Correlate this event with other suspicious activities on the host. If this activity is unexpected for the user or system, consider it as a reconnaissance step. Ensure that PowerShell module logging (and script block logging) is enabled and forwarded to your SIEM for comprehensive visibility."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the registry access event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID (e.g., 13) for the registry event."
+      },
+      {
+        "name": "image",
+        "required": true,
+        "description": "The full path to the process image that accessed the registry."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      },
+      {
+        "name": "target_object",
+        "required": true,
+        "description": "The registry key path that was accessed."
+      },
+      {
+        "name": "details",
+        "required": false,
+        "description": "Additional details about the registry value set (if event ID 13)."
+      }
+    ]
+  }
+]

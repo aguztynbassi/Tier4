@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Suspicious File Execution via wscript/cscript",
+    "description": "Detects the execution of scripts (.jse, .vbe, .js, .vba) using wscript.exe or cscript.exe. While legitimate tools, these are often used to execute malicious scripts, bypassing traditional executable defenses. This rule focuses on the execution of these script types, excluding JSON files to reduce false positives.",
+    "tags": [
+      "security",
+      "detection",
+      "execution",
+      "command and scripting interpreter",
+      "Visual Basic",
+      "JavaScript",
+      "TA0002",
+      "T1059",
+      "T1059.005",
+      "T1059.007",
+      "Windows",
+      "Sysmon",
+      "wscript",
+      "cscript",
+      "script_execution"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: Suspicious script execution detected on host '{host}' by user '{user}'. The `{process_name}` process at '{process_path}' was executed with command line '{command_line}', indicating the execution of a potentially malicious script file (e.g., .jse, .vbe, .js, or .vba). This is a common technique used by adversaries to execute malicious code and bypass traditional executable defenses. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**IMMEDIATE AND URGENT ACTION REQUIRED:** This is a critical security incident. Isolate the affected system immediately. Analyze the script file being executed for malicious content. Investigate the source of the script (e.g., email attachment, malicious website download) and any associated network connections or file modifications. This alert signifies an active threat and potential system compromise."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Process Creation (1)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was executed, which should be 'wscript.exe' or 'cscript.exe'."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the wscript.exe or cscript.exe executable."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute the script, including the file path and extension."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the script was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

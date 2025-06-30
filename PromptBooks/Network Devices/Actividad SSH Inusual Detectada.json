@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Actividad SSH Inusual Detectada",
+    "description": "Se ha detectado una actividad SSH inusualmente alta, lo que podría indicar exfiltración de datos, intento de fuerza bruta o una conexión de comando y control.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "exfiltration",
+      "persistence",
+      "initial access",
+      "exfiltration over alternative protocol",
+      "brute force",
+      "application layer protocol",
+      "TA0010",
+      "TA0003",
+      "TA0001",
+      "T1048.001",
+      "T1110",
+      "T1071.004",
+      "network",
+      "linux",
+      "windows",
+      "ssh",
+      "unusual_behavior",
+      "high_connection_rate"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "ALERTA DE SEVERIDAD ALTA: Actividad SSH Inusual Detectada.\n\nSe ha observado un volumen inusualmente alto de conexiones SSH ({count} conexiones) desde el usuario '{user}' o hacia el destino '{destination_address}' en un periodo de 10 minutos, iniciando en '{timestamp}'. Esta actividad puede ser un indicador de exfiltración de datos, un intento de fuerza bruta para obtener credenciales, o el establecimiento de un canal de comando y control.\n\n**Detalles del Evento Agregado:**\n* **Fecha/Hora de Inicio del Periodo**: {timestamp}\n* **Usuario**: {user}\n* **Dirección IP de Origen**: {source_address}\n* **Dirección IP de Destino**: {destination_address}\n* **Conexiones Count**: {count}\n* **Protocolo**: {protocol}\n* **Estado (ej. éxito/fallo)**: {status}\n\n**ACCIONES RECOMENDADAS (PRIORIDAD ALTA):**\n\n1.  **Investigar el Usuario y las IPs:** Verifique la legitimidad del usuario '{user}'. ¿Es un administrador de sistemas? ¿Es una cuenta de servicio? ¿Esta actividad es esperada para este usuario/IPs? Investigue la reputación de las direcciones IP de origen '{source_address}' y destino '{destination_address}'.\n2.  **Contexto de Conexión:** Si los logs lo permiten, examine los detalles de las sesiones SSH individuales (ej. comandos ejecutados, archivos transferidos) que contribuyeron a este alto conteo. ¿Qué tipo de datos se están transfiriendo?\n3.  **Aislamiento del Host/Bloqueo de IP:** Si la actividad es sospechosa y no se justifica, aísle el host de origen o destino de la red, y bloquee las direcciones IP involucradas en los firewalls perimetrales.\n4.  **Verificar Credenciales:** Si se sospecha de fuerza bruta o credenciales comprometidas, inicie una rotación de contraseñas para el usuario afectado y considere la revocación de claves SSH.\n5.  **Análisis Forense:** Realice un análisis forense exhaustivo del host o hosts involucrados para identificar la presencia de malware, herramientas de exfiltración, persistencia, o actividad post-explotación.\n6.  **Revisar Logs Adicionales:** Correlacione esta alerta con otros logs (ej. logs de autenticación, logs de procesos, logs de seguridad de endpoints) en el host y en la red para buscar actividades relacionadas."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the start of the aggregation window."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account involved in the SSH connections."
+      },
+      {
+        "name": "source_address",
+        "required": true,
+        "description": "The source IP address of the SSH connections."
+      },
+      {
+        "name": "destination_address",
+        "required": true,
+        "description": "The destination IP address of the SSH connections."
+      },
+      {
+        "name": "count",
+        "required": true,
+        "description": "The number of SSH connections detected within the timeframe."
+      },
+      {
+        "name": "protocol",
+        "required": false,
+        "description": "The network protocol used (e.g., 'ssh')."
+      },
+      {
+        "name": "status",
+        "required": false,
+        "description": "The status of the SSH connection (e.g., 'success', 'failed')."
+      }
+    ]
+  }
+]

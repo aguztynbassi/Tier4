@@ -1,0 +1,63 @@
+[
+  {
+    "name": "Volumen de Tráfico de Red Inusual Detectado",
+    "description": "Se ha detectado un volumen de tráfico de red saliente inusualmente alto, lo que podría indicar un intento de exfiltración de datos.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "exfiltration",
+      "command and control",
+      "exfiltration over c2 channel",
+      "network",
+      "large data transfer",
+      "unusual traffic",
+      "TA0010",
+      "T1041",
+      "T1071.001"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "ALERTA DE SEVERIDAD ALTA: Volumen de Tráfico de Red Inusual Detectado.\n\nSe ha observado un volumen de tráfico de red saliente de gran tamaño ({bytes} bytes) desde la dirección IP de origen '{source_ip}' hacia '{dest_ip}' utilizando el protocolo '{protocol}' a través del puerto '{dest_port}', iniciando en '{Timestamp}'. Este volumen inusual de tráfico sugiere una posible exfiltración de datos o una actividad de comando y control maliciosa.\n\n**Detalles del Evento:**\n* **Fecha/Hora**: {Timestamp}\n* **Origen**: {source_ip}\n* **Destino**: {dest_ip}\n* **Puerto de Origen**: {source_port}\n* **Puerto de Destino**: {dest_port}\n* **Protocolo**: {protocol}\n* **Bytes Transferidos**: {bytes}\n\n**ACCIONES RECOMENDADAS (PRIORIDAD ALTA):**\n\n1.  **Identificar el Origen y Destino:** Determine a qué activo (servidor, estación de trabajo, usuario) pertenece la IP de origen '{source_ip}' y la IP de destino '{dest_ip}'.\n2.  **Validar la Legitimidad:** Contacte a los propietarios del activo de origen para verificar si esta transferencia de datos es legítima y autorizada. Pregunte sobre actividades recientes que involucren grandes transferencias de archivos (ej. copias de seguridad, migraciones, sincronizaciones).\n3.  **Análisis de Destino:** Analice la reputación y el propósito de la dirección IP de destino '{dest_ip}'. Verifique si es un destino conocido para servicios legítimos (ej. almacenamiento en la nube empresarial) o si está asociado con actividad maliciosa o dominios sospechosos.\n4.  **Inspección de Contenido (si es posible):** Si su firewall, proxy o IDS permite la inspección de contenido (DLP), revise los logs detallados de la transferencia para determinar qué tipo de datos se están enviando.\n5.  **Aislamiento:** Si la actividad es sospechosa, considere aislar el host '{source_ip}' de la red para prevenir una mayor exfiltración de datos.\n6.  **Análisis Forense:** Realice un análisis forense del host de origen para buscar malware, persistencia, credenciales comprometidas y otros indicadores de compromiso.\n7.  **Bloqueo de Destino:** Si se confirma que el destino es malicioso, bloquee la dirección IP/dominio en los firewalls y proxies.\n8.  **Revisión de Políticas DLP:** Si la organización tiene políticas de Prevención de Pérdida de Datos (DLP), revise si esta transferencia debería haber sido bloqueada por ellas."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the network traffic event."
+      },
+      {
+        "name": "source_ip",
+        "required": true,
+        "description": "The source IP address of the machine initiating the transfer."
+      },
+      {
+        "name": "dest_ip",
+        "required": true,
+        "description": "The destination IP address of the server receiving the data."
+      },
+      {
+        "name": "source_port",
+        "required": false,
+        "description": "The source port of the network connection."
+      },
+      {
+        "name": "dest_port",
+        "required": false,
+        "description": "The destination port of the network connection."
+      },
+      {
+        "name": "protocol",
+        "required": false,
+        "description": "The network protocol used (e.g., TCP, UDP, HTTP)."
+      },
+      {
+        "name": "bytes",
+        "required": true,
+        "description": "The total number of bytes transferred in the session."
+      }
+    ]
+  }
+]

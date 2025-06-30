@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Acceso Inusual a Almacenamiento en la Nube",
+    "description": "Se ha detectado un patrón de acceso inusual a un servicio de almacenamiento en la nube, lo que podría indicar un intento de exfiltración de datos.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "cloud",
+      "cloud_storage",
+      "exfiltration",
+      "unusual_access",
+      "large_data_download",
+      "TA0010",
+      "T1537"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "ALERTA DE SEVERIDAD ALTA: Acceso Inusual a Almacenamiento en la Nube Detectado.\n\nSe ha observado un volumen inusualmente alto de {count} descargas del archivo '{file_name}' por el usuario '{user}' desde la dirección IP '{source_ip}' en un período de 1 hora, iniciando en '{Timestamp}'. Este patrón de acceso es altamente sospechoso y podría indicar un intento de exfiltración de datos.\n\n**Detalles del Evento Agregado:**\n* **Timestamp (Inicio del período)**: {Timestamp}\n* **Usuario Impactado**: {user}\n* **Nombre del Archivo**: {file_name}\n* **Acción**: {action}\n* **Dirección IP de Origen**: {source_ip}\n* **Conteo de Descargas**: {count}\n\n**ACCIONES RECOMENDADAS (PRIORIDAD ALTA):**\n\n1.  **Validar la Legitimidad:** Contacta inmediatamente al usuario '{user}' y/o al propietario del archivo '{file_name}' para verificar si esta actividad es legítima y esperada. Pregunta si estaban realizando operaciones de descarga masiva, sincronización o auditorías.\n2.  **Revisar Logs de Auditoría de la Nube:** Accede a los logs detallados del proveedor de la nube (ej., AWS CloudTrail, Azure Monitor, Google Cloud Audit Logs) para obtener más contexto. Revisa eventos anteriores y posteriores asociados con este usuario, archivo o IP de origen. Busca otras actividades sospechosas (ej., cambios de permisos).\n3.  **Verificar Credenciales Comprometidas:** Si el usuario no puede justificar la actividad, asume que las credenciales de '{user}' (o la clave de acceso utilizada por esa IP) están comprometidas. Revócalas inmediatamente y fuerza una rotación de credenciales. Implementa MFA si no está activo.\n4.  **Análisis de Origen:** Investiga la `source_ip` '{source_ip}'. ¿Es una IP interna o externa? ¿Es esperada para este usuario/rol? Realiza un análisis de la reputación de la IP.\n5.  **Aislamiento:** Considera suspender temporalmente el acceso del usuario '{user}' al almacenamiento en la nube o bloquear la `source_ip` si la actividad es claramente maliciosa.\n6.  **Análisis Forense:** Realiza un análisis forense exhaustivo de la cuenta de usuario en la nube y, si es posible, del dispositivo de origen del acceso para identificar malware, persistencia, y el alcance del compromiso.\n7.  **Revisar Permisos:** Verifica los permisos del usuario '{user}' en el almacenamiento en la nube. Asegúrate de que siga el principio de privilegio mínimo (Least Privilege)."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the earliest event in the aggregation window."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account performing the download activity."
+      },
+      {
+        "name": "file_name",
+        "required": true,
+        "description": "The name of the file being downloaded."
+      },
+      {
+        "name": "action",
+        "required": true,
+        "description": "The action performed (should be 'download')."
+      },
+      {
+        "name": "source_ip",
+        "required": false,
+        "description": "The source IP address of the access."
+      },
+      {
+        "name": "count",
+        "required": true,
+        "description": "The number of download events within the timeframe."
+      }
+    ]
+  }
+]

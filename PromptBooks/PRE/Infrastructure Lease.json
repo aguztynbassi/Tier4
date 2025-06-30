@@ -1,0 +1,48 @@
+[
+  {
+    "name": "Infrastructure Lease",
+    "description": "Detects the leasing of infrastructure, which may be an early indicator of malicious activities.",
+    "tags": [
+      "security",
+      "detection",
+      "resource development",
+      "virtual private server",
+      "TA0042",
+      "T1583.003",
+      "cloud"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "MEDIUM-SEVERITY ALERT: Cloud infrastructure leasing activity detected by user '{user}' in cloud provider '{cloud_provider}' in region '{region}', for resource ID '{resource_id}'. This activity, occurring at '{timestamp}', is a common preparatory step for adversaries to set up malicious infrastructure (e.g., C2 servers, phishing sites). Event Details:\n\n* **Timestamp**: {timestamp}\n* **User**: {user}\n* **Cloud Provider**: {cloud_provider}\n* **Region**: {region}\n* **Resource ID**: {resource_id}\n\n**RECOMMENDED ACTION:** Investigate the legitimacy of this infrastructure lease. Verify if the user '{user}' is authorized to provision these resources. If this activity is unexpected or originates from an unauthorized user/account, escalate for further investigation. Review associated cloud activity logs, user roles, and network configurations for any suspicious patterns. If the infrastructure appears suspicious, consider terminating the resources and reviewing related access keys/credentials. Correlate with any related internal activity if the lease was initiated from within your network."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the infrastructure lease event."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account or service principal that initiated the infrastructure lease."
+      },
+      {
+        "name": "cloud_provider",
+        "required": true,
+        "description": "The cloud service provider (e.g., AWS, Azure, GCP) where the infrastructure was leased."
+      },
+      {
+        "name": "region",
+        "required": true,
+        "description": "The geographical region where the cloud infrastructure was provisioned."
+      },
+      {
+        "name": "resource_id",
+        "required": true,
+        "description": "The identifier of the leased cloud resource (e.g., instance ID, server ID)."
+      }
+    ]
+  }
+]

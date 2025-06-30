@@ -1,0 +1,75 @@
+[
+  {
+    "name": "RunOnce Registry Key Configuration Change",
+    "description": "Detects changes to the RunOnce registry key, indicating a program or script is configured to run automatically after a user logs on. Adversaries frequently modify this key to establish persistence or defense evasion. Immediate investigation is required to confirm the legitimacy of any detected changes.",
+    "tags": [
+      "security",
+      "detection",
+      "persistence",
+      "defense evasion",
+      "boot or logon autostart execution",
+      "registry run keys / startup folder",
+      "TA0003",
+      "TA0005",
+      "T1547.001",
+      "Windows",
+      "Sysmon",
+      "runonce",
+      "registry",
+      "persistence"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: Suspicious modification to a RunOnce registry key detected on host '{Computer}' by user '{User}'. A registry value under a RunOnce or RunOnceEx key ('{TargetObject}') was set by process '{Image}' (PID: {ProcessId}) with command line '{CommandLine}', indicating that a program or script has been configured to execute automatically after a user logs on. This is a common technique used by adversaries for persistence and defense evasion. Event Details:\n\n* **Timestamp**: {Timestamp}\n* **Event ID**: {EventID}\n* **Process Image**: {Image}\n* **Process ID**: {ProcessId}\n* **Command Line**: {CommandLine}\n* **Registry Key Modified**: {TargetObject}\n* **New Value Details**: {Details}\n* **User**: {User}\n* **Host**: {Computer}\n\n**IMMEDIATE AND URGENT ACTION REQUIRED:** This is a critical security incident. Isolate the affected system immediately. Examine the modified registry key ('{TargetObject}') and the process '{Image}' that made the change. Determine the purpose of the configured entry and if it points to a malicious executable or script. Conduct a thorough forensic analysis to identify the initial compromise vector, any malicious payloads, and other persistence mechanisms. This alert signifies a high-priority threat."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the registry event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Sysmon Event ID for Registry Value Set (12)."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to the process image that modified the registry key."
+      },
+      {
+        "name": "ProcessId",
+        "required": true,
+        "description": "The Process ID of the process that modified the registry key."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The command line of the process that modified the registry key."
+      },
+      {
+        "name": "TargetObject",
+        "required": true,
+        "description": "The full path to the modified registry key within the RunOnce or RunOnceEx hive."
+      },
+      {
+        "name": "Details",
+        "required": true,
+        "description": "The details of the registry value that was set, including its type and data."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the registry modification occurred."
+      },
+      {
+        "name": "Computer",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]
