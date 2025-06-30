@@ -27,22 +27,16 @@ The essence of this project lies in a collection of JSON files (or a single larg
 [
   {
     "name": "Suspicious Svchost Activity Detected",
-    "description": "Detects anomalous `svchost.exe` activity, which is unusual if launched without significant command-line arguments and may indicate code injection by malicious processes.",
+    "description": "Detects anomalous `svchost.exe` activity, ...",
     "tags": [
       "security",
       "detection",
-      "windows",
-      "privilege escalation",
-      "defense evasion",
-      "process injection",
-      "TA0004",
-      "TA0005",
-      "T1055"
+      "windows"
     ],
     "prompts": [
       {
         "id": "1",
-        "prompt": "Suspicious `svchost.exe` activity has been detected. Event Details: Event ID {EventID}, Timestamp {Timestamp}, Image {Image}, Command Line {CommandLine}, User {User}, Computer {Computer}, Parent Image {ParentImage}. Investigate whether this activity is a process injection attempt or legitimate system service/application activity. Pay special attention to the command line and parent process.",
+        "prompt": "Suspicious `svchost.exe` activity has been detected. Event Details: Event ID {EventID}, Timestamp {Timestamp}, ...",
         "continueOnError": false,
         "systemCapability": "analyzeSecurityEvent"
       }
@@ -52,9 +46,6 @@ The essence of this project lies in a collection of JSON files (or a single larg
         "name": "EventID",
         "required": true,
         "description": "The Sysmon Event ID for process creation (should be 1)."
-      },
-      {
-        ...
       }
     ]
   }
