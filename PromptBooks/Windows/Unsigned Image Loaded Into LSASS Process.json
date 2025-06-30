@@ -1,0 +1,69 @@
+[
+  {
+    "name": "Unsigned Image Loaded Into LSASS Process",
+    "description": "An unsigned executable or DLL has been loaded into the critical LSASS.exe process, indicating a probable credential dumping attempt, malicious injection, or persistence mechanism.",
+    "tags": [
+      "security",
+      "detection",
+      "critical",
+      "windows",
+      "credential_access",
+      "memory_injection",
+      "defense_evasion",
+      "persistence",
+      "TA0005",
+      "TA0004",
+      "TA0003",
+      "T1003",
+      "T1003.001"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "CRITICAL SEVERITY ALERT: Unsigned Image Loaded Into LSASS Process.\\n\\nAn unsigned image ('{LoadedImage}') was loaded into the LSASS.exe process on host '{ComputerName}' by user '{User}' at '{Timestamp}'. This activity is a strong indicator of a potential credential dumping attack (e.g., Mimikatz), malicious code injection, or an attempt to establish persistence.\\n\\nEvent Details:\\n* Timestamp: {Timestamp}\\n* Host: {ComputerName}\\n* User: {User}\\n* Process: {Image}\\n* Loaded Image: {LoadedImage}\\n* Signed Status: {Signed}\\n* Signature Status: {SignatureStatus}\\n* Sysmon Rule Name: {RuleName}\\n\\nRECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY):\\n\\n1. IMMEDIATE HOST ISOLATION: Disconnect host '{ComputerName}' from the network immediately to prevent further compromise, credential exfiltration, or lateral movement.\\n2. Memory Forensics & Acquisition: Acquire a full memory dump of the compromised host '{ComputerName}'. This is critical for recovering credentials, injected code, and understanding the attacker's tools and techniques.\\n3. Process Analysis: Review active processes on the host. Look for suspicious parent-child relationships for lsass.exe, or any other unusual processes.\\n4. Analyze Loaded Image: Investigate the LoadedImage '{LoadedImage}'. Check its reputation (VirusTotal, public sandboxes). If possible, obtain a copy for static and dynamic analysis.\\n5. User Account Investigation: Investigate the '{User}' account for signs of compromise (e.g., unusual logins, failed authentications, activity on other hosts). Reset passwords for all affected accounts and enforce Multi-Factor Authentication (MFA).\\n6. Credential Reset & Rotation: Assume credentials on the affected host are compromised. Initiate a full password reset for all local administrator accounts, service accounts, and any domain accounts that logged into this machine recently.\\n7. Threat Hunt: Search for similar image load events or credential dumping indicators across other systems in your environment.\\n8. Eradication & Recovery: After investigation, initiate a full system re-image or restoration from a known good backup, ensuring the malicious code is fully eradicated. Implement stronger security controls to prevent recurrence."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of when the unsigned image was loaded into LSASS."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the event occurred."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user context under which the image was loaded."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to the LSASS process (e.g., C:\\Windows\\System32\\lsass.exe)."
+      },
+      {
+        "name": "LoadedImage",
+        "required": true,
+        "description": "The full path to the unsigned DLL or executable loaded into LSASS."
+      },
+      {
+        "name": "Signed",
+        "required": true,
+        "description": "The digital signature status of the loaded image (expected 'false')."
+      },
+      {
+        "name": "SignatureStatus",
+        "required": true,
+        "description": "The status of the signature validation (e.g., 'Not signed')."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The Sysmon rule name that triggered the alert, if available."
+      }
+    ]
+  }
+]

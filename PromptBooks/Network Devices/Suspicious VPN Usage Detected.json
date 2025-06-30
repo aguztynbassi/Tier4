@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Suspicious VPN Usage Detected",
+    "description": "An unusual pattern of VPN connections has been detected, potentially indicating data exfiltration or unauthorized command and control activity.",
+    "tags": [
+      "security",
+      "detection",
+      "medium",
+      "vpn",
+      "network",
+      "unusual_behavior",
+      "data_exfiltration",
+      "command_and_control",
+      "TA0011",
+      "T1071.004",
+      "T1071.001"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "MEDIUM SEVERITY ALERT: Suspicious VPN Usage Detected.\\n\\nAn unusually high number of VPN connections ({count} events) from user '{user}' to destination IP '{dest_ip}' has been observed within a 10-minute timeframe, starting at '{Timestamp}'. This pattern could indicate an attempt at data exfiltration, establishing a command and control channel, or unauthorized resource access.\\n\\n**Event Details:**\n* **Timestamp (Start of Aggregation Period)**: {Timestamp}\n* **Suspect User**: {user}\n* **Destination IP**: {dest_ip}\n* **Connection Count**: {count}\n\n**RECOMMENDED ACTIONS (MEDIUM PRIORITY):**\n\n1.  **Validate Legitimacy:** Immediately contact user '{user}' to verify if this VPN activity is legitimate and expected. Inquire about the purpose of such a high volume of connections to '{dest_ip}'.\n2.  **Investigate Destination IP:** Determine if '{dest_ip}' is a legitimate, authorized resource. If it's an external IP, check its reputation (e.g., VirusTotal, AbuseIPDB, passive DNS) to identify potential malicious infrastructure.\n3.  **Review User Activity:** Examine other logs related to user '{user}' around the same timestamp. Look for: \\n    * Unusual login attempts or activity on other systems.\\n    * High volume of data transfer before or during VPN connections.\\n    * Execution of suspicious processes or scripts.\\n4.  **VPN Log Analysis:** Dive deeper into the raw VPN logs for '{user}' and '{dest_ip}' to understand the nature of the connections (e.g., duration, protocol used, amount of data transferred, if available).\n5.  **Endpoint Examination:** If '{user}' is associated with a specific endpoint, investigate that endpoint for signs of compromise, malware, or unauthorized tools that might be initiating these connections.\n6.  **Network Traffic Analysis:** If available, review network flow data (NetFlow, IPFIX) or full packet capture (PCAP) for connections to '{dest_ip}' to identify the protocols and data patterns involved.\n7.  **Review VPN Policies:** Ensure your VPN access policies are appropriately configured to restrict access to only necessary resources and to prevent unauthorized outbound connections."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the earliest event in the aggregation window."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account associated with the suspicious VPN connections."
+      },
+      {
+        "name": "dest_ip",
+        "required": true,
+        "description": "The destination IP address to which the VPN connections were established."
+      },
+      {
+        "name": "count",
+        "required": true,
+        "description": "The aggregated number of VPN connection events within the timeframe."
+      }
+    ]
+  }
+]

@@ -1,0 +1,64 @@
+[
+  {
+    "name": "UAC Bypass Attempt via Windows Directory Masquerading",
+    "description": "A User Account Control (UAC) bypass attempt has been detected by executing a process from a masqueraded Windows directory, indicating potential privilege escalation.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "privilege_escalation",
+      "defense_evasion",
+      "masquerading",
+      "uac_bypass",
+      "TA0005",
+      "TA0004",
+      "T1548",
+      "T1548.002",
+      "T1036.004"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: UAC Bypass Attempt via Windows Directory Masquerading Detected.\\n\\nAn attempt to bypass User Account Control (UAC) was detected on host '{ComputerName}' by user '{User}' at '{Timestamp}'. A process ('{Image}') with elevated integrity ('{IntegrityLevel}') was created from a masqueraded Windows directory path, specifically indicating a UAC bypass attempt.\\n\\nEvent Details:\\n* Timestamp: {Timestamp}\\n* Host: {ComputerName}\\n* User: {User}\\n* Process Image: {Image}\\n* Command Line: {CommandLine}\\n* Integrity Level: {IntegrityLevel}\\n* Sysmon Rule Name: {RuleName}\\n\\nRECOMMENDED IMMEDIATE ACTIONS (HIGH PRIORITY):\\n\\n1. IMMEDIATE HOST ISOLATION: Disconnect host '{ComputerName}' from the network to prevent further compromise or lateral movement.\\n2. VERIFY LEGITIMACY: Contact the user '{User}' immediately to confirm if this activity was authorized. Execution from such masqueraded paths is almost always malicious.\\n3. FORENSIC ANALYSIS: Conduct a full forensic investigation of '{ComputerName}'. Look for:\\n    * The executable located at '{Image}' - analyze its purpose and origin.\\n    * Any parent processes or initial infection vectors that led to this UAC bypass attempt.\\n    * Other processes running with elevated privileges created around the same time.\\n    * Indicators of Compromise (IOCs) such as unusual network connections or persistence mechanisms.\\n    * Evidence of initial access and the full attack chain.\\n4. USER ACCOUNT INVESTIGATION: Investigate the '{User}' account for signs of compromise (e.g., unusual login times, failed authentications, activity on other hosts). Consider forcing a password reset and enforcing Multi-Factor Authentication (MFA).\\n5. THREAT HUNT: Search for similar process creations from masqueraded paths or other UAC bypass attempts across other systems in your environment.\\n6. REVIEW SYSTEM PATCHES: Ensure the operating system and all software on the affected host are fully patched to prevent exploitation of known vulnerabilities."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of when the process was created."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the UAC bypass attempt occurred."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the process was run."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to the executable created from the masqueraded directory."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line used to launch the process."
+      },
+      {
+        "name": "IntegrityLevel",
+        "required": true,
+        "description": "The integrity level of the process (expected 'High')."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The Sysmon rule name that triggered the alert, if available."
+      }
+    ]
+  }
+]

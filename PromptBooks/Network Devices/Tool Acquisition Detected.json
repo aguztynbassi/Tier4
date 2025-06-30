@@ -1,0 +1,59 @@
+[
+  {
+    "name": "Tool Acquisition Detected",
+    "description": "A tool that could be used for malicious activities has been detected being downloaded. This indicates a potential attack preparation phase.",
+    "tags": [
+      "security",
+      "detection",
+      "medium",
+      "tool_acquisition",
+      "reconnaissance",
+      "network",
+      "TA0042",
+      "T1587"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "MEDIUM SEVERITY ALERT: Tool Acquisition Detected.\n\nTool '{tool_name}' has been downloaded by user '{user}' from source IP '{source_address}' to destination IP '{destination_address}' from URL '{source_url}' (Hash: {file_hash}) at '{Timestamp}'. This activity could be a preparation phase for an attack.\n\n**Event Details:**\n* **Timestamp**: {Timestamp}\n* **User**: {user}\n* **Source IP**: {source_address}\n* **Destination IP**: {destination_address}\n* **Tool Name**: {tool_name}\n* **Source URL**: {source_url}\n* **File Hash (if available)**: {file_hash}\n\n**RECOMMENDED ACTIONS (MEDIUM PRIORITY):**\n\n1.  **Validate Legitimacy:** Contact user '{user}' to verify the legitimacy of the download. Ask if the download of '{tool_name}' was intentional and if it's a required tool for their work.\n2.  **Investigate the Tool:**\n    * Check the reputation of '{tool_name}' and '{source_url}' on threat intelligence platforms (e.g., VirusTotal, AbuseIPDB, URLVoid).\n    * Determine if the tool is known for use in malicious activities (e.g., penetration testing tools, exploit kits, unauthorized remote access tools).\n3.  **File Analysis:** If '{file_hash}' is available, search for it on threat intelligence platforms. If possible, submit the file to a sandbox environment for dynamic analysis.\n4.  **User Account and Host Analysis:**\n    * Review recent activity for user '{user}' for other suspicious actions (e.g., unusual login attempts, script execution, configuration changes).\n    * Investigate the host associated with '{destination_address}' (if an endpoint) for signs of compromise or execution of the tool.\n5.  **Review Download Policies:** Ensure your proxy or IDS security policies are configured to block or alert on the download of known malicious or high-risk tools.\n6.  **User Education:** If the download was legitimate but from an untrusted source, educate the user on secure download policies and the use of authorized sources."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the tool download event."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account that initiated the download."
+      },
+      {
+        "name": "source_address",
+        "required": true,
+        "description": "The source IP address of the download (e.g., internal client IP)."
+      },
+      {
+        "name": "destination_address",
+        "required": true,
+        "description": "The destination IP address of the download (e.g., external server IP)."
+      },
+      {
+        "name": "tool_name",
+        "required": true,
+        "description": "The identified name of the downloaded tool."
+      },
+      {
+        "name": "source_url",
+        "required": false,
+        "description": "The URL from which the tool was downloaded."
+      },
+      {
+        "name": "file_hash",
+        "required": false,
+        "description": "The hash of the downloaded file (e.g., SHA256)."
+      }
+    ]
+  }
+]

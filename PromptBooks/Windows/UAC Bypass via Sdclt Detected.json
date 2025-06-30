@@ -1,0 +1,62 @@
+[
+  {
+    "name": "UAC Bypass via Sdclt Detected",
+    "description": "A User Account Control (UAC) bypass attempt leveraging 'sdclt.exe' and specific registry key modifications has been detected, indicating a potential privilege escalation.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "privilege_escalation",
+      "defense_evasion",
+      "uac_bypass",
+      "TA0005",
+      "TA0004",
+      "T1548",
+      "T1548.002"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: UAC Bypass via Sdclt Detected.\\n\\nA suspicious modification to a UAC-bypassing registry key ({TargetObject}) was detected on host '{ComputerName}' by user '{User}' via process '{Image}' at '{Timestamp}'. This typically indicates an attempt to bypass User Account Control and execute code with elevated privileges, likely using 'sdclt.exe'.\\n\\nEvent Details:\\n* Timestamp: {Timestamp}\\n* Host: {ComputerName}\\n* User: {User}\\n* Process: {Image}\\n* Modified Registry Key: {TargetObject}\\n* New Value (Details): {Details}\\n* Sysmon Rule Name: {RuleName}\\n\\nRECOMMENDED IMMEDIATE ACTIONS (HIGH PRIORITY):\\n\\n1. IMMEDIATE HOST ISOLATION: Disconnect host '{ComputerName}' from the network to prevent further compromise or lateral movement.\\n2. VERIFY LEGITIMACY: Contact the user '{User}' immediately to confirm if this activity was authorized. UAC bypasses are rarely legitimate outside of very specific, controlled administrative tasks. If the user cannot confirm, assume compromise.\\n3. REGISTRY REMEDIATION: Immediately revert the modified registry key ({TargetObject}) to its default state. This typically involves deleting or clearing the value, or restoring it from a known good configuration.\\n4. FORENSIC ANALYSIS: Conduct a full forensic investigation of '{ComputerName}'. Look for: \\n    * The presence of malicious executables or scripts that were likely launched via the UAC bypass. \\n    * Any new processes running with elevated privileges after the event. \\n    * Other indicators of compromise (IOCs), such as unusual network connections or persistence mechanisms. \\n    * Evidence of initial access and the full attack chain.\\n5. USER ACCOUNT INVESTIGATION: Investigate the '{User}' account for signs of compromise (e.g., unusual login times, failed authentications, activity on other hosts). Consider forcing a password reset and enforcing Multi-Factor Authentication (MFA).\\n6. THREAT HUNT: Search for similar registry modifications or UAC bypass attempts across other systems in your environment to identify widespread compromise.\\n7. REVIEW SYSTEM PATCHES: Ensure the operating system and all software on the affected host are fully patched to prevent exploitation of known vulnerabilities."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of when the registry modification occurred."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the UAC bypass attempt occurred."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account that performed the registry modification."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The process that performed the registry modification (e.g., powershell.exe, cmd.exe)."
+      },
+      {
+        "name": "TargetObject",
+        "required": true,
+        "description": "The specific registry key path that was modified to facilitate the UAC bypass."
+      },
+      {
+        "name": "Details",
+        "required": false,
+        "description": "The new value of the registry key, if available (often the command to be executed)."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The Sysmon rule name that triggered the alert, if available."
+      }
+    ]
+  }
+]
