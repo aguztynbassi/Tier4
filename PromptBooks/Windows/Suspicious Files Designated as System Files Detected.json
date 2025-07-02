@@ -1,0 +1,60 @@
+[
+  {
+    "name": "Suspicious Files Designated as System Files Detected",
+    "description": "Detection of attrib.exe being used to set the system file attribute (+s) on executable or script files in suspicious directories, indicating an attempt to hide malicious artifacts.",
+    "tags": [
+      "security",
+      "detection",
+      "medium",
+      "windows",
+      "defense_evasion",
+      "file_attributes",
+      "TA0005",
+      "T1564",
+      "T1564.001"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "MEDIUM SEVERITY ALERT: Suspicious Files Designated as System Files Detected.\\n\\n`attrib.exe` was used with the `+s` flag to designate a file as a system file on host '{ComputerName}' by user '{User}' at '{Timestamp}'. The command line used was: '{CommandLine}'. The parent process was '{ParentImage}'. This activity is suspicious as it can be used by attackers to hide malicious files from users and security tools.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **User**: {User}\\n* **Process**: {Image}\\n* **Parent Process**: {ParentImage}\\n* **Command Line**: {CommandLine}\\n* **Sysmon Rule Name**: {RuleName}\\n\\n**RECOMMENDED ACTIONS (MEDIUM PRIORITY):**\\n\\n1.  **VERIFY LEGITIMACY:** Contact '{User}' to determine if this action was legitimate administrative activity. If the user is a system administrator, confirm it was an authorized and expected action. Request documentation or a change ticket if applicable.\\n2.  **ANALYZE COMMAND LINE & PATH:** Carefully examine the '{CommandLine}'. Pay close attention to the full path of the file being modified. Is it located in a common temporary folder or a user-writable directory? Does the file type (e.g., .exe, .ps1) match what's expected in that location?\\n3.  **FILE ANALYSIS:** If the activity is suspicious, locate the file mentioned in the `CommandLine`. Perform the following:\n    * Check its current attributes (using `attrib.exe <filename>` or file properties).\n    * Analyze the file's content (static and dynamic analysis) for malicious indicators. Submit it to a sandbox or reputable online analysis tool (e.g., VirusTotal).\n    * Check the file's creation, modification, and access times for unusual patterns.\\n4.  **PARENT PROCESS INVESTIGATION:** Investigate the '{ParentImage}' process. Is it a known legitimate application or system process, or does it appear suspicious? Look for unusual parent-child relationships.\\n5.  **USER ACCOUNT INVESTIGATION:** If the activity is deemed malicious, investigate the '{User}' account for signs of compromise (e.g., unusual login times, failed authentications, activity on other hosts).\\n6.  **THREAT HUNT:** Search your environment for other instances of `attrib.exe` being used with the `+s` flag, especially in conjunction with hidden or system attributes (`+h`, `+s`). Also look for other suspicious files in common temporary or user-writable directories."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of when attrib.exe was executed."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to the attrib.exe executable."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line arguments of attrib.exe, including the +s flag and file path."
+      },
+      {
+        "name": "ParentImage",
+        "required": true,
+        "description": "The full path to the parent process that launched attrib.exe."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account that executed attrib.exe."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the event occurred."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The Sysmon rule name that triggered the alert, if available."
+      }
+    ]
+  }
+]

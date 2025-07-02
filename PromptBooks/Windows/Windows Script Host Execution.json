@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Windows Script Host Execution",
+    "description": "Execution of a script file (.vbs, .js, .vbe, .jse) via wscript.exe or cscript.exe has been detected, which can indicate malicious code execution.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "lolbin",
+      "script_execution",
+      "TA0002",
+      "T1059",
+      "T1059.005",
+      "T1059.007"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: Windows Script Host Execution Detected.\\n\\nThe script host '{Image}' was executed with the command line '{CommandLine}' on computer '{Computer}' by user '{User}' at {Timestamp}. This activity is suspicious because `wscript.exe` and `cscript.exe` are legitimate Windows tools often abused by threat actors to execute malicious scripts (malware, phishing, etc.).\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Computer**: {Computer}\\n* **User**: {User}\\n* **Script Host Process**: {Image}\\n* **Command Line**: {CommandLine}\\n* **Sysmon Event ID**: {EventID}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY):**\\n\\n1.  **VERIFY LEGITIMACY:** Determine if this script execution is a known legitimate activity in your environment. **Given that script hosts are LOLBins, assume malicious intent** unless definitively proven otherwise by a documented and whitelisted workflow. Verify if the script is part of a scheduled task, GPO, or legitimate enterprise application.\\n2.  **ANALYZE THE SCRIPT:** Identify the full path of the script file in '{CommandLine}'. Isolate the script file and perform static and dynamic analysis in a safe environment (sandbox). Look for obfuscation, unusual network connections, system manipulation, or any other malicious behavior.\\n3.  **INVESTIGATE SCRIPT ORIGIN:** Determine how the script arrived on the computer. Was it downloaded from the internet (email, browser)? Was it copied from a network share? Is it part of an Office document?\\n4.  **INVESTIGATE EXECUTION CONTEXT:** Examine the parent process (if available in logs) and any network or system activity following the script execution. Were there new process creations, registry modifications, or unusual network connections?\\n5.  **USER ACCOUNT INVESTIGATION:** Investigate the '{User}' account for signs of compromise (e.g., anomalous login times, failed authentication attempts, activity on other hosts). Consider forcing a password reset and enforcing Multi-Factor Authentication (MFA).\\n6.  **HOST FORENSIC ANALYSIS:** Conduct a deeper forensic analysis of '{Computer}' to identify other Indicators of Compromise (IOCs) and determine the scope of any potential compromise.\\n7.  **THREAT HUNT:** Search your environment for other instances of `wscript.exe` or `cscript.exe` execution with similar patterns, or the presence of the same malicious scripts on other machines."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The date and time when the script was executed."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to wscript.exe or cscript.exe."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line used to execute the script."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account that executed the script."
+      },
+      {
+        "name": "Computer",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Sysmon event ID (expected to be 1)."
+      }
+    ]
+  }
+]

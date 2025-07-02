@@ -1,0 +1,68 @@
+[
+  {
+    "name": "Suspicious Scheduled Task Creation via Masqueraded XML",
+    "description": "Detection of a scheduled task created using schtasks.exe with an XML file, where the XML file's extension appears to be masqueraded or non-standard, indicating potential covert persistence or code execution.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "persistence",
+      "defense_evasion",
+      "scheduled_task",
+      "TA0003",
+      "TA0005",
+      "T1053",
+      "T1053.005",
+      "T1036"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: Suspicious Scheduled Task Creation via Masqueraded XML Detected.\\n\\n`schtasks.exe` was used to create a scheduled task on host '{ComputerName}' by user '{User}' at '{Timestamp}', using an XML file with a potentially masqueraded extension. The command line was: '{CommandLine}'. The process '{Image}' with parent '{ParentImage}' had an integrity level of '{IntegrityLevel}'. This activity is highly suspicious and suggests an adversary is attempting to establish covert persistence or execute malicious code.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **User**: {User}\\n* **Process**: {Image}\\n* **Parent Process**: {ParentImage}\\n* **Command Line**: {CommandLine}\\n* **Integrity Level**: {IntegrityLevel}\\n* **Sysmon Rule Name**: {RuleName}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (HIGH PRIORITY):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** Disconnect host '{ComputerName}' from the network immediately to prevent further lateral movement or command and control.\\n2.  **VERIFY LEGITIMACY (HIGH SKEPTICISM):** This behavior is rarely legitimate. Thoroughly investigate the `schtasks.exe` command line, especially the path and name of the XML file. If any custom scripts or legitimate software are *known* to create scheduled tasks this way, verify their exact command line and ensure they are not compromised. **Assume malicious intent unless proven otherwise.**\\n3.  **ANALYZE THE XML FILE:** Locate the XML file referenced in the `CommandLine` and analyze its content. This XML file defines the task's actions (what it runs) and triggers (when it runs). Look for suspicious executables, scripts, or network connections.\\n4.  **FORENSIC ANALYSIS:** Conduct a full forensic investigation of '{ComputerName}'. Focus on:\\n    * Analyzing the scheduled task itself (using `schtasks /query /xml` or Task Scheduler UI) for its full configuration, including the user context it runs under and its triggers.\\n    * Examining any executables or scripts that the scheduled task is configured to run.\\n    * Looking for other Indicators of Compromise (IOCs) such as new or modified registry keys, unusual network connections, or additional dropped files.\\n    * Identifying the initial access vector that led to this execution.\\n5.  **USER ACCOUNT INVESTIGATION:** Investigate the '{User}' account for signs of compromise (e.g., unusual login times, failed authentications, activity on other hosts). Consider forcing a password reset and enforcing Multi-Factor Authentication (MFA).\\n6.  **THREAT HUNT:** Search your environment for similar `schtasks.exe` executions using XML files with unusual extensions or other scheduled task creation attempts across other systems."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of when the suspicious scheduled task was created."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The process image (schtasks.exe) that created the scheduled task."
+      },
+      {
+        "name": "ParentImage",
+        "required": true,
+        "description": "The parent process of schtasks.exe."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line arguments of schtasks.exe, including the XML file path."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account that created the scheduled task."
+      },
+      {
+        "name": "IntegrityLevel",
+        "required": false,
+        "description": "The integrity level of the process that created the scheduled task (e.g., High, Medium, System)."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the scheduled task was created."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The Sysmon rule name that triggered the alert, if available."
+      }
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "name": "Social Network Account Creation Detected",
+    "description": "The creation of a new social media account has been detected, which might be associated with information operations or other malicious activities.",
+    "tags": [
+      "security",
+      "detection",
+      "medium",
+      "social_media",
+      "account_creation",
+      "information_operations",
+      "TA0043",
+      "T1590.001"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "MEDIUM SEVERITY ALERT: Social Network Account Creation Detected.\\n\\nA new social media account with ID '{account_id}' was created on platform '{platform}' by user '{user}' at {timestamp}. This activity is being monitored as it could be related to information operations, brand impersonation, or other malicious campaigns.\\n\\n**Event Details:**\\n* **Timestamp**: {timestamp}\\n* **Platform**: {platform}\\n* **User (Creator)**: {user}\\n* **Account ID**: {account_id}\\n* **Action**: {action}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (PRIORITY MEDIUM):**\\n\\n1.  **VERIFY LEGITIMACY:** Determine if this account creation is a legitimate and expected activity within your organization (e.g., marketing, public relations). Consult with relevant departments if this is part of a sanctioned campaign.\\n2.  **CONTEXTUAL INVESTIGATION:** Investigate the details of the newly created account. What is the account's name? What content has it posted (if any)? Is it attempting to impersonate an individual or organization? Is it part of a larger network of similar suspicious accounts?\\n3.  **USER/IP INVESTIGATION:** If the 'user' field provides insight into the creator (e.g., an IP address, email), investigate that source. Is it from a known corporate network, a VPN, or a suspicious geolocation?\\n4.  **PLATFORM-SPECIFIC ACTIONS:** Depending on the platform, consider reporting the account for suspicious activity or abuse if it violates the platform's terms of service and is deemed malicious. \\n5.  **BASELINE ADJUSTMENT:** If this is a recurring false positive, review and adjust your detection rule or baselines to account for legitimate account creation patterns in your environment.\\n6.  **THREAT INTELLIGENCE CROSS-REFERENCE:** Check if the account ID, username, or associated content aligns with known threat intelligence related to information operations, spam, or malicious campaigns."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of when the account was created."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user (or identifier) that created the account."
+      },
+      {
+        "name": "account_id",
+        "required": true,
+        "description": "The unique ID of the newly created social media account."
+      },
+      {
+        "name": "platform",
+        "required": true,
+        "description": "The social media platform where the account was created (e.g., facebook, twitter)."
+      },
+      {
+        "name": "action",
+        "required": true,
+        "description": "The action that triggered the alert (expected to be 'create_account')."
+      }
+    ]
+  }
+]

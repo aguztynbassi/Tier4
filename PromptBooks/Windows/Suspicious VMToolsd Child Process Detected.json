@@ -1,0 +1,64 @@
+[
+  {
+    "name": "Suspicious VMToolsd Child Process Detected",
+    "description": "An unusual child process was spawned by VMware Tools (vmtoolsd.exe), potentially indicating malicious code execution or persistence by an attacker within a virtualized environment.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "vmware",
+      "process_creation",
+      "persistence",
+      "execution",
+      "TA0002",
+      "T1059",
+      "T1059.001",
+      "T1059.002",
+      "T1059.003"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: Suspicious VMToolsd Child Process Detected.\\n\\nAn unexpected child process ('{Image}') with the command line '{CommandLine}' was spawned by 'vmtoolsd.exe' on host '{Computer}' by user '{User}' at '{Timestamp}'. This activity is highly suspicious and often indicates an attacker attempting to execute malicious code or establish persistence within a virtual machine by abusing VMware Tools.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {Computer}\\n* **User**: {User}\\n* **Parent Process**: {ParentImage}\\n* **Child Process**: {Image}\\n* **Command Line**: {CommandLine}\\n* **Event ID**: {EventID}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (HIGH PRIORITY):**\n\n1.  **IMMEDIATE HOST ISOLATION:** Disconnect host '{Computer}' from the network immediately to prevent further lateral movement or command and control.\\n2.  **VERIFY LEGITIMACY:** Thoroughly investigate the '{Image}' process and its '{CommandLine}'. Confirm if this is a known, authorized script or application being legitimately run by VMware Tools in your environment. Pay close attention to the full path and command-line arguments. If not explicitly authorized, assume malicious intent.\n3.  **FORENSIC ANALYSIS:** Conduct a full forensic investigation of '{Computer}'. Focus on:\\n    * Analyzing the executable '{Image}' and any related files (e.g., scripts, DLLs) it might have dropped or loaded. Check its reputation (e.g., VirusTotal).\\n    * Examining the process tree around the `vmtoolsd.exe` process to identify any other suspicious activities.\\n    * Looking for other Indicators of Compromise (IOCs) such as new or modified registry keys, scheduled tasks, unusual network connections, or other persistence mechanisms.\\n    * Identifying the initial access vector that led to this execution.\n4.  **USER ACCOUNT INVESTIGATION:** Investigate the '{User}' account for signs of compromise (e.g., unusual login times, failed authentications, activity on other hosts). Consider forcing a password reset and enforcing Multi-Factor Authentication (MFA).\n5.  **THREAT HUNT:** Search your environment for similar `vmtoolsd.exe` child process creations or other forms of execution and persistence across other virtual machines."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp when the suspicious child process was created."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Windows Security Event ID (expected 4688)."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the suspicious process was created."
+      },
+      {
+        "name": "Computer",
+        "required": true,
+        "description": "The hostname of the system where the event occurred."
+      },
+      {
+        "name": "ParentImage",
+        "required": true,
+        "description": "The full path to the parent process (expected to be vmtoolsd.exe)."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to the suspicious child process executable."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line arguments of the child process."
+      }
+    ]
+  }
+]
