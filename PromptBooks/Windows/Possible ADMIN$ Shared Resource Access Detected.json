@@ -1,0 +1,61 @@
+[
+  {
+    "name": "Possible ADMIN$ Shared Resource Access Detected",
+    "description": "Access to the ADMIN$ shared resource detected, which could indicate lateral movement or unauthorized access by adversaries. Legitimate administrative activities may cause false positives.",
+    "tags": [
+      "security",
+      "detection",
+      "medium",
+      "windows",
+      "lateral_movement",
+      "file_share",
+      "admin_share",
+      "TA0008",
+      "T1021",
+      "T1021.002"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "MEDIUM SEVERITY ALERT: Possible ADMIN$ Shared Resource Access Detected.\\n\\nAccess to the ADMIN$ shared resource on host '{ComputerName}' was detected by user '{User}' from source IP '{SourceAddress}' at {Timestamp}. The accessed object was '{RelativeTargetName}'. While ADMIN$ access can be legitimate for administration, it's frequently used by adversaries for lateral movement.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **User**: {User}\\n* **Share Name**: {ShareName} (expected 'Admin$')\\n* **Source IP Address**: {SourceAddress}\\n* **Accessed Object**: {RelativeTargetName} (if available)\\n* **Windows Event ID**: 5140\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (PRIORITY MEDIUM):**\\n\\n1.  **VERIFY LEGITIMACY:** Immediately determine if this ADMIN$ access is legitimate and authorized. Contact the user '{User}' and relevant IT teams (e.g., system administrators, help desk) to confirm if this activity was expected. **Consider it suspicious if the user is not a system administrator or if the access is from an unusual source IP/workstation.**\\n2.  **CONTEXTUAL ASSESSMENT:**\\n    * **Is '{User}' an authorized administrator for '{ComputerName}'?** If not, escalate investigation.\\n    * **Is '{SourceAddress}' an expected source for this user's administrative activities?** Look for external IPs, VPNs, or unusual internal subnets.\\n    * **What was the '{RelativeTargetName}' accessed?** Access to sensitive directories (e.g., `C:\\Windows\\System32`, `C:\\Windows\\Temp`, `C:\\Users\\<username>\\AppData`) or executable files is more suspicious.\\n    * **Are there other suspicious activities associated with '{User}' or '{SourceAddress}' around this time?** (e.g., failed logins, other lateral movement attempts, unusual process executions).\\n3.  **NETWORK TRAFFIC ANALYSIS:** Review network flow data and firewall logs for connections to and from '{ComputerName}' and '{SourceAddress}' around the time of the ADMIN$ access. Look for unusual SMB traffic patterns or other protocols.\\n4.  **USER ACCOUNT INVESTIGATION:** If the activity is suspicious, investigate the '{User}' account for signs of compromise (e.g., anomalous logins, failed authentications, activity on other hosts). Consider forcing a password reset and enforcing Multi-Factor Authentication (MFA).\\n5.  **HOST FORENSIC ANALYSIS (IF MALICIOUS):** If the ADMIN$ access is confirmed malicious, proceed with a full forensic investigation of '{ComputerName}' to identify the initial access vector, scope of impact, and other Indicators of Compromise (IOCs). Pay attention to file modifications or creations within the ADMIN$ share.\\n6.  **THREAT HUNT:** Search your environment for other instances of ADMIN$ access by '{User}' or from '{SourceAddress}' to other systems. Look for patterns of lateral movement across multiple hosts."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The date and time of the ADMIN$ access event."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the ADMIN$ share was accessed."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account that accessed the ADMIN$ share."
+      },
+      {
+        "name": "ShareName",
+        "required": true,
+        "description": "The name of the shared resource (expected to be 'Admin$')."
+      },
+      {
+        "name": "SourceAddress",
+        "required": true,
+        "description": "The IP address from which the ADMIN$ access originated."
+      },
+      {
+        "name": "RelativeTargetName",
+        "required": false,
+        "description": "The specific file or directory accessed within the ADMIN$ share, if available."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Windows Event ID (5140)."
+      }
+    ]
+  }
+]

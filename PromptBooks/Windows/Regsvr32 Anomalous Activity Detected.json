@@ -1,0 +1,64 @@
+[
+  {
+    "name": "Regsvr32 Anomalous Activity Detected",
+    "description": "Suspicious execution patterns of regsvr32.exe detected, potentially indicating abuse for malicious code execution, defense evasion, or persistence.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "defense_evasion",
+      "execution",
+      "lolbin",
+      "persistence",
+      "code_execution",
+      "TA0005",
+      "TA0002",
+      "T1218",
+      "T1218.009"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: Regsvr32 Anomalous Activity Detected.\\n\\nHighly suspicious activity involving `regsvr32.exe` was observed on host '{ComputerName}' by user '{User}' at {Timestamp}. The process '{Image}' with command line '{CommandLine}' was observed, and its parent process was '{ParentImage}'. This behavior deviates significantly from normal `regsvr32.exe` usage and is a strong indicator of malicious activity, such as code execution, defense evasion, or persistence.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **User**: {User}\\n* **Process Image**: {Image}\\n* **Parent Process**: {ParentImage}\\n* **Command Line**: {CommandLine}\\n* **Sysmon Event ID**: 1\\n* **Sysmon Rule Name**: {RuleName}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** Disconnect host '{ComputerName}' from the network immediately to contain any potential malicious activity and prevent lateral movement or data exfiltration.\\n2.  **VERIFY LEGITIMACY (EXTREME SKEPTICISM):** The detected `regsvr32.exe` behavior is highly indicative of abuse. **Assume malicious intent unless definitively proven otherwise** by authorized and documented software installations, updates, or specific development/debugging activities. Contact relevant IT teams for verification, but maintain high suspicion.\\n3.  **ANALYZE COMMAND LINE & ASSOCIATED FILES:** Carefully examine the '{CommandLine}'. \\n    * If a remote URL is present (e.g., `http://`, `ftp://` with `scrobj.dll`), DO NOT access it directly. Safely download the content in a sandbox environment and analyze the scriptlet (.sct file) or DLL for malicious code.\\n    * If a local path is present, isolate the DLL/OCX file being registered and submit it for analysis (e.g., VirusTotal, internal sandbox). \\n4.  **INVESTIGATE PARENT PROCESS:** Thoroughly investigate the '{ParentImage}' process. How did it come to execute `regsvr32.exe` in such an anomalous way? Was it a compromised application (e.g., Office, web browser), a PowerShell script, or a command prompt? Follow the execution chain to identify the initial infection vector.\\n5.  **USER ACCOUNT INVESTIGATION:** Investigate the '{User}' account for signs of compromise (e.g., anomalous logins, failed authentications, activity on other hosts). Consider forcing a password reset and enforcing Multi-Factor Authentication (MFA).\\n6.  **MEMORY FORENSIC ANALYSIS:** Perform a memory dump of '{ComputerName}' and analyze it for injected code, suspicious modules, or process anomalies. This can reveal the true payload if `regsvr32.exe` was used for process injection or direct code execution.\\n7.  **HOST FORENSIC ANALYSIS:** Conduct a full forensic investigation of '{ComputerName}'. Look for other Indicators of Compromise (IOCs) such as new or modified executables, persistence mechanisms, unusual network connections, or signs of post-exploitation activity.\\n8.  **THREAT HUNT:** Search your environment for other instances of anomalous `regsvr32.exe` activity, similar command-line patterns, or related parent-child relationships."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of when regsvr32.exe activity was detected."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to the regsvr32.exe executable."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line of the regsvr32.exe process."
+      },
+      {
+        "name": "ParentImage",
+        "required": true,
+        "description": "The full path to the parent process that launched regsvr32.exe."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the regsvr32.exe process ran."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the event occurred."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The Sysmon rule name that triggered the alert, if available."
+      }
+    ]
+  }
+]

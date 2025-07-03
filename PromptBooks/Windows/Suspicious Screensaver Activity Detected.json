@@ -1,0 +1,70 @@
+[
+  {
+    "name": "Suspicious Screensaver Activity Detected",
+    "description": "A suspicious modification to the screensaver registry key (SCRNSAVE.EXE) has been detected, which could indicate a persistence attempt by an attacker.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "persistence",
+      "registry",
+      "TA0003",
+      "T1546",
+      "T1546.002"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: Suspicious Screensaver Activity Detected.\\n\\nAn unusual modification to the `SCRNSAVE.EXE` registry key was detected on host '{Computer}' by user '{User}' at {Timestamp}. The process '{Image}' (parent: '{ParentImage}') modified the key '{TargetObject}'. The value set was '{Details}'. This is highly suspicious and may be an attempt to establish persistence on the system.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Computer**: {Computer}\\n* **User**: {User}\\n* **Modifying Process**: {Image}\\n* **Parent Process**: {ParentImage}\\n* **Process Command Line**: {CommandLine}\\n* **Modified Registry Key**: {TargetObject}\\n* **Value Set**: {Details}\\n* **Sysmon Event ID**: {EventID}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** Disconnect host '{Computer}' from the network immediately to contain any potential malicious activity and prevent lateral movement.\\n2.  **VERIFY LEGITIMACY (HIGH SKEPTICISM):** Programmatic or unusual modification of the `SCRNSAVE.EXE` key outside of normal channels (user-initiated change, GPO/MDM) is highly suspicious. **Assume it is malicious** unless definitively proven otherwise by documented and expected legitimate activity.\\n3.  **ANALYZE SCREENSAVER BINARY:** Examine the file pointed to by '{Details}'. If it's not a legitimate Windows screensaver (e.g., `logon.scr` in `System32`), obtain a copy of the file for forensic analysis and submit it to platforms like VirusTotal or a sandbox. Look for any indicators of compromise.\\n4.  **INVESTIGATE MODIFYING PROCESS:** Investigate the '{Image}' process and its parent process '{ParentImage}'. Is it a legitimate process? Was it executed with unusual arguments or by an unusual parent process? Trace the execution chain to identify the source of this activity.\\n5.  **INVESTIGATE USER ACCOUNT:** Investigate the '{User}' account for signs of compromise (e.g., anomalous logins, failed authentication attempts, activity on other machines). Consider forcing a password reset and enforcing Multi-Factor Authentication (MFA).\\n6.  **HOST FORENSIC ANALYSIS:** Conduct a comprehensive forensic analysis of '{Computer}' to identify other Indicators of Compromise (IOCs) and determine the initial infection vector and scope of compromise.\\n7.  **THREAT HUNT:** Search your environment for other instances of the `SCRNSAVE.EXE` key being modified, especially if `rundll32.exe` is the modifying process and the path is outside standard system directories. Review audit logs for GPO changes related to screensavers."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The date and time when the screensaver activity was detected."
+      },
+      {
+        "name": "Computer",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account that performed the registry modification."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to the process that modified the registry key."
+      },
+      {
+        "name": "ParentImage",
+        "required": false,
+        "description": "The full path to the parent process, if available."
+      },
+      {
+        "name": "CommandLine",
+        "required": false,
+        "description": "The full command line of the modifying process, if available."
+      },
+      {
+        "name": "TargetObject",
+        "required": true,
+        "description": "The screensaver registry key that was modified."
+      },
+      {
+        "name": "Details",
+        "required": true,
+        "description": "The details or new value set in the registry key (the path to the screensaver binary)."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Sysmon event ID (12, 13, or 14)."
+      }
+    ]
+  }
+]

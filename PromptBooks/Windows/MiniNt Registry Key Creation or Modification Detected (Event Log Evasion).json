@@ -1,0 +1,78 @@
+[
+  {
+    "name": "MiniNt Registry Key Creation/Modification Detected (Event Log Evasion)",
+    "description": "Critical defense evasion detected: Creation or modification of the 'HKLM\\SYSTEM\\CurrentControlSet\\Control\\MiniNt' registry key, which can disable Windows Event Logging after reboot.",
+    "tags": [
+      "security",
+      "detection",
+      "critical",
+      "windows",
+      "defense_evasion",
+      "logging_evasion",
+      "system_integrity",
+      "registry_modification",
+      "TA0005",
+      "T1562",
+      "T1562.001",
+      "T1562.002"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "ALERTA DE SEVERIDAD CRÍTICA: Creación/Modificación de Clave de Registro MiniNt Detectada (Evasión de Registros de Eventos).\\n\\nSe detectó la creación o modificación de la clave de registro altamente sospechosa 'HKLM\\SYSTEM\\CurrentControlSet\\Control\\MiniNt' en el host '{ComputerName}' por el usuario '{User}' a través del proceso '{ProcessName}' (`{Image}`) con la línea de comandos '{CommandLine}' en {Timestamp}. El objeto específico objetivo fue '{TargetObject}', y si se estableció un valor, los detalles son: '{Details}'. Esta acción es una técnica conocida de evasión de defensas utilizada por adversarios para deshabilitar el servicio de registro de eventos de Windows después de un reinicio del sistema, dificultando gravemente la detección y las capacidades forenses.\\n\\n**Detalles del Evento:**\\n* **Marca de Tiempo**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **Usuario**: {User}\\n* **Nombre del Proceso**: {ProcessName}\\n* **Imagen del Proceso**: {Image}\\n* **Línea de Comandos del Proceso**: {CommandLine}\\n* **Objeto de Registro Objetivo**: {TargetObject}\\n* **Detalles de la Modificación**: {Details} (si EventID es 13)\\n* **ID de Evento de Sysmon**: {EventID}\\n* **Nombre de la Regla de Sysmon**: {RuleName}\\n\\n**ACCIONES INMEDIATAS RECOMENDADAS (PRIORIDAD CRÍTICA - RESPONDER INMEDIATAMENTE):**\\n\\n1.  **AISLAMIENTO INMEDIATO DEL HOST:** Desconecte el host '{ComputerName}' de la red **inmediatamente** para contener la amenaza y prevenir daños mayores o movimiento lateral. **NO apague el sistema.**\\n2.  **ASUMIR COMPROMISO:** Esta actividad es casi exclusivamente maliciosa. **Asuma que el host está comprometido y proceda con los procedimientos completos de respuesta a incidentes.**\\n3.  **PREVENIR REINICIO (SI ES POSIBLE):** Si el sistema aún no se ha reiniciado, intente evitarlo. Un reinicio activará la modificación del registro y deshabilitará el registro de eventos. Si ya se produjo un reinicio, proceda al paso 4, pero tenga en cuenta que es posible que falten registros críticos.\\n4.  **REVERTIR MODIFICACIÓN DE REGISTRO:** Intente inmediatamente revertir o eliminar la clave `MiniNt` y cualquier valor dentro de ella. Esto puede requerir herramientas especializadas o iniciar en un entorno de recuperación si el registro ya está deteriorado. \\n    * Para `HKLM\\SYSTEM\\CurrentControlSet\\Control\\MiniNt`, es posible que deba eliminar la clave o los valores específicos creados/modificados dentro de ella. **Sea extremadamente cauteloso al modificar el registro manualmente.**\\n5.  **ANÁLISIS FORENSE DE MEMORIA:** Realice un volcado completo de memoria de '{ComputerName}' inmediatamente. Analice el volcado de memoria en busca de código inyectado, módulos maliciosos, conexiones de red y otros artefactos en memoria. Esto es crucial ya que es probable que el atacante tenga acceso activo antes de intentar deshabilitar los registros.\\n6.  **ANÁLISIS FORENSE DE DISCO:** Realice un análisis forense completo de '{ComputerName}'. Busque archivos recién creados, archivos del sistema modificados, mecanismos de persistencia y cualquier herramienta o malware que el atacante haya dejado. Preste especial atención a los archivos creados por '{ProcessName}' o alrededor de la `Marca de Tiempo` del evento.\\n7.  **INVESTIGAR EL ORIGEN DEL PROCESO:** Investigue cómo '{ProcessName}' llegó a realizar esta modificación de registro. ¿Fue ejecutado por otro proceso sospechoso? ¿Fue el resultado de que un usuario hizo clic en un enlace/archivo adjunto malicioso? Busque alertas anteriores o actividades sospechosas relacionadas con '{User}'.\\n8.  **INVESTIGACIÓN DE CUENTA DE USUARIO:** Investigue la cuenta de usuario '{User}' en busca de signos de compromiso (por ejemplo, inicios de sesión anómalos, autenticaciones fallidas, actividad en otros hosts). Incluso si el usuario es `SYSTEM`, investigue si la propia cuenta del sistema ha sido abusada o si un proceso que se ejecuta como SYSTEM fue comprometido.\\n9.  **ANÁLISIS DE TRÁFICO DE RED:** Revise los registros de red de '{ComputerName}' alrededor de la hora del evento. Busque conexiones salientes sospechosas (C2, exfiltración de datos) o conexiones entrantes inusuales que puedan haber iniciado el compromiso.\\n10. **BÚSQUEDA DE AMENAZAS (THREAT HUNTING):** Busque en su entorno otras instancias de modificaciones del registro `MiniNt` u otras técnicas de evasión de registros de eventos."
+        }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the registry event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Sysmon Event ID (12 or 13)."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the registry modification occurred."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the process made the registry change."
+      },
+      {
+        "name": "ProcessName",
+        "required": true,
+        "description": "The name of the process that modified the registry."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to the process image that modified the registry."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line of the process that modified the registry."
+      },
+      {
+        "name": "TargetObject",
+        "required": true,
+        "description": "The full registry key/value path that was modified or created."
+      },
+      {
+        "name": "Details",
+        "required": false,
+        "description": "The new value written to the registry key, if Event ID 13."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The Sysmon rule name that triggered the alert, if available."
+      }
+    ]
+  }
+]

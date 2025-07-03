@@ -1,0 +1,61 @@
+[
+  {
+    "name": "Registry Run Key Persistence Detected",
+    "description": "Changes to Registry Run keys detected, indicating potential persistence by executing malicious binaries during system startup.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "persistence",
+      "registry",
+      "autostart",
+      "TA0003",
+      "T1547",
+      "T1547.001"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: Registry Run Key Persistence Detected.\\n\\nAn attempt to access or modify a Registry Run key (`{ObjectName}`) was detected on host '{ComputerName}' by user '{SubjectUserName}' via process '{ProcessName}' at {Timestamp}. The `AccessMask` was '{AccessMask}'. This indicates a potential attempt to establish persistence, allowing malicious code to execute automatically during system startup.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **User**: {SubjectUserName}\\n* **Process Name**: {ProcessName}\\n* **Registry Object**: {ObjectName}\\n* **Registry Value Name**: {ObjectValueName} (if available)\\n* **Access Mask**: {AccessMask}\\n* **Windows Event ID**: 4663\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** Disconnect host '{ComputerName}' from the network immediately to contain any potential malicious activity and prevent lateral movement or data exfiltration.\\n2.  **VERIFY LEGITIMACY (EXTREME SKEPTICISM):** Modifications to Registry Run keys are a very common persistence mechanism for malware. **Assume malicious intent unless definitively proven otherwise** by authorized and documented software installations, updates, or system configurations. Contact relevant IT teams for verification.\\n3.  **ANALYZE REGISTRY ENTRY:** Inspect the specific registry key `{ObjectName}` and the value '{ObjectValueName}' (if available). Identify the executable path or command that was added or modified. \\n    * Is the executable path known and legitimate?\\n    * Is the file located in a suspicious directory (e.g., `Temp`, `AppData`, `ProgramData`)?\\n    * Does the executable or command appear suspicious (e.g., random names, obfuscated commands, known malware hashes)?\\n4.  **FILE ANALYSIS:** Obtain a copy of the executable or script referenced in the registry entry. Perform static and dynamic analysis in a sandbox environment (e.g., submit to VirusTotal). \\n5.  **INVESTIGATE PROCESS & USER:** Investigate the '{ProcessName}' that made the registry change and the '{SubjectUserName}' account. Is this process or user typically involved in such modifications? Look for signs of compromise on the user account (anomalous logins, failed authentications) or the process itself (unusual parent process, suspicious network connections).\\n6.  **REMOVE PERSISTENCE:** If confirmed malicious, immediately remove the suspicious entry from the Registry Run key. Exercise caution to avoid damaging the operating system.\\n7.  **FORENSIC ANALYSIS:** Conduct a full forensic investigation of '{ComputerName}' to identify the initial compromise vector, scope of impact, and other Indicators of Compromise (IOCs).\\n8.  **THREAT HUNT:** Search your environment for other systems with similar suspicious Registry Run key entries or activities by the same user/process."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the registry access."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the event occurred."
+      },
+      {
+        "name": "SubjectUserName",
+        "required": true,
+        "description": "The user account that accessed the registry object."
+      },
+      {
+        "name": "ProcessName",
+        "required": true,
+        "description": "The process that attempted to access the registry object."
+      },
+      {
+        "name": "ObjectName",
+        "required": true,
+        "description": "The full path to the registry object that was accessed (expected to contain Run key)."
+      },
+      {
+        "name": "AccessMask",
+        "required": true,
+        "description": "The type of access performed on the registry object."
+      },
+      {
+        "name": "ObjectValueName",
+        "required": false,
+        "description": "The specific registry value name being accessed/modified, if available."
+      }
+    ]
+  }
+]

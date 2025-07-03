@@ -1,0 +1,75 @@
+[
+  {
+    "name": "MSHTA Spawned by SVCHOST Detected",
+    "description": "Highly suspicious and unusual behavior detected: mshta.exe spawned as a child process of svchost.exe, indicating potential proxy execution, abuse of trusted processes, or APT activity (e.g., LethalHTA).",
+    "tags": [
+      "security",
+      "detection",
+      "critical",
+      "windows",
+      "mshta",
+      "svchost",
+      "lolbin",
+      "proxy_execution",
+      "lethalhta",
+      "apt",
+      "TA0005",
+      "TA0002",
+      "T1218",
+      "T1218.005"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "CRITICAL SEVERITY ALERT: MSHTA Spawned by SVCHOST Detected.\\n\\nThe Microsoft HTML Application Host (`mshta.exe`) was launched by `svchost.exe` on host '{ComputerName}' by user '{User}' at {Timestamp}. The command line for `mshta.exe` was '{CommandLine}', and for `svchost.exe` was '{ParentCommandLine}'. This is an **extremely unusual and highly suspicious** process relationship, strongly indicating a compromise, malicious proxy execution, or advanced threat activity (e.g., LethalHTA technique).\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **User**: {User}\\n* **Child Process Image**: {Image} (`mshta.exe`)\\n* **Child Process Command Line**: {CommandLine}\\n* **Parent Process Image**: {ParentImage} (`svchost.exe`)\\n* **Parent Process Command Line**: {ParentCommandLine}\\n* **Sysmon Event ID**: {EventID}\\n* **Sysmon Rule Name**: {RuleName}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** Disconnect host '{ComputerName}' from the network **immediately** to contain the threat and prevent any further lateral movement, data exfiltration, or damage. **DO NOT power off the system, but ensure it cannot communicate with other hosts.**\\n2.  **ASSUME COMPROMISE:** This is a rare and highly malicious event. **Assume the host is compromised and act accordingly.**\\n3.  **INVESTIGATE PARENT SVCHOST:** This is paramount. The `svchost.exe` instance that launched `mshta.exe` is likely either: \\n    * A legitimate `svchost.exe` process that has been compromised (e.g., via injection or abuse of a loaded service DLL). Investigate its associated service(s) using `tasklist /svc` or Process Explorer. \\n    * A malicious executable masquerading as `svchost.exe`. Check its path, digital signature, and hash against known good binaries. \\n    * Review `ParentCommandLine` for any unusual service names or parameters.\\n4.  **ANALYZE MSHTA COMMAND LINE & REFERENCED OBJECTS:** Thoroughly examine `{CommandLine}` of `mshta.exe`. Identify the script, URL, or data URI being executed. If it's a file, locate and obtain a copy for analysis. If it's a data URI, extract and deobfuscate the embedded code.\\n5.  **MEMORY FORENSICS:** Perform a full memory dump of '{ComputerName}' immediately. Analyze the memory dump for injected code, malicious modules, network connections, and other in-memory artifacts. This is crucial for understanding the full scope of the compromise.\\n6.  **FILE SYSTEM FORENSICS:** Conduct a full forensic analysis of '{ComputerName}'. Look for newly created files, modified system files, persistence mechanisms, and any tools or malware dropped by the attacker.\\n7.  **NETWORK TRAFFIC ANALYSIS:** Review network logs for '{ComputerName}' around the event time. Look for suspicious outbound connections (C2, data exfiltration) or unusual inbound connections that may have initiated the compromise.\\n8.  **USER ACCOUNT INVESTIGATION:** Investigate the '{User}' account associated with the `mshta.exe` process for signs of compromise, unusual logins, or other malicious activity. Even if `svchost.exe` runs as SYSTEM, the launched `mshta.exe` might run under a different user context, or the SYSTEM account itself could be compromised.\\n9.  **THREAT HUNT:** Search your environment for other instances of `mshta.exe` being spawned by `svchost.exe` or other highly unusual parent-child process relationships."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the mshta.exe process creation."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to the mshta.exe executable."
+      },
+      {
+        "name": "ParentImage",
+        "required": true,
+        "description": "The full path to the parent process, svchost.exe."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line arguments of mshta.exe."
+      },
+      {
+        "name": "ParentCommandLine",
+        "required": false,
+        "description": "The full command line arguments of the svchost.exe parent process, if available."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which mshta.exe was executed."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the mshta.exe process was created."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Sysmon event ID (1)."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The Sysmon rule name that triggered the alert, if available."
+      }
+    ]
+  }
+]

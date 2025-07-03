@@ -1,0 +1,73 @@
+[
+  {
+    "name": "PsExec Tool Execution Detected",
+    "description": "Detection of PsExec service (PSEXESVC) installation or execution events, indicating potential lateral movement or remote execution by adversaries.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "lateral_movement",
+      "remote_execution",
+      "lolbin",
+      "psexec",
+      "TA0002",
+      "TA0008",
+      "T1569",
+      "T1569.002"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: PsExec Tool Execution Detected.\\n\\nA PsExec service (PSEXESVC) installation or execution event was detected on host '{ComputerName}' by user '{User}' at {Timestamp}. This tool is commonly used for legitimate administration, but also extensively by threat actors for lateral movement and remote code execution.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **User (Context)**: {User}\\n* **Event ID**: {EventID}\\n* **Service Name**: {ServiceName} (expected 'PSEXESVC')\\n* **Service File Name**: {ServiceFileName} (if available, for EventID 7045)\\n* **Image (Sysmon)**: {Image} (expected '\\PSEXESVC.exe')\\n* **Command Line (Sysmon)**: {CommandLine} (if available)\\n* **Parent Image (Sysmon)**: {ParentImage} (if available)\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** Disconnect host '{ComputerName}' from the network if this activity is deemed suspicious or unauthorized. This is critical to contain potential lateral movement and command and control.\\n2.  **VERIFY LEGITIMACY (EXTREME SKEPTICISM):** PsExec is a dual-use tool. **Assume malicious intent unless definitively proven otherwise** by authorized and documented IT administration, automation, or software deployment activities. Contact the user '{User}' or relevant IT teams (e.g., Systems Admins, Help Desk) for immediate verification.\\n3.  **CONTEXTUAL ASSESSMENT:**\\n    * **Is this user '{User}' authorized to use PsExec on '{ComputerName}'?** Check their role and typical activities.\\n    * **Is '{ComputerName}' a high-value target (e.g., Domain Controller, critical server)?** If so, escalate severity.\\n    * **What is the source of the PsExec command?** Review the `ParentImage` and `CommandLine` (if available from Sysmon) for unusual sources or parameters. Was it executed from a suspicious IP address or workstation?\\n    * **What was the command executed by PsExec?** While this alert detects the service creation/start, investigate logs on the source machine for the actual `psexec.exe` command that was issued.\\n4.  **NETWORK TRAFFIC ANALYSIS:** Review network logs (firewall, NetFlow, proxy) for connections from '{ComputerName}' to other internal or external hosts around the time of the alert. PsExec involves SMB and RPC traffic.\\n5.  **USER ACCOUNT INVESTIGATION:** If the activity is suspicious, investigate the '{User}' account for signs of compromise (e.g., anomalous login times, failed authentication attempts, activity on other hosts). Consider forcing a password reset and enforcing Multi-Factor Authentication (MFA).\\n6.  **HOST FORENSIC ANALYSIS:** Conduct a full forensic investigation of '{ComputerName}' to identify other Indicators of Compromise (IOCs), such as new processes, persistence mechanisms, or changes to the file system. Remove the PSEXESVC service manually if it persists.\\n7.  **THREAT HUNT:** Search your environment for other instances of PSEXESVC installation/execution, or `psexec.exe` usage across your network, especially by '{User}' or to/from '{ComputerName}'."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The date and time when the PsExec activity was detected."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the PsExec service was installed or executed."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account context under which the service event or process creation occurred."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Windows Event ID (7045, 7036) or Sysmon Event ID (1) that triggered the alert."
+      },
+      {
+        "name": "ServiceName",
+        "required": false,
+        "description": "The name of the service involved (expected 'PSEXESVC'), relevant for 7045/7036."
+      },
+      {
+        "name": "ServiceFileName",
+        "required": false,
+        "description": "The file name of the service executable (if available), relevant for 7045."
+      },
+      {
+        "name": "Image",
+        "required": false,
+        "description": "The full path of the process image (expected '\\PSEXESVC.exe'), relevant for Sysmon 1."
+      },
+      {
+        "name": "CommandLine",
+        "required": false,
+        "description": "The command line of the process, relevant for Sysmon 1."
+      },
+      {
+        "name": "ParentImage",
+        "required": false,
+        "description": "The parent process image, relevant for Sysmon 1."
+      }
+    ]
+  }
+]

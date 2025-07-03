@@ -1,0 +1,63 @@
+[
+  {
+    "name": "Msbuild Spawned by Unusual Parent Process",
+    "description": "Detection of msbuild.exe executed by an uncommon parent process, potentially indicating defense evasion or proxy execution via a trusted Microsoft binary.",
+    "tags": [
+      "security",
+      "detection",
+      "medium",
+      "windows",
+      "msbuild",
+      "lolbin",
+      "proxy_execution",
+      "defense_evasion",
+      "TA0005",
+      "TA0002",
+      "T1127",
+      "T1127.001"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "MEDIUM SEVERITY ALERT: Msbuild Spawned by Unusual Parent Process.\\n\\n`MSBuild.exe` was executed by an unusual parent process '{ParentImage}' on host '{ComputerName}' by user '{User}' at {Timestamp}. The full command line was '{CommandLine}'. `MSBuild.exe` is often abused by adversaries to execute arbitrary code for defense evasion. This behavior is outside typical development activities and warrants investigation.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **User**: {User}\\n* **Parent Process Image**: {ParentImage}\\n* **Child Process Image**: {Image} (`MSBuild.exe`)\\n* **Command Line**: {CommandLine}\\n* **Sysmon Event ID**: 1\\n* **Sysmon Rule Name**: {RuleName}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (PRIORITY MEDIUM):**\\n\\n1.  **VERIFY LEGITIMACY:** Determine if this `MSBuild.exe` execution is legitimate. \\n    * **Is '{ParentImage}' a known and authorized process in your environment that legitimately invokes `MSBuild.exe` (e.g., a custom build script, an unusual CI/CD agent, or a specific development tool not in the exclusion list)?**\\n    * Contact the user '{User}' and relevant development/IT teams to confirm if they initiated a build or related process around this time.\\n2.  **ANALYZE COMMAND LINE & PROJECT FILE:** Examine the full `CommandLine` of `MSBuild.exe`. This often contains a path to a `.csproj`, `.vbproj`, or `.vcxproj` file, or a custom `.xml` build file. \\n    * Obtain a copy of the referenced project/build file. Review its contents for suspicious tasks, custom tasks, or embedded code (e.g., using `InlineTask` or `Code` elements). Look for PowerShell, cmd.exe, or other suspicious commands.\\n    * If the file is not found or is in an unusual location (e.g., `Temp` directory), this is highly suspicious.\\n3.  **INVESTIGATE PARENT PROCESS ORIGIN:** If '{ParentImage}' is not a known legitimate process, investigate how it came to be on the system and why it launched `MSBuild.exe`. Review its own command line, creation events, and network connections.\\n4.  **USER ACCOUNT INVESTIGATION:** If the activity is suspicious, investigate the '{User}' account for signs of compromise (e.g., anomalous logins, failed authentications, activity on other hosts).\\n5.  **ENDPOINT SCAN:** Perform a full endpoint anti-malware scan on '{ComputerName}'.\\n6.  **FORENSIC ANALYSIS (IF MALICIOUS):** If the `MSBuild.exe` activity is confirmed malicious, conduct a full forensic investigation of '{ComputerName}' to identify the initial compromise vector, scope of impact, and other Indicators of Compromise (IOCs).\\n7.  **THREAT HUNT:** Search your environment for other instances of `MSBuild.exe` launched by unusual parent processes or executing suspicious project files."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the MSBuild.exe process creation."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to the MSBuild.exe executable."
+      },
+      {
+        "name": "ParentImage",
+        "required": true,
+        "description": "The full path to the parent process that launched MSBuild.exe."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line arguments of MSBuild.exe."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which MSBuild.exe was executed."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where MSBuild.exe was created."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The Sysmon rule name that triggered the alert, if available."
+      }
+    ]
+  }
+]

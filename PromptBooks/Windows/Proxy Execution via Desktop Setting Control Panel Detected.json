@@ -1,0 +1,63 @@
+[
+  {
+    "name": "Proxy Execution via Desktop Setting Control Panel Detected",
+    "description": "Suspicious use of rundll32.exe with desk.cpl to install/execute a screensaver (.scr) file, indicating potential defense evasion or persistence.",
+    "tags": [
+      "security",
+      "detection",
+      "medium",
+      "windows",
+      "defense_evasion",
+      "persistence",
+      "lolbin",
+      "screensaver",
+      "TA0005",
+      "TA0003",
+      "T1218",
+      "T1218.011"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "MEDIUM SEVERITY ALERT: Proxy Execution via Desktop Setting Control Panel Detected.\\n\\nSuspicious execution of `rundll32.exe` with command line '{CommandLine}' involving `desk.cpl` and an `.scr` file was observed on host '{ComputerName}' by user '{User}' at {Timestamp}. The parent process was '{ParentImage}'. This technique can be abused by adversaries to execute malicious code via a signed binary, serving as a defense evasion or persistence mechanism.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **User**: {User}\\n* **Process**: {Image}\\n* **Parent Process**: {ParentImage}\\n* **Command Line**: {CommandLine}\\n* **Sysmon Event ID**: 1\\n* **Sysmon Rule Name**: {RuleName}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (PRIORITY MEDIUM):**\\n\\n1.  **VERIFY LEGITIMACY:** Determine if this screensaver installation/execution was a legitimate action by the user '{User}' or an authorized system management tool. Contact the user directly for confirmation. Pay close attention if the user is not typically authorized to install custom screensavers.\\n2.  **ANALYZE SCREENSAVER FILE:** The `CommandLine` will contain the path to the `.scr` file. Obtain a copy of this file for analysis. If it is not a known legitimate system screensaver, perform static and dynamic analysis in a sandbox environment (e.g., submit to VirusTotal). Look for malicious indicators, obfuscation, or unusual behavior.\\n3.  **INVESTIGATE PARENT PROCESS & USER ACTIVITY:** Investigate the '{ParentImage}' process that launched `rundll32.exe`. Was it a legitimate application, or something suspicious? Review '{User}'s recent activity on '{ComputerName}' for other suspicious actions leading up to this event (e.g., execution of unknown files, unusual network connections, phishing attempts).\\n4.  **CHECK FOR PERSISTENCE:** Even if the file itself is not immediately malicious, its execution as a screensaver could indicate an attempt at persistence. Check relevant registry keys (e.g., `HKCU\\Control Panel\\Desktop\\SCRNSAVE.EXE`), startup locations, and scheduled tasks on '{ComputerName}'.\\n5.  **NETWORK TRAFFIC ANALYSIS:** If the `.scr` file was downloaded, analyze network logs for connections to the source of the download around the event timestamp.\\n6.  **HOST FORENSIC ANALYSIS (IF MALICIOUS):** If the screensaver file or associated activity is confirmed malicious, proceed with a full forensic investigation of '{ComputerName}' to identify the initial compromise vector, scope of impact, and other IOCs.\\n7.  **THREAT HUNT:** Search your environment for other instances of `rundll32.exe` executing with similar `desk.cpl` parameters, especially if the `ParentImage` is unusual or the user is not typically involved in such activities."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of when the rundll32.exe process was created."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to the rundll32.exe executable."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line arguments of rundll32.exe, including desk.cpl, InstallScreenSaver, and the .scr file path."
+      },
+      {
+        "name": "ParentImage",
+        "required": true,
+        "description": "The full path to the parent process that launched rundll32.exe."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the process ran."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the event occurred."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The Sysmon rule name that triggered the alert, if available."
+      }
+    ]
+  }
+]
