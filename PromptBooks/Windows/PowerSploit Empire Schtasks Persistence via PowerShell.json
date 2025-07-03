@@ -1,0 +1,89 @@
+[
+  {
+    "name": "PowerSploit/Empire Schtasks Persistence via PowerShell",
+    "description": "Detects the creation of a scheduled task (schtasks.exe) executed by PowerShell, using command-line arguments commonly associated with penetration testing frameworks like PowerSploit or Empire for persistence on compromised Windows systems.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "persistence",
+      "execution",
+      "privilege_escalation",
+      "post_exploitation",
+      "empire",
+      "powersploit",
+      "apt",
+      "TA0003",
+      "TA0002",
+      "TA0004",
+      "T1053",
+      "T1053.005",
+      "T1059",
+      "T1059.001"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: PowerSploit/Empire Scheduled Task Persistence Detected!\\n\\n**A scheduled task creation (`schtasks.exe`) was initiated by PowerShell, with command-line arguments indicative of penetration testing frameworks like PowerSploit or Empire, on host '{ComputerName}' at {Timestamp}.** This is a strong indicator of **Persistence (TA0003)** and **Execution (TA0002)**, likely a post-exploitation activity.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **User Account**: {User} (Account that created the task)\\n* **Scheduled Task Process**: {Image} ({CommandLine})\\n* **Parent Process (Initiator)**: {ParentImage} ({ParentCommandLine}) (Expected PowerShell.exe)\\n* **Event ID**: {EventID} (Expected Sysmon 1 or Security 4688)\\n* **Process Hashes**: {Hashes} (if Sysmon)\\n* **Integrity Level**: {IntegrityLevel} (if Sysmon)\\n* **Rule Name**: {RuleName}\\n\\nAdversaries use scheduled tasks to maintain access to a compromised system after initial intrusion. The use of PowerShell and suspicious task parameters is highly indicative of malicious intent.\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** Isolate '{ComputerName}' from the network to prevent further compromise, command and control, or lateral movement.\\n2.  **FORENSIC INVESTIGATION:** Launch a full forensic investigation on '{ComputerName}'. Focus on:\\n    * **Scheduled Tasks:** Immediately inspect and delete the suspicious scheduled task. You can use `schtasks /query /tn \"[TASK_NAME]\" /xml` to inspect and `schtasks /delete /tn \"[TASK_NAME]\" /f` to delete. Look for tasks created around {Timestamp} or any tasks with suspicious names or commands (e.g., those from the 'suspicious_task_details' list in the rule).\\n    * **PowerShell History:** Examine PowerShell console history, transcription logs, and event logs for the full PowerShell command that initiated `schtasks.exe`.\\n    * **Process Activity:** Review all process creation events (Sysmon Event ID 1 or Security Event ID 4688) around the time of the alert for other suspicious processes launched by PowerShell or '{User}'.\\n    * **User Account:** Investigate the '{User}' account for signs of compromise (e.g., unauthorized logins, privilege escalation).\\n    * **Indicators of Compromise (IOCs):** Extract any file hashes ({Hashes}), IP addresses, or domain names from the `CommandLine` and search for them across your environment and in threat intelligence sources.\\n3.  **MALWARE SCAN:** Perform a full anti-malware scan on the system.\\n4.  **REVIEW ACCESS CONTROLS:** Ensure least privilege is enforced for users and processes to prevent unauthorized scheduled task creation."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the affected system."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the task was created."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path of schtasks.exe."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line of schtasks.exe, including arguments for task creation."
+      },
+      {
+        "name": "ParentImage",
+        "required": true,
+        "description": "The full path of the parent process, expected to be powershell.exe."
+      },
+      {
+        "name": "ParentCommandLine",
+        "required": false,
+        "description": "The full command line of the parent powershell.exe process, if available."
+      },
+      {
+        "name": "EventID",
+        "required": false,
+        "description": "The specific event ID (e.g., Sysmon 1, Security 4688)."
+      },
+      {
+        "name": "Hashes",
+        "required": false,
+        "description": "Hashes of the executables (e.g., schtasks.exe, powershell.exe), typically from Sysmon."
+      },
+      {
+        "name": "IntegrityLevel",
+        "required": false,
+        "description": "The integrity level of the process (e.g., High, System), typically from Sysmon."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]

@@ -1,0 +1,81 @@
+[
+  {
+    "name": "Successful Login Event (Time-Based Filtering in SIEM Needed)",
+    "description": "Detects successful user login attempts that occur outside of an organization's regular business hours, indicating potential account compromise, unauthorized access, or insider threat activity.",
+    "tags": [
+      "security",
+      "detection",
+      "medium",
+      "windows",
+      "linux",
+      "azure_ad",
+      "vpn",
+      "application",
+      "initial_access",
+      "unauthorized_access",
+      "insider_threat",
+      "account_compromise",
+      "anomalous_activity",
+      "TA0001",
+      "T1078"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "MEDIUM SEVERITY ALERT: Successful Login Outside Normal Business Hours!\\n\\nA successful login by user '{User}' from Source IP '{SourceIp}' on host/service '{ComputerName}' (Timestamp: {Timestamp}) has been detected outside of defined normal business hours.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **User Account**: {User}\\n* **Source IP**: {SourceIp} (Origin of the login attempt)\\n* **Target Host/Service**: {ComputerName} (or {DestinationIp})\\n* **Event ID (Windows)**: {EventID} (Expected 4624 if Windows)\\n* **Logon Type (Windows)**: {LogonType} (e.g., Interactive, RemoteInteractive, Network)\\n* **Application/Service**: {Application} (if available)\\n* **Full Log Message**: {Message}\\n* **Rule Name**: {RuleName}\\n\\nThis event is a potential indicator of **Account Compromise (T1078 - Valid Accounts)**, **Unauthorized Access (TA0001)**, or **Insider Threat Activity**. While some legitimate false positives are expected, investigation is warranted, especially for critical accounts or unusual login patterns.\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (MEDIUM PRIORITY - INVESTIGATE PROMPTLY):**\\n\\n1.  **VERIFY LEGITIMACY:** Immediately contact the user '{User}' through an out-of-band channel (e.g., phone call to a registered number, internal chat) to verify the legitimacy of this login. Do NOT rely on email for verification.\\n2.  **CONTEXTUAL ANALYSIS:**\\n    * **User Role/Permissions:** Is '{User}' a privileged account or an executive? Increased sensitivity for such accounts.\\n    * **Source IP Location:** Perform a GeoIP lookup on '{SourceIp}'. Is the login from an unexpected geographical location, especially combined with the time of day? Is it a new or unusual IP for this user?\\n    * **Logon Type:** Is the `LogonType` (e.g., interactive, RDP) consistent with expected behavior for this user/system?\\n    * **Previous Activity:** Review recent login history for '{User}'. Are there other suspicious logins (e.g., failed attempts, logins from multiple locations simultaneously - 'impossible travel')?\\n3.  **REVIEW AUTHENTICATION DETAILS:** Check if MFA was used for the login. If not, consider enforcing MFA for this user or all users.\\n4.  **MONITOR FOR FOLLOW-UP ACTIVITY:** Even if the login appears legitimate, continuously monitor '{User}'s activity for any unusual actions (e.g., access to sensitive data, new privilege assignments, execution of unusual commands) immediately following the login.\\n5.  **WHITELISTING/POLICY REVIEW:** If this is a recurring, legitimate pattern (e.g., for specific remote workers or global teams), update your SIEM's baseline or whitelisting configuration to reduce false positives for this specific user/IP combination. Re-evaluate your defined 'normal business hours' if they are too restrictive for your workforce."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the successful login event."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The username that successfully logged in."
+      },
+      {
+        "name": "SourceIp",
+        "required": true,
+        "description": "The IP address from which the login occurred."
+      },
+      {
+        "name": "DestinationIp",
+        "required": false,
+        "description": "The IP address of the target system where the login occurred."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the target system where the login occurred."
+      },
+      {
+        "name": "EventID",
+        "required": false,
+        "description": "The specific event ID for the successful login (e.g., 4624 for Windows)."
+      },
+      {
+        "name": "Message",
+        "required": false,
+        "description": "The full event message providing context for the login."
+      },
+      {
+        "name": "LogonType",
+        "required": false,
+        "description": "The type of logon for Windows events (e.g., Interactive, Network, RemoteInteractive)."
+      },
+      {
+        "name": "Application",
+        "required": false,
+        "description": "The application or service used for the login, if available."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]

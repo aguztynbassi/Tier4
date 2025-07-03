@@ -1,0 +1,85 @@
+[
+  {
+    "name": "Successful Login Using a Default/Well-Known Account",
+    "description": "Detects successful login attempts using default, common, or vendor-supplied accounts, indicating a critical security misconfiguration or account compromise.",
+    "tags": [
+      "security",
+      "detection",
+      "critical",
+      "windows",
+      "linux",
+      "network_device",
+      "application",
+      "cloud_provider",
+      "initial_access",
+      "privilege_escalation",
+      "unauthorized_access",
+      "account_compromise",
+      "security_misconfiguration",
+      "critical_risk",
+      "compliance.pci",
+      "TA0001",
+      "TA0004",
+      "T1078",
+      "T1078.001"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "CRITICAL SEVERITY ALERT: Successful Login with Default/Well-Known Account Detected!\\n\\n**A successful login attempt using the default/well-known account '{User}' from Source IP '{SourceIp}' on host '{ComputerName}' (Timestamp: {Timestamp}) has been detected.**\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **User Account**: {User} (Default/Well-Known Account)\\n* **Source IP**: {SourceIp} (Origin of the login attempt)\\n* **Target Host/Device**: {ComputerName} (or {DestinationIp})\\n* **Event ID (Windows)**: {EventID} (Expected 4624 if Windows)\\n* **Logon Type (Windows)**: {LogonType} (e.g., Interactive, RemoteInteractive, Network)\\n* **Application/Service**: {Application} (if available)\\n* **Full Log Message**: {Message}\\n* **Rule Name**: {RuleName}\\n\\nThis event is a **CRITICAL RISK** indicating either a severe **Security Misconfiguration** (T1078.001 - Default Accounts) or an active **Account Compromise** leading to **Unauthorized Access (TA0001)**. If this account is privileged, it also signifies potential **Privilege Escalation (TA0004)**. This is a direct violation of **PCI DSS Requirement 2.1** and requires immediate action.\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (EXTREME PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **IMMEDIATE ACCOUNT DISABLEMENT/PASSWORD CHANGE:** Immediately disable the '{User}' account on '{ComputerName}' or change its password to a complex, unique, and randomly generated value. If this account is critical for a legacy system and cannot be immediately disabled, implement compensating controls and prioritize its decommissioning.\\n2.  **IMMEDIATE HOST ISOLATION:** If the '{SourceIp}' is external or unknown, or if the login type indicates interactive access (RDP, console), consider immediately isolating '{ComputerName}' from the network to prevent further compromise.\\n3.  **FORENSIC INVESTIGATION:** Launch a full forensic investigation on host '{ComputerName}' and analyze logs from '{SourceIp}' (if it's an internal host). Look for:\\n    * **Post-Exploitation Activity:** Lateral movement, privilege escalation, data staging, unauthorized command execution, or new persistence mechanisms immediately following the login.\\n    * **Additional Compromised Accounts:** Check for other suspicious logins or account enumeration.\\n    * **Malware Presence:** Scan for any malware or suspicious files.\\n4.  **REVIEW ACCESS POLICIES:** Verify that strong password policies, multi-factor authentication (MFA), and strict access controls are enforced, especially for privileged accounts. All default accounts should ideally be disabled, renamed, or have complex passwords changed during initial setup.\\n5.  **THREAT INTELLIGENCE:** Perform threat intelligence lookups on '{SourceIp}'.\\n6.  **REPORT TO COMPLIANCE:** Document this incident and report it to your compliance team, especially if subject to PCI DSS or similar regulations."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the successful login event."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The default/well-known username that successfully logged in."
+      },
+      {
+        "name": "SourceIp",
+        "required": true,
+        "description": "The IP address from which the successful login originated."
+      },
+      {
+        "name": "DestinationIp",
+        "required": false,
+        "description": "The IP address of the target system where the login occurred."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the target system where the login occurred."
+      },
+      {
+        "name": "EventID",
+        "required": false,
+        "description": "The specific event ID for the successful login (e.g., 4624 for Windows)."
+      },
+      {
+        "name": "Message",
+        "required": false,
+        "description": "The full event message providing context for the login."
+      },
+      {
+        "name": "LogonType",
+        "required": false,
+        "description": "The type of logon for Windows events (e.g., Interactive, RemoteInteractive, Network)."
+      },
+      {
+        "name": "Application",
+        "required": false,
+        "description": "The application or service used for the login, if available."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]
