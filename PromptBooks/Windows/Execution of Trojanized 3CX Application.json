@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Execution of Trojanized 3CX Application",
+    "description": "A known trojanized version of the 3CX Desktop application has been executed, indicating a critical supply chain compromise.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "supply_chain_attack",
+      "trojanized_software",
+      "lazarus_group",
+      "defense_evasion",
+      "T1036",
+      "TA0005"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: Execution of Trojanized 3CX Application Detected.\\n\\nA known malicious version of the 3CX Desktop App (Version: '{FileVersion}') has been executed on host '{ComputerName}' by user '{User}' at {Timestamp}. This indicates a critical supply chain compromise, potentially by the Lazarus Group, and immediate action is required.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **User**: {User}\\n* **Image Executed**: {Image}\\n* **Product Name**: {Product}\\n* **Company**: {Company}\\n* **File Version**: {FileVersion}\\n* **Event ID**: 1 (Sysmon Process Creation)\\n* **Sysmon Rule Name**: {RuleName}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (PRIORITIZE!):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** Immediately disconnect host '{ComputerName}' from the network to prevent further compromise, command and control (C2) communication, or lateral movement. **DO NOT power off the system.**\\n2.  **STOP AND DISABLE 3CX APP:** On the isolated host, terminate all instances of `3CXDesktopApp.exe` and disable it from running automatically (e.g., remove from startup, disable scheduled tasks). Consider uninstalling the application *after* forensic collection.\\n3.  **FORENSIC IMAGE AND MEMORY DUMP:** Perform a full forensic disk image and a memory dump of '{ComputerName}'. This is critical to preserve evidence of the compromise and identify the malicious payload and its activities.\\n4.  **HUNT FOR IOCs:** Based on public advisories (e.g., CISA AA23-082A), hunt for known Indicators of Compromise (IOCs) associated with this compromise across your entire environment: \\n    * Network connections to known C2 IPs/domains. \\n    * Presence of specific malicious DLLs or executables dropped by the trojanized app (e.g., `d3dcompiler_47.dll`, `ffmpeg.dll`, `msedgewebview2.exe`). \\n    * Registry modifications or scheduled tasks created by the malware.\\n5.  **REVIEW USER ACTIVITY:** Investigate '{User}' account activity for any suspicious logins or actions since the compromise, especially around the execution timestamp.\\n6.  **UPDATE AND PATCH:** Ensure all 3CX Desktop App installations across your organization are immediately updated to the **latest, officially verified, non-compromised version**. Advise users to only download software directly from official vendor websites.\\n7.  **THREAT HUNT ACROSS NETWORK:** Expand your threat hunt to other systems that have the 3CX Desktop App installed, as well as network logs for outbound connections from any 3CX installations to suspicious destinations.\\n8.  **COMMUNICATE INTERNALLY:** Alert relevant internal stakeholders (IT, Security Leadership, Legal) about the confirmed compromise."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname where the trojanized 3CX app was executed."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the process ran."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to the executable image (3CXDesktopApp.exe)."
+      },
+      {
+        "name": "Product",
+        "required": true,
+        "description": "The product name from the file metadata."
+      },
+      {
+        "name": "Company",
+        "required": true,
+        "description": "The company name from the file metadata."
+      },
+      {
+        "name": "FileVersion",
+        "required": true,
+        "description": "The file version of the executed 3CX Desktop App."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The Sysmon rule name that triggered the event, if available."
+      }
+    ]
+  }
+]

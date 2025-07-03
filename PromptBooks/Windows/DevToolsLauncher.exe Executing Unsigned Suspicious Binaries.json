@@ -1,0 +1,73 @@
+[
+  {
+    "name": "DevToolsLauncher.exe Executing Unsigned/Suspicious Binaries",
+    "description": "Detection of `devtoolslauncher.exe` being used to proxy execution of other binaries, indicating potential defense evasion and malicious execution.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "defense_evasion",
+      "execution",
+      "proxy_execution",
+      "living_off_the_land",
+      "TA0005",
+      "TA0002",
+      "T1218",
+      "T1218.007"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: DevToolsLauncher.exe Proxy Execution Detected!\\n\\n`devtoolslauncher.exe` was observed executing with the `LaunchForDeploy` command on host '{ComputerName}' by user '{User}' via process '{ParentProcessName}' at {Timestamp}. The full command line was: '{CommandLine}'.\\n\\nThis is a strong indicator of **Defense Evasion (T1218 - System Binary Proxy Execution)**, where an adversary is leveraging a legitimate, signed Microsoft binary to execute malicious payloads and bypass security controls.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **User**: {User}\\n* **Process Name**: {ProcessName} (`devtoolslauncher.exe`)\\n* **Command Line**: {CommandLine} (Crucial for identifying the proxied command/file)\\n* **Parent Process**: {ParentProcessName}\\n* **Parent Command Line**: {ParentCommandLine}\\n* **Event ID**: {EventID} (Sysmon Process Creation)\\n* **Sysmon Rule Name**: {RuleName}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** Immediately disconnect host '{ComputerName}' from the network to prevent further malicious activity and potential lateral movement. **DO NOT power off the system.**\\n2.  **FORENSIC IMAGE AND MEMORY DUMP:** Perform a full forensic disk image and a memory dump of '{ComputerName}'. This is crucial to preserve evidence and identify the actual malicious payload being executed.\\n3.  **IDENTIFY THE PROXIED PAYLOAD:** Analyze the `CommandLine` (`{CommandLine}`) to identify the file or command that `devtoolslauncher.exe` was used to launch. Locate this file on the system. Obtain its hash and immediately check it against threat intelligence sources (e.g., VirusTotal, Any.Run). Perform static and dynamic analysis to understand its functionality.\\n4.  **TERMINATE MALICIOUS PROCESSES:** Identify and terminate the malicious payload's process and any related child processes. \\n5.  **INVESTIGATE USER AND PARENT PROCESS:** Investigate the '{User}' account for signs of compromise (e.g., unauthorized logins, privilege escalation). Examine the '{ParentProcessName}' and its command line '{ParentCommandLine}' to understand how `devtoolslauncher.exe` was launched and the initial access vector.\\n6.  **SCOPE OF COMPROMISE:** Determine if this activity is isolated or part of a broader compromise. Look for similar activity on other hosts.\\n7.  **ENHANCE WHITESLISTING/BLOCKING:** If `devtoolslauncher.exe` is not legitimately used in this manner on the affected system/network segment, consider implementing stricter controls (e.g., application whitelisting) to prevent its abuse for proxy execution."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname where the activity occurred."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which `devtoolslauncher.exe` was executed."
+      },
+      {
+        "name": "ProcessName",
+        "required": true,
+        "description": "The name of the process that executed (expected to be `devtoolslauncher.exe`)."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line of `devtoolslauncher.exe`, including the proxied command/file."
+      },
+      {
+        "name": "ParentProcessName",
+        "required": false,
+        "description": "The name of the parent process that launched `devtoolslauncher.exe`."
+      },
+      {
+        "name": "ParentCommandLine",
+        "required": false,
+        "description": "The full command line of the parent process."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Sysmon Event ID (expected to be 1)."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]

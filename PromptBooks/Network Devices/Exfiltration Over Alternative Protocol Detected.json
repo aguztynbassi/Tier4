@@ -1,0 +1,59 @@
+[
+  {
+    "name": "Exfiltration Over Alternative Protocol Detected",
+    "description": "Detection of large-volume data exfiltration using non-standard or alternative network protocols.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "network",
+      "data_exfiltration",
+      "alternative_protocol",
+      "TA0010",
+      "T1048"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: Exfiltration Over Alternative Protocol Detected.\\n\\nAn unusually large volume of data (**{bytes_transferred} bytes**) was transferred over a non-standard protocol ('{protocol}') from source IP '{source_ip}' (Port: {source_port}) to destination IP '{dest_ip}' (Port: {dest_port}) at {Timestamp}. This activity strongly indicates **data exfiltration** using a clandestine or unexpected network channel.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Source IP**: {source_ip}\\n* **Source Port**: {source_port}\\n* **Destination IP**: {dest_ip}\\n* **Destination Port**: {dest_port}\\n* **Protocol**: {protocol}\\n* **Bytes Transferred**: {bytes_transferred}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (HIGH PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **IMMEDIATE NETWORK SEGMENTATION:** Isolate the source host '{source_ip}' from the network **immediately** to contain the potential data exfiltration and prevent further malicious activity. **DO NOT power off the system.**\\n2.  **BLOCK DESTINATION:** Block the destination IP '{dest_ip}' and destination port '{dest_port}' at your network perimeter firewall. Research the reputation of '{dest_ip}' for any known malicious associations.\\n3.  **VERIFY LEGITIMACY:** Attempt to immediately verify if this large data transfer over '{protocol}' is legitimate. \\n    * Consult with IT/Network teams to determine if any authorized applications or services use this specific protocol for large transfers from '{source_ip}' to '{dest_ip}'. \\n    * Check for any recent change management requests related to network configurations or new applications.\\n4.  **FORENSIC ANALYSIS OF SOURCE HOST:** If the activity is suspicious or unconfirmed, perform a full forensic analysis of the host at '{source_ip}'. Investigate running processes, network connections, recently accessed files, and presence of malware or suspicious scripts that might be initiating this transfer.\\n5.  **PACKET CAPTURE (IF AVAILABLE):** If your network infrastructure allows, capture packet data for traffic to/from '{source_ip}' and '{dest_ip}' on '{protocol}'. Analyze the captured packets to understand the nature of the data being transferred and the communication pattern.\\n6.  **INVESTIGATE USER/PROCESS:** If available through correlating with endpoint logs, identify the user and process on '{source_ip}' that initiated the connection. Investigate for signs of compromise or unauthorized activity.\\n7.  **THREAT HUNT:** Search your network for other instances of large data transfers over non-standard protocols, or any communication to '{dest_ip}' or from '{source_ip}' using other protocols."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the network connection."
+      },
+      {
+        "name": "source_ip",
+        "required": true,
+        "description": "The source IP address of the traffic."
+      },
+      {
+        "name": "dest_ip",
+        "required": true,
+        "description": "The destination IP address of the traffic."
+      },
+      {
+        "name": "source_port",
+        "required": true,
+        "description": "The source port of the connection."
+      },
+      {
+        "name": "dest_port",
+        "required": true,
+        "description": "The destination port of the connection."
+      },
+      {
+        "name": "protocol",
+        "required": true,
+        "description": "The protocol of the connection."
+      },
+      {
+        "name": "bytes_transferred",
+        "required": true,
+        "description": "The volume of bytes transferred during the connection."
+      }
+    ]
+  }
+]

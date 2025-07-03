@@ -1,0 +1,73 @@
+[
+  {
+    "name": "ETW Trace Session Manipulation Detected",
+    "description": "Detection of commands used to stop, clear, or disable ETW trace sessions/providers, indicating potential defense evasion.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "defense_evasion",
+      "logging_evasion",
+      "system_integrity",
+      "TA0005",
+      "T1562",
+      "T1562.002",
+      "T1562.003",
+      "T1562.006"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: ETW Trace Session Manipulation Detected!\\n\\nCommands to stop, clear, or disable Event Tracing for Windows (ETW) trace sessions or providers were executed on host '{ComputerName}' by user '{User}' via process '{ProcessName}' at {Timestamp}. The full command line was: '{CommandLine}'.\\n\\nThis activity is a strong indicator of **Defense Evasion (T1562.006 - Disable or Modify System Logging)**, where an adversary is attempting to reduce forensic visibility or impair security tools that rely on ETW for logging and detection.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **User**: {User}\\n* **Process Name**: {ProcessName}\\n* **Command Line**: {CommandLine}\\n* **Parent Process**: {ParentProcessName}\\n* **Parent Command Line**: {ParentCommandLine}\\n* **Event ID**: {EventID} (Sysmon Process Creation)\\n* **Sysmon Rule Name**: {RuleName}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** Immediately disconnect host '{ComputerName}' from the network to prevent further malicious activity and potential data exfiltration. **DO NOT power off the system.**\\n2.  **FORENSIC IMAGE AND MEMORY DUMP:** Perform a full forensic disk image and a memory dump of '{ComputerName}'. This is crucial to preserve evidence of the compromise before logs are permanently lost or tampered with further.\\n3.  **RESTORE ETW/LOGGING CONFIGURATION:** If possible and safe to do so, attempt to immediately restore the default ETW trace session and logging configurations. This might involve restarting relevant services or applying group policies.\\n4.  **INVESTIGATE USER AND PARENT PROCESS:** Investigate the '{User}' account for signs of compromise (e.g., unauthorized logins, privilege escalation). Examine the '{ParentProcessName}' and its command line '{ParentCommandLine}' to understand how the ETW manipulation command was launched.\\n5.  **REVIEW MISSING LOGS/SECURITY BLIND SPOTS:** Determine which ETW trace sessions or event logs were targeted and for what duration. This will help identify potential blind spots in your logging and what malicious activities might have occurred during that period.\\n6.  **THREAT HUNT FOR RELATED ACTIVITY:** Search for other suspicious activities from '{User}' or on '{ComputerName}' (or other hosts) immediately before and after this ETW manipulation. Look for: \\n    * Initial access attempts. \\n    * Lateral movement. \\n    * Credential access. \\n    * Data exfiltration. \\n    * Execution of known malware. \\n7.  **ENHANCE LOGGING & MONITORING:** Review and enhance your logging and monitoring configurations to detect future attempts at impairing defenses. Consider implementing read-only access for logging configurations where possible."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname where the ETW manipulation occurred."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account that executed the command."
+      },
+      {
+        "name": "ProcessName",
+        "required": true,
+        "description": "The name of the process that executed the command (e.g., cmd.exe, powershell.exe, logman.exe)."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line used to interact with ETW."
+      },
+      {
+        "name": "ParentProcessName",
+        "required": false,
+        "description": "The name of the parent process that launched the command."
+      },
+      {
+        "name": "ParentCommandLine",
+        "required": false,
+        "description": "The full command line of the parent process."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID of the process creation (expected to be 1 for Sysmon)."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sysmon rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]

@@ -1,0 +1,70 @@
+[
+  {
+    "name": "System Time Discovery via Command-Line Tools",
+    "description": "Detection of command-line tools or PowerShell commands used to query system date, time, or time zone settings, indicating potential adversary reconnaissance.",
+    "tags": [
+      "security",
+      "detection",
+      "low",
+      "windows",
+      "reconnaissance",
+      "discovery",
+      "system_information",
+      "TA0007",
+      "T1124"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "LOW SEVERITY ALERT: System Time Discovery via Command-Line Tools Detected.\\n\\nA command-line tool or PowerShell command was executed on host '{ComputerName}' by user '{User}' via process '{ProcessName}' at {Timestamp} to query system time information. The full command line was: '{CommandLine}'.\\n\\nWhile legitimate, this activity can indicate **reconnaissance** by an adversary attempting to understand the system's configuration, time synchronization, or to prepare for time-based operations/evasion.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **User**: {User}\\n* **Process Name**: {ProcessName}\\n* **Command Line**: {CommandLine}\\n* **Parent Process**: {ParentProcessName}\\n* **Parent Command Line**: {ParentCommandLine}\\n* **Event ID**: {EventID}\\n* **Rule Name**: {RuleName}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (LOW PRIORITY - INVESTIGATE & CORRELATE):**\\n\\n1.  **CONTEXTUAL REVIEW:** Review the context of this activity. Is '{User}' typically performing administrative tasks that require querying system time? Is the `ParentProcessName` expected for this user/host?\\n2.  **CORRELATE WITH OTHER ACTIVITIES:** Search for other suspicious activities from '{User}' or on '{ComputerName}' around the same time. Look for: \\n    * Other **discovery commands** (e.g., `whoami`, `ipconfig`, `net view`, `tasklist`, `query user`, `tree`). \\n    * Attempts to modify system time or time zone settings. \\n    * Unusual network connections or process executions.\\n3.  **INVESTIGATE SOURCE/LOCATION:** If the command was executed from an unusual directory (e.g., a temporary folder, a user's Downloads folder) or via a suspicious parent process, this increases the suspicion level.\\n4.  **ANOMALY DETECTION:** Look for a sudden **spike in the frequency** of these queries from a single host or user, especially if it deviates from established baselines.\\n5.  **USER INTERVIEW (if needed):** If the activity remains suspicious after initial correlation, consider contacting '{User}' to inquire about the purpose of the command execution.\\n6.  **BASELINE NORMAL BEHAVIOR:** If system time queries are frequently used legitimately in your environment (e.g., by monitoring scripts), consider adjusting this rule by whitelisting specific users, parent processes, or command-line patterns to reduce noise."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname where the command was executed."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account that executed the command."
+      },
+      {
+        "name": "ProcessName",
+        "required": true,
+        "description": "The name of the process that executed the command (e.g., net.exe, powershell.exe)."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line used."
+      },
+      {
+        "name": "ParentProcessName",
+        "required": false,
+        "description": "The name of the parent process that launched the command."
+      },
+      {
+        "name": "ParentCommandLine",
+        "required": false,
+        "description": "The full command line of the parent process."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID of the process creation (e.g., 1 for Sysmon, 4688 for Windows Security)."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sysmon rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]

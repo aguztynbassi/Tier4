@@ -1,0 +1,76 @@
+[
+  {
+    "name": "BloodHound/Active Directory Reconnaissance Tool Execution Detected",
+    "description": "Detection of Active Directory reconnaissance tool execution (e.g., SharpHound.exe or extensive PowerShell AD queries), indicating an adversary mapping the environment.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "active_directory",
+      "reconnaissance",
+      "discovery",
+      "bloodhound",
+      "TA0007",
+      "T1087",
+      "T1087.002",
+      "T1069",
+      "T1069.002",
+      "T1018",
+      "T1482"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: BloodHound/Active Directory Reconnaissance Tool Execution Detected.\\n\\nExecution of an Active Directory reconnaissance tool (likely BloodHound's SharpHound.exe or extensive PowerShell AD queries) was detected on host '{ComputerName}' by user '{User}' via process '{ProcessName}' at {Timestamp}. The full command line was: '{CommandLine}'.\\n\\nThis activity is a strong indicator of an adversary mapping your Active Directory environment to identify privileged accounts, vulnerable configurations, and potential attack paths for lateral movement and privilege escalation.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **User**: {User}\\n* **Process Name**: {ProcessName}\\n* **Command Line**: {CommandLine}\\n* **Parent Process**: {ParentProcessName}\\n* **Parent Command Line**: {ParentCommandLine}\\n* **Event ID**: {EventID} (Sysmon Process Creation)\\n* **Sysmon Rule Name**: {RuleName}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (HIGH PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** Immediately disconnect host '{ComputerName}' from the network to prevent further reconnaissance, lateral movement, and potential privilege escalation. **DO NOT power off the system.**\\n2.  **FORENSIC IMAGE AND MEMORY DUMP:** Perform a full forensic disk image and a memory dump of '{ComputerName}'. This is critical to preserve evidence, identify the tool used, and understand the extent of the reconnaissance.\\n3.  **USER ACCOUNT INVESTIGATION:** Investigate the '{User}' account for signs of compromise (e.g., unauthorized logins, password changes, unusual activity). Reset the user's password and enforce MFA if not already in place.\\n4.  **NETWORK TRAFFIC ANALYSIS:** Review network logs (Sysmon Event ID 3, firewall logs, NetFlow/Zeek) originating from '{ComputerName}' for outbound LDAP (389/636) connections, especially to Domain Controllers, and any other suspicious C2 traffic or data exfiltration.\\n5.  **DOMAIN CONTROLLER LOG REVIEW:** On your Domain Controllers, review security logs (e.g., Event ID 4662 for object access, 4768/4769 for Kerberos requests) for an unusually high volume of queries originating from '{source_ip}' or related to the compromised user. Look for attempts to enumerate sensitive groups or users.\\n6.  **THREAT HUNT FOR IOCs:** Based on the detected tool (`SharpHound.exe` hash, or PowerShell script content), hunt for associated Indicators of Compromise (IOCs) across your entire environment. Look for the tool's presence on other machines, similar command-line executions, and any generated output files (e.g., `.zip` files from BloodHound). Determine if the output files were exfiltrated.\\n7.  **REVIEW ACTIVE DIRECTORY SECURITY POSTURE:** If the reconnaissance was successful, this indicates potential vulnerabilities in your AD environment. Prioritize addressing identified attack paths (e.g., unconstrained delegation, exposed credentials, weak ACLs)."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname where the activity occurred."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the process was executed."
+      },
+      {
+        "name": "ProcessName",
+        "required": true,
+        "description": "The name of the process that executed the command (e.g., SharpHound.exe, powershell.exe)."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line used."
+      },
+      {
+        "name": "ParentProcessName",
+        "required": false,
+        "description": "The name of the parent process that launched the command."
+      },
+      {
+        "name": "ParentCommandLine",
+        "required": false,
+        "description": "The full command line of the parent process."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Sysmon Event ID (expected to be 1)."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sysmon rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]
