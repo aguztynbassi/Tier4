@@ -1,0 +1,70 @@
+[
+  {
+    "name": "Unusual Web Traffic Detected (Possible Exfiltration)",
+    "description": "An unusually high volume of outbound data traffic over HTTP/S has been detected, which could indicate an attempt at data exfiltration.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "exfiltration",
+      "command and control",
+      "exfiltration over c2 channel",
+      "web protocols",
+      "TA0010",
+      "TA0011",
+      "T1041",
+      "T1071.001",
+      "network",
+      "large data transfer",
+      "suspicious activity"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: Unusual Web Traffic Detected - Possible Data Exfiltration.\n\nA large outbound web data transfer ({bytes_transferred} bytes) has been observed from host '{source_address}' to '{destination_address}' via URL '{url}' by user '{user}' at '{timestamp}'. This unusual volume of traffic suggests possible data exfiltration or malicious command and control activity.\n\n**Event Details:**\n* **Date/Time**: {timestamp}\n* **Source**: {source_address}\n* **Destination**: {destination_address}\n* **User**: {user}\n* **Bytes Transferred**: {bytes_transferred}\n* **Accessed URL**: {url}\n* **HTTP Method**: {http_method}\n* **Destination Port**: {destination_port}\n\n**RECOMMENDED ACTIONS (HIGH PRIORITY):**\n\n1.  **Investigate User and Host:** Contact user '{user}' and the owner of host '{source_address}' to verify if this data transfer is legitimate and authorized. Inquire about recent activities involving large file transfers.\n2.  **Destination Analysis:** Analyze the reputation and purpose of the destination IP address '{destination_address}' and URL '{url}'. Check if they are known destinations for legitimate services (e.g., enterprise cloud storage) or if they are associated with malicious activity.\n3.  **Content Inspection (if possible):** If your proxy or IDS allows content inspection (DLP), review the detailed transfer logs to determine what type of data is being sent.\n4.  **Isolation:** If the activity is suspicious, consider isolating host '{source_address}' from the network to prevent further data exfiltration.\n5.  **Forensic Analysis:** Conduct a forensic analysis of host '{source_address}' to search for malware, persistence, compromised credentials, and other indicators of compromise.\n6.  **Destination Blocking:** If the destination is confirmed to be malicious, block the URL/IP in firewalls and proxies.\n7.  **DLP Policy Review:** If the organization has Data Loss Prevention (DLP) policies, review whether this transfer should have been blocked by them."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the network traffic event."
+      },
+      {
+        "name": "source_address",
+        "required": true,
+        "description": "The source IP address of the machine initiating the transfer."
+      },
+      {
+        "name": "destination_address",
+        "required": true,
+        "description": "The destination IP address of the server receiving the data."
+      },
+      {
+        "name": "user",
+        "required": false,
+        "description": "The user associated with the network activity, if available in logs."
+      },
+      {
+        "name": "bytes_transferred",
+        "required": true,
+        "description": "The total number of bytes transferred in the session."
+      },
+      {
+        "name": "url",
+        "required": false,
+        "description": "The URL accessed during the transfer, if available."
+      },
+      {
+        "name": "http_method",
+        "required": false,
+        "description": "The HTTP method used (e.g., GET, POST)."
+      },
+      {
+        "name": "destination_port",
+        "required": false,
+        "description": "The destination port of the network connection."
+      }
+    ]
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Unusual Cloud Storage Access",
+    "description": "An unusual access pattern to a cloud storage service has been detected, which could indicate an attempt at data exfiltration.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "cloud",
+      "cloud_storage",
+      "exfiltration",
+      "unusual_access",
+      "large_data_download",
+      "TA0010",
+      "T1537"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: Unusual Cloud Storage Access Detected.\n\nAn unusually high volume of {count} downloads of file '{file_name}' by user '{user}' from IP address '{source_ip}' has been observed within a 1-hour period, starting at '{Timestamp}'. This access pattern is highly suspicious and could indicate an attempt at data exfiltration.\n\n**Aggregated Event Details:**\n* **Timestamp (Start of Period)**: {Timestamp}\n* **Affected User**: {user}\n* **File Name**: {file_name}\n* **Action**: {action}\n* **Source IP Address**: {source_ip}\n* **Download Count**: {count}\n\n**RECOMMENDED ACTIONS (HIGH PRIORITY):**\n\n1.  **Validate Legitimacy:** Immediately contact user '{user}' and/or the owner of file '{file_name}' to verify if this activity is legitimate and expected. Ask if they were performing bulk download operations, synchronization, or audits.\n2.  **Review Cloud Audit Logs:** Access detailed logs from the cloud provider (e.g., AWS CloudTrail, Azure Monitor, Google Cloud Audit Logs) for more context. Review prior and subsequent events associated with this user, file, or source IP. Look for other suspicious activities (e.g., permission changes).\n3.  **Verify Compromised Credentials:** If the user cannot justify the activity, assume that the credentials for '{user}' (or the access key used by that IP) are compromised. Immediately revoke them and force a credential rotation. Implement MFA if not active.\n4.  **Source Analysis:** Investigate the `source_ip` '{source_ip}'. Is it an internal or external IP? Is it expected for this user/role? Perform an IP reputation analysis.\n5.  **Isolation:** Consider temporarily suspending user '{user}'s access to cloud storage or blocking the `source_ip` if the activity is clearly malicious.\n6.  **Forensic Analysis:** Conduct a thorough forensic analysis of the cloud user account and, if possible, the source device of the access to identify malware, persistence, and the scope of the compromise.\n7.  **Review Permissions:** Verify the permissions of user '{user}' on the cloud storage. Ensure it adheres to the principle of Least Privilege."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the earliest event in the aggregation window."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account performing the download activity."
+      },
+      {
+        "name": "file_name",
+        "required": true,
+        "description": "The name of the file being downloaded."
+      },
+      {
+        "name": "action",
+        "required": true,
+        "description": "The action performed (should be 'download')."
+      },
+      {
+        "name": "source_ip",
+        "required": false,
+        "description": "The source IP address of the access."
+      },
+      {
+        "name": "count",
+        "required": true,
+        "description": "The number of download events within the timeframe."
+      }
+    ]
+  }
+]
