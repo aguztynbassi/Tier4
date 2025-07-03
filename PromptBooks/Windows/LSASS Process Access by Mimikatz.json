@@ -1,0 +1,72 @@
+[
+  {
+    "name": "LSASS Process Access by Mimikatz",
+    "description": "Detection of suspicious process access to LSASS.exe, highly indicative of credential dumping attempts by tools like Mimikatz.",
+    "tags": [
+      "security",
+      "detection",
+      "critical",
+      "windows",
+      "lsass",
+      "mimikatz",
+      "credential_access",
+      "credential_dumping",
+      "TA0003",
+      "T1003",
+      "T1003.001"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "CRITICAL SEVERITY ALERT: LSASS Process Access by Mimikatz.\\n\\nSuspicious access to the `lsass.exe` process was detected on host '{ComputerName}' at {Timestamp}. The source process '{SourceImage}' (PID: {SourceProcessId}) attempted to access `lsass.exe` (PID: {TargetProcessId}) with the access rights '{GrantedAccess}'. This type of access is highly indicative of credential dumping tools like Mimikatz, aiming to extract sensitive authentication data from memory.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **User**: {User}\\n* **Source Process Image**: {SourceImage}\\n* **Source Process ID**: {SourceProcessId}\\n* **Target Process Image**: {TargetImage} (`lsass.exe`)\\n* **Target Process ID**: {TargetProcessId}\\n* **Granted Access Rights**: {GrantedAccess}\\n* **Sysmon Event ID**: 10\\n* **Sysmon Rule Name**: {RuleName}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** Disconnect host '{ComputerName}' from the network **immediately** to contain the threat and prevent further credential exfiltration or lateral movement. **DO NOT power off the system.**\\n2.  **ASSUME COMPROMISE:** This activity is a strong indicator of an active credential access attempt. **Assume the host and potentially the user account '{User}' are compromised.**\\n3.  **INVESTIGATE SOURCE PROCESS:** Immediately investigate the '{SourceImage}' process. Review its full command line, parent process, process tree, and network connections. Obtain a copy of the executable for analysis if it's not a known legitimate binary.\\n4.  **CREDENTIAL RESET:** If LSASS was successfully accessed, assume credentials within its memory were compromised. Initiate an immediate and forced password reset for the '{User}' account and any other privileged accounts active on '{ComputerName}' at the time of the incident (e.g., domain administrator accounts). Consider rotating Kerberos tickets.\\n5.  **MEMORY FORENSICS:** Perform a full memory dump of '{ComputerName}' immediately. This is crucial for analyzing the compromised LSASS process, identifying extracted credentials, and uncovering other in-memory attacker tools.\\n6.  **DISK FORENSICS:** Conduct a full forensic analysis of '{ComputerName}'. Look for newly created files, persistence mechanisms, and any tools or malware dropped by the attacker. Focus on artifacts left by '{SourceImage}'.\\n7.  **USER ACCOUNT INVESTIGATION:** Investigate the '{User}' account for signs of compromise (e.g., anomalous logins, failed authentications, activity on other hosts). Even if the user is `SYSTEM`, investigate if a process running as SYSTEM was abused or compromised.\\n8.  **THREAT HUNT:** Search your environment for other instances of LSASS process access or other credential dumping techniques. Review authentication and access logs across your infrastructure for anomalous logins."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the process access event."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where LSASS access was detected."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the source process ran."
+      },
+      {
+        "name": "SourceImage",
+        "required": true,
+        "description": "The full path to the process that attempted to access LSASS."
+      },
+      {
+        "name": "SourceProcessId",
+        "required": true,
+        "description": "The Process ID (PID) of the source process."
+      },
+      {
+        "name": "TargetImage",
+        "required": true,
+        "description": "The full path to the target process (lsass.exe)."
+      },
+      {
+        "name": "TargetProcessId",
+        "required": true,
+        "description": "The Process ID (PID) of the target process (lsass.exe)."
+      },
+      {
+        "name": "GrantedAccess",
+        "required": true,
+        "description": "The hexadecimal value of the access rights granted to the source process."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The Sysmon rule name that triggered the alert, if available."
+      }
+    ]
+  }
+]
