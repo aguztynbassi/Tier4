@@ -1,0 +1,86 @@
+[
+  {
+    "name": "DNS Tunneling Detection - Excessive Query Name Length",
+    "description": "Detects DNS queries where the length of a single label or the total query name exceeds common legitimate boundaries (e.g., >63 characters for a label, or unusually long total query name). This is a strong indicator of DNS tunneling, where adversaries encode C2 commands or exfiltrated data within DNS query names.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "dns_server",
+      "firewall",
+      "command_and_control",
+      "exfiltration",
+      "dns_tunneling",
+      "network",
+      "TA0011",
+      "TA0010",
+      "T1071",
+      "T1071.004",
+      "T1568",
+      "T1568.002"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: Potential DNS Tunneling Detected - Excessive Query Name Length!\\n\\n**An unusually long DNS query name ('{QueryName}') of length {QueryLength} was observed originating from '{SourceIp}' and targeting DNS server '{DestinationIp}' at {Timestamp}.** This query significantly exceeds typical legitimate DNS name lengths, strongly suggesting **DNS tunneling (T1071.004)**, a technique used by adversaries for **Command and Control (TA0011)** or **data exfiltration (TA0010)**.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Source IP**: {SourceIp} (Internal Host: {ComputerName})\\n* **Targeted DNS Server IP**: {DestinationIp}\\n* **Targeted Port**: {DestinationPort} (Expected 53)\\n* **Protocol**: {Protocol} (Expected UDP/TCP)\\n* **Full Query Name**: '{QueryName}'\\n* **Query Name Length**: {QueryLength} characters (Threshold: >64, or individual label >63)\\n* **Query Type**: {QueryType}\\n* **Response Code**: {ResponseCode}\\n* **Rule Name**: {RuleName}\\n\\nDNS tunneling allows attackers to bypass traditional firewall rules by encapsulating data within DNS requests and responses. This is a critical indicator of a compromised internal host actively communicating with malicious infrastructure or exfiltrating sensitive data.\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (HIGH PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** Isolate '{SourceIp}' from the network immediately. This host is highly likely to be compromised and actively involved in malicious communication.\\n2.  **DNS QUERY ANALYSIS:** Review the full DNS query logs for '{SourceIp}' to identify the complete series of long queries. Look for: \\n    * **Patterns within the query names** that resemble encoded data (e.g., base64, hex strings). \\n    * **Repeated queries to unusual or suspicious Top-Level Domains (TLDs)** or domains that don't belong to your organization.\\n    * **Correlation with other suspicious activity** from '{SourceIp}' (e.g., suspicious process execution, network connections).\\n3.  **FORENSIC ACQUISITION & ANALYSIS:** Begin forensic acquisition (disk and memory) of '{SourceIp}' to identify the malware responsible for the DNS tunneling, its C2 infrastructure, and any exfiltrated data.\\n4.  **NETWORK TRAFFIC ANALYSIS:** Examine network flow data and packet captures (if available) for '{SourceIp}' to look for unusual data patterns within DNS traffic or other suspicious outbound connections.\\n5.  **THREAT INTELLIGENCE:** Perform threat intelligence lookups on any suspicious domain names identified in the DNS queries to check for associations with known malware families or C2 infrastructure.\\n6.  **DNS SERVER SECURITY:** Ensure your internal DNS servers are configured to log detailed query information and that any recursive resolvers are properly secured and do not forward queries to untrusted external DNS servers."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the DNS query event."
+      },
+      {
+        "name": "SourceIp",
+        "required": true,
+        "description": "The IP address of the client making the DNS query."
+      },
+      {
+        "name": "DestinationIp",
+        "required": true,
+        "description": "The IP address of the DNS server being queried."
+      },
+      {
+        "name": "DestinationPort",
+        "required": true,
+        "description": "The destination port (expected 53)."
+      },
+      {
+        "name": "Protocol",
+        "required": true,
+        "description": "The transport protocol (expected UDP/TCP)."
+      },
+      {
+        "name": "QueryName",
+        "required": true,
+        "description": "The full DNS query string."
+      },
+      {
+        "name": "QueryType",
+        "required": false,
+        "description": "The DNS query type (e.g., A, AAAA, TXT, CNAME)."
+      },
+      {
+        "name": "ResponseCode",
+        "required": false,
+        "description": "The DNS response code (e.g., NOERROR, NXDOMAIN)."
+      },
+      {
+        "name": "QueryLength",
+        "required": true,
+        "description": "The calculated length of the query name."
+      },
+      {
+        "name": "ComputerName",
+        "required": false,
+        "description": "The hostname of the source if available."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]

@@ -1,0 +1,84 @@
+[
+  {
+    "name": "Port Scan Detected (SIEM Correlation Needed)",
+    "description": "Detects a source host scanning a high number of distinct destination ports on a target host within a short timeframe, indicating a port scan, a common reconnaissance technique.",
+    "tags": [
+      "security",
+      "detection",
+      "medium",
+      "network",
+      "firewall",
+      "ids_ips",
+      "ndr",
+      "discovery",
+      "reconnaissance",
+      "network_scan",
+      "port_scan",
+      "TA0007",
+      "T1046"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "MEDIUM SEVERITY ALERT: Port Scan Detected!\\n\\n**Host '{SourceIp}' is performing a port scan against '{DestinationIp}', attempting to connect to {SIEM_DISTINCT_COUNT_PORTS} distinct ports within {SIEM_TIMEFRAME} at {Timestamp}.** This is a strong indicator of **Reconnaissance (TA0007)** activity, specifically **T1046 Network Service Scanning**.\\n\\n**Event Details (from SIEM correlation):**\\n* **Timestamp of First Event**: {SIEM_FIRST_EVENT_TIMESTAMP}\\n* **Timestamp of Last Event**: {SIEM_LAST_EVENT_TIMESTAMP}\\n* **Scanner IP**: {SourceIp}\\n* **Target IP**: {DestinationIp}\\n* **Number of Distinct Ports Scanned**: {SIEM_DISTINCT_COUNT_PORTS}\\n* **Time Window**: {SIEM_TIMEFRAME}\\n* **Example Port Scanned**: {DestinationPort} (one of the ports detected)\\n* **Protocol**: {Protocol} (e.g., TCP, UDP)\\n* **Action (Firewall/IDS)**: {Action} (e.g., 'allowed', 'blocked', 'denied')\\n* **Rule Name**: {RuleName}\\n\\nAdversaries perform port scans to identify open services and potential vulnerabilities on target systems before launching more focused attacks. While this is reconnaissance, it often precedes more severe incidents.\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (MEDIUM PRIORITY - INVESTIGATE PROMPTLY):**\\n\\n1.  **IDENTIFY SCANNER & TARGET:** Determine if '{SourceIp}' is an internal or external host. Likewise, determine if '{DestinationIp}' is an internal or external asset, and its criticality.\\n2.  **CHECK FOR AUTHORIZED SCAN:** Verify if the scan from '{SourceIp}' is an authorized vulnerability scan or penetration test (e.g., from your security team, a third-party vendor). If it is legitimate, consider whitelisting the source IP in your SIEM to reduce future false positives.\\n3.  **REVIEW FIREWALL/IDS LOGS:** Examine the raw logs from your firewall or IDS around the time of the scan to understand the full scope of the scanned ports and the type of scan (e.g., TCP SYN scan, UDP scan). Pay attention to the 'Action' taken (was traffic allowed or blocked?).\\n4.  **VULNERABILITY MANAGEMENT:** If '{DestinationIp}' is an internal asset, ensure it is regularly patched and has no unnecessary open ports. Conduct a targeted vulnerability scan if this asset is critical or frequently targeted.\\n5.  **NETWORK SEGMENTATION:** Review network segmentation around '{DestinationIp}' to ensure only necessary ports are accessible from '{SourceIp}' or external networks.\\n6.  **MONITOR FOR FOLLOW-UP ACTIVITY:** Even if the scan was blocked, adversaries often follow up reconnaissance with exploitation attempts. Continuously monitor '{SourceIp}' and '{DestinationIp}' for any subsequent suspicious activity, such as brute-force attacks, exploitation attempts, or unusual login attempts."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of one of the network connection events (e.g., the most recent one)."
+      },
+      {
+        "name": "SourceIp",
+        "required": true,
+        "description": "The source IP address of the scanner."
+      },
+      {
+        "name": "DestinationIp",
+        "required": true,
+        "description": "The destination IP address being scanned."
+      },
+      {
+        "name": "DestinationPort",
+        "required": false,
+        "description": "One of the ports detected as part of the scan."
+      },
+      {
+        "name": "Protocol",
+        "required": false,
+        "description": "The protocol used for the scan (e.g., TCP, UDP)."
+      },
+      {
+        "name": "Action",
+        "required": false,
+        "description": "The action taken by the firewall/IDS (e.g., allowed, blocked)."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      },
+      {
+        "name": "SIEM_DISTINCT_COUNT_PORTS",
+        "required": true,
+        "description": "The number of distinct destination ports identified by the SIEM aggregation (e.g., 65)."
+      },
+      {
+        "name": "SIEM_TIMEFRAME",
+        "required": true,
+        "description": "The time window over which the distinct ports were counted (e.g., '5 minutes')."
+      },
+      {
+        "name": "SIEM_FIRST_EVENT_TIMESTAMP",
+        "required": true,
+        "description": "The timestamp of the first event in the correlated group."
+      },
+      {
+        "name": "SIEM_LAST_EVENT_TIMESTAMP",
+        "required": true,
+        "description": "The timestamp of the last event in the correlated group."
+      }
+    ]
+  }
+]

@@ -1,0 +1,105 @@
+[
+  {
+    "name": "Excessive HTTP Errors from Single Source (SIEM Correlation Needed)",
+    "description": "Detects an excessive number of distinct HTTP error status codes (4xx or 5xx) from the same source IP targeting the same web server within a short timeframe. This can indicate web application attacks, vulnerability scanning, or a severely misconfigured client.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "webserver",
+      "firewall",
+      "ids_ips",
+      "proxy",
+      "discovery",
+      "impact",
+      "web_attack",
+      "reconnaissance",
+      "vulnerability_scan",
+      "misconfiguration",
+      "TA0007",
+      "TA0040",
+      "T1046",
+      "T1133",
+      "T1595",
+      "T1595.002"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: Excessive Distinct HTTP Errors Detected from Single Source!\\n\\n**An unusually high number of distinct HTTP error status codes ({SIEM_COUNT_OF_DISTINCT_STATUS_CODES} distinct errors) originating from '{SourceIp}' targeting web server '{DestinationIp}' (or '{ComputerName}') has been detected within the last {SIEM_TIMEFRAME} at {Timestamp}.** This pattern is a strong indicator of **web application scanning (T1046)**, **fuzzing/directory busting**, or potentially a **misconfigured client or service** interacting with your web server.\\n\\n**Event Details (from SIEM correlation):**\\n* **Timestamp of First Error**: {SIEM_FIRST_EVENT_TIMESTAMP}\\n* **Timestamp of Last Error**: {SIEM_LAST_EVENT_TIMESTAMP}\\n* **Source IP**: {SourceIp}\\n* **Targeted Web Server IP**: {DestinationIp}\\n* **Targeted Web Server Hostname (if available)**: {ComputerName}\\n* **Number of Distinct Error Codes**: {SIEM_COUNT_OF_DISTINCT_STATUS_CODES} (e.g., 400, 401, 403, 404, 500, etc.)\\n* **Time Window**: {SIEM_TIMEFRAME}\\n* **Example HTTP Method**: {HttpMethod}\\n* **Example Request URI**: {RequestUri}\\n* **Example Status Code**: {StatusCode}\\n* **Example User Agent**: {UserAgent}\\n* **Rule Name**: {RuleName}\\n\\nWhile these errors may not indicate a successful compromise, the high volume of varied error responses suggests automated probing or malicious attempts to find vulnerabilities or exposed paths. It can also point to a critical misconfiguration impacting a large number of requests.\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (HIGH PRIORITY - INVESTIGATE PROMPTLY):**\\n\\n1.  **ANALYZE REQUEST PATTERNS:** Review the full web access logs for '{SourceIp}' and '{DestinationIp}' (or '{ComputerName}') to identify: \\n    * The specific error codes returned and the frequency of each. \\n    * The requested URIs associated with these errors. Are they common paths (e.g., `/admin`, `/login`) or obscure, non-existent directories/files?\\n    * The 'UserAgent' string. Is it associated with known scanning tools (e.g., Nikto, Burp Suite, dirbuster)?\\n2.  **BLOCK SUSPICIOUS SOURCES:** If the activity appears malicious (e.g., typical vulnerability scanner patterns, random URL generation), immediately block '{SourceIp}' at your perimeter firewall or Web Application Firewall (WAF).\\n3.  **VALIDATE LEGITIMACY:** \\n    * Determine if '{SourceIp}' is a known, legitimate scanner (e.g., your internal vulnerability scanner, a penetration testing firm). If so, consider whitelisting this activity or adjusting the correlation threshold.\\n    * Check if the activity is due to a misconfigured legitimate application or service. If so, work with the application owner to correct the issue.\\n4.  **WEB APPLICATION FIREWALL (WAF) REVIEW:** Ensure your WAF (if deployed) is configured to detect and block common web scanning and fuzzing techniques. Review WAF logs for correlated alerts.\\n5.  **VULNERABILITY ASSESSMENT:** If the errors indicate probing for specific vulnerabilities (e.g., SQL injection, directory traversal), conduct a targeted security assessment of the affected web application on '{DestinationIp}' (or '{ComputerName}').\\n6.  **THREAT INTELLIGENCE:** Perform threat intelligence lookups on '{SourceIp}' to see if it's a known malicious IP."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of one of the HTTP error events (e.g., the most recent one)."
+      },
+      {
+        "name": "SourceIp",
+        "required": true,
+        "description": "The IP address of the client making the web request."
+      },
+      {
+        "name": "DestinationIp",
+        "required": true,
+        "description": "The IP address of the web server."
+      },
+      {
+        "name": "DestinationPort",
+        "required": false,
+        "description": "The destination port (expected 80 or 443)."
+      },
+      {
+        "name": "HttpMethod",
+        "required": false,
+        "description": "The HTTP method used (e.g., GET, POST)."
+      },
+      {
+        "name": "RequestUri",
+        "required": true,
+        "description": "The requested URL path."
+      },
+      {
+        "name": "StatusCode",
+        "required": true,
+        "description": "The HTTP response status code (e.g., 404, 500)."
+      },
+      {
+        "name": "UserAgent",
+        "required": false,
+        "description": "The User-Agent string from the client."
+      },
+      {
+        "name": "ComputerName",
+        "required": false,
+        "description": "The hostname of the web server (if available)."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      },
+      {
+        "name": "SIEM_COUNT_OF_DISTINCT_STATUS_CODES",
+        "required": true,
+        "description": "The aggregated count of distinct HTTP status codes by the SIEM (e.g., 25)."
+      },
+      {
+        "name": "SIEM_TIMEFRAME",
+        "required": true,
+        "description": "The time window over which the events were counted (e.g., '1 minute')."
+      },
+      {
+        "name": "SIEM_FIRST_EVENT_TIMESTAMP",
+        "required": true,
+        "description": "The timestamp of the first event in the correlated group."
+      },
+      {
+        "name": "SIEM_LAST_EVENT_TIMESTAMP",
+        "required": true,
+        "description": "The timestamp of the last event in the correlated group."
+      }
+    ]
+  }
+]

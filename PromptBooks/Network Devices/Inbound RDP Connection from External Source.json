@@ -1,0 +1,86 @@
+[
+  {
+    "name": "Inbound RDP Connection from External Source",
+    "description": "Detects inbound Remote Desktop Protocol (RDP) connections initiated from external IP addresses targeting internal systems. Direct exposure of RDP to the internet is a significant security vulnerability, frequently exploited for initial access, lateral movement, and persistent access.",
+    "tags": [
+      "security",
+      "detection",
+      "critical",
+      "network",
+      "firewall",
+      "ids_ips",
+      "initial_access",
+      "lateral_movement",
+      "command_and_control",
+      "discovery",
+      "network_access",
+      "rdp",
+      "remote_access",
+      "expose_services",
+      "TA0001",
+      "TA0008",
+      "TA0011",
+      "TA0007",
+      "T1021",
+      "T1021.001"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "CRITICAL SEVERITY ALERT: Inbound RDP Connection from External Source Detected!\\n\\n**An inbound RDP connection attempt from external IP '{SourceIp}' to internal system '{DestinationIp}' on port {DestinationPort} was detected at {Timestamp}.** Direct exposure of RDP to the internet is a **top initial access vector** for adversaries, leading to brute-force attacks, credential stuffing, and often immediate system compromise. This is a critical security incident.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Source IP**: {SourceIp} (External)\\n* **Destination IP**: {DestinationIp} (Internal System)\\n* **Destination Port**: {DestinationPort} (Expected 3389 for RDP)\\n* **Protocol**: {Protocol} (Expected TCP)\\n* **Direction**: {Direction} (Expected 'inbound')\\n* **Action**: {Action} (Crucial context: 'allowed' or 'blocked')\\n* **User (if available)**: {User} (Attempted RDP login user)\\n* **Firewall Rule ID (if available)**: {RuleId}\\n* **Rule Name**: {RuleName}\\n\\nThis alert indicates that an external entity is actively attempting to gain access to your internal network via RDP. Even if the connection was blocked, repeated attempts signify active targeting. **If the connection was allowed, assume immediate compromise and initiate emergency response procedures.**\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** If the 'Action' was 'allowed', immediately isolate '{DestinationIp}' from the network. If 'blocked', proceed to step 2 but maintain vigilance.\\n2.  **BLOCK SOURCE IP:** Immediately block '{SourceIp}' at your perimeter firewall to prevent further connection attempts to RDP and any other services.\\n3.  **RDP EXPOSURE REVIEW (CRITICAL):** \\n    * **URGENT:** Re-evaluate why RDP on '{DestinationIp}' is directly exposed to the internet. **Direct RDP exposure is a severe risk and should be eliminated.** Implement a secure remote access solution (e.g., VPN, RDP Gateway, Bastion Host) and disable direct RDP exposure. \\n    * Implement strong multi-factor authentication (MFA) for *all* RDP access, even if via a gateway.\\n4.  **LOG REVIEW - AUTHENTICATION:** Thoroughly review security event logs on '{DestinationIp}' for any successful or failed RDP login attempts from '{SourceIp}' around the '{Timestamp}'. Look for brute-force patterns or successful logins by unexpected users ({User}).\\n5.  **FORENSIC ANALYSIS (if allowed):** If the connection was allowed and especially if a successful login occurred, perform a full forensic analysis of '{DestinationIp}' to identify compromise, persistence mechanisms, and lateral movement attempts.\\n6.  **THREAT INTELLIGENCE:** Perform threat intelligence lookups on '{SourceIp}' to determine if it's associated with known threat actors, botnets, or brute-force campaigns.\\n7.  **VULNERABILITY MANAGEMENT:** Conduct an immediate vulnerability scan on all internet-facing systems for open RDP ports and ensure all systems are patched against known RDP vulnerabilities (e.g., BlueKeep, DejaBlue)."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the inbound RDP connection event."
+      },
+      {
+        "name": "SourceIp",
+        "required": true,
+        "description": "The source IP address attempting the RDP connection (external)."
+      },
+      {
+        "name": "DestinationIp",
+        "required": true,
+        "description": "The destination IP address of the internal system targeted."
+      },
+      {
+        "name": "DestinationPort",
+        "required": true,
+        "description": "The destination port (expected to be 3389 for RDP)."
+      },
+      {
+        "name": "Protocol",
+        "required": true,
+        "description": "The network protocol (expected TCP)."
+      },
+      {
+        "name": "Direction",
+        "required": true,
+        "description": "The direction of the connection (expected 'inbound')."
+      },
+      {
+        "name": "Action",
+        "required": false,
+        "description": "The action taken by the firewall (e.g., 'allowed', 'blocked')."
+      },
+      {
+        "name": "User",
+        "required": false,
+        "description": "The user account attempting to authenticate via RDP, if available in logs."
+      },
+      {
+        "name": "RuleId",
+        "required": false,
+        "description": "The ID of the specific firewall rule involved, if available."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]
