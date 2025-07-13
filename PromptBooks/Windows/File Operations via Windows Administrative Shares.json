@@ -1,0 +1,77 @@
+[
+  {
+    "name": "File Operations via Windows Administrative Shares",
+    "description": "Detects attempts to copy, move, or otherwise interact with files located on Windows administrative network shares (e.g., `C$`, `ADMIN$`, `IPC$`, `D$`). Adversaries frequently leverage these shares for lateral movement, malware staging, and data exfiltration by directly accessing them via UNC paths (`\\\\hostname\\C$`). This is a common technique as these shares are often accessible with administrative credentials obtained during compromise.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "sysmon",
+      "lateral_movement",
+      "execution",
+      "exfiltration",
+      "remote_services",
+      "ingress_tool_transfer",
+      "TA0008",
+      "TA0002",
+      "TA0010",
+      "T1021",
+      "T1021.002",
+      "T1105"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: File Operations via Windows Administrative Shares Detected!\\n\\n**Suspicious file operations involving Windows administrative shares (`C$`, `ADMIN$`, `IPC$`, etc.) have been detected on host '{ComputerName}' at {Timestamp}.** This is a strong indicator of **Lateral Movement (TA0008)**, **Execution (TA0002)**, or **Exfiltration (TA0010)** via **SMB/Windows Admin Shares (T1021.002)**, commonly used by adversaries for malware staging, data collection, or remote command execution.\\n\\n**Incident Details:**\\n* **Timestamp**: {Timestamp}\\n* **Event ID**: {EventID} (Sysmon EventID 1: Process Creation)\\n* **Process**: '{Image}'\\n* **Full Command Line**: `{CommandLine}`\\n* **Parent Process**: '{ParentImage}'\\n* **User Context**: '{User}'\\n* **Affected Host**: '{ComputerName}'\\n* **Process GUID**: {ProcessGuid}\\n* **Rule Name**: {RuleName}\\n\\nThis alert is triggered by common command-line utilities (`cmd.exe`, `powershell.exe`, `robocopy.exe`, `xcopy.exe`, `net.exe`, `bitsadmin.exe`, `wmic.exe`, `certutil.exe`, etc.) being used with UNC paths (`\\\\hostname\\C$`, `\\\\hostname\\ADMIN$`, `\\\\hostname\\IPC$`, or `\\\\hostname\\D$`) or explicit `net use` commands targeting administrative shares. While these shares are legitimate for IT administration, their use by unauthorized users or unexpected processes is a critical security concern, as they provide powerful means for attackers to move across your network and manipulate files.\\n\\n**IMMEDIATE RECOMMENDED ACTIONS (HIGH PRIORITY - INVESTIGATE URGENTLY!):**\\n\\n1.  **ISOLATE HOST:** If the activity is not immediately recognized as legitimate or authorized, **immediately isolate the host '{ComputerName}' from the network** to contain any potential lateral movement, malware propagation, or data exfiltration.\\n2.  **INVESTIGATE INITIATING PROCESS & USER:** Thoroughly investigate the '{Image}' process:\\n    * What is its reputation? Is it a known legitimate application, or an unknown/suspicious executable?\\n    * Where is it located on disk? Is it running from an unusual directory (e.g., `Temp`, `AppData`, `Public` folders)?\\n    * Check its **digital signature**. Is it signed by a trusted vendor? Unsigned or suspiciously signed processes are highly suspect.\\n    * What is its **parent process** ('{ParentImage}')? How was '{Image}' launched?\\n    * Is the user '{User}' authorized to perform administrative share operations from this context?\\n3.  **ANALYZE COMMAND LINE:** Examine the full command line (`{CommandLine}`) to understand: \\n    * The specific administrative share being accessed (e.g., `C$`, `ADMIN$`).\\n    * The source and destination paths of the file operation. This can reveal if malware is being staged or if data is being exfiltrated.\\n    * The remote host targeted by the UNC path. Identify the specific machines involved in the lateral movement.\\n4.  **NETWORK CONNECTIONS:** Look for associated network connection events (Sysmon Event ID 3) from the '{Image}' process around the same timestamp to identify the remote host involved in the share access. Also, check authentication logs (Event ID 4624/4625) on the targeted remote host.\\n5.  **SEARCH FOR MALICIOUS FILES:** If files were copied, investigate both the source and destination paths for suspicious executables, scripts, or archives. Submit any suspicious files to a sandbox for analysis.\\n6.  **FULL FORENSIC ANALYSIS:** Launch a full forensic investigation on the host '{ComputerName}' (and potentially the targeted remote host) to determine:\\n    * The initial compromise vector and timeline.\\n    * All Indicators of Compromise (IOCs) on the systems.\\n    * The full scope of lateral movement and data accessed/exfiltrated.\\n    * Any persistence mechanisms established by the adversary.\\n7.  **ESCALATE TO INCIDENT RESPONSE LEADERSHIP:** This is a critical indicator of potential active adversary activity. Immediately escalate to your incident response team leadership for coordinated action."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Sysmon Event ID (expected to be 1 for Process Creation)."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to the executable that performed the file operation."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line arguments used by the process, including the administrative share path."
+      },
+      {
+        "name": "ParentImage",
+        "required": false,
+        "description": "The executable of the parent process that launched the process."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the process ran."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the file operation occurred."
+      },
+      {
+        "name": "ProcessGuid",
+        "required": true,
+        "description": "The unique GUID for the process that performed the file operation."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]

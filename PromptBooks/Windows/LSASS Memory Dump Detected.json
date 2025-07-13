@@ -1,0 +1,82 @@
+[
+  {
+    "name": "LSASS Memory Dump Detected (via Tool or File Creation)",
+    "description": "Detects attempts to dump the memory of the Local Security Authority Subsystem Service (LSASS) process, a critical target for Credential Access. Adversaries use tools like `CreateMiniDump.exe`, Sysinternals ProcDump, or other utilities to create a memory dump of LSASS. From this dump, they can extract sensitive credentials such as password hashes, Kerberos tickets, and NTLM hashes. This is a high-impact action indicating an active credential access phase of an attack.",
+    "tags": [
+      "security",
+      "detection",
+      "critical",
+      "windows",
+      "sysmon",
+      "credential_access",
+      "os_credential_dumping",
+      "forensic_tool",
+      "TA0006",
+      "T1003",
+      "T1003.001"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "CRITICAL ALERT: LSASS Memory Dump Detected!\\n\\n**An attempt to dump the memory of the `lsass.exe` process has been detected on host '{ComputerName}' at {Timestamp}.** This is a **CRITICAL** indicator of active **Credential Access (TA0006)**, specifically **OS Credential Dumping: LSASS Memory (T1003.001)**, as adversaries directly target LSASS to steal sensitive authentication material.\\n\\n**Incident Details:**\\n* **Timestamp**: {Timestamp}\\n* **Event ID**: {EventID} (Sysmon EventID 1 or 11)\\n* **Action**: {Action_Type} (Process Creation or File Creation)\\n* **Involved Process/File**: '{Involved_Entity}'\\n* **Command Line (if process)**: `{CommandLine}`\\n* **Image Hash (if process)**: {ImageHash}\\n* **Parent Process (if process)**: '{ParentImage}'\\n* **User Context**: '{User}'\\n* **Affected Host**: '{ComputerName}'\\n* **Process GUID**: {ProcessGuid}\\n* **Rule Name**: {RuleName}\\n\\nThis alert is triggered by either the creation of an `lsass.dmp` file (potentially in a suspicious location like `C:\\Windows\\Temp\\lsass.dmp`) or the execution of known LSASS dumping tools such as `procdump.exe`, `CreateMiniDump.exe`, `mimikatz.exe`, `dumpit.exe`, or `comsvcs.dll` with LSASS-targeting arguments. The primary goal of such activity is to extract password hashes, plaintext credentials, and Kerberos tickets for privilege escalation and lateral movement.\\n\\n**IMMEDIATE RECOMMENDED ACTIONS (CRITICAL PRIORITY - RESPOND NOW!):**\\n\\n1.  **EMERGENCY HOST ISOLATION:** **Immediately isolate the host '{ComputerName}' from the network.** This is a confirmed, critical security incident indicating that an adversary is actively attempting to steal credentials and has a significant foothold.\\n2.  **IMMEDIATE ACCOUNT PASSWORD RESET/INVALIDATION:** **Assume all credentials on the compromised host, and potentially within the domain, are compromised.** Force password resets for the user '{User}' and any other high-privilege accounts that might have been logged into the system or whose hashes could have been dumped. Consider invalidating Kerberos tickets if a domain controller was targeted.\\n3.  **SECURE THE DUMP FILE:** If an `lsass.dmp` file was created, **secure it immediately**. Do not delete it. It contains crucial forensic evidence. Prevent its exfiltration.\\n4.  **PERFORM MEMORY FORENSICS (ON LSASS PROCESS):** Even if a dump file was created, **perform a live memory dump of the `lsass.exe` process** on the affected host. This may capture additional transient data or provide insights into the injector.\\n5.  **INVESTIGATE INITIATING PROCESS/FILE CREATOR:** \\n    * For process creation: Investigate '{Involved_Entity}' (the tool executed). What is its reputation? Where did it come from? What is its parent process '{ParentImage}'? Check its digital signature and hash (`{ImageHash}`).\\n    * For file creation: Investigate '{Image}' (the process that created the dump file). This process itself might be malicious or compromised.\\n6.  **FULL FORENSIC ANALYSIS:** Launch a full forensic investigation on the host '{ComputerName}' to determine:\\n    * The initial compromise vector and timeline.\\n    * All Indicators of Compromise (IOCs) on the system.\\n    * The full scope of stolen credentials and their potential impact.\\n    * Any persistence mechanisms established by the adversary.\\n    * Whether the adversary has already moved laterally to other systems.\\n7.  **ESCALATE TO INCIDENT RESPONSE LEADERSHIP:** This is a critical incident. Immediately escalate to your incident response team leadership and relevant stakeholders for coordinated action."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Sysmon Event ID (1 for Process Creation, 11 for File Creation)."
+      },
+      {
+        "name": "Action_Type",
+        "required": true,
+        "description": "Indicates whether the alert is due to 'Process Creation' or 'File Creation'."
+      },
+      {
+        "name": "Involved_Entity",
+        "required": true,
+        "description": "The executable path (for process creation) or the full file path (for file creation)."
+      },
+      {
+        "name": "CommandLine",
+        "required": false,
+        "description": "The full command line arguments if the event is a process creation."
+      },
+      {
+        "name": "ImageHash",
+        "required": false,
+        "description": "The hash of the executable if the event is a process creation."
+      },
+      {
+        "name": "ParentImage",
+        "required": false,
+        "description": "The parent process if the event is a process creation."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the event occurred."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the event occurred."
+      },
+      {
+        "name": "ProcessGuid",
+        "required": true,
+        "description": "The unique GUID for the process involved in the event."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]
