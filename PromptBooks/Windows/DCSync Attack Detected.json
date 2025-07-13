@@ -1,0 +1,88 @@
+[
+  {
+    "name": "DCSync Attack Detected",
+    "description": "Detects attempts to perform a DCSync attack, which involves abusing the Active Directory Replication Service (ADRS) to extract credential hashes from a domain controller. This is typically indicated by a non-machine account requesting 'Replicating Directory Changes' or 'Replicating Directory Changes All' permissions, or by the creation of a suspicious Service Principal Name (SPN) related to global catalog replication.",
+    "tags": [
+      "security",
+      "detection",
+      "critical",
+      "windows",
+      "active_directory",
+      "credential_access",
+      "defense_evasion",
+      "persistence",
+      "T1003",
+      "T1003.003",
+      "TA0003",
+      "TA0005"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "ALERTA CRÍTICA: ¡Potencial Ataque DCSync Detectado!\\n\\n**Se ha detectado una actividad altamente sospechosa en el Controlador de Dominio '{ComputerName}' a las {Timestamp} que es consistente con un ataque DCSync.**\\n\\n**Detalles del Incidente:**\\n* **Timestamp**: {Timestamp}\\n* **ID de Evento**: {EventID}\\n\\n**Escenario 1: Solicitud/Uso de Permisos de Replicación (EventID 4662)**\\n* **Cuenta Sospechosa**: '{SubjectUserName}' (Dominio: '{SubjectDomainName}') - **¡Esta NO es una cuenta de máquina!**\\n* **Controlador de Dominio Objetivo**: '{ObjectServer}'\\n* **Máscara de Acceso**: '{AccessMask}'\\n* **Propiedades de Acceso**: '{Properties}' (Contiene GUIDs para 'Replicating Directory Changes' o 'Replicating Directory Changes All')\\n\\n**Escenario 2: Creación de SPN de Catálogo Global (EventID 4742)**\\n* **Cuenta de Equipo Modificada**: '{TargetUserName}' (Dominio: '{TargetDomainName}')\\n* **Nombres Principales de Servicio (SPN)**: '{ServicePrincipalNames}' (Contiene un SPN relacionado con 'GC/')\\n\\nUn ataque DCSync (T1003.003) permite a un atacante con permisos suficientes solicitar la replicación de datos del directorio de un controlador de dominio, incluyendo hashes de credenciales de usuarios. Este es un método extremadamente potente para el **Acceso a Credenciales (TA0003)** y a menudo se utiliza para **Evasión de Defensas (TA0005)** o para establecer **Persistencia (TA0003)** en el dominio.\\n\\n**ACCIONES INMEDIATAS RECOMENDADAS (PRIORIDAD EXTREMA - ¡RESPONDER AHORA!):**\\n\\n1.  **AISLAMIENTO DE LA CUENTA Y EL ORIGEN:** \\n    * Aísle o deshabilite inmediatamente la cuenta '{SubjectUserName}' (si es el EventID 4662) o investigue a fondo la cuenta que modificó el SPN (si es EventID 4742). \\n    * Bloquee cualquier IP de origen asociada a la actividad sospechosa.\\n2.  **ANÁLISIS FORENSE DEL CONTROLADOR DE DOMINIO:** Inicie un análisis forense exhaustivo (disco y memoria) en el controlador de dominio '{ComputerName}' (y '{ObjectServer}' si es diferente). Busque: \\n    * Herramientas de ataque (e.g., Mimikatz, BloodHound, secretsdump.py de Impacket).\\n    * Otros IOCs de compromiso.\\n    * Acciones posteriores a la posible extracción de credenciales.\\n3.  **REVISIÓN DE PERMISOS:** \\n    * **Para EventID 4662:** Revise los permisos en Active Directory para la cuenta '{SubjectUserName}'. ¿Tiene permisos legítimos para replicación de directorio? Si no, revoque esos permisos inmediatamente.\\n    * **Para EventID 4742:** Investigue por qué se modificó el SPN. ¿Es legítimo? ¿Fue autorizado? Los SPN 'GC/' son muy sensibles.\\n4.  **REESTABLECIMIENTO DE CONTRASEÑAS:** Asuma que las credenciales del dominio pueden haber sido comprometidas. Implemente un plan de restablecimiento de contraseñas de emergencia para cuentas privilegiadas y de alto valor (administradores de dominio, cuentas de servicio), comenzando por las más críticas.\\n5.  **ANÁLISIS DE LA CADENA DE ATAQUE:** Determine cómo la cuenta '{SubjectUserName}' obtuvo los permisos o cómo se realizó el cambio de SPN. ¿Hubo una escalada de privilegios previa?\\n6.  **ESCALAR:** Escalar inmediatamente a los equipos de respuesta a incidentes, administradores de Active Directory y seguridad de la información para una respuesta coordinada."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the detected DCSync activity."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Windows Security Event ID (4662 or 4742)."
+      },
+      {
+        "name": "SubjectUserName",
+        "required": false,
+        "description": "The user account attempting/performing the DCSync (for EventID 4662). Will be null for 4742 scenario."
+      },
+      {
+        "name": "SubjectDomainName",
+        "required": false,
+        "description": "The domain of the subject user account (for EventID 4662). Will be null for 4742 scenario."
+      },
+      {
+        "name": "ObjectServer",
+        "required": false,
+        "description": "The domain controller targeted by the replication request (for EventID 4662). Will be null for 4742 scenario."
+      },
+      {
+        "name": "AccessMask",
+        "required": false,
+        "description": "The access mask requested (for EventID 4662). Will be null for 4742 scenario."
+      },
+      {
+        "name": "Properties",
+        "required": false,
+        "description": "The GUIDs of the requested replication rights (for EventID 4662). Will be null for 4742 scenario."
+      },
+      {
+        "name": "TargetUserName",
+        "required": false,
+        "description": "The computer account whose SPN was changed (for EventID 4742). Will be null for 4662 scenario."
+      },
+      {
+        "name": "TargetDomainName",
+        "required": false,
+        "description": "The domain of the target computer account (for EventID 4742). Will be null for 4662 scenario."
+      },
+      {
+        "name": "ServicePrincipalNames",
+        "required": false,
+        "description": "The Service Principal Name(s) that were modified, specifically looking for 'GC/' (for EventID 4742). Will be null for 4662 scenario."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the domain controller where the event occurred."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]
