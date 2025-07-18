@@ -1,0 +1,74 @@
+[
+  {
+    "name": "Compiled HTML Help (CHM) File Execution via hh.exe",
+    "description": "Detects the execution of Compiled HTML Help (`.chm`) files via `hh.exe` (Microsoft HTML Help Executable). This legitimate Windows binary can be abused for signed binary proxy execution to bypass security controls like AppLocker or other behavior-based defenses. Adversaries often embed malicious code (e.g., JavaScript, VBScript) within `.chm` files that, when opened, can lead to arbitrary code execution, typically by `hh.exe` spawning a suspicious child process.",
+    "tags": [
+      "security",
+      "detection",
+      "medium",
+      "windows",
+      "sysmon",
+      "execution",
+      "defense_evasion",
+      "signed_binary_proxy_execution",
+      "lolbas",
+      "TA0002",
+      "TA0005",
+      "T1218",
+      "T1218.001"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "MEDIUM SEVERITY ALERT: Compiled HTML Help (CHM) File Execution via hh.exe Detected!\\n\\n**Suspicious execution of a Compiled HTML Help (`.chm`) file via `hh.exe` has been detected on host '{ComputerName}' at {Timestamp}.** This is a strong indicator of **Execution (TA0002)** and **Defense Evasion (TA0005)**, leveraging **Signed Binary Proxy Execution through Compiled HTML Files (T1218.001)**. Adversaries abuse `hh.exe` to execute arbitrary code embedded within `.chm` files, often bypassing application whitelisting and other security controls.\\n\\n**Incident Details:**\\n* **Timestamp**: {Timestamp}\\n* **Event ID**: {EventID} (Sysmon EventID 1: Process Creation)\\n* **Executing Process**: '{Image}'\\n* **Full Command Line**: `{CommandLine}`\\n* **Parent Process**: '{ParentImage}'\\n* **Parent Command Line**: `{ParentCommandLine}`\\n* **User Context**: '{User}'\\n* **Affected Host**: '{ComputerName}'\\n* **Rule Name**: {RuleName}\\n\\nThis alert is triggered by either `hh.exe` directly spawning a suspicious child process (like `powershell.exe`, `cmd.exe`, `mshta.exe`, etc.) or `hh.exe` being used to open a `.chm` file located in an unusual or suspicious directory (e.g., `C:\\Users\\Public\\`, `C:\\Windows\\Temp\\`, user download/temp folders). Legitimate CHM files are typically opened by `explorer.exe` or directly from trusted application directories.\\n\\n**IMMEDIATE RECOMMENDED ACTIONS (MEDIUM PRIORITY - INVESTIGATE):**\\n\\n1.  **ANALYZE COMMAND LINE & CHM PATH:** Carefully examine the `CommandLine` (`{CommandLine}`) of `hh.exe` to identify the full path of the `.chm` file. If a child process was spawned, review its `CommandLine` (`{CommandLine}`). Identify if the `.chm` file is located in a suspicious directory.\\n2.  **RETRIEVE AND ANALYZE CHM FILE:** If the `.chm` file is present on disk, **retrieve a copy of it for static and dynamic analysis** in a sandbox environment. Do NOT open it directly on an analysis workstation. This will help determine the embedded malicious content (e.g., JavaScript, VBScript, PowerShell code) and its true purpose.\\n3.  **INVESTIGATE PARENT PROCESS & USER:** \\n    * What is the '{ParentImage}' process, and what was its `ParentCommandLine` (`{ParentCommandLine}`)? How was `hh.exe` (or the initial malicious process) launched? \\n    * Is the user '{User}' authorized to open CHM files from this location or is their account potentially compromised?\\n4.  **CHECK FOR CHILD PROCESSES:** Confirm any suspicious child processes spawned by `hh.exe` (as detailed in the alert) and investigate their activities (e.g., network connections, file modifications, additional process creations).\\n5.  **ENDPOINT SCAN:** Perform a full endpoint security scan on '{ComputerName}' to identify any associated malware or indicators of compromise.\\n6.  **ESCALATE:** Escalate to the security operations center (SOC) or incident response team for further analysis and potential remediation if malicious intent is confirmed."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Sysmon Event ID (expected to be 1 for Process Creation)."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to the executable (either `hh.exe` or its suspicious child process)."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line arguments, including the path to the CHM file or the command of the spawned child process."
+      },
+      {
+        "name": "ParentImage",
+        "required": true,
+        "description": "The executable of the parent process (expected to be `hh.exe` for child processes, or the process that launched `hh.exe`)."
+      },
+      {
+        "name": "ParentCommandLine",
+        "required": false,
+        "description": "The full command line of the parent process."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the process ran."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the CHM execution occurred."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]

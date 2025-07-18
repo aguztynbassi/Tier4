@@ -1,0 +1,89 @@
+[
+  {
+    "name": "Cobalt Strike Reflective DLL Injection (Remote Thread Start Address)",
+    "description": "Detects remote thread creation (Sysmon Event ID 8) where the `StartAddress` of the new thread corresponds to known default memory addresses utilized by Cobalt Strike's Reflective Loader during its process injection techniques. These specific hexadecimal patterns are highly characteristic of Cobalt Strike beacon activity, indicating defense evasion and persistent control by injecting malicious code into legitimate processes like `explorer.exe`, `svchost.exe`, or `lsass.exe`.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "sysmon",
+      "defense_evasion",
+      "persistence",
+      "process_injection",
+      "malware:Cobalt Strike",
+      "TA0005",
+      "TA0003",
+      "T1055",
+      "T1055.001"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: Cobalt Strike Reflective DLL Injection Detected!\\n\\n**A highly suspicious remote thread creation with a known Cobalt Strike `StartAddress` pattern has been detected on host '{ComputerName}' at {Timestamp}.** This is a **CRITICAL** indicator of active compromise, likely involving **Cobalt Strike beacon activity**, leveraging **Defense Evasion (TA0005)** and **Process Injection (T1055)** techniques, specifically Reflective DLL Injection.\\n\\n**Incident Details:**\\n* **Timestamp**: {Timestamp}\\n* **Event ID**: {EventID} (Sysmon EventID 8: CreateRemoteThread)\\n* **Source Process**: '{SourceImage}' (PID: {SourceProcessId})\\n* **Target Process (Injected Into)**: '{TargetImage}' (PID: {TargetProcessId})\\n* **Remote Thread Start Address**: `{StartAddress}`\\n* **Start Module (if available)**: {StartModule}\\n* **Start Function (if available)**: {StartFunction}\\n* **User Context of Source Process**: '{User}'\\n* **Affected Host**: '{ComputerName}'\\n* **Rule Name**: {RuleName}\\n\\nThe `StartAddress` of the newly created remote thread (`{StartAddress}`) matches a known default offset used by Cobalt Strike's reflective loader. This strongly suggests that malicious code (the Cobalt Strike beacon) has been injected into a legitimate process (`{TargetImage}`). Common target processes include `explorer.exe`, `svchost.exe`, and `lsass.exe`, which are often used to blend in with normal system activity.\\n\\n**IMMEDIATE RECOMMENDED ACTIONS (HIGH PRIORITY - RESPOND URGENTLY!):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** **Immediately isolate the affected host '{ComputerName}' from the network.** This is paramount to prevent further C2 communication, lateral movement, or data exfiltration.\\n2.  **MEMORY FORENSICS:** Perform a full memory acquisition of the compromised host. This is crucial for extracting the injected beacon, identifying its configuration, and understanding its capabilities. Analyze memory dumps for Cobalt Strike indicators (e.g., beacon configuration, loaded modules, network indicators).\\n3.  **PROCESS TREE ANALYSIS:** Investigate the full process tree leading to the `SourceImage` (`{SourceImage}`). How did the initial compromise occur? Look for suspicious parent processes or command lines.\\n4.  **DISK FORENSICS:** Collect relevant disk artifacts (e.g., event logs, temporary files, dropped executables, registry hives) from '{ComputerName}'. Look for the initial dropper, any staging files, or persistence mechanisms.\\n5.  **NETWORK TRAFFIC ANALYSIS:** Review network logs for '{ComputerName}' for any outbound C2 connections (e.g., to known Cobalt Strike default ports or suspicious IPs/domains) that may have occurred before or during the alert.\\n6.  **CREDENTIAL DUMPING CHECK:** If the `TargetImage` is `lsass.exe`, it's highly likely that the adversary is attempting to dump credentials. Prioritize incident response actions related to credential compromise.\\n7.  **THREAT HUNTING:** Proactively search other endpoints in your environment for similar `StartAddress` patterns or other Cobalt Strike indicators to identify if the compromise is more widespread.\\n8.  **ESCALATE TO INCIDENT RESPONSE LEADERSHIP:** This is a confirmed critical security incident involving a sophisticated adversary tool. Immediately escalate to your incident response team leadership for coordinated action."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the remote thread creation event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Sysmon Event ID (expected to be 8 for CreateRemoteThread)."
+      },
+      {
+        "name": "SourceImage",
+        "required": true,
+        "description": "The full path to the process that created the remote thread."
+      },
+      {
+        "name": "SourceProcessId",
+        "required": true,
+        "description": "The Process ID of the source process."
+      },
+      {
+        "name": "TargetImage",
+        "required": true,
+        "description": "The full path to the process into which the remote thread was created (the injected process)."
+      },
+      {
+        "name": "TargetProcessId",
+        "required": true,
+        "description": "The Process ID of the target process."
+      },
+      {
+        "name": "StartAddress",
+        "required": true,
+        "description": "The hexadecimal start address of the remotely created thread."
+      },
+      {
+        "name": "StartModule",
+        "required": false,
+        "description": "The name of the module where the thread starts (if available)."
+      },
+      {
+        "name": "StartFunction",
+        "required": false,
+        "description": "The name of the function where the thread starts (if available)."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the source process ran."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the event occurred."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]

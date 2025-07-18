@@ -1,0 +1,78 @@
+[
+  {
+    "name": "Outbound Connection to Hidden Cobra C2 Infrastructure",
+    "description": "Detects outbound network connections from internal hosts to IP addresses identified as belonging to Hidden Cobra (also known as Lazarus Group, APT38), a sophisticated state-sponsored threat actor. These connections are strong indicators of active Command and Control (C2) communication or data exfiltration, signaling a critical compromise of the connecting system. This rule requires an up-to-date threat intelligence feed for `HIDDEN_COBRA_IPS`.",
+    "tags": [
+      "security",
+      "detection",
+      "critical",
+      "network",
+      "command_and_control",
+      "exfiltration",
+      "threat_intelligence",
+      "apt:HiddenCobra",
+      "TA0011",
+      "TA0010",
+      "T1041",
+      "T1071"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "CRITICAL ALERT: Outbound Connection to Hidden Cobra C2 Infrastructure Detected!\\n\\n**A critical outbound network connection has been detected from internal host '{SourceIp}' to a known Hidden Cobra (Lazarus Group, APT38) Command and Control (C2) IP address '{DestinationIp}' on port {DestinationPort} at {Timestamp}.** This is a **CRITICAL** indicator of active **Command and Control (TA0011)** communication, signaling a high-confidence compromise of the connecting system and potential **Exfiltration (TA0010)**.\\n\\n**Incident Details:**\\n* **Timestamp**: {Timestamp}\\n* **Event ID**: {EventID} (if available from log source)\\n* **Source IP**: '{SourceIp}'\\n* **Destination IP (Hidden Cobra C2)**: '{DestinationIp}'\\n* **Destination Port**: {DestinationPort}\\n* **Protocol**: {Protocol}\\n* **Affected Internal Host (if available)**: '{ComputerName}'\\n* **Initiated By Process/User (if available)**: '{InitiatedBy}'\\n* **Destination Country (Geo-location)**: {DestinationCountry}\\n* **Rule Name**: {RuleName}\\n\\nThis alert indicates that a system within your network is actively communicating with infrastructure known to be operated by Hidden Cobra, a highly sophisticated state-sponsored threat actor. This communication is typically used for issuing commands to compromised systems, staging further attacks, or exfiltrating stolen data. The immediate presence of this indicator demands urgent attention.\\n\\n**IMMEDIATE RECOMMENDED ACTIONS (CRITICAL PRIORITY - RESPOND NOW!):**\\n\\n1.  **EMERGENCY HOST ISOLATION:** **Immediately isolate the internal host '{SourceIp}' (or '{ComputerName}') from the network.** This is paramount to prevent further C2 communication, data exfiltration, or lateral movement within your environment.\\n2.  **NETWORK TRAFFIC ANALYSIS:** Capture and analyze all available network traffic logs from and to '{SourceIp}' around the time of the alert. Look for patterns, data volume, and any other anomalous connections.\\n3.  **ENDPOINT FORENSICS:** Initiate a full forensic investigation on the compromised host '{ComputerName}' (or the system associated with '{SourceIp}'):\\n    * Identify the malware or tool establishing the C2 connection.\\n    * Determine the initial compromise vector.\\n    * Look for persistence mechanisms, lateral movement attempts, and evidence of data collection or exfiltration.\\n    * Perform memory forensics to identify running malicious processes and loaded modules.\\n4.  **THREAT INTELLIGENCE CROSS-REFERENCE:** Verify the `DestinationIp` ({DestinationIp}) against multiple up-to-date threat intelligence sources to confirm its association with Hidden Cobra and identify any related IOCs (e.g., domains, file hashes). Update your `HIDDEN_COBRA_IPS` list if necessary.\\n5.  **REVIEW PROXY/DNS LOGS:** Check proxy and DNS logs for connections or queries related to `DestinationIp` or any associated domains to identify if other internal hosts are also compromised.\\n6.  **ESCALATE TO INCIDENT RESPONSE LEADERSHIP:** This is a confirmed critical security incident involving a state-sponsored threat actor. Immediately escalate to your incident response team leadership and relevant stakeholders for coordinated action, including potential notification to relevant authorities if required."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the network connection event."
+      },
+      {
+        "name": "EventID",
+        "required": false,
+        "description": "The Event ID from the log source (e.g., firewall, Sysmon) if available."
+      },
+      {
+        "name": "SourceIp",
+        "required": true,
+        "description": "The internal source IP address of the connecting host."
+      },
+      {
+        "name": "DestinationIp",
+        "required": true,
+        "description": "The destination IP address, identified as Hidden Cobra C2 infrastructure."
+      },
+      {
+        "name": "DestinationPort",
+        "required": true,
+        "description": "The destination port used for the outbound connection."
+      },
+      {
+        "name": "Protocol",
+        "required": true,
+        "description": "The transport layer protocol used for the connection (e.g., TCP, UDP)."
+      },
+      {
+        "name": "ComputerName",
+        "required": false,
+        "description": "The hostname of the internal system if available from host-based logs."
+      },
+      {
+        "name": "InitiatedBy",
+        "required": false,
+        "description": "The process or user that initiated the connection, if available (e.g., from Sysmon Event ID 3)."
+      },
+      {
+        "name": "DestinationCountry",
+        "required": false,
+        "description": "The geo-located country of the destination IP address."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]

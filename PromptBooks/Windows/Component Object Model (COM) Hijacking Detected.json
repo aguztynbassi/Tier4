@@ -1,0 +1,75 @@
+[
+  {
+    "name": "Component Object Model (COM) Hijacking Detected",
+    "description": "Detects attempts by adversaries to establish persistence or achieve defense evasion by hijacking Component Object Model (COM) objects. This technique involves modifying specific registry keys (e.g., `InprocServer32`, `LocalServer32`) under `HKCU\\Software\\Classes\\CLSID` or `HKLM\\SOFTWARE\\Classes\\CLSID` to redirect legitimate COM object instantiations to malicious DLLs or executables. This allows malicious code to be executed when a legitimate application attempts to load the hijacked COM object.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "sysmon",
+      "defense_evasion",
+      "persistence",
+      "execution",
+      "event_triggered_execution",
+      "TA0005",
+      "TA0003",
+      "TA0002",
+      "T1546",
+      "T1546.015"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: Component Object Model (COM) Hijacking Detected!\\n\\n**A critical registry modification indicating a potential Component Object Model (COM) hijacking attempt has been detected on host '{ComputerName}' at {Timestamp}.** This is a strong indicator of **Persistence (TA0003)**, **Defense Evasion (TA0005)**, and potential **Execution (TA0002)**, leveraging **COM Hijacking (T1546.015)**.\\n\\n**Incident Details:**\\n* **Timestamp**: {Timestamp}\\n* **Event ID**: {EventID} (Sysmon EventID 12, 13, or 14 for Registry Activity)\\n* **Modifying Process**: '{Image}'\\n* **Command Line**: `{CommandLine}`\\n* **Target Registry Object**: '{TargetObject}'\\n* **Registry Details/Value Written**: `{Details}`\\n* **User Context**: '{User}'\\n* **Affected Host**: '{ComputerName}'\\n* **Rule Name**: {RuleName}\\n\\nThis alert is triggered by suspicious modifications to `CLSID` registry keys (e.g., `InprocServer32`, `LocalServer32`, `ShellFolder`). The `Details` field (`{Details}`) reveals that a new DLL or EXE path (potentially in a suspicious location like `C:\\Users\\Public\\` or `C:\\Windows\\Temp\\`) has been registered, or that a suspicious command (`powershell.exe`, `cmd.exe`, etc.) has been injected. This allows an adversary to execute malicious code when a legitimate application or system component attempts to load the hijacked COM object.\\n\\n**IMMEDIATE RECOMMENDED ACTIONS (HIGH PRIORITY - INVESTIGATE URGENTLY!):**\\n\\n1.  **ANALYZE REGISTRY MODIFICATION:** Immediately examine the `TargetObject` (`{TargetObject}`) and `Details` (`{Details}`) fields in detail. Identify the specific COM CLSID (the GUID in `{...}`) that was modified and the new DLL/EXE path or command that was registered.\\n2.  **RETRIEVE AND ANALYZE SUSPICIOUS FILES/COMMANDS:** If the `Details` field points to a file (e.g., `{Details}` showing `C:\\Users\\Public\\malicious.dll`), **retrieve a copy of that file for static and dynamic analysis** in a sandbox environment. If it's a command, analyze the command's intent.\\n3.  **INVESTIGATE MODIFYING PROCESS & USER:** \\n    * What is the '{Image}' process that made the registry modification? Is it a known legitimate application (e.g., installer, update service), or an unknown/suspicious executable? \\n    * Where is it located? Check its **digital signature**. \\n    * How was it launched (`{CommandLine}`)? What is its parent process?\\n    * Is the user '{User}' authorized to make such system-level registry changes, or is their account potentially compromised?\\n4.  **CHECK FOR PERSISTENCE:** Confirm that this registry modification has established a persistence mechanism. Determine how to safely revert the change after forensic collection. \\n5.  **IMPACT ASSESSMENT:** Identify which legitimate applications or system components rely on the hijacked COM object. This will help determine the potential impact and trigger for the malicious code execution.\\n6.  **ENDPOINT SCAN:** Perform a full endpoint security scan on '{ComputerName}' to identify any associated malware or indicators of compromise.\\n7.  **ESCALATE:** Immediately escalate to the security operations center (SOC) or incident response team for further analysis and comprehensive remediation."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the registry modification event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Sysmon Event ID (expected to be 12, 13, or 14 for Registry Activity)."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to the executable that modified the registry."
+      },
+      {
+        "name": "CommandLine",
+        "required": false,
+        "description": "The full command line arguments of the process that modified the registry."
+      },
+      {
+        "name": "TargetObject",
+        "required": true,
+        "description": "The full registry key or value path that was modified, including the CLSID."
+      },
+      {
+        "name": "Details",
+        "required": true,
+        "description": "The data written to the registry value, crucial for identifying malicious paths or commands."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the registry modification occurred."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the registry modification occurred."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]
