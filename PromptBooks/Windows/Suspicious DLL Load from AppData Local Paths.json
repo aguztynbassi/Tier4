@@ -1,0 +1,43 @@
+[
+  {
+    "name": "Suspicious DLL Load from AppData Local Paths (BlueMashroom Technique)",
+    "description": "Detects suspicious DLL loads or executions originating from user-writable `AppData\\Local` paths, often leveraging trusted Windows binaries like `regsvr32.exe`. This behavior is a strong indicator of defense evasion and code execution by adversaries attempting to bypass application whitelisting.",
+    "tags": [
+      "security",
+      "defense_evasion",
+      "execution",
+      "DLL_sideloading",
+      "proxy_execution",
+      "T1218",
+      "T1218.010",
+      "T1574",
+      "sysmon",
+      "windows_processes"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A critical security event has been detected on the host **{computer_name}**. A process, `regsvr32.exe`, executed the command line **{command_line}**, which attempts to load a DLL from a user-writable `AppData\\Local` path. This is a highly suspicious activity and is characteristic of **Signed Binary Proxy Execution** (**MITRE ATT&CK T1218**), a technique used for **defense evasion** and code execution. The event was triggered under the user **{user}**. Immediate investigation is required to analyze the loaded DLL and the context of the execution. This is a strong indicator of a security incident that needs to be treated with high priority.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line that includes 'regsvr32.exe' and the AppData path."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account that executed the command."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      }
+    ]
+  }
+]

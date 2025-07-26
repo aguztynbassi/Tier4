@@ -1,0 +1,51 @@
+[
+  {
+    "name": "BITS Job Creation or Transfer Detected",
+    "description": "Detects the creation or management of Background Intelligent Transfer Service (BITS) jobs via `bitsadmin.exe` or PowerShell's `Start-BitsTransfer` cmdlet. Adversaries frequently abuse BITS to download or upload malicious payloads, execute commands, and establish command and control channels by leveraging a legitimate Windows service that can bypass some network defenses.",
+    "tags": [
+      "security",
+      "persistence",
+      "defense_evasion",
+      "command_and_control",
+      "T1197",
+      "lolbas",
+      "sysmon",
+      "windows_processes"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A suspicious BITS job creation or file transfer has been detected on the host **{computer_name}**. The command line **{command_line}** was executed by the process **{image}** under the user **{user}**, indicating an attempt to use a legitimate Windows service for potentially malicious purposes. This activity is a known technique for **Defense Evasion** and **Command and Control** (**MITRE ATT&CK T1197**). The parent process was **{parent_image}**. Due to the high rate of legitimate BITS usage, immediate investigation is required to determine if this activity is benign (e.g., Windows Update) or malicious. The presence of unusual source URLs, destinations, or post-completion commands is a strong indicator of compromise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "image",
+        "required": true,
+        "description": "The process image (e.g., 'bitsadmin.exe' or 'powershell.exe')."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line that includes BITS-related parameters."
+      },
+      {
+        "name": "parent_image",
+        "required": true,
+        "description": "The parent process that initiated the BITS command."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process ran."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      }
+    ]
+  }
+]

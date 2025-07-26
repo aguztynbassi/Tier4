@@ -1,0 +1,41 @@
+[
+  {
+    "name": "PowerShell Console Host History Log Clearing",
+    "description": "Detects attempts to remove or clear PowerShell console host history logs, a common defense evasion technique used by adversaries.",
+    "tags": [
+      "security",
+      "detection",
+      "powershell",
+      "defense evasion",
+      "Windows",
+      "T1070",
+      "T1070.003",
+      "TA0005"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Suspicious PowerShell command history clearing detected on **{computer_name}**. The user **{user}** executed a command ('`{payload}`') to remove or manipulate PowerShell history logs. This is a high-risk defense evasion tactic that could indicate an attacker attempting to hide their tracks. Immediate investigation is required to determine the context and purpose of this action.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The hostname of the computer where the event occurred."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account that ran the PowerShell command."
+      },
+      {
+        "name": "payload",
+        "required": true,
+        "description": "The full script block or command that was executed to clear the history."
+      }
+    ]
+  }
+]

@@ -1,0 +1,53 @@
+[
+  {
+    "name": "CACTUSTORCH-like Remote Thread Creation Detected",
+    "description": "Detects the creation of a remote thread by processes commonly abused by adversaries for code injection, such as scripting hosts (`wscript.exe`, `cscript.exe`) or Microsoft Office applications. This is a direct indicator of malicious code injection and is a high-severity event associated with defense evasion and arbitrary code execution.",
+    "tags": [
+      "security",
+      "execution",
+      "defense_evasion",
+      "process_injection",
+      "T1055",
+      "T1055.003",
+      "T1059",
+      "T1566",
+      "CACTUSTORCH",
+      "sysmon"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A critical security event has been detected on the host **{computer_name}**. The process **{source_image}**, running under user **{user}**, created a remote thread in the target process **{image}**. This activity is a hallmark of malicious code injection (**MITRE ATT&CK T1055.003**) and is a technique used by implants like CACTUSTORCH for defense evasion. The injected thread started in the function **{start_function}**, which is highly suspicious. Immediate investigation is required to analyze the source process, the user's activity, and the integrity of the target process. This event should be treated as a confirmed compromise until proven otherwise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "source_image",
+        "required": true,
+        "description": "The path of the process that created the remote thread."
+      },
+      {
+        "name": "image",
+        "required": true,
+        "description": "The path of the target process where the remote thread was created."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user context of the source process."
+      },
+      {
+        "name": "start_function",
+        "required": true,
+        "description": "The name of the function where the injected thread started."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      }
+    ]
+  }
+]

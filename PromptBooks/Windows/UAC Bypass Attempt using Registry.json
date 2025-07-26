@@ -1,0 +1,51 @@
+[
+  {
+    "name": "UAC Bypass Attempt using Registry",
+    "description": "Detects attempts to bypass User Account Control (UAC) by modifying specific registry keys associated with auto-elevated applications. Adversaries leverage these techniques to elevate process privileges on the system, often by manipulating `\\mscfile\\shell\\open\\command\\` or `\\ms-settings\\shell\\open\\command\\` paths. This is a critical indicator of privilege escalation.",
+    "tags": [
+      "security",
+      "privilege_escalation",
+      "defense_evasion",
+      "UAC_bypass",
+      "T1548",
+      "T1548.002",
+      "sysmon",
+      "windows_registry"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A critical privilege escalation attempt has been detected on the host **{computer_name}**. The registry key **{target_object}**, a known target for UAC bypass exploits, was modified by the process **{image}** under the user **{user}**. This activity is a strong indicator of an adversary attempting to bypass User Account Control (**MITRE ATT&CK T1548.002**) to gain elevated privileges. The event ID is **{event_id}**. Immediate investigation is required to determine the origin of the process and its full intent. If the modification is not part of a legitimate installation or system update, this is a confirmed security incident.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "target_object",
+        "required": true,
+        "description": "The full path of the registry key or value that was modified."
+      },
+      {
+        "name": "image",
+        "required": true,
+        "description": "The process that performed the registry modification."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account that performed the modification."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon event ID for the registry modification (12, 13, or 14)."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      }
+    ]
+  }
+]

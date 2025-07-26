@@ -1,0 +1,49 @@
+[
+  {
+    "name": "Botnet Development Detected",
+    "description": "Detection of activities related to botnet development. This activity may indicate an adversary's attempt to create or maintain a network of malicious bots. This is a critical indicator of resource development as part of the reconnaissance phase of an attack.",
+    "tags": [
+      "security",
+      "threat_intelligence",
+      "botnet",
+      "resource_development",
+      "T1586.002"
+    ],
+    "platforms": [
+      "IaaS",
+      "Linux",
+      "macOS",
+      "windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A potential botnet development activity has been detected in a code repository. The repository name **{repo_name}** contains the term 'botnet', which is a strong indicator of a malicious project. The activity was performed by the user **{user}** from the IP address **{source_address}** at **{timestamp}**. This aligns with the **MITRE ATT&CK T1586.002** (Develop Capabilities: Botnet) technique. Further investigation is needed to determine the nature of this activity. Check if the user is authorized to perform security research or if this is an unauthorized malicious project.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "repo_name",
+        "required": true,
+        "description": "The name of the code repository."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user who performed the activity."
+      },
+      {
+        "name": "source_address",
+        "required": true,
+        "description": "The source IP address of the activity."
+      },
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      }
+    ]
+  }
+]

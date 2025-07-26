@@ -1,0 +1,53 @@
+[
+  {
+    "name": "Internal Email with CEO Fraud Characteristics (Spoofed Sender)",
+    "description": "Detects fraudulent emails with 'CEO Fraud' or internal spoofing characteristics. An email that appears to originate from a key executive in the organization is received by an internal user, but its origin ('OriginalClientAddress') does not correspond to a legitimate mail server, suggesting a compromised internal account or a phishing attempt.",
+    "tags": [
+      "security",
+      "phishing",
+      "spoofing",
+      "ceo_fraud",
+      "T1566",
+      "T1566.004",
+      "T1078.003",
+      "initial_access",
+      "exchange",
+      "email_security"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A critical alert has been triggered on the Exchange host **{computer_name}**: an email with characteristics of internal spoofing has been detected. The apparent sender is an executive (**{sender}**), but the source IP address (**{original_client_address}**) does not belong to any of our legitimate mail servers. This is a strong indicator of a potential CEO Fraud attack, a compromised account, or an internal phishing attempt (**MITRE ATT&CK T1566.004**). The message was sent to recipient **{receiver}** with the subject: **{subject}**. Immediate action is required to verify the sender's account, investigate the email's origin, and notify the user not to reply. This alert has a high priority level due to the severe potential impact of such attacks.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "sender",
+        "required": true,
+        "description": "The email address of the sender (e.g., ceo@yourcompany.com)."
+      },
+      {
+        "name": "original_client_address",
+        "required": true,
+        "description": "The source IP address of the client that sent the email."
+      },
+      {
+        "name": "receiver",
+        "required": true,
+        "description": "The email address of the internal recipient."
+      },
+      {
+        "name": "subject",
+        "required": true,
+        "description": "The subject of the email."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The name of the Exchange server where the event occurred."
+      }
+    ]
+  }
+]

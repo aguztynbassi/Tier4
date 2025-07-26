@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Failed Call to LsaRegisterLogonProcess()",
+    "description": "Detects a failed attempt to call the privileged Windows function `LsaRegisterLogonProcess()`. This can indicate unauthorized attempts to interact with the Local Security Authority (LSA), often as part of a privilege escalation attempt, credential access, or a bypass of security controls. The specific failure reason `%%1794` confirms the process lacked the necessary privileges for this action.",
+    "tags": [
+      "security",
+      "privilege_escalation",
+      "credential_access",
+      "T1548",
+      "T1548.002",
+      "T1550",
+      "LSA",
+      "windows_security_log",
+      "system_events"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "An unauthorized attempt to interact with the Local Security Authority (LSA) has been detected on the host **{computer_name}**. The Windows Security Event Log (Event ID 4673) shows that the process **{process_name}** attempted to call the privileged function `LsaRegisterLogonProcess()` but failed due to a lack of privileges (**FailureReason: %%1794**). This is a strong indicator of a potential **privilege escalation** or **credential access** attempt (**MITRE ATT&CK T1548**). The attempt was made by the user **{subject_user_name}**. Immediate investigation is required to determine the purpose of the process and whether it is malicious or a legitimate but misconfigured application. Analyze the parent process and other recent activities of this user to assess the full scope of the threat.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that attempted to call the privileged service."
+      },
+      {
+        "name": "subject_user_name",
+        "required": true,
+        "description": "The user account under which the process was running."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      }
+    ]
+  }
+]

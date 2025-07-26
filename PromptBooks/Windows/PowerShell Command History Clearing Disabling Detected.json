@@ -1,0 +1,47 @@
+[
+  {
+    "name": "PowerShell Command History Clearing/Disabling Detected",
+    "description": "Detects attempts to clear or disable PowerShell command history, a common defense evasion technique used by adversaries.",
+    "tags": [
+      "security",
+      "detection",
+      "powershell",
+      "defense evasion",
+      "Windows",
+      "Sysmon",
+      "T1070",
+      "T1070.003",
+      "TA0005"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Suspicious PowerShell command history clearing/disabling detected on **{computer_name}**. The user **{user}** executed a command ('`{command_line}`') to remove or disable the PowerShell history logs. This is a high-risk defense evasion tactic that could indicate an attacker attempting to hide their tracks. Immediate investigation is required to determine the context and purpose of this action, and the parent process **{parent_image}** should also be analyzed.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The hostname of the computer where the event occurred."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account that ran the PowerShell command."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line that was executed."
+      },
+      {
+        "name": "parent_image",
+        "required": true,
+        "description": "The parent process that launched the PowerShell command."
+      }
+    ]
+  }
+]

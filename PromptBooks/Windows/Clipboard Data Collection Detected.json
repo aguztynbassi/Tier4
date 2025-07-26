@@ -1,0 +1,51 @@
+[
+  {
+    "name": "Clipboard Data Collection Detected",
+    "description": "Detects attempts to access or manipulate data stored in the user's clipboard, often indicating adversary collection efforts.",
+    "tags": [
+      "security",
+      "detection",
+      "collection",
+      "clipboard",
+      "Windows",
+      "Sysmon",
+      "T1115",
+      "TA0009"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Suspicious clipboard data collection detected on host **{computer_name}**. The process **{image}** (command line: '`{command_line}`') attempted to access or manipulate clipboard data. This activity was initiated by **{user}** and the parent process was **{parent_image}**. This could indicate an adversary collecting sensitive information. Please investigate this event, focusing on the user's recent activities and the purpose of this process.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The hostname of the system where the clipboard access was detected."
+      },
+      {
+        "name": "image",
+        "required": true,
+        "description": "The name of the process (e.g., powershell.exe, clip.exe) that interacted with the clipboard."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute the process."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user context under which the clipboard interaction occurred."
+      },
+      {
+        "name": "parent_image",
+        "required": true,
+        "description": "The full path to the parent process that launched the process interacting with the clipboard."
+      }
+    ]
+  }
+]

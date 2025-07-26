@@ -1,0 +1,49 @@
+[
+  {
+    "name": "Chafer/OilRig - PowerShell History Collection Detected",
+    "description": "Detecta intentos de acceso o recuperación del historial de comandos de PowerShell, una técnica de reconocimiento y colección utilizada por grupos como Chafer (OilRig). El objetivo es identificar comandos ejecutados previamente, datos sensibles o credenciales almacenadas. Esta actividad es altamente sospechosa si no es realizada por un administrador de sistemas o analista de seguridad.",
+    "tags": [
+      "security",
+      "discovery",
+      "collection",
+      "credential_access",
+      "T1059.001",
+      "T1083",
+      "T1552.002",
+      "Chafer",
+      "OilRig",
+      "sysmon",
+      "windows_powershell"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Se ha detectado una actividad sospechosa de colección de información en el host **{computer_name}**. El proceso **{image}** ejecutó la línea de comandos **{command_line}** bajo el usuario **{user}**. Este comando está directamente relacionado con la recopilación del historial de PowerShell, que puede contener datos sensibles y credenciales. Esta táctica es comúnmente utilizada por grupos de amenazas como **Chafer (OilRig)** para el reconocimiento y la colección de credenciales (**MITRE ATT&CK T1083, T1552.002**). Se recomienda verificar si el usuario y el proceso involucrados están autorizados para realizar este tipo de acciones. Si no es una actividad legítima, se debe considerar como una indicación de compromiso y se debe iniciar una investigación completa.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "image",
+        "required": true,
+        "description": "La imagen del proceso (e.g., 'powershell.exe')."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "La línea de comandos completa que incluye la referencia al historial de PowerShell."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "El usuario que ejecutó el comando."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "El nombre del equipo donde ocurrió el evento."
+      }
+    ]
+  }
+]
