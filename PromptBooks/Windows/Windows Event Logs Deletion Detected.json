@@ -1,0 +1,37 @@
+{
+  "name": "Windows Event Logs Deletion Detected",
+  "description": "Detection of Windows Event Log deletion. This could be an attempt by an adversary to erase evidence of their activities, which is a common defense evasion technique.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "indicator_removal",
+    "T1070",
+    "T1070.001",
+    "windows_log_deletion"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a **Windows Event Log Deletion** event was detected. The event ID **{event_id}** indicates that one or more event logs were cleared. This activity is a strong indicator of **Defense Evasion** (**MITRE ATT&CK T1070.001**) and is often a sign of an adversary attempting to cover their tracks. The action was performed under the user **{user}**. Immediate investigation is required to determine the legitimacy of this action and to understand what activity the adversary might be trying to hide.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "event_id",
+      "required": true,
+      "description": "The Windows event ID (1102 or 1104) indicating log deletion."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the log deletion."
+    }
+  ]
+}

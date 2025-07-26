@@ -1,0 +1,48 @@
+[
+  {
+    "name": "Adversary-in-the-Middle Infrastructure Detected",
+    "description": "Detects configuration activities for adversary-in-the-middle (AiTM) infrastructure. This activity can indicate an attempt to establish a control point to intercept or manipulate traffic.",
+    "tags": [
+      "security",
+      "resource_development",
+      "AiTM",
+      "T1583",
+      "T1583.004"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A critical alert has been triggered on the host **{host}**: a potential **Adversary-in-the-Middle (AiTM)** infrastructure setup was detected. The activity was recorded as a server creation with the role of a 'man-in-the-middle' proxy. The configuration was initiated by user **{user}** from the source address **{source_address}**. This is a strong indicator of **Resource Development** (**MITRE ATT&CK T1583.004**) and a severe security incident. Immediate action is required to investigate this activity and block the source address. This could be part of a larger attack aimed at stealing credentials or bypassing multi-factor authentication.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "host",
+        "required": true,
+        "description": "The name of the host where the activity was detected."
+      },
+      {
+        "name": "source_address",
+        "required": true,
+        "description": "The source IP address from which the configuration was initiated."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account that performed the configuration."
+      },
+      {
+        "name": "activity",
+        "required": true,
+        "description": "The type of activity detected (e.g., 'create_server')."
+      },
+      {
+        "name": "role",
+        "required": true,
+        "description": "The role of the configured server (e.g., 'mitm')."
+      }
+    ]
+  }
+]

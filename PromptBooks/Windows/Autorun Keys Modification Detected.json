@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Autorun Keys Modification Detected",
+    "description": "Detects modifications (creation, deletion, or setting values) in critical Windows registry keys that control auto-execution of programs at system boot or user logon. Adversaries commonly abuse these keys, such as `Run`, `RunOnce`, `Winlogon`, and `AppInit_DLLs`, to establish persistence.",
+    "tags": [
+      "security",
+      "persistence",
+      "privilege_escalation",
+      "defense_evasion",
+      "T1547",
+      "T1547.001",
+      "T1547.004",
+      "sysmon",
+      "windows_registry"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A critical persistence mechanism has been detected on the host **{computer_name}**. The process **{image}**, running under user **{user}**, modified a critical Autorun registry key at path **{target_object}**. This registry modification is a known technique used by adversaries to establish persistence (**MITRE ATT&CK T1547.001**), ensuring their malicious code executes automatically upon system boot or user logon. The event details show the new value **{details}**. Immediate investigation is required to determine the legitimacy of this change. If the modification is not from a known, trusted application installer or update, this is a confirmed security incident that requires a high-priority response.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "image",
+        "required": true,
+        "description": "The process that performed the registry modification."
+      },
+      {
+        "name": "target_object",
+        "required": true,
+        "description": "The full path of the registry key or value that was modified."
+      },
+      {
+        "name": "details",
+        "required": true,
+        "description": "The new value written to the registry key, containing the program path."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account that performed the modification."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "name": "Accessibility Features - Suspicious Process Launch by Winlogon",
+    "description": "Detects highly suspicious process creation where legitimate Windows accessibility feature binaries (e.g., `sethc.exe`, `utilman.exe`) are launched by `winlogon.exe` from a non-standard system path. This indicates a potential persistence and privilege escalation attempt, as adversaries commonly hijack these features to execute malicious code with SYSTEM privileges from the login screen.",
+    "tags": [
+      "security",
+      "persistence",
+      "privilege_escalation",
+      "T1546",
+      "T1546.008",
+      "sysmon",
+      "windows_processes"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A critical alert has been triggered on the host **{computer_name}**: the process **{image}**, which is a legitimate Windows accessibility feature, was launched by **{parent_image}** from an unusual path. This activity is a strong indicator of an **Accessibility Features** persistence attack (**MITRE ATT&CK T1546.008**), a known technique for achieving **Privilege Escalation** by executing malicious code with SYSTEM privileges from the login screen. Immediate investigation is required to determine the legitimacy of this action. The event occurred under the user **{user}**. This event should be treated as a confirmed security incident until proven otherwise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "image",
+        "required": true,
+        "description": "The full path to the spawned accessibility executable."
+      },
+      {
+        "name": "parent_image",
+        "required": true,
+        "description": "The full path to the parent process, which should be 'winlogon.exe'."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the spawned process ran."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The hostname of the computer where the event occurred."
+      }
+    ]
+  }
+]

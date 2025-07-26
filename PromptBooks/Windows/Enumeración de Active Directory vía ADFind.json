@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Enumeración de Active Directory vía ADFind",
+    "description": "Se detecta la enumeración de Active Directory utilizando la herramienta AdFind. AdFind es una utilidad basada en CLI que se puede utilizar para recopilar información de Active Directory como unidades organizativas, usuarios, computadoras y grupos. Los adversarios pueden usar esta utilidad para recopilar información relacionada con Active Directory.",
+    "tags": [
+      "security",
+      "discovery",
+      "account_discovery",
+      "group_discovery",
+      "domain_trust_discovery",
+      "command_and_scripting_interpreter",
+      "T1087",
+      "T1069",
+      "T1482",
+      "T1059",
+      "adfind",
+      "sysmon"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Se ha activado una alerta en el host **{computer}**: se ha detectado la ejecución de un proceso con la línea de comandos **{command_line}**, que coincide con patrones de la herramienta de enumeración de Active Directory **AdFind**. Este evento, con ID **1**, indica una posible fase de **Descubrimiento** (**MITRE ATT&CK T1087, T1069, T1482**). Los atacantes utilizan estas herramientas para recopilar información sobre usuarios, grupos y relaciones de confianza para planificar futuros ataques. El proceso padre fue **{parent_process_name}** y el usuario que ejecutó la acción fue **{user}**. Se requiere una investigación inmediata para determinar la legitimidad de esta actividad y si está relacionada con un posible compromiso de seguridad.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "computer",
+        "required": true,
+        "description": "Nombre del equipo donde se detecta la actividad."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "Línea de comandos completa utilizada para ejecutar el proceso."
+      },
+      {
+        "name": "parent_process_name",
+        "required": true,
+        "description": "Nombre del proceso padre que inició la ejecución de AdFind."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "Usuario que ejecutó el proceso."
+      }
+    ]
+  }
+]

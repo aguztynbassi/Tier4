@@ -1,0 +1,45 @@
+[
+  {
+    "name": "Application Whitelisting Bypass via Dxcap Detected",
+    "description": "Detects adversaries bypassing process and/or signature-based defenses by executing `Dxcap.exe`. This activity is often used for application whitelisting bypass via trusted developer utilities proxy execution. The detection focuses on command-line arguments that indicate command execution, which is highly suspicious and requires immediate attention.",
+    "tags": [
+      "security",
+      "defense_evasion",
+      "proxy_execution",
+      "T1127",
+      "lolbas",
+      "sysmon",
+      "windows_processes"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A critical alert has been triggered on the host **{computer_name}**: the process `dxcap.exe` executed the command line **{command_line}**, which contains arguments indicative of **Trusted Developer Utilities Proxy Execution** (**MITRE ATT&CK T1127**). This technique is a known method for bypassing application whitelisting and executing arbitrary code. The parent process was **{parent_image}** and the user was **{user}**. While `dxcap.exe` is a legitimate tool, its use with these parameters is highly suspicious. Immediate investigation is required to determine the nature of the child process being launched and whether this is a legitimate developer activity or a malicious attack.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line that includes '-c' and a reference to an executable."
+      },
+      {
+        "name": "parent_image",
+        "required": true,
+        "description": "The parent process that launched dxcap.exe."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process ran."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      }
+    ]
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Active Directory Schema or Critical Object Change Detected",
+    "description": "Detects the creation, modification, deletion, undeletion, or movement of objects within Active Directory. This rule is particularly focused on changes to the schema or other critical objects, as these can be strong indicators of malicious activity such as persistence, privilege escalation, or defense evasion. While some changes are legitimate, unapproved or unusual modifications are a high-priority security event.",
+    "tags": [
+      "security",
+      "persistence",
+      "privilege_escalation",
+      "credential_access",
+      "defense_evasion",
+      "T1098",
+      "T1484",
+      "T1556",
+      "windows_ad"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A critical alert has been triggered on the Domain Controller **{computer_name}**: a highly suspicious change was made to a critical **Active Directory** object. The event ID **{event_id}** indicates that the object with the distinguished name **{object_dn}** was modified, created, or deleted. The change was performed by the user **{subject_user_name}**. This activity is a strong indicator of a potential **Privilege Escalation** or **Persistence** attack (**MITRE ATT&CK T1098**), especially if the change involves the AD schema or a sensitive object. Immediate investigation is required to determine the legitimacy of this action and the potential impact. This event should be treated as a confirmed security incident until proven otherwise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The specific Windows Security Event ID (e.g., 5136, 5137, etc.)."
+      },
+      {
+        "name": "object_dn",
+        "required": true,
+        "description": "The distinguished name of the Active Directory object that was changed."
+      },
+      {
+        "name": "subject_user_name",
+        "required": true,
+        "description": "The user account that initiated the change."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The name of the Domain Controller where the event occurred."
+      }
+    ]
+  }
+]

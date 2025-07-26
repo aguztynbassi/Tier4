@@ -1,0 +1,44 @@
+[
+  {
+    "name": "Addition of SID History to Active Directory Object",
+    "description": "Detects the addition of SID History attributes to an Active Directory object. This behavior can be used by an attacker to inherit additional privileges from a compromised account, often for privilege escalation or persistence.",
+    "tags": [
+      "security",
+      "persistence",
+      "privilege_escalation",
+      "T1134",
+      "T1134.005",
+      "windows_ad"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A critical alert has been triggered on the Domain Controller **{hostname}**: the **SID History** attribute was added to the Active Directory object for user **{target_user_name}**. This highly suspicious activity, performed by **{subject_user_name}**, is a known technique for **Privilege Escalation** (**MITRE ATT&CK T1134.005**) and **Persistence**. It allows an attacker to inherit the privileges of another account without needing its password. Immediate action is required to investigate the event ID **{event_id}** and determine the legitimacy of this change. This event should be treated as a confirmed security incident until proven otherwise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "target_user_name",
+        "required": true,
+        "description": "The name of the Active Directory object to which SID History was added."
+      },
+      {
+        "name": "subject_user_name",
+        "required": true,
+        "description": "The user account that performed the modification."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Windows Security Event ID (e.g., 4765, 4766, or 4738)."
+      },
+      {
+        "name": "hostname",
+        "required": true,
+        "description": "The hostname of the Domain Controller where the event occurred."
+      }
+    ]
+  }
+]

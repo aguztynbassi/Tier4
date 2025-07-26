@@ -1,0 +1,42 @@
+{
+  "name": "Sysmon Error Event Detected",
+  "description": "Detection of a Sysmon error event. This could be an adversary's attempt to tamper with, disable, or uninstall Sysmon, which is a common defense evasion technique.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "impair_defenses",
+    "T1562",
+    "T1562.001",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a **Sysmon Error Event** was detected with Event ID **{event_id}**. The activity involves the `sysmon.exe` process (**{image}**) and was performed under the user **{user}**. This is a strong indicator of **Defense Evasion** (**MITRE ATT&CK T1562.001**) where an adversary is likely attempting to impair security defenses by interfering with the Sysmon service to prevent logging of their malicious activities. Immediate investigation is required to determine the legitimacy of this action and to restore the integrity of the Sysmon service.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "event_id",
+      "required": true,
+      "description": "The Sysmon event ID (typically 255 for errors)."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "The process image associated with the event, which is expected to be 'sysmon.exe'."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account under which the error event occurred."
+    }
+  ]
+}

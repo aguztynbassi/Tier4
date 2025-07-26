@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Accessibility Features - Registry Modification for Persistence/Privilege Escalation",
+    "description": "Detects suspicious modifications to registry keys associated with Windows Accessibility Features, particularly within the 'Image File Execution Options' (IFEO) key. Adversaries commonly leverage this technique to establish persistence or escalate privileges by redirecting legitimate accessibility binaries to execute malicious code, often gaining SYSTEM privileges at the login screen.",
+    "tags": [
+      "security",
+      "persistence",
+      "privilege_escalation",
+      "T1546",
+      "T1546.008",
+      "sysmon",
+      "windows_registry"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A critical alert has been triggered on the host **{computer_name}**: the registry key **{target_object}**, associated with a Windows Accessibility Feature, was modified by the process **{image}** under the user **{user}**. The modification details are **{details}**. This activity is a strong indicator of an **Accessibility Features** persistence attack (**MITRE ATT&CK T1546.008**), a known technique for achieving **Privilege Escalation** by executing malicious code with SYSTEM privileges from the login screen. Immediate investigation is required to determine the legitimacy of this action. This event should be treated as a confirmed security incident until proven otherwise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "target_object",
+        "required": true,
+        "description": "The full path of the registry key or value that was modified."
+      },
+      {
+        "name": "image",
+        "required": true,
+        "description": "The process that performed the registry modification."
+      },
+      {
+        "name": "details",
+        "required": false,
+        "description": "The value written to the registry key, if available."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account that performed the modification."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      }
+    ]
+  }
+]

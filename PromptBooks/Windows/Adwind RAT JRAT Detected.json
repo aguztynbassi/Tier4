@@ -1,0 +1,60 @@
+[
+  {
+    "name": "Adwind RAT / JRAT Detected",
+    "description": "Detects possible activity related to Adwind or JRAT, such as the execution of `javaw.exe` or `cscript.exe` from a user's AppData directory, or the creation of persistence entries in the registry using common paths for these RATs. This indicates an attempt to establish a Remote Access Trojan.",
+    "tags": [
+      "security",
+      "execution",
+      "persistence",
+      "command_and_control",
+      "T1059",
+      "T1059.001",
+      "T1059.003",
+      "T1059.005",
+      "T1059.007",
+      "adwind",
+      "jrat",
+      "sysmon"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A critical alert has been triggered on the host **{hostname}**: possible activity related to the **Adwind** or **JRAT** Remote Access Trojan has been detected. This malicious software often establishes **Execution** and **Persistence** (**MITRE ATT&CK T1059**) on a compromised system. The event shows a suspicious process creation with the command line **{command_line}**, a file creation at **{image}**, or a registry modification at **{target_object}** with details **{details}**. The activity occurred under the user **{user}**. Immediate action is required to isolate the host and perform a full forensic analysis to determine the scope of the compromise. This is a high-confidence alert for a security incident.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "command_line",
+        "required": false,
+        "description": "The command line of a suspicious process."
+      },
+      {
+        "name": "image",
+        "required": false,
+        "description": "The image path of a suspicious file."
+      },
+      {
+        "name": "target_object",
+        "required": false,
+        "description": "The registry key that was modified for persistence."
+      },
+      {
+        "name": "details",
+        "required": false,
+        "description": "The value written to the registry key."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the activity occurred."
+      },
+      {
+        "name": "hostname",
+        "required": true,
+        "description": "The hostname of the system where the event occurred."
+      }
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "name": "Apache Struts 2 Remote Code Execution Detected (CVE-2017-5638)",
+    "description": "Detects a possible exploitation of the CVE-2017-5638 vulnerability in Apache Struts 2, which allows for remote code execution via manipulated HTTP Content-Type headers. The rule looks for specific patterns in HTTP traffic that are indicative of an OGNL injection attempt.",
+    "tags": [
+      "security",
+      "initial_access",
+      "exploitation",
+      "T1190",
+      "CVE-2017-5638",
+      "apache",
+      "struts"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A critical alert has been triggered: a possible exploitation attempt for **CVE-2017-5638** (Apache Struts 2 RCE) has been detected on the server **{computer}**. The HTTP request originated from the source IP **{src_ip}** and targeted the URL **{url}**. The malicious payload was identified in the `Content-Type` header, which contained the value **{content_type}**. This is a strong indicator of an **Initial Access** attack using the **Exploit Public-Facing Application** technique (**MITRE ATT&CK T1190**). Immediate action is required to block the source IP, isolate the server, and investigate for any post-exploitation activity. Verify that the Apache Struts 2 instance is patched to a non-vulnerable version.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "src_ip",
+        "required": true,
+        "description": "The source IP address of the malicious request."
+      },
+      {
+        "name": "url",
+        "required": true,
+        "description": "The URL targeted by the request."
+      },
+      {
+        "name": "content_type",
+        "required": true,
+        "description": "The value of the HTTP Content-Type header containing the malicious payload."
+      },
+      {
+        "name": "computer",
+        "required": true,
+        "description": "The name of the server where the event occurred."
+      }
+    ]
+  }
+]
