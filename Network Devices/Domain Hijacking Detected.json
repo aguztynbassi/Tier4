@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Domain Hijacking Detected",
+    "description": "A potential domain hijacking attempt has been detected, requiring an immediate and critical response.",
+    "tags": [
+      "security",
+      "detection",
+      "critical",
+      "domain_hijacking",
+      "dns_security",
+      "resource_compromise",
+      "TA0042",
+      "T1584.001"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "CRITICAL SEVERITY ALERT: Potential Domain Hijacking Detected!\\n\\nYour domain, '{domain_name}', has reported a '{status}' status at {Timestamp}. This could mean control of your domain has been seized by an attacker. Nameservers have changed from '{old_nameservers}' to '{new_nameservers}'. The detected activity was '{activity}', possibly from IP '{source_ip}'. Immediate action is required!\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Affected Domain**: {domain_name}\\n* **Old Nameservers (if applicable)**: {old_nameservers}\\n* **New Nameservers (if applicable)**: {new_nameservers}\\n* **Registrant Email (if applicable)**: {registrant_email}\\n* **Source IP (if applicable)**: {source_ip}\\n* **Detected Activity**: {activity}\\n* **Reported Status**: {status}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY - RESPOND WITHIN MINUTES):**\\n\\n1.  **IMMEDIATE CONTACT WITH REGISTRAR/DNS PROVIDER:** Contact your domain registrar and/or DNS provider **immediately**. Request they block any further changes to the domain and, if possible, revert the nameservers to your last known good configuration.\\n2.  **PASSWORD RESET/MFA FOR ADMIN ACCOUNTS:** Force password resets and enable/re-verify MFA for all administrative accounts associated with your domain registrar and DNS provider. Investigate any unusual logins to these accounts.\\n3.  **VERIFY CRITICAL DNS RECORDS:** Verify the integrity of all critical DNS records for the affected domain (A, MX, CNAME, TXT records) to detect redirects to malicious sites, attacker-controlled mail servers, or changes to SPF/DKIM/DMARC records.\\n4.  **REVIEW SSL/TLS CERTIFICATES:** If the domain was hijacked, an attacker might have issued fraudulent SSL/TLS certificates for your domain. Review your Certificate Authority logs and certificate monitoring services for unauthorized issuances.\\n5.  **INTERNAL/EXTERNAL COMMUNICATION:** Prepare a communication plan to notify internal users and, if necessary, external customers about the disruption or potential risk. Activate your domain outage contingency plan.\\n6.  **FORENSIC ANALYSIS:** Initiate a thorough forensic analysis to determine how the registrar or DNS provider account was compromised (e.g., phishing, stolen credentials, vulnerability). \\n7.  **CONTINUOUS MONITORING:** Maintain intensive monitoring of the domain for any anomalous activity, even after regaining control.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the hijacking detection."
+      },
+      {
+        "name": "domain_name",
+        "required": true,
+        "description": "The name of the domain suspected of being hijacked."
+      },
+      {
+        "name": "status",
+        "required": true,
+        "description": "The reported status of the domain (e.g., 'hijacked')."
+      },
+      {
+        "name": "old_nameservers",
+        "required": false,
+        "description": "The previous nameservers of the domain, if available."
+      },
+      {
+        "name": "new_nameservers",
+        "required": false,
+        "description": "The new nameservers of the domain after the change, if available."
+      },
+      {
+        "name": "registrant_email",
+        "required": false,
+        "description": "The email of the domain registrant, if available."
+      },
+      {
+        "name": "source_ip",
+        "required": false,
+        "description": "The IP address from which the activity was detected, if available."
+      },
+      {
+        "name": "activity",
+        "required": false,
+        "description": "The specific activity detected (e.g., nameserver change, registrar change)."
+      }
+    ]
+  }
+]

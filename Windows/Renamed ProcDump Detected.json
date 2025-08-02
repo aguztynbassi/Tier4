@@ -1,0 +1,53 @@
+{
+    "name": "Renamed ProcDump Detected",
+    "description": "Detection of a renamed ProcDump binary. ProcDump is a legitimate utility but is often abused by attackers to dump credentials from memory (e.g., from the lsass.exe process). Adversaries may rename it to evade detection by security software. This detection looks for a known hash or file size of ProcDump when executed under a different name.",
+    "tags": [
+        "TA0006",
+        "T1003",
+        "T1036",
+        "T1036.003",
+        "security",
+        "detection",
+        "Windows"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the execution of the renamed ProcDump binary on host `{hostname}` at `{timestamp}`. The original binary was ProcDump, but it was executed as `{renamed_binary}`. The command line detected was `{command_line}`. Analyze the user (`{user_name}`) who executed the command and the target process (`{target_process}`) being dumped. Determine if this is a legitimate administrative action or a malicious attempt to steal credentials. Provide a summary of the findings and suggest immediate containment and remediation steps.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname where the renamed ProcDump was executed."
+        },
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        },
+        {
+            "name": "renamed_binary",
+            "required": true,
+            "description": "The new name of the ProcDump binary."
+        },
+        {
+            "name": "command_line",
+            "required": true,
+            "description": "The full command line of the renamed binary."
+        },
+        {
+            "name": "user_name",
+            "required": true,
+            "description": "The user account under which the process was executed."
+        },
+        {
+            "name": "target_process",
+            "required": false,
+            "description": "The name or PID of the process being dumped (e.g., lsass.exe)."
+        }
+    ]
+}

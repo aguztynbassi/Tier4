@@ -1,0 +1,54 @@
+{
+    "name": "Renamed PsExec Detected",
+    "description": "Detection of a renamed PsExec binary. PsExec is a legitimate utility but is often abused by attackers for lateral movement and remote code execution. Adversaries may rename it to evade detection by security software. This detection looks for a known hash or file size of PsExec when executed under a different name.",
+    "tags": [
+        "TA0008",
+        "T1021",
+        "T1021.002",
+        "T1036",
+        "T1036.003",
+        "security",
+        "detection",
+        "Windows"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the execution of the renamed PsExec binary on host `{hostname}` at `{timestamp}`. The original binary was PsExec, but it was executed as `{renamed_binary}`. The command line detected was `{command_line}`. Analyze the user (`{user_name}`) who executed the command and the destination host (`{destination_host}`). Determine if this is a legitimate administrative action or a malicious attempt at lateral movement. Provide a summary of the findings and suggest immediate containment and remediation steps.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname where the renamed PsExec was executed."
+        },
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        },
+        {
+            "name": "renamed_binary",
+            "required": true,
+            "description": "The new name of the PsExec binary."
+        },
+        {
+            "name": "command_line",
+            "required": true,
+            "description": "The full command line of the renamed binary."
+        },
+        {
+            "name": "user_name",
+            "required": true,
+            "description": "The user account under which the process was executed."
+        },
+        {
+            "name": "destination_host",
+            "required": false,
+            "description": "The destination host where PsExec attempted to establish a session."
+        }
+    ]
+}

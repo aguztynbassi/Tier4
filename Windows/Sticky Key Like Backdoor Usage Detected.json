@@ -1,0 +1,48 @@
+{
+  "name": "Sticky Key Like Backdoor Usage Detected",
+  "description": "Detects the installation and use of a sticky key-like backdoor. This technique involves registering a malicious debugger for a built-in tool, like `sethc.exe`, that is accessible from the logon screen. This allows an adversary to gain unauthorized access and execute malicious code with elevated privileges.",
+  "tags": [
+    "security",
+    "persistence",
+    "privilege_escalation",
+    "T1546",
+    "T1546.008",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a suspicious registry modification was detected, indicating the installation of a **sticky key-like backdoor**. The target object is **{target_object}**, and a debugger was registered, which is a strong indicator of **Persistence** and **Privilege Escalation** (**MITRE ATT&CK T1546.008**). Immediate investigation is required to determine the legitimacy of this action and to remove the malicious registry entry. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    },
+    {
+      "id": "2",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a sticky key-like backdoor was used to launch a suspicious process. The parent process is **`winlogon.exe`**, which launched an unusual child process with the command line **{command}**. This is a strong indicator of an adversary using a backdoor for **Privilege Escalation** and **Execution**. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious process. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "target_object",
+      "required": true,
+      "description": "The full path of the registry key that was modified for the sticky key backdoor."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The command line of the suspicious process launched by the sticky key backdoor."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

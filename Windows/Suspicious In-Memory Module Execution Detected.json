@@ -1,0 +1,42 @@
+{
+  "name": "Suspicious In-Memory Module Execution Detected",
+  "description": "Detects suspicious processes accessing other processes' memory space in a manner consistent with reflective loading or other in-memory code execution techniques. This is a strong indicator of an adversary attempting to bypass security defenses by executing malicious code directly in memory.",
+  "tags": [
+    "security",
+    "privilege_escalation",
+    "defense_evasion",
+    "process_injection",
+    "T1055",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a process is attempting to access the memory of another process in a suspicious manner, which is a strong indicator of **In-Memory Module Execution** (**MITRE ATT&CK T1055**). The call trace details are **{call_trace}**, and the access rights are **{access}**. This is often an attempt by an adversary to inject and execute malicious code without dropping a file to disk, which is a common **Defense Evasion** technique. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious process. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "call_trace",
+      "required": true,
+      "description": "The call trace of the process that accessed the memory."
+    },
+    {
+      "name": "access",
+      "required": true,
+      "description": "The access rights requested by the process."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

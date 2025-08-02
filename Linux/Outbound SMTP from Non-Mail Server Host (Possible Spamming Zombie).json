@@ -1,0 +1,90 @@
+[
+  {
+    "name": "Outbound SMTP from Non-Mail Server Host (Possible Spamming Zombie)",
+    "description": "Detects outbound SMTP connections from internal hosts NOT designated as mail servers, indicating a compromised system (zombie/bot) sending spam, phishing, or exfiltrating data, bypassing mail gateways.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "network",
+      "firewall",
+      "ids_ips",
+      "endpoint",
+      "compromise",
+      "malware",
+      "spamming",
+      "botnet",
+      "network_access",
+      "command_and_control",
+      "impact",
+      "execution",
+      "lateral_movement",
+      "TA0011",
+      "TA0040",
+      "TA0002",
+      "TA0008",
+      "T1071",
+      "T1071.003"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: Outbound SMTP from Non-Mail Server Host - Possible Spamming Zombie Detected!\\n\\nAn internal host, '{SourceIp}' (or '{HostName}'), not designated as a legitimate mail server, attempted an outbound SMTP connection to an external destination '{DestinationIp}' on port {DestinationPort} at {Timestamp}.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Source IP**: {SourceIp} (Internal Host)\\n* **Source Hostname**: {HostName} (if available)\\n* **Destination IP**: {DestinationIp} (External SMTP Server)\\n* **Destination Port**: {DestinationPort} (Expected 25, 587, or 465)\\n* **Protocol**: {Protocol} (Expected TCP)\\n* **Direction**: Outbound\\n* **Firewall Action**: {Action} (e.g., 'allowed', 'blocked')\\n* **User (if EDR)**: {User}\\n* **Process Name (if EDR)**: {ProcessName}\\n* **Rule Name**: {RuleName}\\n\\nThis is a strong indicator of a **compromised internal system being used as a spamming 'zombie' or 'bot' (T1071.003 - Email Protocols)**, potentially for sending phishing emails, mass spam, or even exfiltrating data via SMTP. This activity often bypasses legitimate mail gateways and can lead to your organization's IP addresses being blacklisted.\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** Immediately isolate '{SourceIp}' (or '{HostName}') from the network to prevent further outbound malicious email activity and potential spread of malware.\\n2.  **NETWORK TRAFFIC ANALYSIS:** Review network flow logs and firewall logs for '{SourceIp}' to identify the volume and pattern of SMTP connections, as well as any other suspicious outbound traffic. If possible, capture full packet data (PCAP) of the SMTP session for analysis of email headers and content.\\n3.  **ENDPOINT FORENSIC ANALYSIS:** Conduct a full forensic investigation of '{SourceIp}' (or '{HostName}'). Focus on:\\n    * **Malware:** Scan for known malware, particularly botnet agents, email worms, or infostealers.\\n    * **Processes:** Identify the process responsible for initiating the SMTP connections (confirm '{ProcessName}'). Is it a legitimate application, or a suspicious executable?\\n    * **System Persistence:** Look for new scheduled tasks, services, or registry entries indicative of malware persistence.\\n    * **User Accounts:** Investigate the '{User}' account (if available) for signs of compromise or unauthorized activity.\\n4.  **BLOCK/FILTER OUTBOUND SMTP:** Reinforce your perimeter firewall rules to strictly allow outbound SMTP (ports 25, 587, 465) *only* from your designated internal mail servers (e.g., IPs in `LEGITIMATE_MAIL_SERVERS_INTERNAL`). Block direct outbound SMTP from all other internal hosts.\\n5.  **THREAT INTELLIGENCE:** Perform threat intelligence lookups on '{SourceIp}' and '{DestinationIp}'. Are they known malicious IPs? \\n6.  **EMAIL BLACKLIST CHECK:** Check if your organization's public IP ranges are listed on any spam blacklists (e.g., Spamhaus, Barracuda Reputation Block List). If so, initiate the delisting process.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the network connection event."
+      },
+      {
+        "name": "SourceIp",
+        "required": true,
+        "description": "The source IP address of the internal host making the outbound SMTP connection."
+      },
+      {
+        "name": "HostName",
+        "required": false,
+        "description": "The hostname of the source system, if available from endpoint or DNS logs."
+      },
+      {
+        "name": "DestinationIp",
+        "required": true,
+        "description": "The destination IP address of the SMTP server."
+      },
+      {
+        "name": "DestinationPort",
+        "required": true,
+        "description": "The destination port of the SMTP connection (25, 587, or 465)."
+      },
+      {
+        "name": "Protocol",
+        "required": true,
+        "description": "The network protocol (expected to be 'tcp')."
+      },
+      {
+        "name": "Action",
+        "required": false,
+        "description": "The action taken by the firewall/IDS (e.g., 'allowed', 'blocked')."
+      },
+      {
+        "name": "User",
+        "required": false,
+        "description": "The user account that initiated the connection, if available from endpoint logs."
+      },
+      {
+        "name": "ProcessName",
+        "required": false,
+        "description": "The process name that initiated the connection, if available from endpoint logs."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]

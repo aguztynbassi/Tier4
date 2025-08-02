@@ -1,0 +1,84 @@
+{
+  "name": "TCP Port Scan Detected (SIEM Correlation Needed)",
+  "description": "Detection of a source host scanning a target network for open TCP ports by targeting a high number of distinct TCP destination ports within a short timeframe, indicating a TCP port scan.",
+  "tags": [
+    "security",
+    "detection",
+    "medium",
+    "network",
+    "firewall",
+    "ids_ips",
+    "ndr",
+    "discovery",
+    "reconnaissance",
+    "network_scan",
+    "tcp_scan",
+    "TA0007",
+    "T1046"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "MEDIUM SEVERITY ALERT: TCP Port Scan Detected!\\n\\nAn unusual number of distinct TCP destination ports (e.g., >100) were targeted by '{SourceIp}' towards '{DestinationIp}' within a short timeframe (e.g., 5 minutes) at {Timestamp}. This indicates a potential TCP port scan, a common reconnaissance technique used by adversaries.\\n\\n**Event Details (from SIEM correlation):**\\n* **Scanner IP**: {SourceIp}\\n* **Target IP/Network**: {DestinationIp}\\n* **Number of Distinct TCP Ports Scanned**: [SIEM_DISTINCT_COUNT_PORTS] (e.g., 105)\\n* **Timeframe**: [SIEM_TIMEFRAME] (e.g., 5 minutes)\\n* **Protocol**: {Protocol} (expected 'tcp')\\n* **Action (by Firewall/IDS)**: {Action} (e.g., 'allowed', 'blocked')\\n* **First Scanned Port Timestamp**: [SIEM_FIRST_EVENT_TIMESTAMP]\\n* **Last Scanned Port Timestamp**: [SIEM_LAST_EVENT_TIMESTAMP]\\n* **Rule Name**: {RuleName}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (MEDIUM PRIORITY - INVESTIGATE PROMPTLY):**\\n\\n1.  **IDENTIFY SCANNER AND TARGET:** Determine if '{SourceIp}' is an internal or external system. If internal, investigate the host for compromised software, misconfigurations, or malicious activity. If external, perform threat intelligence lookups on the IP.\\n2.  **NETWORK TRAFFIC ANALYSIS:** Review network flow logs and potentially capture packet data (PCAP) for connections between '{SourceIp}' and '{DestinationIp}' around the time of the alert to understand the nature of the scanned ports and any follow-up activity.\\n3.  **REVIEW FIREWALL/IDS LOGS:** Check if the TCP scan attempts were blocked by your firewall or IDS/IPS. If they were allowed, assess why and adjust policies if necessary.\\n4.  **VULNERABILITY ASSESSMENT (Target):** If '{DestinationIp}' is an internal system, ensure it is patched and configured securely, especially for any TCP services that might be exposed.\\n5.  **THREAT HUNT FOR FOLLOW-UP ACTIVITY:** Look for subsequent activity from '{SourceIp}' (e.g., exploitation attempts, unusual inbound/outbound connections, other reconnaissance) that might indicate a more advanced attack stage.\\n6.  **WHITELISTING (if legitimate):** If this is a known, authorized vulnerability scan or legitimate network activity, create a whitelist entry for '{SourceIp}' and '{DestinationIp}' to prevent future false positives.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of the network connection event."
+    },
+    {
+      "name": "SourceIp",
+      "required": true,
+      "description": "The source IP address of the scanner."
+    },
+    {
+      "name": "DestinationIp",
+      "required": true,
+      "description": "The destination IP address being scanned."
+    },
+    {
+      "name": "DestinationPort",
+      "required": true,
+      "description": "The scanned TCP port (used for distinct count)."
+    },
+    {
+      "name": "Protocol",
+      "required": true,
+      "description": "The network protocol (expected to be 'tcp')."
+    },
+    {
+      "name": "Action",
+      "required": false,
+      "description": "The action taken by the firewall/IDS (e.g., 'allowed', 'blocked'), if available."
+    },
+    {
+      "name": "RuleName",
+      "required": false,
+      "description": "The name of the Sigma rule that triggered the event, if applicable."
+    },
+    {
+      "name": "SIEM_DISTINCT_COUNT_PORTS",
+      "required": true,
+      "description": "The count of distinct TCP destination ports scanned, aggregated by the SIEM (e.g., 105)."
+    },
+    {
+      "name": "SIEM_TIMEFRAME",
+      "required": true,
+      "description": "The time window over which the events were counted (e.g., '5 minutes')."
+    },
+    {
+      "name": "SIEM_FIRST_EVENT_TIMESTAMP",
+      "required": true,
+      "description": "The timestamp of the first event in the correlated group."
+    },
+    {
+      "name": "SIEM_LAST_EVENT_TIMESTAMP",
+      "required": true,
+      "description": "The timestamp of the last event in the correlated group."
+    }
+  ]
+}

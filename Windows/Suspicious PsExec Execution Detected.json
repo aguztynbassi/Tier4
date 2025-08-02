@@ -1,0 +1,32 @@
+{
+  "name": "Suspicious PsExec Execution Detected",
+  "description": "Detection of suspicious PsExec or PaExec execution with a renamed service name. This helps to identify lateral movement attempts where an adversary uses a modified or non-standard PsExec client to evade detection, which is a common lateral movement technique.",
+  "tags": [
+    "security",
+    "lateral_movement",
+    "psexec",
+    "paexec",
+    "T1021",
+    "windows_event_log"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a suspicious **PsExec/PaExec** execution was detected. The command was executed via the **`IPC$`** share and a non-standard service name, which is a strong indicator of an adversary attempting to perform **Lateral Movement** (**MITRE ATT&CK T1021**) with a modified or unknown PsExec client. The event occurred with Event ID **5145** under the user **{user}**. Immediate investigation is required to determine the legitimacy of this action and to block the malicious process.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

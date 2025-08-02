@@ -1,0 +1,36 @@
+{
+  "name": "Suspicious MsiExec Directory Detected",
+  "description": "Detection of `msiexec.exe` being launched from a directory other than its standard system locations. Adversaries may use a malicious copy of `msiexec.exe` or a malicious MSI installer to execute code and evade security defenses, which is a common defense evasion technique.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "masquerading",
+    "T1036",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "An alert has been triggered on the host **{host}**: the process **`msiexec.exe`** was launched from an unusual directory, **{image}**. This is a strong indicator of **Defense Evasion** (**MITRE ATT&CK T1036**), where an adversary is attempting to masquerade as a legitimate process to execute malicious code. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious process. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "The process image of msiexec.exe, which is expected to be in an unusual location."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

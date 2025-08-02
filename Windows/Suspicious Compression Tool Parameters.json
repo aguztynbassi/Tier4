@@ -1,0 +1,43 @@
+{
+  "name": "Suspicious Compression Tool Parameters",
+  "description": "Detection of suspicious command-line arguments used with data compression tools. Adversaries often use these tools to stage data for exfiltration or to hide malicious files, and specific parameters can indicate malicious intent.",
+  "tags": [
+    "security",
+    "collection",
+    "exfiltration",
+    "data_compressed",
+    "T1020",
+    "T1560",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "An alert has been triggered on the host **{host}**: a compression tool, **{file}**, was executed with suspicious command-line parameters: **{command}**. This is a strong indicator of **Collection** and **Exfiltration** (**MITRE ATT&CK T1560**), where an adversary is likely preparing to steal data or hide malicious files. The event occurred under the user **{user}**. Immediate investigation is required to determine the legitimacy of this action and to perform a full forensic analysis of the affected files.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "file",
+      "required": true,
+      "description": "The name of the compression tool that was executed."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The full command line that was executed with the suspicious parameters."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "name": "Sophos XG Firewall - Inbound Attack Detected by IDP",
+  "description": "An inbound attack detected by the Sophos XG Firewall's Intrusion Detection and Prevention (IDP) policy. This indicates a potential threat from an external source, such as an exploit attempt, port scan, or denial of service attack.",
+  "tags": [
+    "security",
+    "impact",
+    "denial_of_service",
+    "reconnaissance",
+    "T1498",
+    "T1499",
+    "sophos_xg_firewall"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the firewall: an inbound attack has been detected by the IDP policy. The attack originated from the source IP address **{source_address}** and was targeting the destination IP address **{destination_address}**. The attack was detected from the country **{country}**. This is a strong indicator of an external threat attempting to compromise a system on the network. Immediate investigation is required to block the malicious source and to secure the affected system.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "The source IP address of the attack."
+    },
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "The destination IP address of the attack."
+    },
+    {
+      "name": "country",
+      "required": true,
+      "description": "The country of origin for the attack."
+    }
+  ]
+}

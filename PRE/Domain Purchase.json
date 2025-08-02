@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Domain Purchase",
+    "description": "Detects domain purchase activities, which may indicate preparation for malicious activities like phishing campaigns.",
+    "tags": [
+      "security",
+      "detection",
+      "resource development",
+      "domain",
+      "TA0042",
+      "T1583.001",
+      "network"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "MEDIUM-SEVERITY ALERT: A new domain purchase has been detected, which may indicate resource development activities by potential adversaries. While domain purchases are often legitimate, they can be a precursor to malicious activities such as phishing campaigns, command and control (C2) infrastructure setup, or hosting malicious content. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event Name**: domain-purchase\n* **Status**: purchased\n* **Domain Name**: {domain_name}\n* **Registrar**: {registrar}\n* **Purchaser Email**: {purchaser_email}\n* **Registration Date**: {registration_date}\n\n**RECOMMENDED ACTION:** Investigate the legitimacy of this domain purchase. Perform a WHOIS lookup on '{domain_name}' to gather more registration details. Check if the purchaser's email or any other associated information is linked to known malicious actors or suspicious activities. Monitor this domain for unusual DNS queries, web traffic, or appearance in threat intelligence feeds. If the domain appears suspicious, consider blocking it at your perimeter security controls and adding it to your threat intelligence platform. Correlate with any related internal activity if the purchase was initiated from within your network (e.g., suspicious web Browse from a managed endpoint).",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the domain purchase event."
+      },
+      {
+        "name": "domain_name",
+        "required": true,
+        "description": "The name of the domain that was purchased."
+      },
+      {
+        "name": "registrar",
+        "required": true,
+        "description": "The domain registrar through which the domain was purchased."
+      },
+      {
+        "name": "purchaser_email",
+        "required": true,
+        "description": "The email address associated with the domain purchaser."
+      },
+      {
+        "name": "registration_date",
+        "required": true,
+        "description": "The official registration date of the domain."
+      }
+    ]
+  }
+]

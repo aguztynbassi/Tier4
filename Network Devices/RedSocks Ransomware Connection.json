@@ -1,0 +1,48 @@
+{
+    "name": "RedSocks Ransomware Connection",
+    "description": "RedSocks Ransomware connection to a malicious domain. The alert uses the `RedSocks Ransomware` list to check against the domain in the logs. This can indicate an ongoing C2 communication attempt.",
+    "tags": [
+        "TA0040",
+        "T1071",
+        "T1071.001",
+        "security",
+        "detection",
+        "Firewall",
+        "IDS/IPS"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the network connection from host `{hostname}` to the malicious domain `{destination_domain}` at `{timestamp}`. The connection was initiated by a process with PID `{process_id}`. Analyze the user (`{user_name}`) associated with the process and any other network traffic to or from this host. Determine if the host is infected and if the ransomware is actively communicating. Provide a summary of your findings and recommend an incident response plan.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname of the affected host."
+        },
+        {
+            "name": "destination_domain",
+            "required": true,
+            "description": "The malicious domain to which the host connected."
+        },
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        },
+        {
+            "name": "process_id",
+            "required": true,
+            "description": "The Process ID of the process that initiated the connection."
+        },
+        {
+            "name": "user_name",
+            "required": true,
+            "description": "The user account under which the process was executed."
+        }
+    ]
+}

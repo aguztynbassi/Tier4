@@ -1,0 +1,28 @@
+{
+    "name": "Robbinhood Ransomware Infected Host Detected",
+    "description": "RobbinHood ransomware-infected host is detected. For the alert to work, you must use the list ROBBINHOOD_RANSOMWARE_HASHES, which includes IOC hashes for RobbinHood ransomware.",
+    "tags": [
+        "TA0040",
+        "T1486",
+        "security",
+        "detection",
+        "Firewall",
+        "IDS/IPS",
+        "Windows Sysmon"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the Robbinhood ransomware infection on the host. The alert was triggered by a file with the hash `{file_hash}`. Identify the source of the infection, the files that were encrypted, and any network communication associated with the malware. Recommend steps to isolate the host, eradicate the malware, and restore affected files.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "file_hash",
+            "required": true,
+            "description": "The hash of the file that matched an entry in the ROBBINHOOD_RANSOMWARE_HASHES list."
+        }
+    ]
+}

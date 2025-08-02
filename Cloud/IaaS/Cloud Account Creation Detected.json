@@ -1,0 +1,49 @@
+{
+  "name": "Cloud Account Creation Detected",
+  "description": "Detects new cloud account creations, which may indicate adversary resource development.",
+  "tags": [
+    "security",
+    "detection",
+    "medium",
+    "cloud",
+    "resource_development",
+    "acquire_infrastructure",
+    "TA0042",
+    "T1583.002"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "MEDIUM SEVERITY ALERT: Cloud Account Creation Detected!\\n\\n**A new cloud account creation has been detected in your {cloud_provider} environment at {timestamp}.** This activity may indicate **Resource Development (TA0042)** by an adversary, specifically the technique of **Acquire Infrastructure: Cloud Accounts (T1583.002)**. Attackers often create cloud accounts to establish infrastructure for future malicious operations (e.g., hosting C2, data staging, or launching attacks).\\n\\n**Incident Details:**\\n* **Timestamp**: {timestamp}\\n* **Action**: {action} (Account Creation)\\n* **User/Entity that created the account**: '{user}'\\n* **Created Account ID**: '{account_id}'\\n* **Cloud Provider**: {cloud_provider}\\n\\nThis alert is generated because an entity has performed the 'create_account' action in your cloud provider. If this activity is unauthorized or doesn't align with expected business procedures, it could indicate unauthorized access to your cloud management environment or an adversary preparing their infrastructure.\\n\\n**IMMEDIATE RECOMMENDED ACTIONS (MEDIUM PRIORITY - INVESTIGATE):**\\n\\n1.  **VERIFY AUTHORIZATION:** Immediately determine if the creation of this account ({account_id}) by user '{user}' was authorized and aligns with standard business procedures. Contact the cloud operations team or account owner to verify its legitimacy.\\n2.  **AUDIT USER ACTIVITY:** If the account creation is not legitimate, thoroughly investigate the recent activity of user '{user}'. Look for any other suspicious actions (configuration changes, creation of additional resources, etc.).\\n3.  **REVIEW CREATED ACCOUNT CONFIGURATION:** Access the created account ({account_id}) and review its default configuration and any resources that were provisioned immediately after its creation. Look for excessive permissions, unusual networking, or non-standard services enabled.\\n4.  **MONITOR RESOURCES:** Continue to actively monitor the newly created account for the provisioning of malicious infrastructure (e.g., compute instances, storage, serverless functions, containers, databases) or any attempts to establish Command and Control (C2) channels.\\n5.  **STRENGTHEN MASTER ACCOUNT SECURITY:** If the account that performed the creation was compromised, implement immediate measures to secure the master account or root identity entity (MFA, credential rotation, privileged access monitoring).\\n6.  **ESCALATE:** If unauthorized activity is confirmed, immediately escalate to the security incident response team for thorough investigation and remediation actions.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "timestamp",
+      "required": true,
+      "description": "The timestamp when the account creation was detected."
+    },
+    {
+      "name": "action",
+      "required": true,
+      "description": "The action performed, which should be 'create_account'."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user or service entity that initiated the account creation."
+    },
+    {
+      "name": "account_id",
+      "required": true,
+      "description": "The unique identifier of the cloud account that was created."
+    },
+    {
+      "name": "cloud_provider",
+      "required": true,
+      "description": "The name of the cloud provider (e.g., AWS, Azure, GCP)."
+    }
+  ]
+}

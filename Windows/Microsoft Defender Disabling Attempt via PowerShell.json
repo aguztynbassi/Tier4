@@ -1,0 +1,30 @@
+{
+    "name": "Microsoft Defender Disabling Attempt via PowerShell",
+    "description": "An attempt to disable Microsoft Defender via PowerShell is detected.",
+    "tags": [
+        "TA0005",
+        "TA0002",
+        "T1562",
+        "T1562.001",
+        "T1059",
+        "T1059.001",
+        "security",
+        "detection",
+        "Windows"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the security event: 'Microsoft Defender Disabling Attempt via PowerShell'. Event details: {event_details}",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "event_details",
+            "required": true,
+            "description": "Details of the detected security event, including the original query information: `norm_id=WinServer event_id=4104 script_block=\"Set-MpPreference -DisableRealtimeMonitoring $true\"`."
+        }
+    ]
+}

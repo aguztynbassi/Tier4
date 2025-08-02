@@ -1,0 +1,47 @@
+{
+  "name": "Suspicious Userinit Child Process",
+  "description": "Detection of a suspicious child process of `userinit.exe`. `userinit.exe` is a legitimate Windows process that is responsible for launching the user's shell (typically `explorer.exe`). A malicious child process of `userinit.exe` is a strong indicator of an adversary attempting to bypass security defenses and achieve persistence.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "masquerading",
+    "persistence",
+    "T1036",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a suspicious process, **{image}**, was launched by **{parent_image}** (userinit.exe). This is a strong indicator of **Masquerading** (**MITRE ATT&CK T1036**) and an attempt at **Persistence**. `userinit.exe` should only launch `explorer.exe` or legitimate logon scripts. The command line was **{command}**, and the event occurred under the user **{user}**. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious process.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "The name of the suspicious child process."
+    },
+    {
+      "name": "parent_image",
+      "required": true,
+      "description": "The name of the parent process, which is expected to be 'userinit.exe'."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The full command line of the suspicious process."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

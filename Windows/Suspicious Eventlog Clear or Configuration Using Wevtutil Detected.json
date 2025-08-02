@@ -1,0 +1,41 @@
+{
+  "name": "Suspicious Eventlog Clear or Configuration Using Wevtutil Detected",
+  "description": "Detection of clearing or modifying event logs using `wevtutil`, PowerShell, or `wmic`. This is a strong indicator of an adversary attempting to erase evidence of their activities, a tactic often seen in ransomware attacks like NotPetya.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "indicator_removal",
+    "T1070",
+    "windows_event_log"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a process, **{process}**, attempted to clear or modify the Windows event logs with the command **{command}**. This is a strong indicator of **Defense Evasion** (**MITRE ATT&CK T1070.001**), as adversaries often erase logs to hide their tracks. This type of activity is commonly associated with ransomware attacks. Immediate investigation is required to determine the legitimacy of this action and to understand what activity the adversary might be trying to conceal. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "process",
+      "required": true,
+      "description": "The name of the process that performed the action."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The full command line that was executed."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

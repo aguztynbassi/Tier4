@@ -1,0 +1,36 @@
+{
+  "name": "Suspect Svchost Activity Detected",
+  "description": "Detects `svchost.exe` being spawned without any command-line arguments. This is highly unusual and can indicate an adversary has launched the process to inject malicious code into its memory space, a common process injection and defense evasion technique.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "process_injection",
+    "T1055",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a **`svchost.exe`** process was launched without any command-line arguments. The parent process is **{parent_image}**. This is a strong indicator of a **Process Injection** attempt (**MITRE ATT&CK T1055**), where an adversary is attempting to inject and execute malicious code within a legitimate system process. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious process. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "parent_image",
+      "required": true,
+      "description": "The name of the parent process that launched svchost.exe."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

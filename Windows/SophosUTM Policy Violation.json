@@ -1,0 +1,39 @@
+{
+  "name": "SophosUTM Policy Violation",
+  "description": "Detects multiple policy violations from a single source IP address or user. This could indicate a compromised host, an insider threat, or an adversary attempting to bypass security controls by accessing prohibited content categories.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "privilege_escalation",
+    "T1548",
+    "T1484",
+    "T1212",
+    "T1068",
+    "sophos_utm"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered: a source, **{source_address}**, associated with the user **{user}**, has committed multiple policy violations by attempting to access a combination of extremist, concerning, criminal, or vulnerable content categories. The total number of violations is **{Violation}**. This is a strong indicator of an **insider threat** or a **compromised host**. Immediate investigation is required to determine the legitimacy of this action and to block the source.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "The source IP address of the policy violation."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    },
+    {
+      "name": "Violation",
+      "required": true,
+      "description": "The total number of policy violations from the source."
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+    "name": "Ryuk Ransomware Affected Host",
+    "description": "Ryuk Ransomware infects a host. The alert uses the RYUK_RANSOMWARE_HASH list to compare hash, pre-digest value, or digest in the logs. Ryuk is a notorious ransomware family known for its targeted attacks against large organizations. The presence of these hashes indicates a high probability of an active infection or an attempted attack.",
+    "tags": [
+        "TA0040",
+        "T1486",
+        "security",
+        "detection",
+        "Firewall",
+        "IDS/IPS",
+        "Windows Sysmon"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "A host `{hostname}` was identified as being affected by Ryuk ransomware at `{timestamp}`. The detection was based on the file `{file_name}` with the hash `{file_hash}`. Immediately investigate the extent of the infection on the host and identify any encrypted files. Determine if the ransomware has spread to other hosts or network shares. Provide a detailed report of the incident and recommend an incident response plan, including host isolation and data recovery strategies.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname of the affected host."
+        },
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the ransomware activity was detected."
+        },
+        {
+            "name": "file_name",
+            "required": true,
+            "description": "The name of the malicious file."
+        },
+        {
+            "name": "file_hash",
+            "required": true,
+            "description": "The hash of the malicious file that matched the Ryuk list."
+        }
+    ]
+}

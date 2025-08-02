@@ -1,0 +1,45 @@
+{
+  "name": "Svchost DLL Search Order Hijack Detected",
+  "description": "Detection of a DLL search order hijack involving `svchost.exe`. Adversaries may place a malicious DLL in a location that is searched before the legitimate one, causing `svchost.exe` to load the malicious DLL instead. This is a common persistence and privilege escalation technique.",
+  "tags": [
+    "security",
+    "persistence",
+    "privilege_escalation",
+    "defense_evasion",
+    "dll_search_order_hijacking",
+    "T1574",
+    "T1574.001",
+    "T1574.002",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a DLL search order hijack was detected. The process **{source_image}** loaded a suspicious DLL (**{image}**), which is typically associated with a known hijacking technique. This is a strong indicator of **Persistence** and **Privilege Escalation** (**MITRE ATT&CK T1574.001, T1574.002**). Immediate investigation is required to determine the legitimacy of this action and to remove the malicious DLL. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "source_image",
+      "required": true,
+      "description": "The process image that loaded the DLL, which is expected to be 'svchost.exe'."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "The name of the suspicious DLL that was loaded."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

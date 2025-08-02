@@ -1,0 +1,53 @@
+{
+    "name": "Rundll32 Internet Connection Detected",
+    "description": "rundll32 that communicates with public IP addresses are detected. Adversaries often abuse legitimate Windows utilities like rundll32.exe to execute malicious code and establish command and control (C2) communication. This is a highly suspicious behavior as rundll32.exe does not typically initiate outbound network connections.",
+    "tags": [
+        "TA0005",
+        "TA0002",
+        "T1218",
+        "T1218.011",
+        "security",
+        "detection",
+        "Windows Sysmon"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the outbound network connection initiated by `rundll32.exe` at `{timestamp}` on host `{hostname}`. The connection was established to the public IP address `{destination_address}` on port `{destination_port}`. Analyze the full command line of the `rundll32` process (`{command_line}`) and the user (`{user_name}`) who executed it. Determine the purpose of this connection and if it is part of a malicious C2 channel. Provide a summary of your findings and recommend immediate network blocking and host containment.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the network connection was initiated."
+        },
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname where the activity was detected."
+        },
+        {
+            "name": "destination_address",
+            "required": true,
+            "description": "The public IP address to which rundll32.exe connected."
+        },
+        {
+            "name": "destination_port",
+            "required": true,
+            "description": "The port used for the network connection."
+        },
+        {
+            "name": "command_line",
+            "required": true,
+            "description": "The full command line of the rundll32.exe process."
+        },
+        {
+            "name": "user_name",
+            "required": true,
+            "description": "The user account under which the process was executed."
+        }
+    ]
+}

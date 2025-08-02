@@ -1,0 +1,54 @@
+{
+    "ID": "0761",
+    "name": "QBot Process Creation Detected",
+    "description": "Detection of QBot/Qakbot creating processes. QBot is a modular malware that is often used for reconnaissance, credential theft, and lateral movement. It has been observed creating new processes with the intention of injecting malicious code or downloading additional payloads. This detection is based on the behavioral analysis of a process with known QBot characteristics. The prompt helps investigate the source of the QBot infection and determine the extent of the compromise.",
+    "tags": [
+        "TA0002",
+        "T1059",
+        "T1059.001",
+        "T1059.003",
+        "security",
+        "detection",
+        "Windows"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the QBot process creation attempt at `{timestamp}` on host `{hostname}`. The process `{process_name}` with Process ID `{process_id}` created a new process with the command line `{command_line}`. Analyze the user (`{user_name}`) associated with the activity and any other network traffic to or from this host. Determine if the host is infected and what actions the malware took. Provide a summary of your findings and recommend an incident response plan.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        },
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname where the QBot activity was detected."
+        },
+        {
+            "name": "process_name",
+            "required": true,
+            "description": "The name of the QBot process."
+        },
+        {
+            "name": "process_id",
+            "required": true,
+            "description": "The Process ID of the QBot process."
+        },
+        {
+            "name": "command_line",
+            "required": true,
+            "description": "The full command line of the newly created process."
+        },
+        {
+            "name": "user_name",
+            "required": true,
+            "description": "The user account under which the process was executed."
+        }
+    ]
+}

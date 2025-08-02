@@ -1,0 +1,39 @@
+{
+    "name": "Rogue Access Point Detected",
+    "description": "Rogue access point is detected. This may indicate an adversary has deployed a malicious wireless access point to intercept network traffic or gain unauthorized access to the network.",
+    "tags": [
+        "TA0005",
+        "T1211",
+        "T1518",
+        "T1518.001",
+        "security",
+        "detection",
+        "Firewall",
+        "IDS/IPS"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "A rogue access point named `{access_point_name}` with MAC address `{access_point_mac}` was detected at `{timestamp}`. Investigate the location of the access point and its connection to the network. Check for any unauthorized devices connected to it. Provide a summary of the investigation and recommend steps to physically remove the access point and secure the network.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "access_point_name",
+            "required": true,
+            "description": "The name (SSID) of the rogue access point."
+        },
+        {
+            "name": "access_point_mac",
+            "required": true,
+            "description": "The MAC address of the rogue access point."
+        },
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the rogue access point was detected."
+        }
+    ]
+}

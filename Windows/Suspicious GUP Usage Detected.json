@@ -1,0 +1,37 @@
+{
+  "name": "Suspicious GUP Usage Detected",
+  "description": "Detection of the Notepad++ updater (`gup.exe`) running from a suspicious directory. Adversaries may use a malicious copy of `gup.exe` or a DLL side-loading attack to execute code and evade security defenses, which is a common defense evasion technique.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "dll_side_loading",
+    "T1574",
+    "T1574.002",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: the process **`gup.exe`** was launched from an unusual directory, **{image}**. This is a strong indicator of **Defense Evasion** and **DLL Side-Loading** (**MITRE ATT&CK T1574.002**), where an adversary is attempting to use a legitimate utility to execute malicious code. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious process. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "The process image of gup.exe, which is expected to be in an unusual location."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

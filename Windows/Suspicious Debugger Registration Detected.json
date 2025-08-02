@@ -1,0 +1,38 @@
+{
+  "name": "Suspicious Debugger Registration Detected",
+  "description": "Detection of a suspicious debugger registration for a program available on the Windows logon screen. Adversaries can register a debugger to a sticky key application (e.g., `sethc.exe`), allowing them to launch a command prompt with system-level privileges from the logon screen. This is a common defense evasion and privilege escalation technique.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "privilege_escalation",
+    "masquerading",
+    "T1027",
+    "T1027.004",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a suspicious debugger registration was detected for a sticky key application. This is a strong indicator of **Defense Evasion** and **Privilege Escalation** (**MITRE ATT&CK T1027.004**), where an adversary is attempting to create a backdoor that can be launched from the logon screen. The command line was **{command}** and the event occurred under the user **{user}**. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious registry entry. This event should be treated as a confirmed security incident until proven otherwise.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The full command line that was executed to register the debugger."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

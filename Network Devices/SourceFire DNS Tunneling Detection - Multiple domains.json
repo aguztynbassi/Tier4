@@ -1,0 +1,30 @@
+{
+  "name": "SourceFire DNS Tunneling Detection - Multiple domains",
+  "description": "Detects a single source IP address making a large number of DNS queries for different domains. This behavior is a strong indicator of DNS tunneling, a technique used by adversaries to establish a command and control channel or exfiltrate data by encapsulating it within DNS queries.",
+  "tags": [
+    "security",
+    "exfiltration",
+    "command_and_control",
+    "dns_tunneling",
+    "T1090",
+    "T1090.004",
+    "T1568",
+    "T1568.002",
+    "sourcefire"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered: a single source IP address, **{source_address}**, has made a high volume of DNS queries for more than 50 different domains within a short period. This is a strong indicator of a **DNS Tunneling** attack (**MITRE ATT&CK T1090.004**), which is a common technique for **Command and Control** and **Data Exfiltration**. Immediate investigation is required to block the malicious IP address and to secure the affected host.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "The source IP address that is performing the suspicious DNS queries."
+    }
+  ]
+}

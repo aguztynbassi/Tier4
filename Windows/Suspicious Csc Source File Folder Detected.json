@@ -1,0 +1,40 @@
+{
+  "name": "Suspicious Csc Source File Folder Detected",
+  "description": "Detects the execution of `csc.exe` with a source file located in a suspicious folder like AppData or the Windows Temp directory. Adversaries may use this technique to compile and execute malicious code to bypass security controls and masquerade as a legitimate process.",
+  "tags": [
+    "security",
+    "execution",
+    "defense_evasion",
+    "compile_after_delivery",
+    "user_execution",
+    "T1027",
+    "T1027.004",
+    "T1204",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "An alert has been triggered on the host **{host}**: the process **`csc.exe`** was executed with a source file located in a suspicious directory, **{command}**. This is a strong indicator of **Execution** and **Defense Evasion** (**MITRE ATT&CK T1027.004**), where an adversary is attempting to compile and execute malicious code. The event occurred under the user **{user}**. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious file.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The full command line that was executed, which includes the suspicious source file path."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

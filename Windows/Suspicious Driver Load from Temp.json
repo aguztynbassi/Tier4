@@ -1,0 +1,36 @@
+{
+  "name": "Suspicious Driver Load from Temp",
+  "description": "Detection of a driver being loaded from a temporary directory. Adversaries may place malicious drivers in temporary directories to achieve persistence and evade security defenses, which is a common persistence technique.",
+  "tags": [
+    "security",
+    "persistence",
+    "create_or_modify_system_process",
+    "T1543",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a driver was loaded from a temporary directory, **{image}**. This is a strong indicator of **Persistence** and **Create or Modify System Process** (**MITRE ATT&CK T1543**) where an adversary is attempting to establish a foothold by loading a malicious driver. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious driver. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "The path of the driver that was loaded."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

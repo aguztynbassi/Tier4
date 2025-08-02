@@ -1,0 +1,38 @@
+{
+    "name": "Allowed NetLogon Connections via Group Policy - CVE2020-1472",
+    "description": "Allowed NetLogon connections from a list of patched and unpatched systems via a Group Policy setting. Detection of allowed NetLogon connections from unpatched systems to a domain controller when the CVE-2020-1472 patch is enabled and a group policy is applied. It may indicate a configuration mistake, which may be a potential risk for the environment.",
+    "tags": [
+        "TA0001",
+        "T1583",
+        "T1583.003",
+        "T1211",
+        "security",
+        "detection",
+        "Windows"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the allowed NetLogon connection from the unpatched system `{source_address}` to the domain controller `{destination_address}` at `{timestamp}`. The connection was allowed via Group Policy, but the system should be patched for the CVE-2020-1472 vulnerability. Determine if this is a misconfiguration and if the system should be on the network. Provide a summary of your findings and recommend immediate remediation steps to prevent this type of connection.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "source_address",
+            "required": true,
+            "description": "The IP address of the unpatched system."
+        },
+        {
+            "name": "destination_address",
+            "required": true,
+            "description": "The IP address of the domain controller."
+        },
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        }
+    ]
+}

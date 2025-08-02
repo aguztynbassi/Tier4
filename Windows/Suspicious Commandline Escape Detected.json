@@ -1,0 +1,41 @@
+{
+  "name": "Suspicious Commandline Escape Detected",
+  "description": "Detection of processes using suspicious command-line arguments with escape characters. Adversaries often use escape characters to obfuscate their commands and evade security defenses. This is a common defense evasion technique.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "deobfuscate_decode_files_or_information",
+    "T1140",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "An alert has been triggered on the host **{host}**: a process, **{image}**, was executed with a suspicious command line: **{command}**. The command contains unusual escape characters, which is a strong indicator of **Defense Evasion** (**MITRE ATT&CK T1140**), where an adversary is attempting to obfuscate a malicious command to bypass security controls. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious process. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "The process image that was executed."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The full command line that was executed with the escape characters."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "name": "Infrastructure Provisioning Detected",
+  "description": "New cloud infrastructure provisioning has been detected, which could indicate resource development for malicious activities.",
+  "tags": [
+    "security",
+    "detection",
+    "medium",
+    "cloud",
+    "infrastructure_provisioning",
+    "resource_development",
+    "TA0042",
+    "T1583.003"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "MEDIUM SEVERITY ALERT: Infrastructure Provisioning Detected.\\n\\nProvisioning of a new infrastructure resource ({resource_type}, ID: {resource_id}) in region '{region}' by user '{user}' from IP '{source_ip}' was detected at {Timestamp}. This '{activity}' activity can be legitimate but could also indicate resource development for malicious activities, such as command and control (C2) infrastructure, attack staging, or malware hosting.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **User/Entity**: {user}\\n* **Resource Type**: {resource_type}\\n* **Resource ID**: {resource_id}\\n* **Cloud Region**: {region}\\n* **Source IP**: {source_ip}\\n* **Activity**: {activity}\\n\\n**RECOMMENDED ACTIONS (MEDIUM PRIORITY - INVESTIGATE):**\\n\\n1.  **VERIFY LEGITIMACY:** Determine if this provisioning is legitimate and authorized. \\n    * Contact user '{user}' or the responsible team to confirm if they initiated this activity. \\n    * Review change tickets, deployment plans, or internal documentation related to this resource. \\n    * Verify if the `source_ip` is an internal IP or from a legitimate service provider.\\n2.  **EVALUATE PROVISIONED RESOURCE:** Once the resource ID ({resource_id}) is confirmed, perform the following verifications:\\n    * **Purpose:** What is the stated purpose of the resource? Does it match its configuration and observed activity?\\n    * **Configuration:** Review the resource's configuration (e.g., instance type, open ports, security groups, network policies, IAM/RBAC permissions). Look for unusual or overly permissive configurations.\\n    * **Post-Provisioning Activity:** Immediately monitor any activity on the new resource (e.g., inbound/outbound connections, software installation, file downloads, CPU/network activity). Look for connections to suspicious IPs or domains.\\n3.  **INVESTIGATE USER AND SOURCE IP:** If the activity appears unusual, investigate user '{user}' and the `source_ip`. \\n    * Has there been any other suspicious activity from this user or IP?\\n    * Is the `source_ip` from an expected range, or is it from an unusual location?\\n4.  **REVIEW NAMING CONVENTIONS:** If your organization has naming conventions for cloud resources, verify if the resource name {resource_id} complies. Non-standard names can be an indicator of unauthorized activity.\\n5.  **AUDIT ADDITIONAL LOGS:** Consult audit logs from other cloud services to look for related or contextually relevant activities performed by '{user}' or from '{source_ip}'.\\n6.  **ESCALATE (IF MALICIOUS):** If the activity is confirmed to be malicious or unauthorized, immediately escalate to the incident response team for containment, eradication, and recovery. Consider deleting the provisioned resource and revoking the compromised user/role's permissions.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of the infrastructure provisioning event."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user or entity that performed the provisioning."
+    },
+    {
+      "name": "resource_id",
+      "required": true,
+      "description": "The unique ID of the provisioned resource."
+    },
+    {
+      "name": "resource_type",
+      "required": true,
+      "description": "The type of resource provisioned (e.g., 'ec2_instance', 'vm')."
+    },
+    {
+      "name": "region",
+      "required": true,
+      "description": "The cloud region where the resource was provisioned."
+    },
+    {
+      "name": "source_ip",
+      "required": true,
+      "description": "The source IP address from which the activity originated."
+    },
+    {
+      "name": "activity",
+      "required": true,
+      "description": "The activity that triggered the rule (e.g., 'provision')."
+    }
+  ]
+}

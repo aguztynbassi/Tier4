@@ -1,0 +1,36 @@
+{
+  "name": "Suspicious Access to Sensitive File Extensions",
+  "description": "Detects suspicious access to sensitive file extensions (e.g., `.pst`, `.kirbi`, `groups.xml`). Adversaries often search for and collect these files to gain access to credentials, private data, or to gather information for further attacks.",
+  "tags": [
+    "security",
+    "collection",
+    "data_from_local_system",
+    "T1074",
+    "windows_event_log"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "An alert has been triggered on the host **{host}**: a suspicious access to a sensitive file, **{relative_target}**, was detected. This is a strong indicator of **Collection** (**MITRE ATT&CK T1074**), where an adversary is attempting to gather sensitive information, such as passwords, emails, or other confidential data. Immediate investigation is required to determine the legitimacy of this action and to secure the affected file. The event occurred with Event ID **5145** under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "relative_target",
+      "required": true,
+      "description": "The name of the sensitive file that was accessed."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

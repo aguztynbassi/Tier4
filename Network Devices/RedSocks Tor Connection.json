@@ -1,0 +1,44 @@
+{
+    "name": "RedSocks Tor Connection",
+    "description": "RedSocks Tor connection detected. Tor is a free and open-source software for enabling anonymous communication. Adversaries may use Tor for C2 communication or to download malicious payloads. This detection is triggered when an unusual Tor connection is detected from a host. This prompt helps investigate the source of the Tor connection and determine if it's a legitimate system behavior or a malicious one.",
+    "tags": [
+        "TA0001",
+        "TA0005",
+        "T1048",
+        "T1048.001",
+        "security",
+        "detection",
+        "Firewall",
+        "IDS/IPS"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the Tor connection from host `{hostname}` to the Tor network at `{timestamp}`. The connection was initiated by a process with PID `{process_id}`. Analyze the user (`{user_name}`) associated with the process and any other network traffic to or from this host. Determine if this is a legitimate use of Tor or a malicious attempt to communicate with a C2 server. Provide a summary of your findings and recommend an incident response plan.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname of the affected host."
+        },
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        },
+        {
+            "name": "process_id",
+            "required": true,
+            "description": "The Process ID of the process that initiated the connection."
+        },
+        {
+            "name": "user_name",
+            "required": true,
+            "description": "The user account under which the process was executed."
+        }
+    ]
+}

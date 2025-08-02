@@ -1,0 +1,49 @@
+{
+    "name": "Scheduled Task Creation Detected",
+    "description": "The use of `schtasks.exe` for the creation of scheduled tasks in a user session is detected. Attackers often abuse scheduled tasks for persistence, privilege escalation, or defense evasion. This alert specifically focuses on tasks created by non-system users, which can indicate malicious activity.",
+    "tags": [
+        "TA0002",
+        "TA0003",
+        "TA0004",
+        "T1053",
+        "T1053.005",
+        "security",
+        "detection",
+        "Windows Sysmon"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the creation of a new scheduled task on host `{hostname}` at `{timestamp}`. The command line used was `{command_line}`. Identify the user (`{user_name}`) who created the task and the program or script (`{task_program}`) it is configured to run. Determine if this is a legitimate administrative action or a malicious attempt to establish persistence. Provide a summary of your findings and recommend steps to remove the suspicious task and contain the threat.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname where the scheduled task was created."
+        },
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the task was created."
+        },
+        {
+            "name": "command_line",
+            "required": true,
+            "description": "The full command line of the schtasks.exe process."
+        },
+        {
+            "name": "user_name",
+            "required": true,
+            "description": "The user account that created the scheduled task."
+        },
+        {
+            "name": "task_program",
+            "required": false,
+            "description": "The program or script the scheduled task is configured to run."
+        }
+    ]
+}

@@ -1,0 +1,52 @@
+[
+  {
+    "name": "DNS Tunneling Detected",
+    "description": "An unusually high volume of DNS queries for the same domain has been detected, indicating potential DNS tunneling.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "network",
+      "dns_tunneling",
+      "command_and_control",
+      "data_exfiltration",
+      "TA0011",
+      "T1071.004"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: DNS Tunneling Detected.\\n\\nAn unusually high volume (over 1000 queries in 1 hour) of DNS requests for domain '{QueryName}' originating from '{source_ip}' has been detected. This is a strong indicator of **DNS tunneling**, a technique used for command and control (C2) or data exfiltration.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp} (Start of detection period)\\n* **Source IP**: {source_ip}\\n* **DNS Server**: {destination_ip}\\n* **Queried Domain (Suspicious)**: {QueryName}\\n* **Predominant Query Type**: {QueryType}\\n* **Query Count**: [Your SIEM's Count Value]\\n* **Time Period**: 1 hour\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (HIGH PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **HOST ISOLATION:** **Immediately isolate** the machine with source IP '{source_ip}' from the network to stop potential tunneling and prevent further C2 communication or data exfiltration. **DO NOT power off the system.**\\n2.  **DOMAIN/IP BLOCKING:** Block the domain '{QueryName}' and, if it's a known attacker IP, the destination IP '{destination_ip}' at your firewalls and proxies to prevent future communications. It's crucial to block the domain to prevent the tunnel from reactivating even if it changes IP.\\n3.  **HOST FORENSIC ANALYSIS:** Conduct a thorough forensic analysis of the machine at '{source_ip}'. Look for malware, hidden processes, tunneling tool log files, and any suspicious newly created or modified files.\\n4.  **DNS TRAFFIC ANALYSIS:** If you have packet capture capabilities, perform a capture of DNS traffic for '{source_ip}' and '{QueryName}'. Analyze the content of the queries to determine the type of data being exfiltrated or commands being sent.\\n5.  **USER/PROCESS INVESTIGATION:** Identify the user and process that originated these DNS queries on host '{source_ip}'. Investigate whether the user account has been compromised or if unauthorized software is running.\\n6.  **THREAT HUNTING:** Search for other hosts in your network exhibiting similar patterns of high-volume DNS queries to the same domain or other suspicious domains. Review your proxy and firewall logs for other potential C2 or exfiltration activities.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the start of the detection period."
+      },
+      {
+        "name": "source_ip",
+        "required": true,
+        "description": "The source IP address making the suspicious DNS queries."
+      },
+      {
+        "name": "destination_ip",
+        "required": true,
+        "description": "The IP address of the DNS server that was queried."
+      },
+      {
+        "name": "QueryName",
+        "required": true,
+        "description": "The queried domain name that showed the unusual volume."
+      },
+      {
+        "name": "QueryType",
+        "required": false,
+        "description": "The predominant DNS query type (e.g., A, TXT), if available."
+      }
+    ]
+  }
+]

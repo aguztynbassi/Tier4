@@ -1,0 +1,44 @@
+{
+  "name": "SolarisLDAP Possible Bruteforce Attack Detected",
+  "description": "Detects a potential brute-force attack against Solaris LDAP credentials. This is indicated by a single user account having a high number of failed login attempts within a short period, which is a common credential access technique.",
+  "tags": [
+    "security",
+    "credential_access",
+    "brute_force",
+    "T1110",
+    "T1110.001",
+    "T1110.002",
+    "T1110.004",
+    "solaris_ldap"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: A user account, **{user}**, has had a high number of failed login attempts ({cnt} failures) in Solaris LDAP. This is a strong indicator of a **Brute-Force Attack** (**MITRE ATT&CK T1110**), where an adversary is attempting to guess the user's password. Immediate investigation is required to determine the source of the attacks and to secure the affected account. The event occurred at **{log_ts}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The name of the user account that was targeted."
+    },
+    {
+      "name": "cnt",
+      "required": true,
+      "description": "The number of failed login attempts."
+    },
+    {
+      "name": "log_ts",
+      "required": true,
+      "description": "The timestamp of the event."
+    }
+  ]
+}

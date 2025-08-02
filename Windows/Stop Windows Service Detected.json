@@ -1,0 +1,41 @@
+{
+  "name": "Stop Windows Service Detected",
+  "description": "Detects the stopping of a Windows service using `sc.exe`, `net.exe`, or `net1.exe`. Adversaries may stop services to disrupt an organization's operations, disable security controls, or prevent applications from interfering with malicious activities, which is a common technique for 'Impact'.",
+  "tags": [
+    "security",
+    "impact",
+    "service_stop",
+    "T1489",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a process, **{image}**, was executed to stop a Windows service. The command was **{command}**, and the event occurred under the user **{user}**. This is a strong indicator of an **Impact** attack (**MITRE ATT&CK T1489**), where an adversary is attempting to disrupt operations or disable security tools. Immediate investigation is required to determine the legitimacy of this action and to restart any affected services.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "The process image that performed the action (e.g., sc.exe, net.exe)."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The full command line that was executed to stop the service."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

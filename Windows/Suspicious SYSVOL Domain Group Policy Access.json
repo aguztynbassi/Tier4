@@ -1,0 +1,42 @@
+{
+  "name": "Suspicious SYSVOL Domain Group Policy Access",
+  "description": "Detection of access to Domain Group Policies stored in the SYSVOL folder. Adversaries may access these policies to discover user passwords or other sensitive information, which is a common credential access technique.",
+  "tags": [
+    "security",
+    "credential_access",
+    "unsecured_credentials",
+    "T1552",
+    "T1552.006",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a process, **{image}**, executed a command line that accesses the **SYSVOL folder** to read a Domain Group Policy: **{command}**. This is a strong indicator of **Credential Access** (**MITRE ATT&CK T1552.006**) where an adversary may be attempting to discover sensitive information or passwords stored within group policy files. Immediate investigation is required to determine the legitimacy of this action and to perform a full forensic analysis of the `SYSVOL` folder. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "The process image that performed the access."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The full command line that was executed."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

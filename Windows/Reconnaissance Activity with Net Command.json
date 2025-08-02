@@ -1,0 +1,43 @@
+{
+    "name": "Reconnaissance Activity with Net Command",
+    "description": "Detection of reconnaissance activity using the 'net' command. Adversaries use the 'net' command to discover users, groups, and network configurations. This detection is based on the behavioral analysis of multiple 'net' commands being executed in a short period, which could indicate an attacker is mapping the internal network. This prompt helps investigate the source of the discovery activity and determine if it's a legitimate administrative task or a malicious reconnaissance.",
+    "tags": [
+        "TA0007",
+        "T1087",
+        "T1087.001",
+        "T1018",
+        "security",
+        "detection",
+        "Windows"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the reconnaissance activity from host `{hostname}` at `{timestamp}`. The command line detected was `{command_line}` executed by the user `{user_name}`. Determine if this is a legitimate administrative action or a malicious reconnaissance attempt. Provide a summary of your findings, including the specific commands used and the information gathered. Recommend immediate containment and remediation steps.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname of the system where the reconnaissance activity was detected."
+        },
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        },
+        {
+            "name": "command_line",
+            "required": true,
+            "description": "The full command line of the process (e.g., net user, net group, net share)."
+        },
+        {
+            "name": "user_name",
+            "required": true,
+            "description": "The user account under which the process was executed."
+        }
+    ]
+}

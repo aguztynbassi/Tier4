@@ -1,0 +1,31 @@
+{
+  "name": "Suspicious Windows ANONYMOUS LOGON Local Account Creation",
+  "description": "Detection of the creation of a local account with a name similar to 'ANONYMOUS LOGON'. This is a highly suspicious activity, as an adversary might create such an account to blend in with legitimate system processes and establish persistence.",
+  "tags": [
+    "security",
+    "persistence",
+    "account_creation",
+    "T1136",
+    "windows_event_log"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a new local user account, **{user}**, was created with a name that closely resembles 'ANONYMOUS LOGON'. This is a strong indicator of **Persistence** (**MITRE ATT&CK T1136**), where an adversary is attempting to create a backdoor or a stealthy account to maintain access to the system. The event occurred with Event ID **4720**. Immediate investigation is required to determine the legitimacy of this action and to remove the suspicious account. This event should be treated as a confirmed security incident until proven otherwise.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The name of the suspicious user account that was created."
+    }
+  ]
+}

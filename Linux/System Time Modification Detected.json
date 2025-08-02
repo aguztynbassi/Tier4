@@ -1,0 +1,69 @@
+[
+  {
+    "name": "System Time Modification Detected",
+    "description": "Unauthorized or suspicious changes to the system clock detected, indicating potential defense evasion, disruption, or integrity compromise.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "linux",
+      "macos",
+      "defense_evasion",
+      "impact",
+      "TA0005",
+      "TA0040",
+      "T1485"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: System Time Modification Detected!\\n\\nUnauthorized or suspicious system time modification was detected on host '{ComputerName}' at {Timestamp}.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **User Account**: {User} (Account that initiated the change)\\n* **Process Name**: {ProcessName} (Process/Service that made the change, if available)\\n* **Command Line**: {CommandLine} (Full command if a script or manual command was used, e.g., for `ntp_command_execution`)\\n* **Event ID (Windows)**: {EventID} (Expected 4616 if Windows)\\n* **Full Log Message**: {Message} (Provides more context from OS logs)\\n* **Rule Name**: {RuleName}\\n\\nThis incident is a critical indicator of **Defense Evasion (TA0005)** or **Impact (TA0040)**. Adversaries manipulate system time to evade security controls (e.g., license checks, scheduled tasks, time-based OTPs), disrupt forensic timelines, or interfere with system operation.\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** Disconnect host '{ComputerName}' from the network to prevent further malicious activity, especially if the time change is significant or for a non-SYSTEM account.\\n2.  **FORENSIC ANALYSIS:** Immediately initiate a forensic investigation of '{ComputerName}'. Focus on: \\n    * **Time Synchronization Settings:** Verify the system's NTP configuration. Is it pointing to a legitimate time source? \\n    * **Event Logs:** Scrutinize all logs (Security, System, Application, PowerShell, Sysmon, Auditd) around the time of the change for preceding or subsequent suspicious activity. \\n    * **User Activity:** Investigate the '{User}' account for signs of compromise (e.g., unauthorized logins, privilege escalation). \\n    * **Process Analysis:** If '{ProcessName}' and '{CommandLine}' are available, analyze them for malicious intent. \\n    * **File System Timestamps:** Be aware that file system timestamps might be unreliable due to the time change.\\n3.  **RESET SYSTEM TIME:** Re-synchronize the system clock with a trusted, authoritative NTP server (e.g., your internal domain controller or a public NTP server). Verify the time is correct.\\n4.  **CHECK INTEGRITY OF TIME-DEPENDENT SERVICES:** Assess the impact on services, applications, and cryptographic systems that rely on accurate time (e.g., Kerberos, TLS certificates, licensing mechanisms, scheduled tasks, logging systems).\\n5.  **THREAT HUNTING:** Search for similar time modifications or associated activities across other systems in your environment. Look for indicators of compromise (IOCs) identified during the investigation.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the system time change event."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the time was changed."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account (or SID) that initiated the time change."
+      },
+      {
+        "name": "ProcessName",
+        "required": false,
+        "description": "The name of the process that changed the time, if available."
+      },
+      {
+        "name": "CommandLine",
+        "required": false,
+        "description": "The command line executed, if the time change was via a script or command."
+      },
+      {
+        "name": "EventID",
+        "required": false,
+        "description": "The Windows Event ID (e.g., 4616) associated with the time change."
+      },
+      {
+        "name": "Message",
+        "required": false,
+        "description": "The full log message providing context for the event."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]

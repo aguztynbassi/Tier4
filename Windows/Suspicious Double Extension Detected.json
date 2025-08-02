@@ -1,0 +1,41 @@
+{
+  "name": "Suspicious Double Extension Detected",
+  "description": "Detection of a file with a suspicious double extension (e.g., `.docx.exe`). Adversaries often use double extensions to masquerade as a benign file type, such as a document, to trick users into executing a malicious file, which is a common defense evasion technique.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "masquerading",
+    "T1036.007",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "An alert has been triggered on the host **{host}**: a suspicious process, **{process}**, with a double file extension was detected in the command line: **{command}**. This is a strong indicator of **Defense Evasion** (**MITRE ATT&CK T1036.007**), where an adversary is attempting to masquerade as a benign file to trick a user into executing malicious code. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious file. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "process",
+      "required": true,
+      "description": "The name of the suspicious process."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The full command line that was executed."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

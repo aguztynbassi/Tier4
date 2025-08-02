@@ -1,0 +1,57 @@
+{
+    "name": "Safe DLL Search Mode Disabled",
+    "description": "Safe DLL search mode is disabled, which could allow an attacker to perform a DLL Side-Loading attack. This prompt helps investigate the event by checking the registry key `SafeDllSearchMode` and its value. If the value is `0`, it means that the safe DLL search mode is disabled. The DLL Side-Loading attack can be used to achieve persistence or defense evasion. This prompt can be used to investigate this type of activity.",
+    "tags": [
+        "security",
+        "detection",
+        "windows",
+        "TA0005",
+        "T1562",
+        "T1562.001"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the security event with Event ID {event_id} from the WindowsSysmon logs. The `SafeDllSearchMode` registry key has been modified to a value of `0x00000000`, indicating that safe DLL search mode has been disabled. The event occurred at `{timestamp}` on the host `{hostname}`. The process that made the change was `{process_name}` with Process ID `{process_id}`. Analyze the command line (`{command_line}`) for any suspicious arguments and review the user `{user}` associated with the activity. Provide a summary of your findings and determine if this is a legitimate configuration change or a potential malicious activity. If malicious, identify the potential threat and suggest immediate mitigation steps.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "event_id",
+            "required": true,
+            "description": "The Sysmon Event ID for the registry value modification (should be 13)."
+        },
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        },
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname where the event was detected."
+        },
+        {
+            "name": "process_name",
+            "required": true,
+            "description": "The name of the process that modified the registry key."
+        },
+        {
+            "name": "process_id",
+            "required": true,
+            "description": "The Process ID of the process that modified the registry key."
+        },
+        {
+            "name": "command_line",
+            "required": true,
+            "description": "The command line of the process that modified the registry key."
+        },
+        {
+            "name": "user",
+            "required": true,
+            "description": "The user account under which the process was executed."
+        }
+    ]
+}

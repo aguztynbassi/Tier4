@@ -1,0 +1,41 @@
+{
+  "name": "Suspicious Calculator Usage Detected",
+  "description": "Detection of `calc.exe` being used with command-line parameters or running from a suspicious directory. Adversaries may use this legitimate process to test execution or to evade security tools by masquerading as a benign application.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "masquerading",
+    "T1036",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "An alert has been triggered on the host **{host}**: a suspicious `calc.exe` process was detected. The process, **{image}**, was launched with the command line **{command}**. The use of command-line parameters with `calc.exe` or its execution from a non-standard directory is a strong indicator of **Defense Evasion** (**MITRE ATT&CK T1036**). An adversary may be using this legitimate process for testing or to hide malicious activity. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious process. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "The full path of the calc.exe process."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The full command line that was executed."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "name": "Suspicious RDP Redirect Using TSCON Detected",
+  "description": "Detects a suspicious RDP session redirect using `tscon.exe`. Adversaries may use `tscon.exe` to connect to a different session, potentially hijacking an existing RDP session to maintain access, bypass authentication, and facilitate lateral movement.",
+  "tags": [
+    "security",
+    "lateral_movement",
+    "privilege_escalation",
+    "remote_services",
+    "T1021",
+    "T1021.001",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: the process **{image}** executed a command line containing the pattern `*/dest:rdp-tcp:*`, which indicates a suspicious **RDP session redirect**. This is a strong indicator of **Lateral Movement** (**MITRE ATT&CK T1021.001**) where an adversary is likely attempting to hijack an RDP session to gain unauthorized access to another user's session or to escalate privileges. The command line was **{command}** and the event occurred under the user **{user}**. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious process.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "The process image that performed the action."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The full command line that was executed."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

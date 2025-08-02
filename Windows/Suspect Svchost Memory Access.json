@@ -1,0 +1,43 @@
+{
+  "name": "Suspect Svchost Memory Access",
+  "description": "Detects suspicious memory access to `svchost.exe`. Adversaries may inject malicious code into `svchost.exe` to execute code, evade security defenses, and potentially disrupt services. This is a common defense evasion and privilege escalation technique.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "privilege_escalation",
+    "process_injection",
+    "T1562",
+    "T1562.001",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a process is attempting to access the memory of **`svchost.exe`** with a suspicious access right (**{access}**). The call trace is **{call_trace}**. This is a strong indicator of **Defense Evasion** and **Process Injection** (**MITRE ATT&CK T1562.001**), where an adversary is attempting to hide malicious activity within a legitimate system process. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious process. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "access",
+      "required": true,
+      "description": "The access rights requested by the process."
+    },
+    {
+      "name": "call_trace",
+      "required": true,
+      "description": "The call trace of the process that accessed the memory."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

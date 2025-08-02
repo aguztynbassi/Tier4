@@ -1,0 +1,38 @@
+{
+  "name": "Suspicious Service Path Modification Detected",
+  "description": "Detection of a service path modification to use PowerShell or CMD. Adversaries may modify a legitimate service to execute a command or a script, which is a common persistence and execution technique.",
+  "tags": [
+    "security",
+    "persistence",
+    "execution",
+    "service_cmd",
+    "T1569",
+    "T1569.002",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: the process **`sc.exe`** was used to modify a service path to execute **`powershell`** or **`cmd`**. This is a strong indicator of a **Service Command** attack (**MITRE ATT&CK T1569.002**) where an adversary is attempting to establish **Persistence** by hijacking a legitimate service. The command line was **{command}** and the event occurred under the user **{user}**. Immediate investigation is required to determine the legitimacy of this action and to restore the integrity of the affected service.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The full command line that was executed."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

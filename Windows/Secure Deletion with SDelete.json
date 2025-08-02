@@ -1,0 +1,57 @@
+{
+    "name": "Secure Deletion with SDelete",
+    "description": "Detection of secure file deletion using `sdelete.exe` or similar tools. Attackers often use secure deletion utilities to remove traces of their activity, making forensic analysis more difficult. This prompt helps investigate the use of such tools, which could indicate an attempt at defense evasion or cover up a compromise.",
+    "tags": [
+        "security",
+        "detection",
+        "windows",
+        "TA0005",
+        "T1070",
+        "T1070.004"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the security event at `{timestamp}` on host `{hostname}` where `sdelete.exe` or a similar secure deletion tool was executed. The process `{process_name}` with Process ID `{process_id}` executed the command `{command_line}`. Analyze the target files or directories (`{target_object}`) that were subjected to secure deletion. Review the user (`{user}`) associated with this activity. Determine if this is a legitimate administrative action (e.g., data sanitization) or a potential malicious attempt to cover tracks. Provide a summary of your findings and suggest immediate mitigation steps.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        },
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname where the event was detected."
+        },
+        {
+            "name": "process_name",
+            "required": true,
+            "description": "The name of the process that performed the secure deletion (e.g., sdelete.exe)."
+        },
+        {
+            "name": "process_id",
+            "required": true,
+            "description": "The Process ID of the process that performed the secure deletion."
+        },
+        {
+            "name": "command_line",
+            "required": true,
+            "description": "The full command line of the process that performed the secure deletion."
+        },
+        {
+            "name": "target_object",
+            "required": false,
+            "description": "The files or directories that were securely deleted."
+        },
+        {
+            "name": "user",
+            "required": true,
+            "description": "The user account under which the process was executed."
+        }
+    ]
+}

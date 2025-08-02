@@ -1,0 +1,48 @@
+{
+    "name": "RedSocks Backdoor Connection",
+    "description": "RedSocks Backdoor connection to a C2 server is detected. The alert uses the `RedSocks Backdoor` list to check against the source IP in the logs. This indicates an ongoing C2 communication.",
+    "tags": [
+        "TA0001",
+        "T1071",
+        "T1071.001",
+        "security",
+        "detection",
+        "Firewall",
+        "IDS/IPS"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the network connection from host `{hostname}` to the malicious C2 server `{c2_server}` at `{timestamp}`. The connection was initiated by a process with PID `{process_id}`. Analyze the user (`{user_name}`) associated with the process and any other network traffic to or from this host. Determine if the host is infected and if the backdoor is actively communicating. Provide a summary of your findings and recommend an incident response plan.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname of the affected host."
+        },
+        {
+            "name": "c2_server",
+            "required": true,
+            "description": "The malicious C2 server to which the host connected."
+        },
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        },
+        {
+            "name": "process_id",
+            "required": true,
+            "description": "The Process ID of the process that initiated the connection."
+        },
+        {
+            "name": "user_name",
+            "required": true,
+            "description": "The user account under which the process was executed."
+        }
+    ]
+}

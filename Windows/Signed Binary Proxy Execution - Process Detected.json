@@ -1,0 +1,41 @@
+{
+  "name": "Signed Binary Proxy Execution - Process Detected",
+  "description": "Detects the use of legitimate, signed Windows binaries like `mavinject.exe`, `certutil.exe`, and `msiexec.exe` to proxy the execution of malicious content. This is a common **Defense Evasion** technique used by adversaries to bypass security controls that rely on process or signature-based defenses.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "proxy_execution",
+    "T1218",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a signed Windows binary, **{process}**, was executed with a suspicious command line: **{command}**. This is a strong indicator of **Signed Binary Proxy Execution** (**MITRE ATT&CK T1218**), where an adversary is attempting to use a trusted utility to execute malicious code. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious file. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "process",
+      "required": true,
+      "description": "The name of the signed binary that was executed."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The full command line that was executed."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

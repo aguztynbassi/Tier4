@@ -1,0 +1,51 @@
+{
+    "name": "Suspicious File or Directory Permission Modification",
+    "description": "This prompt is designed to detect and investigate suspicious modifications to file or directory permissions using the `icacls.exe` command-line utility. Attackers often modify permissions to escalate privileges or enable persistence. The prompt specifically looks for the `icacls` command granting 'everyone' full control, which is a highly suspicious activity and could indicate a defense evasion or privilege escalation attempt.",
+    "tags": [
+        "security",
+        "detection",
+        "windows",
+        "TA0005",
+        "T1222.001"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the security event where the `icacls.exe` command was executed with the command line `{command}` on the host `{hostname}` at `{timestamp}`. The command includes 'grant everyone', which is highly suspicious. Analyze the target file or directory (`{target_object}`). Identify the process (`{process}`) that initiated this command and the user (`{user}`) who executed it. Determine if this permission modification is a legitimate administrative action or a potential malicious activity. Provide a summary of your findings and recommend immediate actions.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "command",
+            "required": true,
+            "description": "The full command line of the icacls.exe process, including the suspicious 'grant everyone' argument."
+        },
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname where the event was detected."
+        },
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        },
+        {
+            "name": "target_object",
+            "required": false,
+            "description": "The file or directory whose permissions were modified."
+        },
+        {
+            "name": "process",
+            "required": true,
+            "description": "The name of the process that was executed (should be icacls.exe)."
+        },
+        {
+            "name": "user",
+            "required": true,
+            "description": "The user account under which the command was executed."
+        }
+    ]
+}

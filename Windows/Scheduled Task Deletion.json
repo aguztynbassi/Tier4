@@ -1,0 +1,29 @@
+{
+    "name": "Scheduled Task Deletion",
+    "description": "Deletion of a scheduled task is detected using schtasks utility with delete command.",
+    "tags": [
+        "TA0002",
+        "TA0003",
+        "TA0004",
+        "T1053",
+        "T1053.005",
+        "security",
+        "detection",
+        "Windows Sysmon"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the security event: 'Scheduled Task Deletion'. Event details: {event_details}",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "event_details",
+            "required": true,
+            "description": "Details of the detected security event, including the original query information: `norm_id=WindowsSysmon event_id=1 image='*\\schtasks.exe' command='*delete*'`."
+        }
+    ]
+}

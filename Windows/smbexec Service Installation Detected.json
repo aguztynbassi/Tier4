@@ -1,0 +1,34 @@
+{
+  "name": "smbexec Service Installation Detected",
+  "description": "Detection of a service installation related to the `smbexec.py` tool. This is a strong indicator of a **Lateral Movement** attempt, where an adversary is using a malicious service to execute code on a remote system and evade security controls.",
+  "tags": [
+    "security",
+    "lateral_movement",
+    "execution",
+    "service_creation",
+    "T1021",
+    "T1569",
+    "T1569.002",
+    "windows_event_log"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a new service with the name **'BTOBTO'** was installed, and its command line contains the suspicious command **`execute.bat`**. This is a strong indicator of a **Lateral Movement** attack (**MITRE ATT&CK T1569.002**) using the `smbexec.py` tool. An adversary is likely attempting to execute code on this system with elevated privileges. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious service. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

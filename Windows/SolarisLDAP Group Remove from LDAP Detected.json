@@ -1,0 +1,38 @@
+{
+  "name": "SolarisLDAP Group Remove from LDAP Detected",
+  "description": "Detects the removal of a group from Solaris LDAP. Adversaries may remove groups to disrupt operations, remove evidence of their activities, or to disable security controls. This is a strong indicator of an adversary attempting to impact the environment or evade security defenses.",
+  "tags": [
+    "security",
+    "impact",
+    "defense_evasion",
+    "account_manipulation",
+    "t1098",
+    "t1531",
+    "solaris_ldap"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: the group **{group}** was removed from Solaris LDAP. This is a strong indicator of **Impact** (**MITRE ATT&CK T1531**) or **Defense Evasion**, where an adversary is attempting to disrupt operations or remove evidence of their activities. Immediate investigation is required to determine the legitimacy of this action and to restore the group if it was removed maliciously. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "group",
+      "required": true,
+      "description": "The name of the group that was removed."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

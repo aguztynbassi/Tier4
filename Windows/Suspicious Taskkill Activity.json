@@ -1,0 +1,41 @@
+{
+    "name": "Suspicious Taskkill Activity",
+    "description": "This prompt detects suspicious activity where more than two processes are terminated quickly using the `taskkill` command. This behavior can be indicative of malicious activity such as ransomware, which may terminate security products or other processes to facilitate its operations.",
+    "tags": [
+        "security",
+        "detection",
+        "windows",
+        "TA0040",
+        "T1489"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the security event where the `taskkill.exe` command was used to terminate more than two processes on the host `{host}`. This suspicious activity was detected at `{timestamp}`. Identify the specific processes that were terminated. Analyze the command line arguments (`{command}`) used for each `taskkill` execution. Determine the user (`{user}`) who initiated this activity and review their recent actions. Provide a summary of your findings and assess if this activity is part of a legitimate administrative task or a potential malicious event like a ransomware attack.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "host",
+            "required": true,
+            "description": "The hostname where the suspicious taskkill activity was detected."
+        },
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        },
+        {
+            "name": "command",
+            "required": true,
+            "description": "The command line of the taskkill.exe process."
+        },
+        {
+            "name": "user",
+            "required": true,
+            "description": "The user account under which the command was executed."
+        }
+    ]
+}

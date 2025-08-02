@@ -1,0 +1,74 @@
+[
+  {
+    "name": "Default Connection Attempts to Unexpected Ports",
+    "description": "Detects network connection attempts (whether allowed or blocked by a firewall/IDS) targeting ports that are *not* part of the expected and allowed services on a given system or network segment. This is a critical indicator of port scanning, reconnaissance, unauthorized access attempts, or misconfigured applications. The `allowed_ports` list must be carefully defined and maintained for your specific environment.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "network",
+      "reconnaissance",
+      "port_scan",
+      "misconfiguration",
+      "TA0007",
+      "TA0001",
+      "TA0008",
+      "T1046"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: Default Connection Attempt to Unexpected Port Detected!\\n\\n**A network connection attempt from '{SourceIp}' to '{DestinationIp}' on unexpected port '{DestinationPort}' ({Protocol} protocol) was observed at {Timestamp}.** This indicates potential **port scanning (T1046)**, **reconnaissance (TA0007)**, an **unauthorized access attempt (TA0001)**, or a **misconfigured application/system** trying to communicate on a non-standard port.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Source IP**: {SourceIp}\\n* **Destination IP**: {DestinationIp} (Target Host: {ComputerName})\\n* **Destination Port**: {DestinationPort} (This port is NOT in your allowed list)\\n* **Protocol**: {Protocol}\\n* **Action (Firewall/IDS)**: {Action} (e.g., 'allow', 'deny', 'block')\\n* **Reporting Device**: {DeviceName}\\n* **Rule Name**: {RuleName}\\n\\nSince '{DestinationPort}' is not an expected open port for '{DestinationIp}', this traffic is highly suspicious. Even if the connection was blocked, it signifies active probing of your network defenses.\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (HIGH PRIORITY - INVESTIGATE PROMPTLY):**\\n\\n1.  **IDENTIFY THE SOURCE:** Investigate '{SourceIp}'. Is it an internal host or an external one? \\n    * If internal, identify the specific process or application on '{SourceIp}' making this connection. Is it legitimate but misconfigured? Or is it malicious?\\n    * If external, consider blocking '{SourceIp}' at your perimeter firewall, especially if it's exhibiting scanning behavior.\\n2.  **VALIDATE THE DESTINATION:** Confirm that '{DestinationIp}' should not be listening on '{DestinationPort}'. If it's a legitimate new service, update your `allowed_ports` list. If not, this could be an attempt to find unauthorized services or a misconfiguration on the destination system.\\n3.  **REVIEW FIREWALL/IDS LOGS:** Examine surrounding log events from the same '{SourceIp}' to determine if this is an isolated event or part of a broader scanning/attack pattern targeting multiple ports or destinations.\\n4.  **THREAT INTELLIGENCE:** Perform a threat intelligence lookup on '{SourceIp}' (if external) to check for known malicious activity.\\n5.  **VULNERABILITY SCAN (if applicable):** If the destination is an external-facing asset, consider a targeted vulnerability scan to identify any unintentionally exposed services.\\n6.  **ESCALATE:** Escalate to network and system administration teams as needed, especially if the source or destination is critical infrastructure or if malicious activity is confirmed.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the network connection attempt event."
+      },
+      {
+        "name": "SourceIp",
+        "required": true,
+        "description": "The source IP address of the connection attempt."
+      },
+      {
+        "name": "DestinationIp",
+        "required": true,
+        "description": "The destination IP address of the connection attempt."
+      },
+      {
+        "name": "DestinationPort",
+        "required": true,
+        "description": "The destination port number targeted."
+      },
+      {
+        "name": "Protocol",
+        "required": true,
+        "description": "The transport protocol (e.g., TCP, UDP)."
+      },
+      {
+        "name": "Action",
+        "required": false,
+        "description": "The action taken by the firewall/IDS (e.g., 'allow', 'deny', 'block', 'drop')."
+      },
+      {
+        "name": "ComputerName",
+        "required": false,
+        "description": "The hostname of the destination system if available."
+      },
+      {
+        "name": "DeviceName",
+        "required": false,
+        "description": "The name of the firewall/IDS device if available."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]

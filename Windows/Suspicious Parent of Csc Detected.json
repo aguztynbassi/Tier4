@@ -1,0 +1,36 @@
+{
+  "name": "Suspicious Parent of Csc Detected",
+  "description": "Detection of `csc.exe` (C# compiler) being launched by a suspicious parent process like `wscript.exe`, `cscript.exe`, or `mshta.exe`. This is a strong indicator of a payload delivery attempt, where an adversary is using a legitimate utility to compile and execute malicious code to evade security defenses.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "masquerading",
+    "T1036",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: the process **`csc.exe`** was launched by a suspicious parent process, **{parent_image}**. This is a strong indicator of a **Payload Delivery** attempt and **Defense Evasion** (**MITRE ATT&CK T1036**). Adversaries often use legitimate utilities like `csc.exe` to compile and execute malicious code. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious process. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "parent_image",
+      "required": true,
+      "description": "The name of the parent process that launched csc.exe."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

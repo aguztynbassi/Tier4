@@ -1,0 +1,70 @@
+[
+  {
+    "name": "Potential Copyright Infringement Phishing Email",
+    "description": "Detects emails with subject lines related to copyright or intellectual property infringement, which are commonly used in phishing campaigns to trick recipients into clicking malicious links or opening attachments. Attackers exploit the sense of urgency or fear associated with legal notices to deliver malware or steal credentials. This rule requires an up-to-date list of known legitimate servers (`KNOWN_SERVER_HOST`).",
+    "tags": [
+      "security",
+      "detection",
+      "medium",
+      "email",
+      "initial_access",
+      "collection",
+      "phishing",
+      "TA0001",
+      "TA0009",
+      "T1566",
+      "T1566.001",
+      "T1566.002"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "MEDIUM SEVERITY ALERT: Potential Copyright Infringement Phishing Email Detected!\\n\\n**A suspicious email with a subject line related to copyright or intellectual property infringement has been detected, potentially indicating a phishing attempt.** This type of email often aims to trick recipients into clicking malicious links or opening harmful attachments, serving as an **Initial Access (TA0001)** vector via **Phishing (T1566)**.\\n\\n**Email Details:**\\n* **Timestamp**: {Received}\\n* **From**: '{From}'\\n* **To**: '{To}'\\n* **Subject**: '{Subject}'\\n* **Source IP**: {SourceIp}\\n* **Rule Name**: {RuleName}\\n\\nThe subject line ('{Subject}') contains keywords such as 'copyright', 'infringement', 'DMCA', or 'legal notice', which are frequently exploited in social engineering schemes to create a sense of urgency or fear. Adversaries leverage these themes to bypass user vigilance and deliver malware or collect credentials.\\n\\n**IMMEDIATE RECOMMENDED ACTIONS (MEDIUM PRIORITY - INVESTIGATE):**\\n\\n1.  **WARN RECIPIENT:** Immediately alert the recipient(s) '{To}' about the suspicious nature of the email. Instruct them **NOT to click any links, open any attachments, or reply to the email.** Advise them to delete the email if they have not interacted with it.\\n2.  **ANALYZE EMAIL CONTENT:**\\n    * **Check for Malicious Links:** If your email logs include body content, analyze it for suspicious URLs. Use a sandbox environment or online reputation checker to test any links. If links are found, consider blocking them at your perimeter.\\n    * **Check for Malicious Attachments:** If the email has attachments, do NOT open them. Submit them to a sandbox environment (e.g., VirusTotal, Cuckoo Sandbox) for analysis. If malicious, block the file hash/signature at your endpoint security.\\n    * **Review Headers:** Examine full email headers for anomalies (e.g., SPF/DKIM/DMARC failures, unusual `Reply-To` addresses, mismatched sender domains).\\n3.  **SOURCE IP & SENDER REPUTATION:** Investigate the `SourceIp` ({SourceIp}) and sender's domain ('{From}') for known malicious reputation or inconsistencies. Add to block lists if confirmed malicious.\\n4.  **PHISHING AWARENESS:** If this is a widespread campaign, consider issuing an organization-wide alert to raise awareness about this specific phishing tactic.\\n5.  **REVIEW PAST ACTIVITY:** Check if the recipient or any other users have recently clicked similar links or opened similar attachments. If so, initiate incident response procedures for potential compromise.\\n6.  **ESCALATE:** Escalate to the security operations center (SOC) or incident response team for further analysis and potential remediation if a compromise is suspected or confirmed.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Received",
+        "required": true,
+        "description": "The timestamp when the email was received."
+      },
+      {
+        "name": "From",
+        "required": true,
+        "description": "The sender's email address."
+      },
+      {
+        "name": "To",
+        "required": true,
+        "description": "The recipient's email address."
+      },
+      {
+        "name": "Subject",
+        "required": true,
+        "description": "The subject line of the email."
+      },
+      {
+        "name": "SourceIp",
+        "required": true,
+        "description": "The IP address of the sending mail server."
+      },
+      {
+        "name": "Body",
+        "required": false,
+        "description": "(Optional) The content of the email body, if logged."
+      },
+      {
+        "name": "Headers",
+        "required": false,
+        "description": "(Optional) The full email headers, if logged."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]

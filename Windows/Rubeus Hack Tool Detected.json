@@ -1,0 +1,41 @@
+{
+    "name": "Rubeus Hack Tool Detected",
+    "description": "The Command line parameters like asreproast, dump, impersonate user, harvest, and other commands used by the Rubeus hack tool are detected. Rubeus is a C# toolset for interacting with Kerberos and is often used by attackers for credential access and privilege escalation.",
+    "tags": [
+        "TA0006",
+        "T1003",
+        "security",
+        "detection",
+        "Windows Sysmon"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the execution of the Rubeus hack tool on the host `{hostname}` at `{timestamp}`. The command line detected was `{command_line}`. Identify the user (`{user_name}`) who executed the command and any other processes associated with this activity. Determine the objective of the Rubeus command (e.g., asreproasting, ticket dumping). Provide a summary of the findings and suggest immediate containment and remediation steps.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname where the Rubeus tool was executed."
+        },
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        },
+        {
+            "name": "command_line",
+            "required": true,
+            "description": "The full command line arguments used to execute Rubeus."
+        },
+        {
+            "name": "user_name",
+            "required": true,
+            "description": "The user account that executed the command."
+        }
+    ]
+}

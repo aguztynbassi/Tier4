@@ -1,0 +1,42 @@
+{
+  "name": "Shadow Copy Creation Using OS Utilities Detected",
+  "description": "Detects the creation of shadow copies using built-in Windows utilities like `PowerShell`, `wmic`, and `vssadmin`. Adversaries often use this technique to gain access to files that are locked or in use, which is a common **Credential Access** and **Collection** technique.",
+  "tags": [
+    "security",
+    "credential_access",
+    "collection",
+    "shadow_copy",
+    "T1003",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a process, **{process}**, was executed with a command line (**{command}**) to create a shadow copy. This is a strong indicator of an adversary attempting to gain access to sensitive files, such as credential data, to perform **Credential Access** (**MITRE ATT&CK T1003**). Immediate investigation is required to determine the legitimacy of this action and to remove any malicious files. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "process",
+      "required": true,
+      "description": "The name of the process that performed the action."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The full command line that was executed to create the shadow copy."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

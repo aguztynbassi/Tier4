@@ -1,0 +1,43 @@
+{
+    "ID": "0768",
+    "name": "RDP over Reverse SSH Tunnel WFP",
+    "description": "A reverse SSH tunnel has been detected and is being used for RDP. Attackers often use reverse SSH tunnels to bypass network firewalls and gain remote access to systems inside the network. This detection is based on the Windows Filtering Platform (WFP) logs, providing details about the user, source, and destination. This detection focuses on the event logs generated when a remote session is created, providing details about the user, source, and destination.",
+    "tags": [
+        "TA0001",
+        "T1090",
+        "T1090.003",
+        "security",
+        "detection",
+        "Windows"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the RDP over reverse SSH tunnel detected at `{timestamp}` on the host `{hostname}`. The tunnel was established from the source IP address `{source_address}` by the user `{user_name}`. Determine if this is a legitimate administrative action or a potential malicious activity, such as remote access by an attacker. Provide a summary of your findings and recommend immediate mitigation steps, including terminating the session if it is deemed malicious.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the remote session was established."
+        },
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname of the system where the remote session was established."
+        },
+        {
+            "name": "source_address",
+            "required": true,
+            "description": "The source IP address from which the remote session originated."
+        },
+        {
+            "name": "user_name",
+            "required": true,
+            "description": "The name of the user who established the remote session."
+        }
+    ]
+}
