@@ -1,0 +1,36 @@
+{
+  "name": "Account Manipulated for Persistence Detected",
+  "description": "Detecta el uso de comandos `net` para manipular cuentas de usuario, incluyendo la adición a grupos locales. Este es un intento de **Persistencia** por parte de un adversario.",
+  "tags": [
+    "security",
+    "persistence",
+    "account_manipulation",
+    "T1098",
+    "windows"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "Se ha activado una alerta en el host **{host}**: se detectó la manipulación de una cuenta con el comando **{command}**. Esto es un fuerte indicador de **Persistencia** (**MITRE ATT&CK T1098**), donde un adversario intenta mantener su acceso al sistema. Se requiere una investigación inmediata para determinar la legitimidad de esta acción y asegurar el host afectado. El evento ocurrió bajo el usuario **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del host donde ocurrió el evento."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comando completa que se ejecutó para manipular la cuenta."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que realizó la acción."
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "name": "System Network Connections Discovery",
+  "description": "Detects the use of system utilities like `netstat.exe` and `net.exe` for network connections discovery. This is a common **Discovery** technique used by adversaries to understand the network connections of the compromised system.",
+  "tags": [
+    "security",
+    "discovery",
+    "system_network_connections_discovery",
+    "T1049",
+    "windows",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "An alert has been triggered on the host **{host}**: a process, **{process}**, was executed with a command line (**{command}**) to discover network connections. This is a strong indicator of **Discovery** (**MITRE ATT&CK T1049**), where an adversary is attempting to enumerate active network connections. Immediate investigation is required to determine the legitimacy of this action and to secure the affected host. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "process",
+      "required": true,
+      "description": "The name of the process that performed the action."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The full command line that was executed."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}
