@@ -17,7 +17,9 @@
     "prompts": [
       {
         "id": "1",
-        "prompt": "Medium-severity alert: Suspicious query for MachineGUID detected on host '{host}' by user '{user}'. The `reg.exe` process at '{process_path}' was executed with command line '{command_line}', specifically querying the 'MachineGuid' registry key. While `reg.exe` is a legitimate tool, this action is often performed by adversaries for reconnaissance or system identification, particularly by ransomware or other malware. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity immediately.** Determine if this query for the MachineGUID is legitimate and expected behavior in your environment. If not, investigate the process that initiated this query and look for other suspicious activities, especially those related to ransomware or information gathering."
+        "prompt": "Medium-severity alert: Suspicious query for MachineGUID detected on host '{host}' by user '{user}'. The `reg.exe` process at '{process_path}' was executed with command line '{command_line}', specifically querying the 'MachineGuid' registry key. While `reg.exe` is a legitimate tool, this action is often performed by adversaries for reconnaissance or system identification, particularly by ransomware or other malware. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity immediately.** Determine if this query for the MachineGUID is legitimate and expected behavior in your environment. If not, investigate the process that initiated this query and look for other suspicious activities, especially those related to ransomware or information gathering.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
       }
     ],
     "parameters": [

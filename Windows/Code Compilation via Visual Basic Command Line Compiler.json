@@ -19,7 +19,9 @@
     "prompts": [
       {
         "id": "1",
-        "prompt": "Medium-severity alert: Code compilation activity detected on host '{host}' by user '{user}'. The `cvtres.exe` process was launched by `vbc.exe` (Visual Basic Command Line Compiler), which can indicate malicious code compilation outside of a typical development environment, potentially for defense evasion. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Parent Process Name**: {parent_process_name}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity immediately.** Determine if this compilation is legitimate and expected in your environment. If not, analyze the source code being compiled and examine the system for any newly created executables or suspicious files. This could be an adversary compiling malware on the fly to bypass endpoint security solutions."
+        "prompt": "Medium-severity alert: Code compilation activity detected on host '{host}' by user '{user}'. The `cvtres.exe` process was launched by `vbc.exe` (Visual Basic Command Line Compiler), which can indicate malicious code compilation outside of a typical development environment, potentially for defense evasion. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Parent Process Name**: {parent_process_name}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity immediately.** Determine if this compilation is legitimate and expected in your environment. If not, analyze the source code being compiled and examine the system for any newly created executables or suspicious files. This could be an adversary compiling malware on the fly to bypass endpoint security solutions.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
       }
     ],
     "parameters": [

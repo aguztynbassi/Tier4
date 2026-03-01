@@ -18,7 +18,9 @@
     "prompts": [
       {
         "id": "1",
-        "prompt": "Medium-severity alert: Suspicious creation of an Alternate Data Stream (ADS) using `findstr.exe` detected on host '{host}' by user '{user}'. The process '{process_name}' at '{process_path}' was executed with command line '{command_line}', and a file '{object_name}' with an ADS was accessed or created. This technique can be used by adversaries to hide malicious code or data. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **Object Name**: {object_name}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity immediately.** Determine if this ADS creation is legitimate for the observed process and user. If not, analyze the content of the ADS within '{object_name}' and examine the system for any malicious payloads or further indicators of compromise. This could be an attempt at defense evasion or data staging."
+        "prompt": "Medium-severity alert: Suspicious creation of an Alternate Data Stream (ADS) using `findstr.exe` detected on host '{host}' by user '{user}'. The process '{process_name}' at '{process_path}' was executed with command line '{command_line}', and a file '{object_name}' with an ADS was accessed or created. This technique can be used by adversaries to hide malicious code or data. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **Object Name**: {object_name}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity immediately.** Determine if this ADS creation is legitimate for the observed process and user. If not, analyze the content of the ADS within '{object_name}' and examine the system for any malicious payloads or further indicators of compromise. This could be an attempt at defense evasion or data staging.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
       }
     ],
     "parameters": [

@@ -16,7 +16,9 @@
     "prompts": [
       {
         "id": "1",
-        "prompt": "Medium-severity alert: Suspicious execution of ASP.NET Compiler (`aspnet_compiler.exe`) detected on host '{host}' by user '{user}'. The process '{process_name}' was executed from an unusual path '{process_path}' with command line '{command_line}'. While `aspnet_compiler.exe` is a legitimate developer tool, adversaries can abuse it to execute malicious code or obfuscate their activity. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity immediately.** Determine if this `aspnet_compiler.exe` execution is legitimate and expected in your environment, especially given its execution path. If not, analyze the command line arguments and any related files for malicious indicators. This could be an attempt at defense evasion or code execution."
+        "prompt": "Medium-severity alert: Suspicious execution of ASP.NET Compiler (`aspnet_compiler.exe`) detected on host '{host}' by user '{user}'. The process '{process_name}' was executed from an unusual path '{process_path}' with command line '{command_line}'. While `aspnet_compiler.exe` is a legitimate developer tool, adversaries can abuse it to execute malicious code or obfuscate their activity. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity immediately.** Determine if this `aspnet_compiler.exe` execution is legitimate and expected in your environment, especially given its execution path. If not, analyze the command line arguments and any related files for malicious indicators. This could be an attempt at defense evasion or code execution.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
       }
     ],
     "parameters": [

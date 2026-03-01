@@ -1,4 +1,3 @@
-[
   {
     "name": "Account Discovery Detected (Local and Domain)",
     "description": "Detects common command-line patterns indicating an adversary's attempt to discover local or domain user accounts and group memberships. This reconnaissance activity often involves using built-in Windows utilities like `net.exe` or `powershell.exe` to enumerate users, groups, and cached credentials, which is crucial for subsequent attack phases such as privilege escalation or lateral movement.",
@@ -48,4 +47,3 @@
       }
     ]
   }
-]

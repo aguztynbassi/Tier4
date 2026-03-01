@@ -17,7 +17,9 @@
     "prompts": [
       {
         "id": "1",
-        "prompt": "Medium-severity alert: Windows packet monitoring tool (`pktmon.exe`) usage detected on host '{host}' by user '{user}'. The process '{process_name}' at '{process_path}' was executed with command line '{command_line}'. While `pktmon.exe` is a legitimate diagnostic tool, adversaries can abuse it to sniff network traffic and potentially capture sensitive information. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity immediately.** Determine if this use of `pktmon.exe` is legitimate and expected in your environment. If not, analyze the command line arguments to understand what traffic is being monitored and investigate for any suspicious network activity or data exfiltration. This could be an indicator of reconnaissance or information gathering."
+        "prompt": "Medium-severity alert: Windows packet monitoring tool (`pktmon.exe`) usage detected on host '{host}' by user '{user}'. The process '{process_name}' at '{process_path}' was executed with command line '{command_line}'. While `pktmon.exe` is a legitimate diagnostic tool, adversaries can abuse it to sniff network traffic and potentially capture sensitive information. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity immediately.** Determine if this use of `pktmon.exe` is legitimate and expected in your environment. If not, analyze the command line arguments to understand what traffic is being monitored and investigate for any suspicious network activity or data exfiltration. This could be an indicator of reconnaissance or information gathering.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
       }
     ],
     "parameters": [

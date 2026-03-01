@@ -17,7 +17,9 @@
     "prompts": [
       {
         "id": "1",
-        "prompt": "Medium-severity alert: Possible creation of an Alternate Data Stream (ADS) detected on host '{host}' by user '{user}'. This activity can be used by adversaries to hide malicious code or data within legitimate files, bypassing traditional security scans. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **Object Name (if available)**: {object_name}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity immediately.** Determine if the creation of an ADS is legitimate for the observed process and user. If not, analyze the file '{object_name}' (if available) for hidden data and scan the system for malicious payloads. This could be an attempt at defense evasion or data staging."
+        "prompt": "Medium-severity alert: Possible creation of an Alternate Data Stream (ADS) detected on host '{host}' by user '{user}'. This activity can be used by adversaries to hide malicious code or data within legitimate files, bypassing traditional security scans. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **Object Name (if available)**: {object_name}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity immediately.** Determine if the creation of an ADS is legitimate for the observed process and user. If not, analyze the file '{object_name}' (if available) for hidden data and scan the system for malicious payloads. This could be an attempt at defense evasion or data staging.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
       }
     ],
     "parameters": [
