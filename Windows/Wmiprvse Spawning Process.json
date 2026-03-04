@@ -1,0 +1,42 @@
+{
+  "name": "Wmiprvse Spawning Unusual Process",
+  "description": "Detecta cuando el proceso WMI Provider Host (`WmiPrvSe.exe`) inicia procesos secundarios inusuales. Esta actividad es un indicador clave de la ejecución de comandos a través de WMI (Windows Management Instrumentation), una técnica utilizada frecuentemente por adversarios para la ejecución remota de código y el movimiento lateral.",
+  "tags": [
+    "security",
+    "execution",
+    "wmi",
+    "lateral_movement",
+    "T1047",
+    "windows_server"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "Se ha detectado una ejecución sospechosa en el host **{host}**. El proceso **WmiPrvSe.exe** ha iniciado un proceso hijo inusual: **{process}**. El comando ejecutado fue: **{command}**. Esta actividad sugiere el uso de **WMI para la ejecución de procesos** (**MITRE ATT&CK T1047**), lo cual es comúnmente explotado para realizar movimientos laterales o persistencia dentro de la red. Es necesario verificar si esta acción fue realizada por una herramienta de administración legítima o por un actor de amenazas. El evento fue registrado bajo el usuario **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del servidor o equipo donde se detectó la ejecución."
+    },
+    {
+      "name": "process",
+      "required": true,
+      "description": "El nombre del proceso hijo que fue iniciado por WmiPrvSe.exe."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que se ejecutó."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario asociada a la ejecución del proceso."
+    }
+  ]
+}

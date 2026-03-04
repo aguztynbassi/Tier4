@@ -1,0 +1,43 @@
+{
+  "name": "WMI - Network Connection Detected",
+  "description": "Detecta cuando el proceso `wmic.exe` establece una conexión de red saliente. Bajo condiciones normales, WMIC se utiliza para consultas locales o administración remota a través de RPC/DCOM, pero rara vez inicia conexiones de red directas por sí mismo. Esta actividad suele indicar el uso de WMIC para descargar payloads remotos o realizar movimientos laterales.",
+  "tags": [
+    "security",
+    "execution",
+    "lateral_movement",
+    "wmi",
+    "network_connection",
+    "T1047",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "Se ha detectado una **Conexión de Red anómala** desde **wmic.exe** en el host **{host}**. El proceso está intentando comunicarse con la dirección externa **{destination_address}** a través del puerto **{destination_port}**. El uso de WMI para comunicaciones de red es una técnica común para la ejecución remota de código (**MITRE ATT&CK T1047**) y la descarga de scripts de evasión. El evento fue iniciado por el usuario **{user}**. Se recomienda verificar si el comando WMIC asociado incluía parámetros como `/format` apuntando a una URL o si se trata de un intento de balizamiento (beaconing).",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del equipo donde wmic.exe inició la conexión."
+    },
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "La dirección IP de destino de la conexión de red."
+    },
+    {
+      "name": "destination_port",
+      "required": true,
+      "description": "El puerto de destino utilizado para la conexión."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que ejecutó el proceso WMIC."
+    }
+  ]
+}

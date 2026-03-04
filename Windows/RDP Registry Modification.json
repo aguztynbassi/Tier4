@@ -1,0 +1,37 @@
+{
+  "name": "RDP Registry Modification Detected",
+  "description": "Detecta la modificación de claves de registro específicas para habilitar conexiones de Escritorio Remoto (RDP) y desactivar la Autenticación a Nivel de Red (NLA). Los atacantes realizan estos cambios para abrir vectores de acceso remoto en sistemas que estaban previamente protegidos o para facilitar el movimiento lateral dentro de la red.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "rdp_enable",
+    "registry_manipulation",
+    "T1112",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Reconfiguración de Acceso Remoto! Se ha detectado una modificación maliciosa en el registro del host **{host}**. El valor de **{target_object}** se ha establecido en `0`, lo que efectivamente habilita las conexiones RDP o desactiva la autenticación obligatoria (**MITRE ATT&CK T1112**). Esta acción suele ser un paso previo al movimiento lateral o a la exfiltración de datos por parte de un adversario. El cambio fue realizado por el usuario **{user}**. Se recomienda verificar si existe un ticket de cambio legítimo y revisar inmediatamente las conexiones de red entrantes al puerto 3389.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del equipo donde se detectó el cambio en el registro."
+    },
+    {
+      "name": "target_object",
+      "required": true,
+      "description": "La ruta de la clave de registro modificada (fDenyTSConnections o UserAuthentication)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que ejecutó la modificación."
+    }
+  ]
+}

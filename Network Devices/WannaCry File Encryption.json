@@ -1,0 +1,33 @@
+{
+  "name": "WannaCry File Encryption Detected",
+  "description": "Detecta la creación masiva de archivos con extensiones asociadas al ransomware WannaCry (ej. .wnry, .wncry). Esta actividad indica que el proceso de cifrado de datos ya ha comenzado en el host afectado, lo que representa una pérdida inminente de acceso a la información y un riesgo crítico de propagación lateral a través del protocolo SMB.",
+  "tags": [
+    "security",
+    "impact",
+    "ransomware",
+    "wannacry",
+    "file_encryption",
+    "T1486",
+    "endpoint_monitoring"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Emergencia de Ransomware! Se ha detectado la creación del archivo cifrado **{new_file}** en el host **{host}**. Este patrón de extensión es característico de **WannaCry** (**MITRE ATT&CK T1486**). El cifrado de archivos es la fase final del ataque; es probable que el sistema ya haya sido comprometido y esté intentando propagarse a otros equipos mediante el puerto 445 (SMB). Se requiere el aislamiento inmediato del host de la red para prevenir un brote masivo y la desactivación del protocolo SMBv1.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se detectó el cifrado de archivos."
+    },
+    {
+      "name": "new_file",
+      "required": true,
+      "description": "La ruta y nombre del archivo con la extensión de WannaCry detectada."
+    }
+  ]
+}

@@ -27,7 +27,6 @@ The core of this project is a library of JSON objects, each acting as a modular 
 ### Example Data Structure
 
 ```json
-[
   {
     "name": "Suspicious Svchost Activity Detected",
     "description": "Detects anomalous svchost.exe behavior, such as execution without services.exe as a parent.",
@@ -40,10 +39,13 @@ The core of this project is a library of JSON objects, each acting as a modular 
       }
     ],
     "parameters": [
-      { "name": "EventID", "required": true, "description": "Sysmon Event ID 1 (Process Creation)." }
+      { 
+        "name": "EventID", 
+        "required": true, 
+        "description": "Sysmon Event ID 1 (Process Creation)." 
+      }
     ]
   }
-]
 
 ```
 

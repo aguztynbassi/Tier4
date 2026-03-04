@@ -1,0 +1,37 @@
+{
+  "name": "RDP Login from Localhost Detected",
+  "description": "Detecta inicios de sesión de Escritorio Remoto (RDP) donde la dirección IP de origen es el propio host (localhost). Este es un indicador crítico de que un atacante está utilizando un túnel (SSH, túnel inverso o port forwarding) para acceder al sistema, permitiéndole saltarse las restricciones de firewall que bloquean el puerto 3389 desde el exterior.",
+  "tags": [
+    "security",
+    "lateral_movement",
+    "rdp_tunneling",
+    "stealth_login",
+    "T1021.001",
+    "windows_server"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Intrusión mediante Túnel! Se ha registrado un inicio de sesión RDP exitoso en el host **{host}** donde la dirección de origen es **{source_address}**. Los inicios de sesión RDP desde localhost no son habituales y confirman el uso de **Remote Services: Remote Desktop Protocol** (**MITRE ATT&CK T1021.001**) a través de un proxy local o túnel. El acceso fue realizado por la cuenta **{user}**. Es urgente identificar el proceso que mantiene el túnel abierto y verificar si se ha realizado algún movimiento lateral adicional desde esta sesión.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del servidor donde se produjo el inicio de sesión."
+    },
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección de origen detectada (127.0.0.1 o ::1)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que inició la sesión RDP."
+    }
+  ]
+}

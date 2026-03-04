@@ -1,0 +1,43 @@
+{
+  "name": "WScript or CScript Dropper Detected",
+  "description": "Detecta la ejecución de motores de script de Windows (wscript.exe, cscript.exe) procesando archivos en directorios de usuario o carpetas de datos de programas. Esta es una técnica común de los 'droppers' o descargadores de malware que utilizan extensiones ofuscadas como .jse, .vbe o .vbs para evadir filtros de seguridad y establecer un acceso inicial.",
+  "tags": [
+    "security",
+    "execution",
+    "dropper",
+    "vba",
+    "javascript",
+    "T1059.005",
+    "T1059.007"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Ejecución de Script Sospechoso! Se ha detectado que **{process}** está ejecutando un archivo de script en una ruta de usuario: **{command}** en el host **{host}**. La ejecución de archivos .js, .vbs o versiones codificadas (.jse, .vbe) desde carpetas como ProgramData o Users es un indicador de actividad de **Malicious Scripting** (**MITRE ATT&CK T1059**). El evento fue iniciado por el usuario **{user}**. Se recomienda verificar el origen del archivo y si el script ha intentado realizar conexiones de red externas para descargar payloads adicionales.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del sistema donde se detectó la ejecución del script."
+    },
+    {
+      "name": "process",
+      "required": true,
+      "description": "El motor de script utilizado (wscript.exe o cscript.exe)."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que muestra la ruta del archivo de script ejecutado."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que activó la ejecución."
+    }
+  ]
+}

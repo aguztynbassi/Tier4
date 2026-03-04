@@ -1,0 +1,37 @@
+{
+  "name": "Wsreset UAC Bypass Detected",
+  "description": "Detecta intentos de evadir el Control de Cuentas de Usuario (UAC) mediante el uso de la herramienta legítima `WSreset.exe`. Los atacantes aprovechan que este binario se auto-eleva para ejecutar procesos secundarios con privilegios de administrador, evitando las alertas de confirmación del sistema.",
+  "tags": [
+    "security",
+    "privilege_escalation",
+    "defense_evasion",
+    "uac_bypass",
+    "T1548.002",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Escalada de Privilegios! Se ha detectado un posible bypass de UAC en el host **{host}**. El proceso legítimo de Windows **WSreset.exe** ha iniciado un proceso hijo inesperado: **{image}**. Esta actividad es un indicador directo de la técnica **Abuse of UAC Mechanism** (**MITRE ATT&CK T1548.002**). Un adversario podría estar intentando obtener privilegios de administrador de forma silenciosa. El evento fue ejecutado por el usuario **{user}**. Se recomienda encarecidamente investigar el proceso hijo y revisar las claves de registro bajo `HKCU\\Software\\Classes\\AppX...`.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del equipo donde se detectó el comportamiento anómalo de WSreset."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "El nombre del proceso sospechoso que fue spawnado por WSreset.exe."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que inició la ejecución de WSreset."
+    }
+  ]
+}

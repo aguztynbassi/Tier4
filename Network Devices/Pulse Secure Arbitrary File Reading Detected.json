@@ -1,0 +1,39 @@
+{
+  "name": "Pulse Secure Arbitrary File Reading Detected",
+  "description": "Detecta intentos de explotación de la vulnerabilidad CVE-2019-11510 en dispositivos VPN Pulse Secure Connect. Los atacantes utilizan peticiones HTTP maliciosas para leer archivos sensibles del sistema sin autenticación, lo que puede resultar en la exposición de credenciales de usuario, sesiones activas y configuraciones críticas de la VPN.",
+  "tags": [
+    "security",
+    "initial_access",
+    "vulnerability",
+    "pulse_secure",
+    "cve-2019-11510",
+    "T1113",
+    "firewall",
+    "ids"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta Crítica de Explotación de Vulnerabilidad! Se ha detectado un intento de lectura de archivos arbitrarios contra el servidor VPN Pulse Secure en el host **{host}**. La petición HTTP detectada hacia **{url}** coincide con los patrones de explotación del **CVE-2019-11510** (**MITRE ATT&CK TA0001**). Esta actividad es utilizada por actores de amenazas para robar bases de datos de sesiones y archivos de configuración. Se recomienda verificar de inmediato si el dispositivo tiene aplicados los parches de seguridad más recientes y auditar los logs de acceso en busca de conexiones VPN anómalas desde la IP de origen **{source_address}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Dirección IP o nombre del dispositivo VPN Pulse Secure afectado."
+    },
+    {
+      "name": "url",
+      "required": true,
+      "description": "La URL específica detectada en el tráfico web (ej. /dana-na/../.../etc/passwd)."
+    },
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección IP externa que está intentando realizar la explotación."
+    }
+  ]
+}

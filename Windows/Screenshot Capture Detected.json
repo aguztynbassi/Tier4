@@ -1,0 +1,37 @@
+{
+  "name": "Screenshot Capture Detected",
+  "description": "Detecta la ejecución de scripts conocidos para la captura de pantalla, como `Get-ScreenShot.ps1`. Los adversarios utilizan esta técnica para recopilar información visual del escritorio de la víctima, lo que puede revelar contraseñas visibles, datos confidenciales en aplicaciones abiertas o actividad del usuario.",
+  "tags": [
+    "security",
+    "collection",
+    "spyware",
+    "powershell",
+    "T1113",
+    "windows_server"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "Se ha detectado una actividad de **Captura de Pantalla** en el host **{host}**. El registro de PowerShell (EventID 4104) identificó el uso del script o comando: **{command}**. Esta acción es característica de la técnica **MITRE ATT&CK T1113**, utilizada por actores de amenazas para monitorizar visualmente a la víctima durante una intrusión. El evento fue ejecutado bajo el usuario **{user}**. Se recomienda investigar la persistencia del atacante y determinar si el script forma parte de un framework de post-explotación.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del equipo donde se registró la captura de pantalla."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "El bloque de código de PowerShell detectado que contiene la función de captura."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que ejecutó el script de captura."
+    }
+  ]
+}

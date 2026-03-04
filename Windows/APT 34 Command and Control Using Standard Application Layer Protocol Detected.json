@@ -1,0 +1,47 @@
+{
+  "name": "APT 34 Command and Control Using Standard Application Layer Protocol Detected",
+  "description": "Detects network communication with infrastructure known to be associated with APT 34 (also known as OilRig) using standard application layer protocols like HTTP, HTTPS, or DNS. Adversaries use these common protocols to blend malicious C2 traffic with legitimate web traffic, making detection more difficult.",
+  "tags": [
+    "security",
+    "command_and_control",
+    "apt34",
+    "oilrig",
+    "T1071",
+    "proxy_logs"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert indicates potential **APT 34 (OilRig)** activity. Communication was detected from internal host **{source_address}** (User: **{user}**) to a known malicious C2 destination: **{destination_host}** (**{destination_address}**) on port **{destination_port}**. This is a strong indicator of **Command and Control** (**MITRE ATT&CK T1071**) using standard application protocols to evade defenses. Immediate isolation of the affected host and a comprehensive forensic investigation are mandatory to prevent further data exfiltration or lateral movement.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "The internal IP address initiating the connection."
+    },
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "The IP address of the identified APT 34 C2 server."
+    },
+    {
+      "name": "destination_host",
+      "required": true,
+      "description": "The malicious domain name associated with the C2 infrastructure."
+    },
+    {
+      "name": "destination_port",
+      "required": true,
+      "description": "The port used for communication (e.g., 80, 443)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account associated with the outbound proxy request."
+    }
+  ]
+}

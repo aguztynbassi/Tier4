@@ -1,0 +1,37 @@
+{
+  "name": "QuarksPwDump Dump File Detected",
+  "description": "Detecta la creación de archivos de volcado de la base de datos SAM (Security Accounts Manager) generados por la herramienta QuarksPwDump. Estos archivos, generalmente almacenados en directorios temporales con extensiones .dmp, contienen los hashes de las contraseñas de los usuarios locales y son un indicador definitivo de un intento de robo de credenciales a gran escala.",
+  "tags": [
+    "security",
+    "credential_access",
+    "sam_dumping",
+    "quarkspwdump",
+    "T1003.002",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Robo de Credenciales en Curso! Se ha detectado la creación de un archivo de volcado de seguridad en el host **{host}**: **{file}**. Este archivo es característico de la herramienta **QuarksPwDump** al extraer hashes de la SAM (**MITRE ATT&CK T1003.002**). La presencia de este archivo indica que un atacante con privilegios elevados está recolectando credenciales para realizar ataques de Pass-the-Hash o escalada de privilegios en el dominio. El evento fue iniciado por el usuario **{user}**. Se recomienda asegurar el archivo para análisis forense y proceder con el aislamiento inmediato del sistema afectado.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del equipo donde se detectó la creación del archivo de volcado."
+    },
+    {
+      "name": "file",
+      "required": true,
+      "description": "La ruta y el nombre del archivo .dmp creado por la herramienta."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario bajo la cual se ejecutó el proceso de volcado."
+    }
+  ]
+}
