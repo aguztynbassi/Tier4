@@ -1,0 +1,38 @@
+{
+  "name": "Psr Capture Screenshots Detected",
+  "description": "Detecta la activación de la herramienta Problem Steps Recorder (psr.exe) con el argumento de inicio. Los atacantes abusan de esta utilidad legítima para capturar de forma automatizada la actividad del escritorio, incluyendo contraseñas visibles, documentos abiertos y configuraciones del sistema, almacenando el resultado en un archivo comprimido local para su posterior exfiltración.",
+  "tags": [
+    "security",
+    "collection",
+    "screen_capture",
+    "living_off_the_land",
+    "psr",
+    "T1113",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Espionaje / Recolección de Datos! Se ha detectado la ejecución de **psr.exe** con el parámetro de inicio en el host **{host}**. Esta actividad coincide con la técnica de **Screen Capture** (**MITRE ATT&CK T1113**). El uso no autorizado de esta herramienta permite a un atacante obtener una secuencia visual de todas las acciones del usuario, exponiendo potencialmente información confidencial en pantalla. El proceso fue iniciado por el usuario **{user}**. Se recomienda investigar si existe un ticket de soporte legítimo que justifique el uso de esta herramienta o si se trata de una recolección de datos maliciosa.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del equipo donde se inició la captura de pantalla."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que ejecutó psr.exe."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa utilizada (ej. psr.exe /start /output C:\\temp\\capture.zip /sc 1)."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "name": "Process Dump via Comsvcs DLL Detected",
+  "description": "Detecta el volcado de memoria de procesos utilizando rundll32 para cargar la función MiniDump de comsvcs.dll. Esta técnica es un método de 'Living-off-the-Land' (LotL) utilizado frecuentemente por adversarios para extraer secretos de la memoria del proceso LSASS, evadiendo las firmas comunes de herramientas como Mimikatz al utilizar componentes legítimos de Windows.",
+  "tags": [
+    "security",
+    "credential_access",
+    "defense_evasion",
+    "lsass_dump",
+    "lolbin",
+    "T1003",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta Crítica de Robo de Credenciales! Se ha detectado un intento de volcado de memoria en el host **{host}** mediante la carga de **comsvcs.dll**. El comando detectado utiliza la función **MiniDump/MiniDumpW**, lo cual indica un ataque de **OS Credential Dumping** (**MITRE ATT&CK T1003**). Este método suele dirigirse al proceso LSASS para obtener credenciales de dominio. El evento fue ejecutado por el usuario **{user}**. Se requiere el aislamiento inmediato del sistema y la rotación de credenciales para todas las cuentas con sesión activa en este host.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se ejecutó el comando de volcado de memoria."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que inició el proceso rundll32.exe."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que incluye la referencia a comsvcs y MiniDump."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "name": "Process Injection Detected",
+  "description": "Detecta intentos de inyección de código en procesos legítimos mediante el uso de scripts de PowerShell o la ejecución de binarios desde rutas del sistema inusuales. La inyección de procesos permite a los adversarios ocultar su actividad maliciosa bajo la identidad de procesos de confianza (como explorer.exe o svchost.exe), facilitando la evasión de EDRs y la escalada de privilegios.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "privilege_escalation",
+    "process_injection",
+    "powershell_exploitation",
+    "T1055",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Inyección de Código Detectada! Se ha identificado la ejecución de comandos relacionados con inyección de DLLs en el host **{host}**. El comando utilizado incluye **{command}**, lo cual es un indicador claro de la técnica **Process Injection** (**MITRE ATT&CK T1055**). Esta actividad sugiere que un atacante está intentando migrar su código malicioso a un proceso del sistema para operar de forma encubierta. El evento fue ejecutado por el usuario **{user}**. Se recomienda realizar un volcado de memoria de los procesos sospechosos y analizar las conexiones de red salientes iniciadas desde procesos del sistema.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se detectó el intento de inyección."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos que contiene la función de inyección o la ruta sospechosa."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que inició el proceso de inyección."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "name": "PowerShell AMSI Bypass via .NET Reflection Detected",
+  "description": "Detecta el intento de desactivar la Interfaz de Escaneo Antimalware (AMSI) mediante la manipulación de la clase AmsiUtils y el campo amsiInitFailed a través de reflexión de .NET. Esta técnica permite a los atacantes ejecutar scripts de PowerShell maliciosos de forma invisible para las soluciones de seguridad (EDR/AV) que dependen de AMSI para inspeccionar el código antes de su ejecución.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "powershell",
+    "amsi_bypass",
+    "reflection",
+    "T1059.001",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Evasión de Seguridad! Se ha detectado un intento de bypass de AMSI en el host **{host}**. El comando ejecutado por el usuario **{user}** incluye referencias a **AmsiUtils** y **amsiInitFailed**. Bajo la técnica de **PowerShell** (**MITRE ATT&CK T1059.001**), este comportamiento indica que un atacante está intentando 'cegar' al antivirus para ejecutar scripts maliciosos sin ser detectado. Se requiere el aislamiento inmediato del host y la revisión de todos los comandos de PowerShell ejecutados en la misma sesión.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se intentó el bypass de AMSI."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "Cuenta de usuario que ejecutó el comando de PowerShell."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que contiene la lógica de reflexión maliciosa."
+    }
+  ]
+}

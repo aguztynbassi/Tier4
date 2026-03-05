@@ -1,0 +1,33 @@
+{
+  "name": "Possible Taskmgr run as LOCAL_SYSTEM Detected",
+  "description": "Detecta la ejecución del Administrador de Tareas (taskmgr.exe) bajo la cuenta de SYSTEM. Este comportamiento es anómalo ya que taskmgr.exe es una herramienta interactiva de usuario. Su ejecución con privilegios de sistema sugiere que un atacante está utilizando el proceso para manipular servicios críticos, evadir software de seguridad o realizar volcados de memoria (dump) de procesos sensibles bajo un contexto de confianza elevado.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "masquerading",
+    "privilege_escalation",
+    "taskmgr",
+    "T1036",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Privilegios Anómalos! Se ha detectado la ejecución de **taskmgr.exe** con privilegios de **LOCAL_SYSTEM** en el host **{host}**. Según la técnica de **Masquerading** (**MITRE ATT&CK T1036**), el uso del Administrador de Tareas bajo este contexto permite realizar acciones que normalmente estarían bloqueadas para un usuario estándar, como finalizar procesos de EDR/Antivirus o realizar volcados de memoria de LSASS. Se requiere una investigación inmediata del proceso padre para determinar cómo se invocó esta instancia con privilegios elevados.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se detectó el Administrador de Tareas ejecutándose como SYSTEM."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de sistema detectada (ej. NT AUTHORITY\\SYSTEM)."
+    }
+  ]
+}

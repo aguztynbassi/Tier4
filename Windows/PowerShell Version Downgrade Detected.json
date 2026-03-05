@@ -1,0 +1,16 @@
+{
+    "ID": "0750",
+    "Name": "PowerShell Version Downgrade Detected",
+    "Description": "The execution of Command and Scripting Interpreter and PowerShell v2 is detected. We recommend you avoid PowerShell v2 as it offers zero-logging. PowerShell v5.x or higher offers better logging.",
+    "Tactics": [
+        "TA0002"
+    ],
+    "Techniques": [
+        "T1059",
+        "T1059.001"
+    ],
+    "Platforms": [
+        "Windows"
+    ],
+    "Query": "norm_id=WinServer event_id=400 host_version=\"2.0\" -user IN EXCLUDED_USERS"
+}
