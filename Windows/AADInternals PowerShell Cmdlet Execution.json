@@ -1,42 +1,40 @@
-[
-  {
-    "name": "AADInternals PowerShell Cmdlet Execution",
-    "description": "Detects the execution of AADInternals cmdlets, a PowerShell toolkit often used by adversaries to extract credentials from systems with AAD Connect installed, potentially compromising the Azure AD environment. This is a critical indicator of privilege escalation and credential access attempts.",
-    "tags": [
-      "security",
-      "privilege_escalation",
-      "credential_access",
-      "command_and_scripting_interpreter",
-      "T1059",
-      "T1059.001",
-      "AADInternals",
-      "S0677",
-      "windows_powershell"
-    ],
-    "prompts": [
-      {
-        "id": "1",
-        "prompt": "A critical alert has been triggered on the host **{computer_name}**: a PowerShell script executed a command containing patterns associated with the **AADInternals** toolkit (**MITRE ATT&CK S0677**). This toolkit is a known tool for **Privilege Escalation** and **Credential Access** in Azure AD environments. The script block text is **{script_block_text}**. This activity indicates a potential compromise of the system, likely in an attempt to steal credentials or manipulate cloud resources. Immediate investigation is required to determine the legitimacy of this action and the scope of the potential compromise. The event occurred under the user **{subject_user_name}**.",
-        "continueOnError": false,
-        "systemCapability": "analyzeSecurityEvent"
-      }
-    ],
-    "parameters": [
-      {
-        "name": "script_block_text",
-        "required": true,
-        "description": "The content of the PowerShell script block that was executed."
-      },
-      {
-        "name": "subject_user_name",
-        "required": true,
-        "description": "The user account that executed the PowerShell script."
-      },
-      {
-        "name": "computer_name",
-        "required": true,
-        "description": "The name of the computer where the event occurred."
-      }
-    ]
-  }
-]
+{
+  "name": "AADInternals PowerShell Cmdlet Execution",
+  "description": "Detects the execution of AADInternals cmdlets, a PowerShell toolkit often used by adversaries to extract credentials from systems with AAD Connect installed, potentially compromising the Azure AD environment. This is a critical indicator of privilege escalation and credential access attempts.",
+  "tags": [
+    "security",
+    "privilege_escalation",
+    "credential_access",
+    "command_and_scripting_interpreter",
+    "T1059",
+    "T1059.001",
+    "AADInternals",
+    "S0677",
+    "windows_powershell"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{computer_name}**: a PowerShell script executed a command containing patterns associated with the **AADInternals** toolkit (**MITRE ATT&CK S0677**). This toolkit is a known tool for **Privilege Escalation** and **Credential Access** in Azure AD environments. The script block text is **{script_block_text}**. This activity indicates a potential compromise of the system, likely in an attempt to steal credentials or manipulate cloud resources. Immediate investigation is required to determine the legitimacy of this action and the scope of the potential compromise. The event occurred under the user **{subject_user_name}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "script_block_text",
+      "required": true,
+      "description": "The content of the PowerShell script block that was executed."
+    },
+    {
+      "name": "subject_user_name",
+      "required": true,
+      "description": "The user account that executed the PowerShell script."
+    },
+    {
+      "name": "computer_name",
+      "required": true,
+      "description": "The name of the computer where the event occurred."
+    }
+  ]
+}

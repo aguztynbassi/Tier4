@@ -1,63 +1,61 @@
-[
-  {
-    "name": ".NET DLL Loaded Via Office Applications",
-    "description": "Detects the loading of a .NET DLL from the Global Assembly Cache (GAC) by an Office application (Word, PowerPoint, Excel, Outlook). This is unusual behavior and can indicate an attempt to execute malicious code within the Office application's process.",
-    "tags": [
-      "security",
-      "detection",
-      "windows",
-      "initial access",
-      "phishing",
-      "spearphishing attachment",
-      "command and scripting interpreter",
-      "windows command shell",
-      "trusted developer utilities proxy execution",
-      "TA0001",
-      "T1566",
-      "T1566.001",
-      "T1059",
-      "T1059.003",
-      "T1127"
-    ],
-    "prompts": [
-      {
-        "id": "1",
-        "prompt": "Unusual loading of a .NET DLL by an Office application from the Global Assembly Cache (GAC) detected. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **User** {user}, **Process Name** {process_name}, **Image Loaded** {image_loaded}, **Parent Process Name** {parent_process_name}. Investigate this high-risk activity immediately as it may indicate an attempt to execute malicious code within the Office application.",
-        "continueOnError": false,
-        "systemCapability": "analyzeSecurityEvent"
-      }
-    ],
-    "parameters": [
-      {
-        "name": "Timestamp",
-        "required": true,
-        "description": "The timestamp of the event."
-      },
-      {
-        "name": "EventID",
-        "required": true,
-        "description": "The Sysmon Event ID for Image Loaded (should be 7)."
-      },
-      {
-        "name": "user",
-        "required": true,
-        "description": "The user account under which the process ran."
-      },
-      {
-        "name": "process_name",
-        "required": true,
-        "description": "The Office application process name (e.g., winword.exe, powerpnt.exe, excel.exe, outlook.exe)."
-      },
-      {
-        "name": "image_loaded",
-        "required": true,
-        "description": "The path of the loaded .NET DLL from the GAC."
-      },
-      {
-        "name": "parent_process_name",
-        "required": true,
-        "description": "The parent process that launched the Office application."
-      }
-    ]
-  }
-]
+{
+  "name": ".NET DLL Loaded Via Office Applications",
+  "description": "Detects the loading of a .NET DLL from the Global Assembly Cache (GAC) by an Office application (Word, PowerPoint, Excel, Outlook). This is unusual behavior and can indicate an attempt to execute malicious code within the Office application's process.",
+  "tags": [
+    "security",
+    "detection",
+    "windows",
+    "initial access",
+    "phishing",
+    "spearphishing attachment",
+    "command and scripting interpreter",
+    "windows command shell",
+    "trusted developer utilities proxy execution",
+    "TA0001",
+    "T1566",
+    "T1566.001",
+    "T1059",
+    "T1059.003",
+    "T1127"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "Unusual loading of a .NET DLL by an Office application from the Global Assembly Cache (GAC) detected. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **User** {user}, **Process Name** {process_name}, **Image Loaded** {image_loaded}, **Parent Process Name** {parent_process_name}. Investigate this high-risk activity immediately as it may indicate an attempt to execute malicious code within the Office application.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of the event."
+    },
+    {
+      "name": "EventID",
+      "required": true,
+      "description": "The Sysmon Event ID for Image Loaded (should be 7)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account under which the process ran."
+    },
+    {
+      "name": "process_name",
+      "required": true,
+      "description": "The Office application process name (e.g., winword.exe, powerpnt.exe, excel.exe, outlook.exe)."
+    },
+    {
+      "name": "image_loaded",
+      "required": true,
+      "description": "The path of the loaded .NET DLL from the GAC."
+    },
+    {
+      "name": "parent_process_name",
+      "required": true,
+      "description": "The parent process that launched the Office application."
+    }
+  ]
+}

@@ -1,71 +1,69 @@
-[
-  {
-    "name": "Fail2Ban IP Banned",
-    "description": "Detects when Fail2Ban has banned an IP address due to excessive failed authentication attempts. This indicates potential brute-force activity.",
-    "tags": [
-      "security",
-      "detection",
-      "persistence",
-      "credential access",
-      "brute force",
-      "valid accounts",
-      "account manipulation",
-      "TA0003",
-      "TA0006",
-      "T1110",
-      "T1078",
-      "T1098",
-      "Linux"
-    ],
-    "prompts": [
-      {
-        "id": "1",
-        "prompt": "Fail2Ban has banned an IP address due to excessive failed authentication attempts, indicating a potential brute-force attack. Event Details: **Timestamp** {timestamp}, **Source IP** {source_address}, **Destination IP** {destination_address}, **Port** {port}, **Service Name** {service_name}, **Ban Duration** {duration}, **Matched Rule** {matched_rule}, **Country** {country}. Investigate this credential access attempt.",
-        "continueOnError": false,
-        "systemCapability": "analyzeSecurityEvent"
-      }
-    ],
-    "parameters": [
-      {
-        "name": "timestamp",
-        "required": true,
-        "description": "The timestamp when the IP was banned."
-      },
-      {
-        "name": "source_address",
-        "required": true,
-        "description": "The IP address that was banned."
-      },
-      {
-        "name": "destination_address",
-        "required": true,
-        "description": "The destination IP address targeted by the brute-force attempt."
-      },
-      {
-        "name": "port",
-        "required": true,
-        "description": "The port targeted by the brute-force attempt."
-      },
-      {
-        "name": "service_name",
-        "required": true,
-        "description": "The service (e.g., SSH, FTP) that detected the failed attempts."
-      },
-      {
-        "name": "duration",
-        "required": true,
-        "description": "The duration for which the IP is banned."
-      },
-      {
-        "name": "matched_rule",
-        "required": true,
-        "description": "The Fail2Ban rule that triggered the ban."
-      },
-      {
-        "name": "country",
-        "required": true,
-        "description": "The country associated with the banned IP address (via geoip)."
-      }
-    ]
-  }
-]
+{
+  "name": "Fail2Ban IP Banned",
+  "description": "Detects when Fail2Ban has banned an IP address due to excessive failed authentication attempts. This indicates potential brute-force activity.",
+  "tags": [
+    "security",
+    "detection",
+    "persistence",
+    "credential access",
+    "brute force",
+    "valid accounts",
+    "account manipulation",
+    "TA0003",
+    "TA0006",
+    "T1110",
+    "T1078",
+    "T1098",
+    "Linux"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "Fail2Ban has banned an IP address due to excessive failed authentication attempts, indicating a potential brute-force attack. Event Details: **Timestamp** {timestamp}, **Source IP** {source_address}, **Destination IP** {destination_address}, **Port** {port}, **Service Name** {service_name}, **Ban Duration** {duration}, **Matched Rule** {matched_rule}, **Country** {country}. Investigate this credential access attempt.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "timestamp",
+      "required": true,
+      "description": "The timestamp when the IP was banned."
+    },
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "The IP address that was banned."
+    },
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "The destination IP address targeted by the brute-force attempt."
+    },
+    {
+      "name": "port",
+      "required": true,
+      "description": "The port targeted by the brute-force attempt."
+    },
+    {
+      "name": "service_name",
+      "required": true,
+      "description": "The service (e.g., SSH, FTP) that detected the failed attempts."
+    },
+    {
+      "name": "duration",
+      "required": true,
+      "description": "The duration for which the IP is banned."
+    },
+    {
+      "name": "matched_rule",
+      "required": true,
+      "description": "The Fail2Ban rule that triggered the ban."
+    },
+    {
+      "name": "country",
+      "required": true,
+      "description": "The country associated with the banned IP address (via geoip)."
+    }
+  ]
+}

@@ -1,57 +1,55 @@
-[
-  {
-    "name": "Non-Existent User Login Attempt Detected",
-    "description": "Detects multiple failed SSH login attempts for non-existent users within a short time frame, indicating potential brute-force activity.",
-    "tags": [
-      "security",
-      "detection",
-      "credential access",
-      "brute force",
-      "password guessing",
-      "TA0006",
-      "T1110",
-      "T1110.001",
-      "Unix"
-    ],
-    "prompts": [
-      {
-        "id": "1",
-        "prompt": "Medium-severity alert: Multiple failed SSH login attempts for non-existent users detected from source IP **{source_address}** within a 60-second timeframe. This indicates potential brute-force activity targeting SSH services. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Source IP**: {source_address}\n* **Attempted User (if available)**: {user_name}\n* **Process Name**: {process_name}\n* **Event ID**: {event_id}\n* **Attempt Count**: {count}\n\n**Immediately investigate the source IP address** and review all login attempts from this source. Consider blocking the source IP temporarily if the activity persists or is clearly malicious. Increase monitoring on SSH services.",
-        "continueOnError": false,
-        "systemCapability": "analyzeSecurityEvent"
-      }
-    ],
-    "parameters": [
-      {
-        "name": "timestamp",
-        "required": true,
-        "description": "The timestamp of the last failed login attempt in the aggregated sequence."
-      },
-      {
-        "name": "source_address",
-        "required": true,
-        "description": "The source IP address from which the failed login attempts originated."
-      },
-      {
-        "name": "user_name",
-        "required": false,
-        "description": "The non-existent username that was attempted during the login, if available in logs."
-      },
-      {
-        "name": "process_name",
-        "required": true,
-        "description": "The process name associated with the login attempt (sshd)."
-      },
-      {
-        "name": "event_id",
-        "required": true,
-        "description": "The Event ID for failed login attempts (e.g., 514, or specific to the Unix system)."
-      },
-      {
-        "name": "count",
-        "required": true,
-        "description": "The number of failed login attempts from the source IP within the specified timeframe."
-      }
-    ]
-  }
-]
+{
+  "name": "Non-Existent User Login Attempt Detected",
+  "description": "Detects multiple failed SSH login attempts for non-existent users within a short time frame, indicating potential brute-force activity.",
+  "tags": [
+    "security",
+    "detection",
+    "credential access",
+    "brute force",
+    "password guessing",
+    "TA0006",
+    "T1110",
+    "T1110.001",
+    "Unix"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "Medium-severity alert: Multiple failed SSH login attempts for non-existent users detected from source IP **{source_address}** within a 60-second timeframe. This indicates potential brute-force activity targeting SSH services. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Source IP**: {source_address}\n* **Attempted User (if available)**: {user_name}\n* **Process Name**: {process_name}\n* **Event ID**: {event_id}\n* **Attempt Count**: {count}\n\n**Immediately investigate the source IP address** and review all login attempts from this source. Consider blocking the source IP temporarily if the activity persists or is clearly malicious. Increase monitoring on SSH services.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "timestamp",
+      "required": true,
+      "description": "The timestamp of the last failed login attempt in the aggregated sequence."
+    },
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "The source IP address from which the failed login attempts originated."
+    },
+    {
+      "name": "user_name",
+      "required": false,
+      "description": "The non-existent username that was attempted during the login, if available in logs."
+    },
+    {
+      "name": "process_name",
+      "required": true,
+      "description": "The process name associated with the login attempt (sshd)."
+    },
+    {
+      "name": "event_id",
+      "required": true,
+      "description": "The Event ID for failed login attempts (e.g., 514, or specific to the Unix system)."
+    },
+    {
+      "name": "count",
+      "required": true,
+      "description": "The number of failed login attempts from the source IP within the specified timeframe."
+    }
+  ]
+}

@@ -1,57 +1,55 @@
-[
-  {
-    "name": "Chrome Extension Installed with DevTools Permission",
-    "description": "Detects the installation of Chrome extensions with developer tools permission. This permission grants the extension powerful access to the browser, potentially allowing for malicious activities like code injection, data exfiltration, and manipulation of browser behavior.",
-    "tags": [
-      "security",
-      "detection",
-      "persistence",
-      "browser extensions",
-      "TA0003",
-      "T1176",
-      "Windows",
-      "Linux",
-      "macOS"
-    ],
-    "prompts": [
-      {
-        "id": "1",
-        "prompt": "Medium-severity alert: A Chrome extension with **developer tools permission** has been detected. This permission grants the extension powerful access to your browser, which could potentially lead to malicious activities like code injection, data exfiltration, or manipulation of browser behavior. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Extension Name**: {name}\n* **Identifier**: {identifier}\n* **Version**: {version}\n* **Path**: {path}\n* **Permissions**: {permissions}\n\n**Investigate this extension immediately.** Determine if this installation is legitimate and necessary for your work. If not, consider removing it to mitigate potential risks.",
-        "continueOnError": false,
-        "systemCapability": "analyzeSecurityEvent"
-      }
-    ],
-    "parameters": [
-      {
-        "name": "timestamp",
-        "required": true,
-        "description": "The timestamp of the detection event."
-      },
-      {
-        "name": "name",
-        "required": true,
-        "description": "The name of the Chrome extension."
-      },
-      {
-        "name": "identifier",
-        "required": true,
-        "description": "The unique identifier (ID) of the Chrome extension."
-      },
-      {
-        "name": "version",
-        "required": true,
-        "description": "The version of the Chrome extension."
-      },
-      {
-        "name": "path",
-        "required": true,
-        "description": "The file system path where the Chrome extension is located."
-      },
-      {
-        "name": "permissions",
-        "required": true,
-        "description": "A list or string indicating the permissions granted to the extension, specifically including 'devtools'."
-      }
-    ]
-  }
-]
+{
+  "name": "Chrome Extension Installed with DevTools Permission",
+  "description": "Detects the installation of Chrome extensions with developer tools permission. This permission grants the extension powerful access to the browser, potentially allowing for malicious activities like code injection, data exfiltration, and manipulation of browser behavior.",
+  "tags": [
+    "security",
+    "detection",
+    "persistence",
+    "browser extensions",
+    "TA0003",
+    "T1176",
+    "Windows",
+    "Linux",
+    "macOS"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "Medium-severity alert: A Chrome extension with **developer tools permission** has been detected. This permission grants the extension powerful access to your browser, which could potentially lead to malicious activities like code injection, data exfiltration, or manipulation of browser behavior. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Extension Name**: {name}\n* **Identifier**: {identifier}\n* **Version**: {version}\n* **Path**: {path}\n* **Permissions**: {permissions}\n\n**Investigate this extension immediately.** Determine if this installation is legitimate and necessary for your work. If not, consider removing it to mitigate potential risks.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "timestamp",
+      "required": true,
+      "description": "The timestamp of the detection event."
+    },
+    {
+      "name": "name",
+      "required": true,
+      "description": "The name of the Chrome extension."
+    },
+    {
+      "name": "identifier",
+      "required": true,
+      "description": "The unique identifier (ID) of the Chrome extension."
+    },
+    {
+      "name": "version",
+      "required": true,
+      "description": "The version of the Chrome extension."
+    },
+    {
+      "name": "path",
+      "required": true,
+      "description": "The file system path where the Chrome extension is located."
+    },
+    {
+      "name": "permissions",
+      "required": true,
+      "description": "A list or string indicating the permissions granted to the extension, specifically including 'devtools'."
+    }
+  ]
+}

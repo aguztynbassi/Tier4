@@ -1,51 +1,49 @@
-[
-  {
-    "name": "Exim Remote Command Execution Detected",
-    "description": "Detects remote command execution attempts in Exim by identifying the CVE-2019-10149 vulnerability.",
-    "tags": [
-      "security",
-      "detection",
-      "execution",
-      "exploitation for client execution",
-      "CVE-2019-10149",
-      "TA0002",
-      "T1203",
-      "Linux"
-    ],
-    "prompts": [
-      {
-        "id": "1",
-        "prompt": "Remote Command Execution (RCE) attempt detected targeting Exim via CVE-2019-10149. A suspicious pattern in the receiver address indicates an exploitation attempt. Event Details: **Timestamp** {timestamp}, **Sender** {sender}, **Receiver** {receiver}, **Message ID** {message_id}, **Subject** {subject}. Investigate this high-risk vulnerability exploitation attempt immediately.",
-        "continueOnError": false,
-        "systemCapability": "analyzeSecurityEvent"
-      }
-    ],
-    "parameters": [
-      {
-        "name": "timestamp",
-        "required": true,
-        "description": "The timestamp of the Exim log event."
-      },
-      {
-        "name": "sender",
-        "required": true,
-        "description": "The sender's email address."
-      },
-      {
-        "name": "receiver",
-        "required": true,
-        "description": "The receiver's email address, containing the exploit pattern."
-      },
-      {
-        "name": "message_id",
-        "required": true,
-        "description": "The Exim message ID for the email."
-      },
-      {
-        "name": "subject",
-        "required": true,
-        "description": "The subject of the email."
-      }
-    ]
-  }
-]
+{
+  "name": "Exim Remote Command Execution Detected",
+  "description": "Detects remote command execution attempts in Exim by identifying the CVE-2019-10149 vulnerability.",
+  "tags": [
+    "security",
+    "detection",
+    "execution",
+    "exploitation for client execution",
+    "CVE-2019-10149",
+    "TA0002",
+    "T1203",
+    "Linux"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "Remote Command Execution (RCE) attempt detected targeting Exim via CVE-2019-10149. A suspicious pattern in the receiver address indicates an exploitation attempt. Event Details: **Timestamp** {timestamp}, **Sender** {sender}, **Receiver** {receiver}, **Message ID** {message_id}, **Subject** {subject}. Investigate this high-risk vulnerability exploitation attempt immediately.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "timestamp",
+      "required": true,
+      "description": "The timestamp of the Exim log event."
+    },
+    {
+      "name": "sender",
+      "required": true,
+      "description": "The sender's email address."
+    },
+    {
+      "name": "receiver",
+      "required": true,
+      "description": "The receiver's email address, containing the exploit pattern."
+    },
+    {
+      "name": "message_id",
+      "required": true,
+      "description": "The Exim message ID for the email."
+    },
+    {
+      "name": "subject",
+      "required": true,
+      "description": "The subject of the email."
+    }
+  ]
+}
