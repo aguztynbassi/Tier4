@@ -1,50 +1,48 @@
-[
-  {
-    "name": "FortiGate Critical Events",
-    "description": "Detects critical system events reported by a FortiGate firewall. These events indicate serious issues that require immediate attention.",
-    "tags": [
-      "security",
-      "detection",
-      "discovery",
-      "indicator removal",
-      "TA0007",
-      "T1046",
-      "Network Devices"
-    ],
-    "prompts": [
-      {
-        "id": "1",
-        "prompt": "A critical system event has been reported by a FortiGate firewall. This indicates a severe issue requiring immediate attention. Event Details: **Timestamp** {timestamp}, **Log ID** {log_id}, **Message** {message}, **Virtual Domain (VDOM)** {vdom}, **Severity** {severity}. Investigate this critical event immediately to prevent or mitigate potential impact on network security.",
-        "continueOnError": false,
-        "systemCapability": "analyzeSecurityEvent"
-      }
-    ],
-    "parameters": [
-      {
-        "name": "timestamp",
-        "required": true,
-        "description": "The timestamp of the critical event."
-      },
-      {
-        "name": "log_id",
-        "required": true,
-        "description": "The FortiGate log ID, crucial for identifying the specific event."
-      },
-      {
-        "name": "message",
-        "required": true,
-        "description": "The full log message providing context for the critical event."
-      },
-      {
-        "name": "vdom",
-        "required": true,
-        "description": "The Virtual Domain (VDOM) where the critical event occurred."
-      },
-      {
-        "name": "severity",
-        "required": true,
-        "description": "The severity level of the event, confirming its critical nature."
-      }
-    ]
-  }
-]
+{
+  "name": "FortiGate Critical Events",
+  "description": "Detects critical system events reported by a FortiGate firewall. These events indicate serious issues that require immediate attention.",
+  "tags": [
+    "security",
+    "detection",
+    "discovery",
+    "indicator removal",
+    "TA0007",
+    "T1046",
+    "Network Devices"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical system event has been reported by a FortiGate firewall. This indicates a severe issue requiring immediate attention. Event Details: **Timestamp** {timestamp}, **Log ID** {log_id}, **Message** {message}, **Virtual Domain (VDOM)** {vdom}, **Severity** {severity}. Investigate this critical event immediately to prevent or mitigate potential impact on network security.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "timestamp",
+      "required": true,
+      "description": "The timestamp of the critical event."
+    },
+    {
+      "name": "log_id",
+      "required": true,
+      "description": "The FortiGate log ID, crucial for identifying the specific event."
+    },
+    {
+      "name": "message",
+      "required": true,
+      "description": "The full log message providing context for the critical event."
+    },
+    {
+      "name": "vdom",
+      "required": true,
+      "description": "The Virtual Domain (VDOM) where the critical event occurred."
+    },
+    {
+      "name": "severity",
+      "required": true,
+      "description": "The severity level of the event, confirming its critical nature."
+    }
+  ]
+}

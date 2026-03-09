@@ -1,63 +1,61 @@
-[
-  {
-    "name": "Unusual Application Data Transfer Detected",
-    "description": "An unusual data transfer pattern by a specific application has been detected, which could indicate data exfiltration or unauthorized resource usage.",
-    "tags": [
-      "security",
-      "detection",
-      "high",
-      "exfiltration",
-      "network",
-      "endpoint",
-      "application_behavior",
-      "unusual_traffic",
-      "TA0010",
-      "T1041"
-    ],
-    "prompts": [
-      {
-        "id": "1",
-        "prompt": "HIGH SEVERITY ALERT: Unusual Application Data Transfer Detected.\\n\\nAn unusually high volume of transfers ({count} events) by application '{ApplicationName}', initiated by user '{SubjectUserName}', from IP '{SourceIp}' to '{DestinationIp}', starting at '{Timestamp}', has been observed. This could indicate a data exfiltration attempt or malicious use of an application.\\n\\nEvent Details:\\n* Timestamp (Start of Period): {Timestamp}\\n* Suspect User: {SubjectUserName}\\n* Application: {ApplicationName}\\n* Source IP: {SourceIp}\\n* Destination IP: {DestinationIp}\\n* Bytes Transferred (Example Event): {BytesTransferred} (if available)\\n* Transfer Count: {count}\\n\\nRECOMMENDED IMMEDIATE ACTIONS:\\n\\n1.  Validate Legitimacy: Immediately contact user '{SubjectUserName}' and the owner of application '{ApplicationName}' to verify if this activity is legitimate and expected. Ask if they were performing large file transfers, backups, or synchronizations that justify the volume. If the user is unavailable, escalate to the security team for further investigation.\\n2.  Analyze Application and Destination: Determine if the application '{ApplicationName}' is legitimate and if the destination '{DestinationIp}' is an authorized server or service for data transfer by this application. Check the reputation of the destination IP if it's external.\\n3.  Content Inspection (DLP/Proxy): If your DLP or proxy solution allows content inspection, review detailed logs to identify the type of data being transferred. This is crucial for confirming the exfiltration of sensitive information.\\n4.  Source Host Analysis: Investigate the host associated with '{SourceIp}'. Look for signs of compromise, such as the presence of malware, unusual processes, or the use of compromised credentials.\\n5.  Isolation: If the activity is suspicious and cannot be justified, consider isolating the source host and/or blocking the application to prevent further exfiltration.\\n6.  Forensic Analysis: Conduct a thorough forensic analysis of the affected host to identify the extent of the compromise, the presence of exfiltration tools, and any stolen data.\\n7.  Review Security Policies: Review network and application security policies to ensure adequate controls are in place to prevent data exfiltration.",
-        "continueOnError": false,
-        "systemCapability": "analyzeSecurityEvent"
-      }
-    ],
-    "parameters": [
-      {
-        "name": "Timestamp",
-        "required": true,
-        "description": "The timestamp of the earliest event in the aggregation window."
-      },
-      {
-        "name": "SubjectUserName",
-        "required": true,
-        "description": "The user account that initiated the data transfer."
-      },
-      {
-        "name": "ApplicationName",
-        "required": true,
-        "description": "The name of the application involved in the data transfer."
-      },
-      {
-        "name": "SourceIp",
-        "required": false,
-        "description": "The source IP address of the data transfer."
-      },
-      {
-        "name": "DestinationIp",
-        "required": false,
-        "description": "The destination IP address of the data transfer."
-      },
-      {
-        "name": "BytesTransferred",
-        "required": false,
-        "description": "The volume of bytes transferred for a specific event (if available per event, not aggregated)."
-      },
-      {
-        "name": "count",
-        "required": true,
-        "description": "The aggregated number of transfer events within the timeframe."
-      }
-    ]
-  }
-]
+{
+  "name": "Unusual Application Data Transfer Detected",
+  "description": "An unusual data transfer pattern by a specific application has been detected, which could indicate data exfiltration or unauthorized resource usage.",
+  "tags": [
+    "security",
+    "detection",
+    "high",
+    "exfiltration",
+    "network",
+    "endpoint",
+    "application_behavior",
+    "unusual_traffic",
+    "TA0010",
+    "T1041"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "HIGH SEVERITY ALERT: Unusual Application Data Transfer Detected.\\n\\nAn unusually high volume of transfers ({count} events) by application '{ApplicationName}', initiated by user '{SubjectUserName}', from IP '{SourceIp}' to '{DestinationIp}', starting at '{Timestamp}', has been observed. This could indicate a data exfiltration attempt or malicious use of an application.\\n\\nEvent Details:\\n* Timestamp (Start of Period): {Timestamp}\\n* Suspect User: {SubjectUserName}\\n* Application: {ApplicationName}\\n* Source IP: {SourceIp}\\n* Destination IP: {DestinationIp}\\n* Bytes Transferred (Example Event): {BytesTransferred} (if available)\\n* Transfer Count: {count}\\n\\nRECOMMENDED IMMEDIATE ACTIONS:\\n\\n1.  Validate Legitimacy: Immediately contact user '{SubjectUserName}' and the owner of application '{ApplicationName}' to verify if this activity is legitimate and expected. Ask if they were performing large file transfers, backups, or synchronizations that justify the volume. If the user is unavailable, escalate to the security team for further investigation.\\n2.  Analyze Application and Destination: Determine if the application '{ApplicationName}' is legitimate and if the destination '{DestinationIp}' is an authorized server or service for data transfer by this application. Check the reputation of the destination IP if it's external.\\n3.  Content Inspection (DLP/Proxy): If your DLP or proxy solution allows content inspection, review detailed logs to identify the type of data being transferred. This is crucial for confirming the exfiltration of sensitive information.\\n4.  Source Host Analysis: Investigate the host associated with '{SourceIp}'. Look for signs of compromise, such as the presence of malware, unusual processes, or the use of compromised credentials.\\n5.  Isolation: If the activity is suspicious and cannot be justified, consider isolating the source host and/or blocking the application to prevent further exfiltration.\\n6.  Forensic Analysis: Conduct a thorough forensic analysis of the affected host to identify the extent of the compromise, the presence of exfiltration tools, and any stolen data.\\n7.  Review Security Policies: Review network and application security policies to ensure adequate controls are in place to prevent data exfiltration.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of the earliest event in the aggregation window."
+    },
+    {
+      "name": "SubjectUserName",
+      "required": true,
+      "description": "The user account that initiated the data transfer."
+    },
+    {
+      "name": "ApplicationName",
+      "required": true,
+      "description": "The name of the application involved in the data transfer."
+    },
+    {
+      "name": "SourceIp",
+      "required": false,
+      "description": "The source IP address of the data transfer."
+    },
+    {
+      "name": "DestinationIp",
+      "required": false,
+      "description": "The destination IP address of the data transfer."
+    },
+    {
+      "name": "BytesTransferred",
+      "required": false,
+      "description": "The volume of bytes transferred for a specific event (if available per event, not aggregated)."
+    },
+    {
+      "name": "count",
+      "required": true,
+      "description": "The aggregated number of transfer events within the timeframe."
+    }
+  ]
+}

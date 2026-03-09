@@ -1,103 +1,101 @@
-[
-  {
-    "name": "Blocked Internal Traffic Followed by Allowed External Connection (Same Host)",
-    "description": "Detects a suspicious sequence where an **internal host** attempts a network connection to an **internal destination that is explicitly blocked** by a firewall or IDS, and this event is immediately followed by an **allowed outbound connection from that *same internal host* to an external destination**. This behavior can indicate a **compromised internal system** attempting to bypass internal network segmentation or controls, and then establishing external Command and Control (C2) or exfiltrating data. It may also highlight critical network misconfigurations.",
-    "tags": [
-      "security",
-      "detection",
-      "high",
-      "network",
-      "command_and_control",
-      "defense_evasion",
-      "lateral_movement",
-      "network_segmentation",
-      "network_traffic",
-      "misconfiguration",
-      "compromised_host",
-      "TA0011",
-      "TA0005",
-      "TA0008",
-      "T1090"
-    ],
-    "prompts": [
-      {
-        "id": "1",
-        "prompt": "ALERTA DE ALTA SEVERIDAD: Tráfico Interno Bloqueado Seguido de Conexión Externa Permitida desde el Mismo Host.\\n\\n**Se ha detectado una secuencia de red altamente sospechosa originada desde el host interno '{SourceIp}' (Hostname: {ComputerName}) a las {Timestamp}.**\\n\\n**Detalles del Incidente:**\\n* **Evento 1 (Bloqueado):** Una conexión desde '{SourceIp}' a la IP interna '{BlockedDestinationIp}' en el puerto '{BlockedDestinationPort}' ({BlockedProtocol}) fue **bloqueada** por el '{DeviceName}' (Acción: '{BlockedAction}').\\n* **Evento 2 (Permitido):** Inmediatamente después (dentro de {Timeframe} minutos), se permitió una conexión de salida desde **el mismo host '{SourceIp}'** hacia el destino externo '{AllowedDestinationIp}' en el puerto '{AllowedDestinationPort}' ({AllowedProtocol}) por el '{DeviceName}' (Acción: '{AllowedAction}').\\n* **ID de la Regla**: {RuleName}\\n\\nEsta secuencia es un fuerte indicador de un **sistema interno comprometido** que intenta **evadir defensas (TA0005)** o la segmentación de red interna (**Movimiento Lateral - TA0008**), y luego establece una conexión de **Comando y Control (C2 - TA0011)** o exfiltra datos a una ubicación externa. También podría indicar una **mala configuración crítica de la red** que necesita ser corregida urgentemente.\\n\\n**ACCIONES INMEDIATAS RECOMENDADAS (ALTA PRIORIDAD - RESPONDER RÁPIDAMENTE):**\\n\\n1.  **AISLAMIENTO DEL HOST:** ¡Aísle inmediatamente el host '{SourceIp}' de la red! Este comportamiento es crítico y sugiere un compromiso activo.\\n2.  **INVESTIGACIÓN DETALLADA DEL HOST:** Realice un análisis forense exhaustivo de '{SourceIp}' (análisis de disco y memoria). Busque: \\n    * Malware o herramientas de ataque.\\n    * Procesos inusuales o persistencia.\\n    * Intentos de acceso a recursos internos.\\n    * Evidencia de túneles o proxies (T1090) que puedan estar utilizando la conexión externa permitida.\\n3.  **ANÁLISIS DE TRÁFICO DE RED:**\\n    * Revise los logs detallados del firewall/IDS para '{SourceIp}' en ambos eventos (el interno bloqueado y el externo permitido).\\n    * Analice los puertos y protocolos involucrados. ¿Por qué el intento interno fue bloqueado? ¿Es '{BlockedDestinationIp}:{BlockedDestinationPort}' un objetivo sensible? ¿El '{AllowedDestinationPort}' de la conexión externa es un puerto C2 conocido o inusual (e.g., 53, 443, 80)?\\n    * Capture el tráfico de red (PCAP) si es posible para un análisis profundo de la carga útil.\\n4.  **INTELIGENCIA DE AMENAZAS:** Realice búsquedas de inteligencia de amenazas sobre '{AllowedDestinationIp}'. ¿Es una IP conocida por ser maliciosa o parte de una infraestructura C2?\\n5.  **REVISIÓN DE SEGMENTACIÓN Y POLÍTICAS:** Confirme que las políticas de segmentación de red internas están configuradas correctamente. Si el tráfico interno bloqueado era legítimo, revise las reglas del firewall. Si no, fortalezca las reglas para prevenir futuros intentos de movimiento lateral.\\n6.  **ESCALAR:** Escalar a los equipos de respuesta a incidentes, administradores de red y de sistemas para una investigación y mitigación coordinadas.",
-        "continueOnError": false,
-        "systemCapability": "analyzeSecurityEvent"
-      }
-    ],
-    "parameters": [
-      {
-        "name": "Timestamp",
-        "required": true,
-        "description": "The timestamp of the *last* event in the sequence (the allowed external connection)."
-      },
-      {
-        "name": "SourceIp",
-        "required": true,
-        "description": "The common source IP address for both events (the internal host)."
-      },
-      {
-        "name": "ComputerName",
-        "required": false,
-        "description": "The hostname of the source internal host, if available."
-      },
-      {
-        "name": "DeviceName",
-        "required": false,
-        "description": "The name of the firewall or IDS device reporting the events."
-      },
-      {
-        "name": "BlockedAction",
-        "required": true,
-        "description": "The action of the first event (e.g., 'blocked', 'deny', 'drop')."
-      },
-      {
-        "name": "BlockedDestinationIp",
-        "required": true,
-        "description": "The internal destination IP address of the blocked connection."
-      },
-      {
-        "name": "BlockedDestinationPort",
-        "required": true,
-        "description": "The destination port of the blocked connection."
-      },
-      {
-        "name": "BlockedProtocol",
-        "required": true,
-        "description": "The protocol of the blocked connection."
-      },
-      {
-        "name": "AllowedAction",
-        "required": true,
-        "description": "The action of the second event (e.g., 'allowed', 'permit', 'pass')."
-      },
-      {
-        "name": "AllowedDestinationIp",
-        "required": true,
-        "description": "The external destination IP address of the allowed connection."
-      },
-      {
-        "name": "AllowedDestinationPort",
-        "required": true,
-        "description": "The destination port of the allowed connection."
-      },
-      {
-        "name": "AllowedProtocol",
-        "required": true,
-        "description": "The protocol of the allowed connection."
-      },
-      {
-        "name": "Timeframe",
-        "required": true,
-        "description": "The time window within which the two events occurred (e.g., '5 minutes')."
-      },
-      {
-        "name": "RuleName",
-        "required": false,
-        "description": "The name of the Sigma rule that triggered the event, if applicable."
-      }
-    ]
-  }
-]
+{
+  "name": "Blocked Internal Traffic Followed by Allowed External Connection (Same Host)",
+  "description": "Detects a suspicious sequence where an **internal host** attempts a network connection to an **internal destination that is explicitly blocked** by a firewall or IDS, and this event is immediately followed by an **allowed outbound connection from that *same internal host* to an external destination**. This behavior can indicate a **compromised internal system** attempting to bypass internal network segmentation or controls, and then establishing external Command and Control (C2) or exfiltrating data. It may also highlight critical network misconfigurations.",
+  "tags": [
+    "security",
+    "detection",
+    "high",
+    "network",
+    "command_and_control",
+    "defense_evasion",
+    "lateral_movement",
+    "network_segmentation",
+    "network_traffic",
+    "misconfiguration",
+    "compromised_host",
+    "TA0011",
+    "TA0005",
+    "TA0008",
+    "T1090"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "ALERTA DE ALTA SEVERIDAD: Tráfico Interno Bloqueado Seguido de Conexión Externa Permitida desde el Mismo Host.\\n\\n**Se ha detectado una secuencia de red altamente sospechosa originada desde el host interno '{SourceIp}' (Hostname: {ComputerName}) a las {Timestamp}.**\\n\\n**Detalles del Incidente:**\\n* **Evento 1 (Bloqueado):** Una conexión desde '{SourceIp}' a la IP interna '{BlockedDestinationIp}' en el puerto '{BlockedDestinationPort}' ({BlockedProtocol}) fue **bloqueada** por el '{DeviceName}' (Acción: '{BlockedAction}').\\n* **Evento 2 (Permitido):** Inmediatamente después (dentro de {Timeframe} minutos), se permitió una conexión de salida desde **el mismo host '{SourceIp}'** hacia el destino externo '{AllowedDestinationIp}' en el puerto '{AllowedDestinationPort}' ({AllowedProtocol}) por el '{DeviceName}' (Acción: '{AllowedAction}').\\n* **ID de la Regla**: {RuleName}\\n\\nEsta secuencia es un fuerte indicador de un **sistema interno comprometido** que intenta **evadir defensas (TA0005)** o la segmentación de red interna (**Movimiento Lateral - TA0008**), y luego establece una conexión de **Comando y Control (C2 - TA0011)** o exfiltra datos a una ubicación externa. También podría indicar una **mala configuración crítica de la red** que necesita ser corregida urgentemente.\\n\\n**ACCIONES INMEDIATAS RECOMENDADAS (ALTA PRIORIDAD - RESPONDER RÁPIDAMENTE):**\\n\\n1.  **AISLAMIENTO DEL HOST:** ¡Aísle inmediatamente el host '{SourceIp}' de la red! Este comportamiento es crítico y sugiere un compromiso activo.\\n2.  **INVESTIGACIÓN DETALLADA DEL HOST:** Realice un análisis forense exhaustivo de '{SourceIp}' (análisis de disco y memoria). Busque: \\n    * Malware o herramientas de ataque.\\n    * Procesos inusuales o persistencia.\\n    * Intentos de acceso a recursos internos.\\n    * Evidencia de túneles o proxies (T1090) que puedan estar utilizando la conexión externa permitida.\\n3.  **ANÁLISIS DE TRÁFICO DE RED:**\\n    * Revise los logs detallados del firewall/IDS para '{SourceIp}' en ambos eventos (el interno bloqueado y el externo permitido).\\n    * Analice los puertos y protocolos involucrados. ¿Por qué el intento interno fue bloqueado? ¿Es '{BlockedDestinationIp}:{BlockedDestinationPort}' un objetivo sensible? ¿El '{AllowedDestinationPort}' de la conexión externa es un puerto C2 conocido o inusual (e.g., 53, 443, 80)?\\n    * Capture el tráfico de red (PCAP) si es posible para un análisis profundo de la carga útil.\\n4.  **INTELIGENCIA DE AMENAZAS:** Realice búsquedas de inteligencia de amenazas sobre '{AllowedDestinationIp}'. ¿Es una IP conocida por ser maliciosa o parte de una infraestructura C2?\\n5.  **REVISIÓN DE SEGMENTACIÓN Y POLÍTICAS:** Confirme que las políticas de segmentación de red internas están configuradas correctamente. Si el tráfico interno bloqueado era legítimo, revise las reglas del firewall. Si no, fortalezca las reglas para prevenir futuros intentos de movimiento lateral.\\n6.  **ESCALAR:** Escalar a los equipos de respuesta a incidentes, administradores de red y de sistemas para una investigación y mitigación coordinadas.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of the *last* event in the sequence (the allowed external connection)."
+    },
+    {
+      "name": "SourceIp",
+      "required": true,
+      "description": "The common source IP address for both events (the internal host)."
+    },
+    {
+      "name": "ComputerName",
+      "required": false,
+      "description": "The hostname of the source internal host, if available."
+    },
+    {
+      "name": "DeviceName",
+      "required": false,
+      "description": "The name of the firewall or IDS device reporting the events."
+    },
+    {
+      "name": "BlockedAction",
+      "required": true,
+      "description": "The action of the first event (e.g., 'blocked', 'deny', 'drop')."
+    },
+    {
+      "name": "BlockedDestinationIp",
+      "required": true,
+      "description": "The internal destination IP address of the blocked connection."
+    },
+    {
+      "name": "BlockedDestinationPort",
+      "required": true,
+      "description": "The destination port of the blocked connection."
+    },
+    {
+      "name": "BlockedProtocol",
+      "required": true,
+      "description": "The protocol of the blocked connection."
+    },
+    {
+      "name": "AllowedAction",
+      "required": true,
+      "description": "The action of the second event (e.g., 'allowed', 'permit', 'pass')."
+    },
+    {
+      "name": "AllowedDestinationIp",
+      "required": true,
+      "description": "The external destination IP address of the allowed connection."
+    },
+    {
+      "name": "AllowedDestinationPort",
+      "required": true,
+      "description": "The destination port of the allowed connection."
+    },
+    {
+      "name": "AllowedProtocol",
+      "required": true,
+      "description": "The protocol of the allowed connection."
+    },
+    {
+      "name": "Timeframe",
+      "required": true,
+      "description": "The time window within which the two events occurred (e.g., '5 minutes')."
+    },
+    {
+      "name": "RuleName",
+      "required": false,
+      "description": "The name of the Sigma rule that triggered the event, if applicable."
+    }
+  ]
+}

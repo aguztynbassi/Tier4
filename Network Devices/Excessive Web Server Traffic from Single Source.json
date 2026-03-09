@@ -1,114 +1,112 @@
-[
-  {
-    "name": "Excessive Web Server Traffic from Single Source (Potential Scan/Brute Force/C2)",
-    "description": "Detects an unusually high number of HTTP/HTTPS requests from the same source IP within a short timeframe, indicating web application scanning, brute-force attacks, Command and Control (C2) activity, or DDoS/DoS reconnaissance.",
-    "tags": [
-      "security",
-      "detection",
-      "high",
-      "webserver",
-      "firewall",
-      "ids_ips",
-      "proxy",
-      "command_and_control",
-      "discovery",
-      "credential_access",
-      "web_attack",
-      "reconnaissance",
-      "brute_force",
-      "C2",
-      "TA0011",
-      "TA0007",
-      "TA0006",
-      "T1071",
-      "T1071.001",
-      "T1110",
-      "T1046"
-    ],
-    "prompts": [
-      {
-        "id": "1",
-        "prompt": "HIGH SEVERITY ALERT: Excessive Web Server Traffic Detected from Single Source!\\n\\n**An unusually high volume of web requests ({SIEM_COUNT_OF_EVENTS} requests) from '{SourceIp}' targeting web server '{DestinationIp}' (Port: {DestinationPort}) has been detected within the last {SIEM_TIMEFRAME} at {Timestamp}.** This pattern is a strong indicator of active **web application scanning (T1046)**, **brute-force/credential stuffing (T1110)**, or **Command and Control (C2) (T1071.001)** activity.\\n\\n**Event Details (from SIEM correlation):**\\n* **Timestamp of First Request**: {SIEM_FIRST_EVENT_TIMESTAMP}\\n* **Timestamp of Last Request**: {SIEM_LAST_EVENT_TIMESTAMP}\\n* **Source IP**: {SourceIp}\\n* **Targeted Web Server IP**: {DestinationIp}\\n* **Targeted Port**: {DestinationPort} (Expected 80 or 443)\\n* **Number of Requests**: {SIEM_COUNT_OF_EVENTS}\\n* **Time Window**: {SIEM_TIMEFRAME}\\n* **Example HTTP Method**: {HttpMethod}\\n* **Example Request URI**: {RequestUri}\\n* **Example Status Code**: {StatusCode}\\n* **Example User Agent**: {UserAgent}\\n* **Web Server Hostname**: {ComputerName}\\n* **Rule Name**: {RuleName}\\n\\nThis incident represents a direct attack or intense reconnaissance against your web assets. Immediate investigation is required to determine the intent and mitigate potential impact.\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (HIGH PRIORITY - RESPOND PROMPTLY):**\\n\\n1.  **BLOCK SOURCE IP:** Immediately block '{SourceIp}' at your perimeter firewall/web application firewall (WAF) to stop the excessive requests.\\n2.  **ANALYZE REQUEST PATTERNS:** Review the full logs for '{SourceIp}' to understand the nature of the requests: \\n    * Are they targeting common login pages (e.g., `/admin`, `/login.php`)? (Indicates brute force)\\n    * Are they probing for known vulnerability paths (e.g., `/.git/config`, `/wp-admin/`)? (Indicates vulnerability scanning)\\n    * Are they unusual HTTP methods or rapid requests to disparate URLs? (Could indicate C2 or advanced scanning)\\n    * Look at `UserAgent` for known scanner strings.\\n3.  **VALIDATE LEGITIMACY:** Check if '{SourceIp}' is a known legitimate service (e.g., a search engine crawler, a trusted partner's API client, an authorized vulnerability scanner). If so, add it to a whitelist in your SIEM correlation rule.\\n4.  **REVIEW WEB SERVER LOGS:** Examine detailed web server access logs for '{DestinationIp}' for any successful exploitation attempts, unusual file creations, or unexpected redirects related to this source IP.\\n5.  **WEB APPLICATION FIREWALL (WAF) AUDIT:** Ensure your WAF (if deployed) is properly configured to detect and block these types of attacks. Review its logs for related alerts.\\n6.  **THREAT INTELLIGENCE:** Perform threat intelligence lookups on '{SourceIp}' to determine if it's associated with known malicious actors, scanning tools, or botnets.\\n7.  **APPLICATION SECURITY ASSESSMENT:** Depending on the nature of the requests, consider a targeted security review or penetration test of the web application on '{DestinationIp}' to identify and remediate vulnerabilities.",
-        "continueOnError": false,
-        "systemCapability": "analyzeSecurityEvent"
-      }
-    ],
-    "parameters": [
-      {
-        "name": "Timestamp",
-        "required": true,
-        "description": "The timestamp of one of the web request events (e.g., the most recent one)."
-      },
-      {
-        "name": "SourceIp",
-        "required": true,
-        "description": "The IP address of the client making the web request."
-      },
-      {
-        "name": "DestinationIp",
-        "required": true,
-        "description": "The IP address of the web server."
-      },
-      {
-        "name": "DestinationPort",
-        "required": true,
-        "description": "The destination port (expected 80 or 443)."
-      },
-      {
-        "name": "HttpMethod",
-        "required": false,
-        "description": "The HTTP method used (e.g., GET, POST)."
-      },
-      {
-        "name": "RequestUri",
-        "required": true,
-        "description": "The requested URL path (e.g., '/admin/login.php')."
-      },
-      {
-        "name": "HttpVersion",
-        "required": false,
-        "description": "The HTTP protocol version."
-      },
-      {
-        "name": "StatusCode",
-        "required": false,
-        "description": "The HTTP response status code (e.g., 200, 404, 500)."
-      },
-      {
-        "name": "UserAgent",
-        "required": false,
-        "description": "The User-Agent string from the client."
-      },
-      {
-        "name": "ComputerName",
-        "required": false,
-        "description": "The hostname of the web server."
-      },
-      {
-        "name": "RuleName",
-        "required": false,
-        "description": "The name of the Sigma rule that triggered the event, if applicable."
-      },
-      {
-        "name": "SIEM_COUNT_OF_EVENTS",
-        "required": true,
-        "description": "The aggregated count of web requests by the SIEM (e.g., 75)."
-      },
-      {
-        "name": "SIEM_TIMEFRAME",
-        "required": true,
-        "description": "The time window over which the events were counted (e.g., '1 minute')."
-      },
-      {
-        "name": "SIEM_FIRST_EVENT_TIMESTAMP",
-        "required": true,
-        "description": "The timestamp of the first event in the correlated group."
-      },
-      {
-        "name": "SIEM_LAST_EVENT_TIMESTAMP",
-        "required": true,
-        "description": "The timestamp of the last event in the correlated group."
-      }
-    ]
-  }
-]
+{
+  "name": "Excessive Web Server Traffic from Single Source (Potential Scan/Brute Force/C2)",
+  "description": "Detects an unusually high number of HTTP/HTTPS requests from the same source IP within a short timeframe, indicating web application scanning, brute-force attacks, Command and Control (C2) activity, or DDoS/DoS reconnaissance.",
+  "tags": [
+    "security",
+    "detection",
+    "high",
+    "webserver",
+    "firewall",
+    "ids_ips",
+    "proxy",
+    "command_and_control",
+    "discovery",
+    "credential_access",
+    "web_attack",
+    "reconnaissance",
+    "brute_force",
+    "C2",
+    "TA0011",
+    "TA0007",
+    "TA0006",
+    "T1071",
+    "T1071.001",
+    "T1110",
+    "T1046"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "HIGH SEVERITY ALERT: Excessive Web Server Traffic Detected from Single Source!\\n\\n**An unusually high volume of web requests ({SIEM_COUNT_OF_EVENTS} requests) from '{SourceIp}' targeting web server '{DestinationIp}' (Port: {DestinationPort}) has been detected within the last {SIEM_TIMEFRAME} at {Timestamp}.** This pattern is a strong indicator of active **web application scanning (T1046)**, **brute-force/credential stuffing (T1110)**, or **Command and Control (C2) (T1071.001)** activity.\\n\\n**Event Details (from SIEM correlation):**\\n* **Timestamp of First Request**: {SIEM_FIRST_EVENT_TIMESTAMP}\\n* **Timestamp of Last Request**: {SIEM_LAST_EVENT_TIMESTAMP}\\n* **Source IP**: {SourceIp}\\n* **Targeted Web Server IP**: {DestinationIp}\\n* **Targeted Port**: {DestinationPort} (Expected 80 or 443)\\n* **Number of Requests**: {SIEM_COUNT_OF_EVENTS}\\n* **Time Window**: {SIEM_TIMEFRAME}\\n* **Example HTTP Method**: {HttpMethod}\\n* **Example Request URI**: {RequestUri}\\n* **Example Status Code**: {StatusCode}\\n* **Example User Agent**: {UserAgent}\\n* **Web Server Hostname**: {ComputerName}\\n* **Rule Name**: {RuleName}\\n\\nThis incident represents a direct attack or intense reconnaissance against your web assets. Immediate investigation is required to determine the intent and mitigate potential impact.\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (HIGH PRIORITY - RESPOND PROMPTLY):**\\n\\n1.  **BLOCK SOURCE IP:** Immediately block '{SourceIp}' at your perimeter firewall/web application firewall (WAF) to stop the excessive requests.\\n2.  **ANALYZE REQUEST PATTERNS:** Review the full logs for '{SourceIp}' to understand the nature of the requests: \\n    * Are they targeting common login pages (e.g., `/admin`, `/login.php`)? (Indicates brute force)\\n    * Are they probing for known vulnerability paths (e.g., `/.git/config`, `/wp-admin/`)? (Indicates vulnerability scanning)\\n    * Are they unusual HTTP methods or rapid requests to disparate URLs? (Could indicate C2 or advanced scanning)\\n    * Look at `UserAgent` for known scanner strings.\\n3.  **VALIDATE LEGITIMACY:** Check if '{SourceIp}' is a known legitimate service (e.g., a search engine crawler, a trusted partner's API client, an authorized vulnerability scanner). If so, add it to a whitelist in your SIEM correlation rule.\\n4.  **REVIEW WEB SERVER LOGS:** Examine detailed web server access logs for '{DestinationIp}' for any successful exploitation attempts, unusual file creations, or unexpected redirects related to this source IP.\\n5.  **WEB APPLICATION FIREWALL (WAF) AUDIT:** Ensure your WAF (if deployed) is properly configured to detect and block these types of attacks. Review its logs for related alerts.\\n6.  **THREAT INTELLIGENCE:** Perform threat intelligence lookups on '{SourceIp}' to determine if it's associated with known malicious actors, scanning tools, or botnets.\\n7.  **APPLICATION SECURITY ASSESSMENT:** Depending on the nature of the requests, consider a targeted security review or penetration test of the web application on '{DestinationIp}' to identify and remediate vulnerabilities.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of one of the web request events (e.g., the most recent one)."
+    },
+    {
+      "name": "SourceIp",
+      "required": true,
+      "description": "The IP address of the client making the web request."
+    },
+    {
+      "name": "DestinationIp",
+      "required": true,
+      "description": "The IP address of the web server."
+    },
+    {
+      "name": "DestinationPort",
+      "required": true,
+      "description": "The destination port (expected 80 or 443)."
+    },
+    {
+      "name": "HttpMethod",
+      "required": false,
+      "description": "The HTTP method used (e.g., GET, POST)."
+    },
+    {
+      "name": "RequestUri",
+      "required": true,
+      "description": "The requested URL path (e.g., '/admin/login.php')."
+    },
+    {
+      "name": "HttpVersion",
+      "required": false,
+      "description": "The HTTP protocol version."
+    },
+    {
+      "name": "StatusCode",
+      "required": false,
+      "description": "The HTTP response status code (e.g., 200, 404, 500)."
+    },
+    {
+      "name": "UserAgent",
+      "required": false,
+      "description": "The User-Agent string from the client."
+    },
+    {
+      "name": "ComputerName",
+      "required": false,
+      "description": "The hostname of the web server."
+    },
+    {
+      "name": "RuleName",
+      "required": false,
+      "description": "The name of the Sigma rule that triggered the event, if applicable."
+    },
+    {
+      "name": "SIEM_COUNT_OF_EVENTS",
+      "required": true,
+      "description": "The aggregated count of web requests by the SIEM (e.g., 75)."
+    },
+    {
+      "name": "SIEM_TIMEFRAME",
+      "required": true,
+      "description": "The time window over which the events were counted (e.g., '1 minute')."
+    },
+    {
+      "name": "SIEM_FIRST_EVENT_TIMESTAMP",
+      "required": true,
+      "description": "The timestamp of the first event in the correlated group."
+    },
+    {
+      "name": "SIEM_LAST_EVENT_TIMESTAMP",
+      "required": true,
+      "description": "The timestamp of the last event in the correlated group."
+    }
+  ]
+}

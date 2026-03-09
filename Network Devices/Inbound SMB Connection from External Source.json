@@ -1,93 +1,91 @@
-[
-  {
-    "name": "Inbound SMB Connection from External Source",
-    "description": "Detects inbound Server Message Block (SMB) connections initiated from external IP addresses targeting internal systems. Direct inbound SMB from outside the internal network is a significant security risk, often abused for initial access, lateral movement, and data exfiltration.",
-    "tags": [
-      "security",
-      "detection",
-      "high",
-      "network",
-      "firewall",
-      "ids_ips",
-      "initial_access",
-      "lateral_movement",
-      "command_and_control",
-      "discovery",
-      "network_access",
-      "smb",
-      "remote_access",
-      "TA0001",
-      "TA0008",
-      "TA0011",
-      "TA0007",
-      "T1021",
-      "T1021.002",
-      "T1071"
-    ],
-    "prompts": [
-      {
-        "id": "1",
-        "prompt": "HIGH SEVERITY ALERT: Inbound SMB Connection from External Source Detected!\\n\\n**An inbound SMB connection attempt from external IP '{SourceIp}' to internal system '{DestinationIp}' on port {DestinationPort} was detected at {Timestamp}.** Direct exposure of SMB to the internet is a severe security risk and is strongly discouraged. This activity is a critical indicator of potential **Initial Access (TA0001)**, **Lateral Movement (TA0008)**, or **Data Exfiltration (TA0010)** attempts by adversaries.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Source IP**: {SourceIp} (External)\\n* **Destination IP**: {DestinationIp} (Internal System)\\n* **Destination Port**: {DestinationPort} (Expected 445 for SMB)\\n* **Protocol**: {Protocol} (Expected TCP)\\n* **Direction**: {Direction} (Expected 'inbound')\\n* **Action**: {Action} (Crucial context: 'allowed' or 'blocked')\\n* **User (if available)**: {User} (Attempted SMB authentication user)\\n* **Firewall Rule ID (if available)**: {RuleId}\\n* **Rule Name**: {RuleName}\\n\\nThis alert signifies that an external entity is attempting to establish an SMB connection to your internal network. Even if blocked, repeated attempts suggest active targeting. If the connection was allowed, it represents an immediate and severe compromise risk that requires urgent attention.\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **BLOCK SOURCE IP:** Immediately block '{SourceIp}' at your perimeter firewall to prevent any further connection attempts to SMB or other services.\\n2.  **NETWORK TRAFFIC ANALYSIS:** If the 'Action' was 'allowed', immediately investigate the SMB session activity. Look for: \\n    * Successful authentication attempts. \\n    * File enumeration or access to shares. \\n    * Attempts to execute remote code or create services. \\n    * Even if 'blocked', monitor for continued brute-force attempts or shifts to other ports.\\n3.  **SMB EXPOSURE REVIEW (CRITICAL):** Re-evaluate why SMB on '{DestinationIp}' is directly exposed to the internet. SMB should *never* be directly exposed. It should only be accessible via a VPN or highly restricted secure gateways with strict IP whitelisting. Implement or enforce strict perimeter controls to prevent any direct inbound SMB from external networks.\\n4.  **VULNERABILITY ASSESSMENT:** Conduct a vulnerability scan on '{DestinationIp}' to identify any unpatched SMB vulnerabilities (e.g., EternalBlue, BlueKeep) or weak configurations that could be exploited.\\n5.  **LOG REVIEW - AUTHENTICATION:** Check authentication logs on '{DestinationIp}' for any successful or failed SMB login attempts from '{SourceIp}' around the '{Timestamp}'. Pay attention to the user '{User}' if provided.\\n6.  **THREAT INTELLIGENCE:** Perform threat intelligence lookups on '{SourceIp}' to determine if it's associated with known malicious actors, botnets, or scanning infrastructure.\\n7.  **SEGMENTATION AUDIT:** Ensure proper network segmentation is in place to limit SMB traffic within your internal network and prevent lateral movement if a system is compromised.",
-        "continueOnError": false,
-        "systemCapability": "analyzeSecurityEvent"
-      }
-    ],
-    "parameters": [
-      {
-        "name": "Timestamp",
-        "required": true,
-        "description": "The timestamp of the inbound SMB connection event."
-      },
-      {
-        "name": "SourceIp",
-        "required": true,
-        "description": "The source IP address attempting the SMB connection (external)."
-      },
-      {
-        "name": "DestinationIp",
-        "required": true,
-        "description": "The destination IP address of the internal system targeted."
-      },
-      {
-        "name": "DestinationPort",
-        "required": true,
-        "description": "The destination port (expected to be 445 for SMB)."
-      },
-      {
-        "name": "Protocol",
-        "required": true,
-        "description": "The network protocol (expected TCP)."
-      },
-      {
-        "name": "Direction",
-        "required": true,
-        "description": "The direction of the connection (expected 'inbound')."
-      },
-      {
-        "name": "Action",
-        "required": false,
-        "description": "The action taken by the firewall (e.g., 'allowed', 'blocked')."
-      },
-      {
-        "name": "User",
-        "required": false,
-        "description": "The user account attempting to authenticate via SMB, if available in logs."
-      },
-      {
-        "name": "ProcessName",
-        "required": false,
-        "description": "The process initiating the SMB connection on the source, if available in richer logs (e.g., EDR on source)."
-      },
-      {
-        "name": "RuleId",
-        "required": false,
-        "description": "The ID of the specific firewall rule involved, if available."
-      },
-      {
-        "name": "RuleName",
-        "required": false,
-        "description": "The name of the Sigma rule that triggered the event, if applicable."
-      }
-    ]
-  }
-]
+{
+  "name": "Inbound SMB Connection from External Source",
+  "description": "Detects inbound Server Message Block (SMB) connections initiated from external IP addresses targeting internal systems. Direct inbound SMB from outside the internal network is a significant security risk, often abused for initial access, lateral movement, and data exfiltration.",
+  "tags": [
+    "security",
+    "detection",
+    "high",
+    "network",
+    "firewall",
+    "ids_ips",
+    "initial_access",
+    "lateral_movement",
+    "command_and_control",
+    "discovery",
+    "network_access",
+    "smb",
+    "remote_access",
+    "TA0001",
+    "TA0008",
+    "TA0011",
+    "TA0007",
+    "T1021",
+    "T1021.002",
+    "T1071"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "HIGH SEVERITY ALERT: Inbound SMB Connection from External Source Detected!\\n\\n**An inbound SMB connection attempt from external IP '{SourceIp}' to internal system '{DestinationIp}' on port {DestinationPort} was detected at {Timestamp}.** Direct exposure of SMB to the internet is a severe security risk and is strongly discouraged. This activity is a critical indicator of potential **Initial Access (TA0001)**, **Lateral Movement (TA0008)**, or **Data Exfiltration (TA0010)** attempts by adversaries.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Source IP**: {SourceIp} (External)\\n* **Destination IP**: {DestinationIp} (Internal System)\\n* **Destination Port**: {DestinationPort} (Expected 445 for SMB)\\n* **Protocol**: {Protocol} (Expected TCP)\\n* **Direction**: {Direction} (Expected 'inbound')\\n* **Action**: {Action} (Crucial context: 'allowed' or 'blocked')\\n* **User (if available)**: {User} (Attempted SMB authentication user)\\n* **Firewall Rule ID (if available)**: {RuleId}\\n* **Rule Name**: {RuleName}\\n\\nThis alert signifies that an external entity is attempting to establish an SMB connection to your internal network. Even if blocked, repeated attempts suggest active targeting. If the connection was allowed, it represents an immediate and severe compromise risk that requires urgent attention.\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **BLOCK SOURCE IP:** Immediately block '{SourceIp}' at your perimeter firewall to prevent any further connection attempts to SMB or other services.\\n2.  **NETWORK TRAFFIC ANALYSIS:** If the 'Action' was 'allowed', immediately investigate the SMB session activity. Look for: \\n    * Successful authentication attempts. \\n    * File enumeration or access to shares. \\n    * Attempts to execute remote code or create services. \\n    * Even if 'blocked', monitor for continued brute-force attempts or shifts to other ports.\\n3.  **SMB EXPOSURE REVIEW (CRITICAL):** Re-evaluate why SMB on '{DestinationIp}' is directly exposed to the internet. SMB should *never* be directly exposed. It should only be accessible via a VPN or highly restricted secure gateways with strict IP whitelisting. Implement or enforce strict perimeter controls to prevent any direct inbound SMB from external networks.\\n4.  **VULNERABILITY ASSESSMENT:** Conduct a vulnerability scan on '{DestinationIp}' to identify any unpatched SMB vulnerabilities (e.g., EternalBlue, BlueKeep) or weak configurations that could be exploited.\\n5.  **LOG REVIEW - AUTHENTICATION:** Check authentication logs on '{DestinationIp}' for any successful or failed SMB login attempts from '{SourceIp}' around the '{Timestamp}'. Pay attention to the user '{User}' if provided.\\n6.  **THREAT INTELLIGENCE:** Perform threat intelligence lookups on '{SourceIp}' to determine if it's associated with known malicious actors, botnets, or scanning infrastructure.\\n7.  **SEGMENTATION AUDIT:** Ensure proper network segmentation is in place to limit SMB traffic within your internal network and prevent lateral movement if a system is compromised.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of the inbound SMB connection event."
+    },
+    {
+      "name": "SourceIp",
+      "required": true,
+      "description": "The source IP address attempting the SMB connection (external)."
+    },
+    {
+      "name": "DestinationIp",
+      "required": true,
+      "description": "The destination IP address of the internal system targeted."
+    },
+    {
+      "name": "DestinationPort",
+      "required": true,
+      "description": "The destination port (expected to be 445 for SMB)."
+    },
+    {
+      "name": "Protocol",
+      "required": true,
+      "description": "The network protocol (expected TCP)."
+    },
+    {
+      "name": "Direction",
+      "required": true,
+      "description": "The direction of the connection (expected 'inbound')."
+    },
+    {
+      "name": "Action",
+      "required": false,
+      "description": "The action taken by the firewall (e.g., 'allowed', 'blocked')."
+    },
+    {
+      "name": "User",
+      "required": false,
+      "description": "The user account attempting to authenticate via SMB, if available in logs."
+    },
+    {
+      "name": "ProcessName",
+      "required": false,
+      "description": "The process initiating the SMB connection on the source, if available in richer logs (e.g., EDR on source)."
+    },
+    {
+      "name": "RuleId",
+      "required": false,
+      "description": "The ID of the specific firewall rule involved, if available."
+    },
+    {
+      "name": "RuleName",
+      "required": false,
+      "description": "The name of the Sigma rule that triggered the event, if applicable."
+    }
+  ]
+}

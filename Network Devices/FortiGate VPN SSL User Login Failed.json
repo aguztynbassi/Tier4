@@ -1,64 +1,62 @@
-[
-  {
-    "name": "FortiGate VPN SSL User Login Failed",
-    "description": "Detects failed VPN SSL login attempts on FortiGate devices. This can indicate brute-forcing or other credential attacks.",
-    "tags": [
-      "security",
-      "detection",
-      "initial access",
-      "credential access",
-      "valid accounts",
-      "brute force",
-      "TA0001",
-      "TA0006",
-      "T1078",
-      "T1110",
-      "Network Devices"
-    ],
-    "prompts": [
-      {
-        "id": "1",
-        "prompt": "A failed VPN SSL login attempt was detected on a FortiGate device, indicating potential brute-force or credential attack activity. Event Details: **Timestamp** {timestamp}, **Log ID** {log_id}, **User** {user}, **Source Address** {source_address}, **VPN User** {vpn_user}, **Authentication Method** {auth_method}, **Reason** {reason}. Investigate this activity to determine if it's a legitimate user error or a malicious attempt to gain unauthorized VPN access.",
-        "continueOnError": false,
-        "systemCapability": "analyzeSecurityEvent"
-      }
-    ],
-    "parameters": [
-      {
-        "name": "timestamp",
-        "required": true,
-        "description": "The timestamp of the failed VPN SSL login attempt."
-      },
-      {
-        "name": "log_id",
-        "required": true,
-        "description": "The FortiGate Log ID for the VPN SSL login failure (39426)."
-      },
-      {
-        "name": "user",
-        "required": true,
-        "description": "The user account related to the event (often the admin user, but can be empty)."
-      },
-      {
-        "name": "source_address",
-        "required": true,
-        "description": "The source IP address from which the failed login attempt originated."
-      },
-      {
-        "name": "vpn_user",
-        "required": true,
-        "description": "The username used for the VPN connection attempt."
-      },
-      {
-        "name": "auth_method",
-        "required": true,
-        "description": "The authentication method used for the VPN connection (e.g., 'password', 'certificate')."
-      },
-      {
-        "name": "reason",
-        "required": true,
-        "description": "The reason provided by FortiGate for the VPN login failure."
-      }
-    ]
-  }
-]
+{
+  "name": "FortiGate VPN SSL User Login Failed",
+  "description": "Detects failed VPN SSL login attempts on FortiGate devices. This can indicate brute-forcing or other credential attacks.",
+  "tags": [
+    "security",
+    "detection",
+    "initial access",
+    "credential access",
+    "valid accounts",
+    "brute force",
+    "TA0001",
+    "TA0006",
+    "T1078",
+    "T1110",
+    "Network Devices"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A failed VPN SSL login attempt was detected on a FortiGate device, indicating potential brute-force or credential attack activity. Event Details: **Timestamp** {timestamp}, **Log ID** {log_id}, **User** {user}, **Source Address** {source_address}, **VPN User** {vpn_user}, **Authentication Method** {auth_method}, **Reason** {reason}. Investigate this activity to determine if it's a legitimate user error or a malicious attempt to gain unauthorized VPN access.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "timestamp",
+      "required": true,
+      "description": "The timestamp of the failed VPN SSL login attempt."
+    },
+    {
+      "name": "log_id",
+      "required": true,
+      "description": "The FortiGate Log ID for the VPN SSL login failure (39426)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account related to the event (often the admin user, but can be empty)."
+    },
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "The source IP address from which the failed login attempt originated."
+    },
+    {
+      "name": "vpn_user",
+      "required": true,
+      "description": "The username used for the VPN connection attempt."
+    },
+    {
+      "name": "auth_method",
+      "required": true,
+      "description": "The authentication method used for the VPN connection (e.g., 'password', 'certificate')."
+    },
+    {
+      "name": "reason",
+      "required": true,
+      "description": "The reason provided by FortiGate for the VPN login failure."
+    }
+  ]
+}

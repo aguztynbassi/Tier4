@@ -1,51 +1,49 @@
-[
-  {
-    "name": "Digital Certificate Purchase",
-    "description": "Detects the purchase of digital certificates, which may be used for malicious activities such as signing malware, evading detection, or impersonating legitimate entities.",
-    "tags": [
-      "security",
-      "detection",
-      "resource development",
-      "acquire infrastructure",
-      "digital certificates",
-      "TA0042",
-      "T1583",
-      "T1583.002"
-    ],
-    "prompts": [
-      {
-        "id": "1",
-        "prompt": "Digital certificate purchase detected. Event Details: **Timestamp** {Timestamp}, **User** {user}, **Product** {product}, **Transaction ID** {transaction_id}, **Details** {details}. Investigate this activity to determine if the certificate purchase is legitimate or for malicious purposes.",
-        "continueOnError": false,
-        "systemCapability": "analyzeSecurityEvent"
-      }
-    ],
-    "parameters": [
-      {
-        "name": "Timestamp",
-        "required": true,
-        "description": "The timestamp of the certificate purchase event."
-      },
-      {
-        "name": "user",
-        "required": true,
-        "description": "The user or account making the purchase."
-      },
-      {
-        "name": "product",
-        "required": true,
-        "description": "The type of certificate purchased."
-      },
-      {
-        "name": "transaction_id",
-        "required": true,
-        "description": "The transaction ID of the purchase."
-      },
-      {
-        "name": "details",
-        "required": true,
-        "description": "Any relevant details about the certificate purchase."
-      }
-    ]
-  }
-]
+{
+  "name": "Digital Certificate Purchase",
+  "description": "Detects the purchase of digital certificates, which may be used for malicious activities such as signing malware, evading detection, or impersonating legitimate entities.",
+  "tags": [
+    "security",
+    "detection",
+    "resource development",
+    "acquire infrastructure",
+    "digital certificates",
+    "TA0042",
+    "T1583",
+    "T1583.002"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "Digital certificate purchase detected. Event Details: **Timestamp** {Timestamp}, **User** {user}, **Product** {product}, **Transaction ID** {transaction_id}, **Details** {details}. Investigate this activity to determine if the certificate purchase is legitimate or for malicious purposes.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of the certificate purchase event."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user or account making the purchase."
+    },
+    {
+      "name": "product",
+      "required": true,
+      "description": "The type of certificate purchased."
+    },
+    {
+      "name": "transaction_id",
+      "required": true,
+      "description": "The transaction ID of the purchase."
+    },
+    {
+      "name": "details",
+      "required": true,
+      "description": "Any relevant details about the certificate purchase."
+    }
+  ]
+}

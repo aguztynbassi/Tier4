@@ -1,107 +1,105 @@
-[
-  {
-    "name": "Excessive DNS Queries to Multiple Distinct Domains (SIEM Correlation Needed)",
-    "description": "Detects a single source IP querying an unusually high number of distinct domains (e.g., >50) within a short timeframe (e.g., 60 seconds). This behavior is highly indicative of potential DNS tunneling, C2, or rapid reconnaissance.",
-    "tags": [
-      "security",
-      "detection",
-      "high",
-      "dns_server",
-      "firewall",
-      "ids_ips",
-      "network",
-      "command_and_control",
-      "exfiltration",
-      "discovery",
-      "dns_tunneling",
-      "reconnaissance",
-      "TA0011",
-      "TA0010",
-      "TA0007",
-      "T1071",
-      "T1071.004",
-      "T1568",
-      "T1568.002"
-    ],
-    "prompts": [
-      {
-        "id": "1",
-        "prompt": "HIGH SEVERITY ALERT: Excessive DNS Queries to Multiple Distinct Domains Detected!\\n\\n**An unusually high number of distinct DNS domains ({SIEM_COUNT_OF_DISTINCT_QUERIES} distinct domains) have been queried by '{SourceIp}' within the last {SIEM_TIMEFRAME} at {Timestamp}.** This pattern is a strong indicator of **DNS tunneling (T1071.004)** for **Command and Control (TA0011)**, **data exfiltration (TA0010)**, or extensive **reconnaissance (TA0007)** activity.\\n\\n**Event Details (from SIEM correlation):**\\n* **Timestamp of First Query**: {SIEM_FIRST_EVENT_TIMESTAMP}\\n* **Timestamp of Last Query**: {SIEM_LAST_EVENT_TIMESTAMP}\\n* **Source IP**: {SourceIp} (Internal Host: {ComputerName})\\n* **Targeted DNS Server IP**: {DestinationIp}\\n* **Number of Distinct Domains**: {SIEM_COUNT_OF_DISTINCT_QUERIES} (e.g., >50)\\n* **Time Window**: {SIEM_TIMEFRAME}\\n* **Example Query Name**: {QueryName}\\n* **Example Query Type**: {QueryType}\\n* **Response Code**: {ResponseCode}\\n* **Protocol**: {Protocol} (Expected UDP/TCP)\\n* **Rule Name**: {RuleName}\\n\\nThis behavior indicates that a host is either compromised and attempting to communicate with a large number of malicious domains, or it is performing an automated scan to identify reachable assets or services across many domains. Given the distinct nature of the queries, it's less likely to be a simple misconfiguration and more likely to be a targeted malicious activity.\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (HIGH PRIORITY - RESPOND PROMPTLY):**\\n\\n1.  **IMMEDIATE HOST INVESTIGATION/ISOLATION:** Investigate '{SourceIp}'. If it is an internal host and this behavior is unexpected, consider isolating it from the network to prevent further compromise or data exfiltration. If external, block it at your perimeter.\\n2.  **DNS QUERY ANALYSIS:** Review the full DNS query logs for '{SourceIp}' to identify the list of queried domains. Look for: \\n    * **Suspicious or unknown domains:** Are the domains legitimate? Are they associated with known malware, C2, or phishing infrastructure?\\n    * **Randomly generated domain names** or domains with long, encoded subdomains (signs of DGA or DNS tunneling).\\n    * **Unusual patterns in query types** (e.g., many TXT or MX queries instead of just A records).\\n3.  **FORENSIC ACQUISITION & ANALYSIS (if internal host):** If '{SourceIp}' is an internal compromised host, begin forensic acquisition (disk and memory) to identify the malware, tools, or processes generating these queries. Look for indicators of compromise (IOCs) such as suspicious executables, persistent mechanisms, or network connections.\\n4.  **NETWORK TRAFFIC ANALYSIS:** Review network flow data and packet captures (if available) for '{SourceIp}' to look for any corresponding suspicious outbound connections that might indicate C2 or data exfiltration.\\n5.  **THREAT INTELLIGENCE:** Perform threat intelligence lookups on the identified distinct domains to determine if they are known malicious, part of botnets, or associated with specific threat actors.\\n6.  **BASELINE DNS ACTIVITY:** If this is a recurring alert for a system, establish a baseline for its normal DNS query patterns to better differentiate legitimate high-volume activity from malicious. Consider whitelisting if confirmed benign and necessary.",
-        "continueOnError": false,
-        "systemCapability": "analyzeSecurityEvent"
-      }
-    ],
-    "parameters": [
-      {
-        "name": "Timestamp",
-        "required": true,
-        "description": "The timestamp of one of the DNS query events (e.g., the most recent one)."
-      },
-      {
-        "name": "SourceIp",
-        "required": true,
-        "description": "The IP address of the client making the DNS query."
-      },
-      {
-        "name": "DestinationIp",
-        "required": true,
-        "description": "The IP address of the DNS server being queried."
-      },
-      {
-        "name": "DestinationPort",
-        "required": false,
-        "description": "The destination port (expected 53)."
-      },
-      {
-        "name": "Protocol",
-        "required": false,
-        "description": "The transport protocol (expected UDP/TCP)."
-      },
-      {
-        "name": "QueryName",
-        "required": true,
-        "description": "The full DNS query string (e.g., 'a_long_encoded_string.malicious.com')."
-      },
-      {
-        "name": "QueryType",
-        "required": false,
-        "description": "The DNS query type (e.g., A, AAAA, TXT, CNAME)."
-      },
-      {
-        "name": "ResponseCode",
-        "required": false,
-        "description": "The DNS response code (e.g., NOERROR, NXDOMAIN)."
-      },
-      {
-        "name": "ComputerName",
-        "required": false,
-        "description": "The hostname of the source if available."
-      },
-      {
-        "name": "RuleName",
-        "required": false,
-        "description": "The name of the Sigma rule that triggered the event, if applicable."
-      },
-      {
-        "name": "SIEM_COUNT_OF_DISTINCT_QUERIES",
-        "required": true,
-        "description": "The aggregated count of distinct QueryNames by the SIEM (e.g., 65)."
-      },
-      {
-        "name": "SIEM_TIMEFRAME",
-        "required": true,
-        "description": "The time window over which the events were counted (e.g., '60 seconds')."
-      },
-      {
-        "name": "SIEM_FIRST_EVENT_TIMESTAMP",
-        "required": true,
-        "description": "The timestamp of the first event in the correlated group."
-      },
-      {
-        "name": "SIEM_LAST_EVENT_TIMESTAMP",
-        "required": true,
-        "description": "The timestamp of the last event in the correlated group."
-      }
-    ]
-  }
-]
+{
+  "name": "Excessive DNS Queries to Multiple Distinct Domains (SIEM Correlation Needed)",
+  "description": "Detects a single source IP querying an unusually high number of distinct domains (e.g., >50) within a short timeframe (e.g., 60 seconds). This behavior is highly indicative of potential DNS tunneling, C2, or rapid reconnaissance.",
+  "tags": [
+    "security",
+    "detection",
+    "high",
+    "dns_server",
+    "firewall",
+    "ids_ips",
+    "network",
+    "command_and_control",
+    "exfiltration",
+    "discovery",
+    "dns_tunneling",
+    "reconnaissance",
+    "TA0011",
+    "TA0010",
+    "TA0007",
+    "T1071",
+    "T1071.004",
+    "T1568",
+    "T1568.002"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "HIGH SEVERITY ALERT: Excessive DNS Queries to Multiple Distinct Domains Detected!\\n\\n**An unusually high number of distinct DNS domains ({SIEM_COUNT_OF_DISTINCT_QUERIES} distinct domains) have been queried by '{SourceIp}' within the last {SIEM_TIMEFRAME} at {Timestamp}.** This pattern is a strong indicator of **DNS tunneling (T1071.004)** for **Command and Control (TA0011)**, **data exfiltration (TA0010)**, or extensive **reconnaissance (TA0007)** activity.\\n\\n**Event Details (from SIEM correlation):**\\n* **Timestamp of First Query**: {SIEM_FIRST_EVENT_TIMESTAMP}\\n* **Timestamp of Last Query**: {SIEM_LAST_EVENT_TIMESTAMP}\\n* **Source IP**: {SourceIp} (Internal Host: {ComputerName})\\n* **Targeted DNS Server IP**: {DestinationIp}\\n* **Number of Distinct Domains**: {SIEM_COUNT_OF_DISTINCT_QUERIES} (e.g., >50)\\n* **Time Window**: {SIEM_TIMEFRAME}\\n* **Example Query Name**: {QueryName}\\n* **Example Query Type**: {QueryType}\\n* **Response Code**: {ResponseCode}\\n* **Protocol**: {Protocol} (Expected UDP/TCP)\\n* **Rule Name**: {RuleName}\\n\\nThis behavior indicates that a host is either compromised and attempting to communicate with a large number of malicious domains, or it is performing an automated scan to identify reachable assets or services across many domains. Given the distinct nature of the queries, it's less likely to be a simple misconfiguration and more likely to be a targeted malicious activity.\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (HIGH PRIORITY - RESPOND PROMPTLY):**\\n\\n1.  **IMMEDIATE HOST INVESTIGATION/ISOLATION:** Investigate '{SourceIp}'. If it is an internal host and this behavior is unexpected, consider isolating it from the network to prevent further compromise or data exfiltration. If external, block it at your perimeter.\\n2.  **DNS QUERY ANALYSIS:** Review the full DNS query logs for '{SourceIp}' to identify the list of queried domains. Look for: \\n    * **Suspicious or unknown domains:** Are the domains legitimate? Are they associated with known malware, C2, or phishing infrastructure?\\n    * **Randomly generated domain names** or domains with long, encoded subdomains (signs of DGA or DNS tunneling).\\n    * **Unusual patterns in query types** (e.g., many TXT or MX queries instead of just A records).\\n3.  **FORENSIC ACQUISITION & ANALYSIS (if internal host):** If '{SourceIp}' is an internal compromised host, begin forensic acquisition (disk and memory) to identify the malware, tools, or processes generating these queries. Look for indicators of compromise (IOCs) such as suspicious executables, persistent mechanisms, or network connections.\\n4.  **NETWORK TRAFFIC ANALYSIS:** Review network flow data and packet captures (if available) for '{SourceIp}' to look for any corresponding suspicious outbound connections that might indicate C2 or data exfiltration.\\n5.  **THREAT INTELLIGENCE:** Perform threat intelligence lookups on the identified distinct domains to determine if they are known malicious, part of botnets, or associated with specific threat actors.\\n6.  **BASELINE DNS ACTIVITY:** If this is a recurring alert for a system, establish a baseline for its normal DNS query patterns to better differentiate legitimate high-volume activity from malicious. Consider whitelisting if confirmed benign and necessary.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of one of the DNS query events (e.g., the most recent one)."
+    },
+    {
+      "name": "SourceIp",
+      "required": true,
+      "description": "The IP address of the client making the DNS query."
+    },
+    {
+      "name": "DestinationIp",
+      "required": true,
+      "description": "The IP address of the DNS server being queried."
+    },
+    {
+      "name": "DestinationPort",
+      "required": false,
+      "description": "The destination port (expected 53)."
+    },
+    {
+      "name": "Protocol",
+      "required": false,
+      "description": "The transport protocol (expected UDP/TCP)."
+    },
+    {
+      "name": "QueryName",
+      "required": true,
+      "description": "The full DNS query string (e.g., 'a_long_encoded_string.malicious.com')."
+    },
+    {
+      "name": "QueryType",
+      "required": false,
+      "description": "The DNS query type (e.g., A, AAAA, TXT, CNAME)."
+    },
+    {
+      "name": "ResponseCode",
+      "required": false,
+      "description": "The DNS response code (e.g., NOERROR, NXDOMAIN)."
+    },
+    {
+      "name": "ComputerName",
+      "required": false,
+      "description": "The hostname of the source if available."
+    },
+    {
+      "name": "RuleName",
+      "required": false,
+      "description": "The name of the Sigma rule that triggered the event, if applicable."
+    },
+    {
+      "name": "SIEM_COUNT_OF_DISTINCT_QUERIES",
+      "required": true,
+      "description": "The aggregated count of distinct QueryNames by the SIEM (e.g., 65)."
+    },
+    {
+      "name": "SIEM_TIMEFRAME",
+      "required": true,
+      "description": "The time window over which the events were counted (e.g., '60 seconds')."
+    },
+    {
+      "name": "SIEM_FIRST_EVENT_TIMESTAMP",
+      "required": true,
+      "description": "The timestamp of the first event in the correlated group."
+    },
+    {
+      "name": "SIEM_LAST_EVENT_TIMESTAMP",
+      "required": true,
+      "description": "The timestamp of the last event in the correlated group."
+    }
+  ]
+}

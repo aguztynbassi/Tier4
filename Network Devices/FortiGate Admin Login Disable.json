@@ -1,56 +1,54 @@
-[
-  {
-    "name": "FortiGate Admin Login Disable",
-    "description": "Detects events indicating that an administrator login has been disabled on a FortiGate firewall. This could be a sign of malicious activity or misconfiguration.",
-    "tags": [
-      "security",
-      "detection",
-      "impact",
-      "credential access",
-      "initial access",
-      "account access removal",
-      "account manipulation",
-      "TA0040",
-      "TA0006",
-      "TA0003",
-      "T1531",
-      "T1098",
-      "Network Devices"
-    ],
-    "prompts": [
-      {
-        "id": "1",
-        "prompt": "A FortiGate administrator login has been disabled. This could indicate malicious activity or a critical misconfiguration. Event Details: **Timestamp** {timestamp}, **User Disabled** {user}, **Source IP** {srcip}, **Log ID** {log_id}, **Virtual Domain (VDOM)** {vdom}. Investigate this high-priority event immediately to confirm legitimacy and restore proper access control.",
-        "continueOnError": false,
-        "systemCapability": "analyzeSecurityEvent"
-      }
-    ],
-    "parameters": [
-      {
-        "name": "timestamp",
-        "required": true,
-        "description": "The timestamp of the event when the admin login was disabled."
-      },
-      {
-        "name": "user",
-        "required": true,
-        "description": "The username of the administrator account that was disabled."
-      },
-      {
-        "name": "srcip",
-        "required": true,
-        "description": "The source IP address from where the disable action originated."
-      },
-      {
-        "name": "log_id",
-        "required": true,
-        "description": "The FortiGate log ID for the event (e.g., 32021)."
-      },
-      {
-        "name": "vdom",
-        "required": true,
-        "description": "The Virtual Domain (VDOM) on which the event occurred."
-      }
-    ]
-  }
-]
+{
+  "name": "FortiGate Admin Login Disable",
+  "description": "Detects events indicating that an administrator login has been disabled on a FortiGate firewall. This could be a sign of malicious activity or misconfiguration.",
+  "tags": [
+    "security",
+    "detection",
+    "impact",
+    "credential access",
+    "initial access",
+    "account access removal",
+    "account manipulation",
+    "TA0040",
+    "TA0006",
+    "TA0003",
+    "T1531",
+    "T1098",
+    "Network Devices"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A FortiGate administrator login has been disabled. This could indicate malicious activity or a critical misconfiguration. Event Details: **Timestamp** {timestamp}, **User Disabled** {user}, **Source IP** {srcip}, **Log ID** {log_id}, **Virtual Domain (VDOM)** {vdom}. Investigate this high-priority event immediately to confirm legitimacy and restore proper access control.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "timestamp",
+      "required": true,
+      "description": "The timestamp of the event when the admin login was disabled."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The username of the administrator account that was disabled."
+    },
+    {
+      "name": "srcip",
+      "required": true,
+      "description": "The source IP address from where the disable action originated."
+    },
+    {
+      "name": "log_id",
+      "required": true,
+      "description": "The FortiGate log ID for the event (e.g., 32021)."
+    },
+    {
+      "name": "vdom",
+      "required": true,
+      "description": "The Virtual Domain (VDOM) on which the event occurred."
+    }
+  ]
+}

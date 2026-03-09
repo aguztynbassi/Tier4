@@ -1,46 +1,44 @@
-[
-  {
-    "name": "Network Trace Capture Initiated with Netsh",
-    "description": "Detects the use of the `netsh.exe` utility with the `trace start` command to initiate a network packet capture. This built-in Windows utility, often used for diagnostics, can be abused by adversaries to monitor network traffic, collect sensitive data, or prepare for data exfiltration.",
-    "tags": [
-      "security",
-      "discovery",
-      "collection",
-      "network_sniffing",
-      "T1040",
-      "T1059",
-      "sysmon",
-      "windows_utilities"
-    ],
-    "prompts": [
-      {
-        "id": "1",
-        "prompt": "A suspicious network trace has been initiated on the host **{computer_name}**. The command line **{command_line}** was executed by the `netsh.exe` process under the user **{user}**. This command is a known method for **network sniffing** and data collection (**MITRE ATT&CK T1040**). Adversaries can use this to capture sensitive network traffic, including credentials and internal communications. Although this is a legitimate diagnostic tool, its use by an unauthorized user or process is a high-priority event. The parent process was **{parent_image}**. Investigate the user's recent activity, the reason for the network trace, and the destination of the output trace file to rule out malicious intent.",
-        "continueOnError": false,
-        "systemCapability": "analyzeSecurityEvent"
-      }
-    ],
-    "parameters": [
-      {
-        "name": "command_line",
-        "required": true,
-        "description": "The full command line that includes 'netsh trace start'."
-      },
-      {
-        "name": "user",
-        "required": true,
-        "description": "The user that executed the command."
-      },
-      {
-        "name": "parent_image",
-        "required": true,
-        "description": "The parent process that invoked 'netsh.exe'."
-      },
-      {
-        "name": "computer_name",
-        "required": true,
-        "description": "The name of the computer where the event occurred."
-      }
-    ]
-  }
-]
+{
+  "name": "Network Trace Capture Initiated with Netsh",
+  "description": "Detects the use of the `netsh.exe` utility with the `trace start` command to initiate a network packet capture. This built-in Windows utility, often used for diagnostics, can be abused by adversaries to monitor network traffic, collect sensitive data, or prepare for data exfiltration.",
+  "tags": [
+    "security",
+    "discovery",
+    "collection",
+    "network_sniffing",
+    "T1040",
+    "T1059",
+    "sysmon",
+    "windows_utilities"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A suspicious network trace has been initiated on the host **{computer_name}**. The command line **{command_line}** was executed by the `netsh.exe` process under the user **{user}**. This command is a known method for **network sniffing** and data collection (**MITRE ATT&CK T1040**). Adversaries can use this to capture sensitive network traffic, including credentials and internal communications. Although this is a legitimate diagnostic tool, its use by an unauthorized user or process is a high-priority event. The parent process was **{parent_image}**. Investigate the user's recent activity, the reason for the network trace, and the destination of the output trace file to rule out malicious intent.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "command_line",
+      "required": true,
+      "description": "The full command line that includes 'netsh trace start'."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user that executed the command."
+    },
+    {
+      "name": "parent_image",
+      "required": true,
+      "description": "The parent process that invoked 'netsh.exe'."
+    },
+    {
+      "name": "computer_name",
+      "required": true,
+      "description": "The name of the computer where the event occurred."
+    }
+  ]
+}

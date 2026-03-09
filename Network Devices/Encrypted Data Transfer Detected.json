@@ -1,56 +1,54 @@
-[
-  {
-    "name": "Encrypted Data Transfer Detected",
-    "description": "An unusually large volume of encrypted data transfer to an external IP, indicating potential data exfiltration.",
-    "tags": [
-      "security",
-      "detection",
-      "high",
-      "network",
-      "data_exfiltration",
-      "encrypted_traffic",
-      "TA0010",
-      "T1048.002"
-    ],
-    "prompts": [
-      {
-        "id": "1",
-        "prompt": "HIGH SEVERITY ALERT: Encrypted Data Transfer Detected.\\n\\nAn unusually large volume of encrypted data (**{bytes_transferred} bytes**) was transferred over port 443 (HTTPS/SSL/TLS) from source IP '{source_ip}' to destination IP '{dest_ip}' at {Timestamp}. This activity strongly indicates **potential data exfiltration** through an encrypted channel.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Source IP**: {source_ip}\\n* **Destination IP**: {dest_ip}\\n* **Destination Port**: {dest_port}\\n* **Protocol (Implied)**: {protocol} (usually TCP/SSL/TLS)\\n* **Bytes Transferred**: {bytes_transferred}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (HIGH PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **IMMEDIATE HOST/USER INVESTIGATION:** Identify the host and user associated with '{source_ip}'. Engage the user (if known and trusted) to ascertain if this activity is legitimate. If not, consider **immediate isolation** of the source host from the network.\\n2.  **BLOCK DESTINATION:** Immediately block the destination IP '{dest_ip}' at your network perimeter firewall. Research the reputation of '{dest_ip}' for any known malicious associations or if it's a suspicious cloud storage/sharing service.\\n3.  **VERIFY LEGITIMACY (DEEP DIVE):** \\n    * Check if this transfer aligns with any scheduled backups, cloud synchronizations, or legitimate large file transfers. \\n    * Consult with relevant teams (IT, business units) for any authorized large data movements. \\n    * If SSL/TLS inspection is available, review logs for the full URL/domain and application involved to determine legitimacy.\\n4.  **FORENSIC ANALYSIS (IF SUSPICIOUS):** If the activity is suspicious or unconfirmed, initiate a forensic analysis of the source host '{source_ip}'. Look for malware, suspicious processes, recently accessed sensitive files, and other signs of compromise.\\n5.  **REVIEW ADJACENT EVENTS:** Correlate this alert with other security events around the same `Timestamp` for '{source_ip}' or '{dest_ip}'. Look for preceding activities like initial access, privilege escalation, or data staging.\\n6.  **DATA SENSITIVITY ASSESSMENT:** If compromise is suspected, determine the type and sensitivity of data potentially exfiltrated. Conduct a data breach impact assessment.\\n7.  **THREAT HUNT:** Search your network for other instances of unusually large encrypted data transfers, especially from other internal hosts to external destinations.",
-        "continueOnError": false,
-        "systemCapability": "analyzeSecurityEvent"
-      }
-    ],
-    "parameters": [
-      {
-        "name": "Timestamp",
-        "required": true,
-        "description": "The timestamp of the network connection."
-      },
-      {
-        "name": "source_ip",
-        "required": true,
-        "description": "The source IP address of the traffic."
-      },
-      {
-        "name": "dest_ip",
-        "required": true,
-        "description": "The destination IP address of the traffic."
-      },
-      {
-        "name": "dest_port",
-        "required": true,
-        "description": "The destination port of the connection (should be 443)."
-      },
-      {
-        "name": "bytes_transferred",
-        "required": true,
-        "description": "The volume of bytes transferred during the connection."
-      },
-      {
-        "name": "protocol",
-        "required": false,
-        "description": "The protocol of the connection, if available (e.g., TCP)."
-      }
-    ]
-  }
-]
+{
+  "name": "Encrypted Data Transfer Detected",
+  "description": "An unusually large volume of encrypted data transfer to an external IP, indicating potential data exfiltration.",
+  "tags": [
+    "security",
+    "detection",
+    "high",
+    "network",
+    "data_exfiltration",
+    "encrypted_traffic",
+    "TA0010",
+    "T1048.002"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "HIGH SEVERITY ALERT: Encrypted Data Transfer Detected.\\n\\nAn unusually large volume of encrypted data (**{bytes_transferred} bytes**) was transferred over port 443 (HTTPS/SSL/TLS) from source IP '{source_ip}' to destination IP '{dest_ip}' at {Timestamp}. This activity strongly indicates **potential data exfiltration** through an encrypted channel.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Source IP**: {source_ip}\\n* **Destination IP**: {dest_ip}\\n* **Destination Port**: {dest_port}\\n* **Protocol (Implied)**: {protocol} (usually TCP/SSL/TLS)\\n* **Bytes Transferred**: {bytes_transferred}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (HIGH PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **IMMEDIATE HOST/USER INVESTIGATION:** Identify the host and user associated with '{source_ip}'. Engage the user (if known and trusted) to ascertain if this activity is legitimate. If not, consider **immediate isolation** of the source host from the network.\\n2.  **BLOCK DESTINATION:** Immediately block the destination IP '{dest_ip}' at your network perimeter firewall. Research the reputation of '{dest_ip}' for any known malicious associations or if it's a suspicious cloud storage/sharing service.\\n3.  **VERIFY LEGITIMACY (DEEP DIVE):** \\n    * Check if this transfer aligns with any scheduled backups, cloud synchronizations, or legitimate large file transfers. \\n    * Consult with relevant teams (IT, business units) for any authorized large data movements. \\n    * If SSL/TLS inspection is available, review logs for the full URL/domain and application involved to determine legitimacy.\\n4.  **FORENSIC ANALYSIS (IF SUSPICIOUS):** If the activity is suspicious or unconfirmed, initiate a forensic analysis of the source host '{source_ip}'. Look for malware, suspicious processes, recently accessed sensitive files, and other signs of compromise.\\n5.  **REVIEW ADJACENT EVENTS:** Correlate this alert with other security events around the same `Timestamp` for '{source_ip}' or '{dest_ip}'. Look for preceding activities like initial access, privilege escalation, or data staging.\\n6.  **DATA SENSITIVITY ASSESSMENT:** If compromise is suspected, determine the type and sensitivity of data potentially exfiltrated. Conduct a data breach impact assessment.\\n7.  **THREAT HUNT:** Search your network for other instances of unusually large encrypted data transfers, especially from other internal hosts to external destinations.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of the network connection."
+    },
+    {
+      "name": "source_ip",
+      "required": true,
+      "description": "The source IP address of the traffic."
+    },
+    {
+      "name": "dest_ip",
+      "required": true,
+      "description": "The destination IP address of the traffic."
+    },
+    {
+      "name": "dest_port",
+      "required": true,
+      "description": "The destination port of the connection (should be 443)."
+    },
+    {
+      "name": "bytes_transferred",
+      "required": true,
+      "description": "The volume of bytes transferred during the connection."
+    },
+    {
+      "name": "protocol",
+      "required": false,
+      "description": "The protocol of the connection, if available (e.g., TCP)."
+    }
+  ]
+}
