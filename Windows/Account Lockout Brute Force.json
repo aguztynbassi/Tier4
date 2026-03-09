@@ -1,0 +1,39 @@
+{
+  "name": "Account Lockout Brute Force Detected",
+  "description": "Detecta múltiples fallos de autenticación que resultan en el bloqueo automático de una cuenta de usuario. Este comportamiento suele estar asociado a ataques de fuerza bruta o password spraying, donde un adversario intenta adivinar contraseñas de forma masiva, o a un intento deliberado de inhabilitar cuentas legítimas para causar una interrupción del servicio (DoS).",
+  "tags": [
+    "security",
+    "credential_access",
+    "impact",
+    "brute_force",
+    "account_lockout",
+    "denial_of_service",
+    "T1110",
+    "event_4625"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Bloqueo de Cuenta! Se ha detectado que la cuenta **{TargetUserName}** ha sido bloqueada tras múltiples intentos fallidos desde el host **{IpAddress}**. Bajo la técnica de **Brute Force** (**MITRE ATT&CK T1110**), este evento sugiere un ataque activo de adivinación de contraseñas o un intento de denegación de servicio dirigido. Se recomienda verificar si el origen de la conexión es una IP interna conocida o un intento de acceso externo, y revisar si otras cuentas están experimentando patrones similares de bloqueo.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo (Controlador de Dominio o servidor) donde se registró el bloqueo."
+    },
+    {
+      "name": "TargetUserName",
+      "required": true,
+      "description": "El nombre de la cuenta de usuario que ha sido bloqueada."
+    },
+    {
+      "name": "IpAddress",
+      "required": true,
+      "description": "La dirección IP de origen desde la cual se realizaron los intentos de inicio de sesión."
+    }
+  ]
+}

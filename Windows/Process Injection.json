@@ -1,0 +1,38 @@
+{
+  "name": "Suspicious Process Injection: System Process Parentage",
+  "description": "Detecta la creación de procesos sospechosos (net.exe, rundll32.exe) cuando son iniciados por procesos críticos del sistema como LSASS o Svchost. Este patrón es un indicador de inyección de procesos, donde un atacante ha insertado código malicioso en un servicio legítimo para ejecutar comandos con privilegios elevados y evadir la detección de herramientas de monitoreo de procesos estándar.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "privilege_escalation",
+    "process_injection",
+    "lsass_compromise",
+    "T1055",
+    "event_4688"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta Crítica de Inyección de Proceso! Se ha detectado que el proceso crítico **{process_name}** ha iniciado de forma anómala a **{new_process_name}** en el host **{host}**. Bajo la técnica de **Process Injection** (**MITRE ATT&CK T1055**), esto sugiere que un adversario ha comprometido un servicio esencial del sistema para ejecutar código arbitrario. El riesgo de escalada de privilegios y persistencia es extremadamente alto. Se recomienda el aislamiento inmediato del host y la inspección de la memoria de los procesos involucrados.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se detectó la relación de parentesco sospechosa."
+    },
+    {
+      "name": "process_name",
+      "required": true,
+      "description": "El proceso padre crítico (ej. lsass.exe o svchost.exe)."
+    },
+    {
+      "name": "new_process_name",
+      "required": true,
+      "description": "El proceso hijo sospechoso iniciado (ej. net.exe o rundll32.exe)."
+    }
+  ]
+}

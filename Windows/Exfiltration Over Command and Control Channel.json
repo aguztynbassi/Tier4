@@ -1,0 +1,38 @@
+{
+  "name": "Exfiltration Over C2 Channel Detected",
+  "description": "Detecta la transferencia de datos salientes hacia direcciones IP y puertos identificados como infraestructura de Mando y Control (C2). Los atacantes utilizan estos canales establecidos para exfiltrar información sensible (documentos, hashes, configuraciones) encapsulándola dentro del tráfico de control del malware, a menudo empleando protocolos comunes como HTTP, HTTPS o DNS para evadir la inspección del firewall.",
+  "tags": [
+    "security",
+    "exfiltration",
+    "command_and_control",
+    "data_theft",
+    "network_security",
+    "T1041",
+    "firewall_alert"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta Crítica de Exfiltración de Datos! Se ha detectado tráfico saliente persistente desde el host **{source_ip}** hacia una IP de infraestructura maliciosa conocida: **{destination_ip}**. Según la técnica **Exfiltration Over C2 Channel** (**MITRE ATT&CK T1041**), el atacante está extrayendo información de la red utilizando un canal de control ya establecido. Se recomienda el bloqueo inmediato de la comunicación en el firewall perimetral y la realización de un análisis de tráfico para determinar el volumen y la naturaleza de los datos comprometidos.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "source_ip",
+      "required": true,
+      "description": "La dirección IP interna del host que está enviando los datos."
+    },
+    {
+      "name": "destination_ip",
+      "required": true,
+      "description": "La dirección IP del servidor C2 del atacante."
+    },
+    {
+      "name": "destination_port",
+      "required": true,
+      "description": "El puerto utilizado para la conexión (ej. 443, 80, 53)."
+    }
+  ]
+}

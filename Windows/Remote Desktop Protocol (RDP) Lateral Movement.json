@@ -1,0 +1,37 @@
+{
+  "name": "Remote Desktop Protocol (RDP) Lateral Movement Detected",
+  "description": "Detecta inicios de sesión exitosos a través de RDP (Remote Desktop Protocol). Los atacantes utilizan credenciales robadas para moverse lateralmente entre estaciones de trabajo y servidores, buscando escalar privilegios o acceder a datos críticos de forma interactiva. El monitoreo del Logon Type 10 permite diferenciar el acceso remoto del acceso físico (Logon Type 2).",
+  "tags": [
+    "security",
+    "lateral_movement",
+    "rdp_abuse",
+    "remote_services",
+    "T1021.001",
+    "event_4624"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Movimiento Lateral RDP! Se ha detectado un inicio de sesión remoto exitoso en el host **{host}** para el usuario **{TargetUserName}** desde la dirección IP **{IpAddress}**. Bajo la técnica de **Remote Services: Remote Desktop Protocol** (**MITRE ATT&CK T1021.001**), este comportamiento podría indicar que un atacante se está desplazando por la red utilizando credenciales comprometidas. Se recomienda validar si el acceso desde la IP de origen es habitual para este usuario y revisar si se han ejecutado herramientas de post-explotación tras el inicio de sesión.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo de destino al que se accedió mediante RDP."
+    },
+    {
+      "name": "TargetUserName",
+      "required": true,
+      "description": "La cuenta de usuario que realizó la conexión remota."
+    },
+    {
+      "name": "IpAddress",
+      "required": true,
+      "description": "La dirección IP de origen de la conexión RDP."
+    }
+  ]
+}

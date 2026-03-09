@@ -1,0 +1,38 @@
+{
+  "name": "Possible Pass-the-Hash (PtH) Activity Detected",
+  "description": "Detecta intentos de autenticación mediante el uso de hashes de contraseña robados. La detección se centra en eventos de inicio de sesión de red (Logon Type 3) que presentan una longitud de clave de 0 (típico de herramientas como Mimikatz) o el uso del proceso de logon 'seclogo' (Logon Type 9), el cual es utilizado frecuentemente para inyectar credenciales en nuevas sesiones de usuario sin conocer la contraseña.",
+  "tags": [
+    "security",
+    "lateral_movement",
+    "credential_access",
+    "pass_the_hash",
+    "ntlm",
+    "T1550.002",
+    "event_4624"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Movimiento Lateral (PtH)! Se ha detectado una posible actividad de **Pass-the-Hash** en el host **{host}**. El usuario **{TargetUserName}** se autenticó desde la dirección IP **{IpAddress}** bajo condiciones anómalas (Key Length 0 o Logon Type 9). Bajo la técnica de **Use Alternate Authentication Material: Pass the Hash** (**MITRE ATT&CK T1550.002**), esto sugiere que un atacante está reutilizando un hash NTLM robado para ganar acceso. Se recomienda verificar si el origen de la conexión es una estación de administración autorizada y auditar los privilegios de la cuenta afectada.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo de destino donde se realizó el inicio de sesión."
+    },
+    {
+      "name": "IpAddress",
+      "required": true,
+      "description": "Dirección IP de origen desde la cual se originó el ataque PtH."
+    },
+    {
+      "name": "TargetUserName",
+      "required": true,
+      "description": "La cuenta de usuario que está siendo suplantada mediante el hash."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "name": "Scheduled Task Persistence Activity Detected",
+  "description": "Detecta la creación de nuevas tareas programadas en Windows. Los atacantes utilizan el Programador de Tareas para establecer persistencia, permitiendo que scripts de PowerShell, balizas (beacons) de C2 o binarios maliciosos se ejecuten de forma recurrente o en eventos específicos del sistema sin intervención manual del usuario.",
+  "tags": [
+    "security",
+    "persistence",
+    "execution",
+    "scheduled_tasks",
+    "schtasks_exe",
+    "T1053.005",
+    "event_4698"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Persistencia Detectada! Se ha creado una nueva tarea programada sospechosa denominada **{task_name}** en el host **{host}**. El comando configurado para ejecutarse es **{task_to_run}**. Bajo la técnica de **Scheduled Task/Job: Scheduled Task** (**MITRE ATT&CK T1053.005**), este comportamiento suele utilizarse para garantizar que el malware sobreviva a los reinicios del sistema. Se recomienda revisar el XML de la tarea para identificar el trigger (disparador) y el contexto de usuario bajo el cual se ejecutará.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se registró la creación de la tarea."
+    },
+    {
+      "name": "task_name",
+      "required": true,
+      "description": "El nombre asignado a la tarea programada (ej. 'Windows Update Check' - falso positivo común vs 'Updater')."
+    },
+    {
+      "name": "task_to_run",
+      "required": true,
+      "description": "La ruta del ejecutable o script que la tarea lanzará."
+    }
+  ]
+}

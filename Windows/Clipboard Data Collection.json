@@ -1,0 +1,37 @@
+{
+  "name": "Clipboard Data Collection Detected",
+  "description": "Detecta el uso de herramientas de línea de comandos (cmd.exe, powershell.exe) para acceder y extraer el contenido del portapapeles del sistema. Esta técnica es utilizada por adversarios para recolectar secretos, contraseñas y otros datos sensibles que el usuario ha copiado, facilitando la exfiltración de información sin necesidad de keyloggers complejos.",
+  "tags": [
+    "security",
+    "collection",
+    "clipboard_stealing",
+    "powershell",
+    "T1115",
+    "event_4688"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Recolección de Datos Sensibles! Se ha detectado acceso al portapapeles mediante el comando **{command_line}** en el host **{host}**. Bajo la técnica de **Clipboard Data** (**MITRE ATT&CK T1115**), este comportamiento sugiere que un proceso malicioso o un atacante está intentando robar información que el usuario **{user}** ha copiado recientemente. Se recomienda verificar si la ejecución fue parte de un script de administración legítimo o si el host ha sido comprometido por malware de tipo 'infostealer'.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se ejecutó el comando de lectura del portapapeles."
+    },
+    {
+      "name": "command_line",
+      "required": true,
+      "description": "La línea de comandos detectada (ej. Get-Clipboard o clip /v)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario cuya sesión de portapapeles fue accedida."
+    }
+  ]
+}

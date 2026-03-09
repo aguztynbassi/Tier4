@@ -1,0 +1,33 @@
+{
+  "name": "Critical Service Stop Detected",
+  "description": "Detecta cuando un servicio del sistema entra en estado detenido. Los adversarios suelen detener servicios de seguridad para evadir defensas, o servicios de aplicaciones y bases de datos para liberar bloqueos de archivos antes de un ataque de Ransomware, asegurando así que el cifrado de datos sea exitoso y sin interrupciones.",
+  "tags": [
+    "security",
+    "impact",
+    "service_stop",
+    "defense_evasion",
+    "ransomware_precursor",
+    "T1489",
+    "event_7036"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Interrupción de Servicio! Se ha detectado que el servicio **{service_name}** se ha detenido en el host **{host}**. Bajo la técnica de **Service Stop** (**MITRE ATT&CK T1489**), esta acción puede ser un precursor de un ataque destructivo o un intento de cegar las capacidades de monitoreo del EDR. Se recomienda verificar de inmediato si la parada fue manual, por una falla del sistema o iniciada por un proceso malicioso, y proceder a reiniciar el servicio de seguridad de ser necesario.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde el servicio cambió su estado a detenido."
+    },
+    {
+      "name": "service_name",
+      "required": true,
+      "description": "El nombre del servicio que se detuvo (ej. WinDefend, SentinelAgent, MpsSvc)."
+    }
+  ]
+}

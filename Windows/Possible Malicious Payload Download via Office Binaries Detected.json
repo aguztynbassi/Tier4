@@ -1,0 +1,43 @@
+{
+  "name": "Malicious Payload Download via Office Binaries Detected",
+  "description": "Detecta cuando aplicaciones de Microsoft Office (Word, Excel, PowerPoint) ejecutan procesos que incluyen protocolos HTTP/HTTPS en su línea de comandos. Este comportamiento es un indicador altamente fiable de la ejecución de macros maliciosas o exploits de documentos que intentan descargar una segunda etapa de malware (payload) desde un servidor remoto controlado por el atacante.",
+  "tags": [
+    "security",
+    "command_and_control",
+    "ingress_tool_transfer",
+    "phishing",
+    "office_malware",
+    "T1105",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Descarga de Malware vía Office! Se ha detectado que el binario **{process_name}** en el host **{host}** intentó realizar una conexión externa para descargar un recurso mediante el comando: **{command}**. Bajo la técnica de **Ingress Tool Transfer** (**MITRE ATT&CK T1105**), esto indica que un documento abierto por el usuario **{user}** contiene código malicioso que está intentando infectar el sistema. Se recomienda el aislamiento inmediato del host y la recuperación del documento original para su análisis en sandbox.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se detectó la ejecución del binario de Office con la URL."
+    },
+    {
+      "name": "process_name",
+      "required": true,
+      "description": "La aplicación de Office involucrada (ej. winword.exe, excel.exe)."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que contiene la dirección HTTP/HTTPS sospechosa."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que abrió el documento malicioso."
+    }
+  ]
+}

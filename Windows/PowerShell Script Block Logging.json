@@ -1,0 +1,38 @@
+{
+  "name": "PowerShell Script Block Logging (De-obfuscated Execution)",
+  "description": "Detecta la ejecución de bloques de código de PowerShell que contienen palabras clave o patrones asociados a actividades maliciosas. Al monitorear el Evento 4104, esta alerta permite visibilizar el contenido real de scripts que han sido ofuscados, codificados o ejecutados directamente en memoria (fileless), capturando el payload final antes de su procesamiento por el motor de PowerShell.",
+  "tags": [
+    "security",
+    "execution",
+    "powershell_logging",
+    "deobfuscation",
+    "fileless_malware",
+    "T1059.001",
+    "event_4104"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Ejecución de Script Malicioso! Se ha capturado un bloque de código sospechoso en el host **{host}** ejecutado por el usuario **{user}**. El contenido del script (**{script_block_text}**) contiene indicadores de compromiso (IoC) vinculados a la técnica de **PowerShell** (**MITRE ATT&CK T1059.001**). Dado que el Script Block Logging registra el código tras la desofuscación, esto representa la intención real del atacante. Se recomienda analizar el script en busca de comandos de descarga (IEX, DownloadString) o inyección de memoria.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se registró la ejecución del bloque de script."
+    },
+    {
+      "name": "script_block_text",
+      "required": true,
+      "description": "El contenido completo o fragmento del script capturado por el Evento 4104."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que inició la sesión de PowerShell."
+    }
+  ]
+}

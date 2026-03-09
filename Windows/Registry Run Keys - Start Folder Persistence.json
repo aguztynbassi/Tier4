@@ -1,0 +1,43 @@
+{
+  "name": "Registry Run Keys / Startup Folder Persistence Detected",
+  "description": "Detecta la creación o modificación de valores en las claves de registro 'Run' y 'RunOnce' o en la carpeta de inicio de Windows. Estas ubicaciones son utilizadas por el sistema operativo para ejecutar programas automáticamente al iniciar la sesión. Los atacantes abusan de esta funcionalidad para garantizar que su payload (backdoor, minero, etc.) se mantenga activo tras reinicios del sistema.",
+  "tags": [
+    "security",
+    "persistence",
+    "defense_evasion",
+    "registry_run_keys",
+    "boot_or_logon_autostart",
+    "T1547.001",
+    "sysmon_event_13"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Persistencia en Registro! Se ha detectado una modificación sospechosa en la clave de ejecución automática **{registry_key_path}** en el host **{host}**. El valor apunta al ejecutable **{target_name}**. Bajo la técnica de **Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder** (**MITRE ATT&CK T1547.001**), esto indica un intento de establecer presencia permanente en el sistema. Se recomienda verificar la firma digital del binario y el proceso padre que realizó la modificación en el registro.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se realizó la modificación del registro."
+    },
+    {
+      "name": "registry_key_path",
+      "required": true,
+      "description": "La ruta completa de la clave de registro afectada (ej. HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run)."
+    },
+    {
+      "name": "target_name",
+      "required": true,
+      "description": "La ruta del binario malicioso que se ha configurado para el inicio automático."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que realizó el cambio en el registro."
+    }
+  ]
+}

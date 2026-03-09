@@ -1,0 +1,38 @@
+{
+  "name": "Exfiltration Over Alternative Protocol (DNS Tunneling)",
+  "description": "Detecta intentos de exfiltración de datos mediante el protocolo DNS. Los atacantes dividen la información sensible en fragmentos codificados (Base64 o Hex) y los envían como subdominios en consultas DNS hacia un servidor controlado por ellos. Esta técnica aprovecha que el puerto 53 suele estar abierto y no inspeccionado por soluciones de seguridad perimetral tradicionales.",
+  "tags": [
+    "security",
+    "exfiltration",
+    "dns_tunneling",
+    "network_security",
+    "data_theft",
+    "T1048.003",
+    "dns_logs"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta Crítica de Exfiltración por DNS! Se ha detectado un volumen inusual de consultas DNS con subdominios sospechosos desde el host **{source_ip}** hacia el dominio **{destination_domain}**. Bajo la técnica de **Exfiltration Over Alternative Protocol: DNS** (**MITRE ATT&CK T1048.003**), esto indica que se están extrayendo datos de la red de forma encubierta. Se recomienda el bloqueo inmediato de las consultas hacia ese dominio y el análisis de los procesos de red en el host afectado.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "source_ip",
+      "required": true,
+      "description": "La dirección IP interna que está originando las consultas DNS anómalas."
+    },
+    {
+      "name": "destination_domain",
+      "required": true,
+      "description": "El dominio de destino que parece actuar como receptor de los datos (C2)."
+    },
+    {
+      "name": "dns_query",
+      "required": true,
+      "description": "La cadena completa de la consulta DNS (ej. b3JkZXJfZGF0YQo=.attacker.com)."
+    }
+  ]
+}
