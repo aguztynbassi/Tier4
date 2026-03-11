@@ -1,0 +1,39 @@
+{
+  "name": "Golden Ticket Usage Detected",
+  "description": "Detecta el uso de tickets Kerberos TGT forjados. Al poseer el hash de la cuenta krbtgt, los atacantes pueden crear tickets con privilegios de Administrador de Dominio que son válidos por periodos prolongados (años), evadiendo las políticas de caducidad de contraseñas y permitiendo un acceso persistente y total a todo el bosque de Active Directory.",
+  "tags": [
+    "security",
+    "credential_access",
+    "persistence",
+    "kerberos",
+    "golden_ticket",
+    "krbtgt_compromise",
+    "T1558.001",
+    "event_4768"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Uso de Golden Ticket Detectado! Se ha identificado una solicitud de ticket Kerberos con opciones anómalas (0x40810000) en el host **{host}**. Bajo la técnica de **Steal or Forge Kerberos Tickets: Golden Ticket** (**MITRE ATT&CK T1558.001**), este evento sugiere que un atacante ha comprometido previamente la cuenta krbtgt y está utilizando tickets forjados para mantener acceso de administrador. Se requiere el inicio inmediato del plan de recuperación de desastres de Active Directory y el reseteo de la cuenta krbtgt.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Controlador de dominio que registró la solicitud del ticket."
+    },
+    {
+      "name": "TargetUserName",
+      "required": true,
+      "description": "El nombre de usuario que figura en el ticket (puede ser un usuario inexistente)."
+    },
+    {
+      "name": "IpAddress",
+      "required": true,
+      "description": "Dirección IP desde la que se presentó el ticket forjado."
+    }
+  ]
+}

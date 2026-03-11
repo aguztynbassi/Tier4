@@ -1,0 +1,38 @@
+{
+  "name": "Abnormal LDAP Query Activity Detected",
+  "description": "Detecta consultas masivas o inusuales a objetos de usuario en Active Directory mediante el protocolo LDAP. Los adversarios realizan estas consultas para enumerar cuentas, identificar administradores de dominio o extraer atributos sensibles que faciliten la escalada de privilegios. Esta actividad suele ser el paso previo a ataques de Password Spraying o movimiento lateral.",
+  "tags": [
+    "security",
+    "discovery",
+    "active_directory",
+    "reconnaissance",
+    "ldap_query",
+    "T1087",
+    "event_4662"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Reconocimiento LDAP! Se ha detectado una consulta inusual a múltiples objetos de usuario en Active Directory desde el host **{source_ip}**. Bajo la técnica de **Account Discovery** (**MITRE ATT&CK T1087**), este comportamiento sugiere que el usuario **{SubjectUserName}** está recolectando información detallada del dominio. Se recomienda auditar si se están consultando atributos sensibles y verificar si el origen de la consulta corresponde a un servidor de aplicaciones legítimo o a una estación de trabajo comprometida.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del Controlador de Dominio que registró el acceso al objeto."
+    },
+    {
+      "name": "SubjectUserName",
+      "required": true,
+      "description": "La cuenta de usuario que realizó la consulta LDAP."
+    },
+    {
+      "name": "ObjectName",
+      "required": true,
+      "description": "El Distinguished Name (DN) del objeto de usuario que fue consultado."
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "name": "Mimikatz Post-Exploitation Tool Detected",
+  "description": "Detecta la ejecución o presencia de la herramienta Mimikatz en el sistema. Los adversarios utilizan Mimikatz para abusar de las funcionalidades de autenticación de Windows, permitiéndoles extraer secretos de la memoria del proceso LSASS, realizar ataques de Pass-the-Hash, Pass-the-Ticket o incluso generar Golden Tickets para obtener control perpetuo sobre el Active Directory.",
+  "tags": [
+    "security",
+    "credential_access",
+    "privilege_escalation",
+    "mimikatz",
+    "lsass",
+    "golden_ticket",
+    "T1003",
+    "event_4688"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Mimikatz Detectado! Se ha identificado la ejecución de la herramienta de post-explotación **Mimikatz** en el host **{host}**. El usuario **{user}** ha iniciado un proceso o comando que coincide con firmas conocidas de esta herramienta. Bajo la técnica **OS Credential Dumping** (**MITRE ATT&CK T1003**), esto representa un riesgo inminente de robo de identidades administrativas. Se requiere el aislamiento inmediato del host de la red y la revocación de todos los tokens de acceso para las cuentas que iniciaron sesión en este equipo recientemente.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se registró la ejecución."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "Ruta completa del ejecutable (ej. C:\\Temp\\mimikatz.exe)."
+    },
+    {
+      "name": "command_line",
+      "required": true,
+      "description": "Los argumentos utilizados (ej. sekurlsa::logonpasswords)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que lanzó la herramienta."
+    }
+  ]
+}

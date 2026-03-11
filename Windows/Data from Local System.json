@@ -1,0 +1,38 @@
+{
+  "name": "Data Collection from Local System Detected",
+  "description": "Detecta la ejecución de comandos de copia o utilidades de red utilizados para agrupar archivos en el sistema local. Los adversarios emplean estas herramientas legítimas para buscar y centralizar información sensible (documentos, bases de datos, archivos de configuración) en una ubicación temporal (staging area) antes de comprimirlos y enviarlos fuera de la red.",
+  "tags": [
+    "security",
+    "collection",
+    "data_staging",
+    "lolbins",
+    "internal_reconnaissance",
+    "T1005",
+    "event_4688"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Recolección de Datos! Se ha detectado una actividad sospechosa de agrupación de archivos mediante el proceso **{process_name}** en el host **{host}**. Bajo la técnica de **Data from Local System** (**MITRE ATT&CK T1005**), este comportamiento indica que un atacante o script malicioso está recolectando información para su posterior exfiltración. Se recomienda revisar la línea de comandos completa para identificar los directorios de origen y destino, y verificar si el usuario **{user}** tiene una justificación operativa para mover grandes volúmenes de datos.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se registró la ejecución del comando de recolección."
+    },
+    {
+      "name": "process_name",
+      "required": true,
+      "description": "El binario utilizado para la copia o enumeración (ej. copy, xcopy, robocopy, net.exe)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que inició el proceso de recolección."
+    }
+  ]
+}

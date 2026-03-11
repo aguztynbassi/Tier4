@@ -1,0 +1,38 @@
+{
+  "name": "Active Directory Reconnaissance Detected",
+  "description": "Detecta la ejecución de comandos de enumeración de Active Directory utilizando herramientas nativas como net.exe y dsquery.exe. Los adversarios emplean estos comandos para identificar cuentas de usuario, pertenencia a grupos privilegiados y recursos compartidos en el dominio, facilitando la planificación de movimientos laterales y escalada de privilegios.",
+  "tags": [
+    "security",
+    "discovery",
+    "active_directory",
+    "reconnaissance",
+    "account_discovery",
+    "T1087",
+    "event_4688"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Reconocimiento de AD! Se ha detectado una actividad de enumeración de cuentas o grupos mediante **{process_name}** en el host **{host}**. Bajo la técnica de **Account Discovery** (**MITRE ATT&CK T1087**), este evento indica que un usuario o proceso está mapeando la infraestructura de Active Directory. Se recomienda verificar si la línea de comandos incluye consultas a grupos sensibles (ej. 'net group \"domain admins\" /domain') y si el usuario **{user}** tiene funciones administrativas justificadas.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se realizó la actividad de reconocimiento."
+    },
+    {
+      "name": "process_name",
+      "required": true,
+      "description": "El ejecutable utilizado para la consulta (ej. net.exe, net1.exe, dsquery.exe)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que ejecutó los comandos de descubrimiento."
+    }
+  ]
+}

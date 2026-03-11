@@ -1,0 +1,38 @@
+{
+  "name": "RDP Brute Force Attempt Detected",
+  "description": "Detecta una ráfaga de intentos fallidos de inicio de sesión a través del protocolo de Escritorio Remoto (RDP). Este comportamiento es característico de ataques de fuerza bruta o password spraying, donde los atacantes intentan comprometer cuentas de usuario para obtener acceso inicial o moverse lateralmente dentro de la red. El uso del Logon Type 10 confirma que los intentos se realizan de forma remota.",
+  "tags": [
+    "security",
+    "credential_access",
+    "brute_force",
+    "rdp",
+    "remote_access",
+    "T1110",
+    "event_4625"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Fuerza Bruta RDP! Se han detectado múltiples intentos fallidos de inicio de sesión en el host **{host}** desde la IP de origen **{IpAddress}**. Bajo la técnica de **Brute Force** (**MITRE ATT&CK T1110**), este patrón indica un intento activo de descifrado de credenciales. Se recomienda bloquear temporalmente la IP de origen en el firewall perimetral y verificar si la cuenta **{TargetUserName}** ha sido bloqueada por política de seguridad tras estos intentos.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo que recibe los intentos de conexión."
+    },
+    {
+      "name": "IpAddress",
+      "required": true,
+      "description": "La dirección IP externa o interna que origina los ataques."
+    },
+    {
+      "name": "TargetUserName",
+      "required": true,
+      "description": "El nombre de usuario que está siendo el objetivo principal del ataque."
+    }
+  ]
+}

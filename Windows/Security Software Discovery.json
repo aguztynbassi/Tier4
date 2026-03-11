@@ -1,0 +1,37 @@
+{
+  "name": "Security Software Discovery Detected",
+  "description": "Detecta la ejecución de procesos de enumeración (tasklist, wmic) utilizados para identificar software de seguridad instalado en el host. Los adversarios buscan activamente procesos de EDR, Antivirus o firewalls para ajustar sus payloads, seleccionar técnicas de evasión específicas o intentar deshabilitar las protecciones antes de proceder con el ataque.",
+  "tags": [
+    "security",
+    "discovery",
+    "reconnaissance",
+    "security_software",
+    "T1518",
+    "event_4688"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Reconocimiento de Defensas! Se ha detectado una actividad de enumeración mediante **{process_name}** en el host **{host}**. Bajo la técnica de **Software Discovery: Security Software Discovery** (**MITRE ATT&CK T1518**), este evento sugiere que un atacante está mapeando las protecciones instaladas para planificar una evasión. Se recomienda auditar si el usuario **{user}** ejecutó comandos con filtros específicos hacia procesos de seguridad (ej. 'avp.exe', 'MsMpEng.exe', 'SentinelAgent.exe').",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se realizó la actividad de descubrimiento."
+    },
+    {
+      "name": "process_name",
+      "required": true,
+      "description": "El ejecutable utilizado para listar servicios o procesos (tasklist.exe, wmic.exe, net.exe)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que inició la consulta de software."
+    }
+  ]
+}

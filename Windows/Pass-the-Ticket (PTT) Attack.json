@@ -1,0 +1,38 @@
+{
+  "name": "Pass-the-Ticket (PtT) Lateral Movement Detected",
+  "description": "Detecta solicitudes de tickets de servicio Kerberos (TGS) que presentan opciones de ticket anómalas (0x40810000). Este patrón suele indicar que se está utilizando un Ticket Granting Ticket (TGT) robado e inyectado en una sesión de usuario para acceder a recursos de red, permitiendo al atacante suplantar identidades de alta jerarquía, como Administradores de Dominio, sin poseer sus credenciales en texto claro.",
+  "tags": [
+    "security",
+    "lateral_movement",
+    "credential_access",
+    "kerberos",
+    "pass_the_ticket",
+    "T1558.001",
+    "event_4769"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Movimiento Lateral Kerberos! Se ha detectado una solicitud de ticket sospechosa mediante la técnica de **Pass-the-Ticket** en el host **{host}**. El usuario **{TargetUserName}** ha intentado acceder al servicio **{ServiceName}** utilizando un ticket con opciones inusuales. Bajo la técnica **Steal or Forge Kerberos Tickets: Golden Ticket** (**MITRE ATT&CK T1558.001**), esto sugiere que un atacante ha extraído e inyectado un ticket TGT en memoria para evadir la autenticación estándar. Se recomienda purgar los tickets de la sesión afectada y auditar el origen de la conexión.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del controlador de dominio que registró la solicitud del ticket."
+    },
+    {
+      "name": "TargetUserName",
+      "required": true,
+      "description": "La cuenta de usuario asociada al ticket Kerberos."
+    },
+    {
+      "name": "ServiceName",
+      "required": true,
+      "description": "El recurso o servicio al que el atacante intenta acceder (ej. cifs/fileserver)."
+    }
+  ]
+}

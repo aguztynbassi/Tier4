@@ -1,0 +1,38 @@
+{
+  "name": "Malicious PowerShell Script Execution Detected",
+  "description": "Detecta la ejecución de scripts o comandos de PowerShell sospechosos. Los adversarios utilizan scripts para automatizar la recolección de datos, descargar payloads adicionales (beacons), o ejecutar comandos de post-explotación. El uso de PowerShell permite a los atacantes evadir detecciones basadas en archivos tradicionales al operar directamente en la memoria del sistema.",
+  "tags": [
+    "security",
+    "execution",
+    "powershell",
+    "fileless_malware",
+    "living_off_the_land",
+    "T1059.001",
+    "event_4688"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Ejecución Maliciosa! Se ha detectado la ejecución de un script de PowerShell sospechoso en el host **{host}** por el usuario **{user}**. Bajo la técnica de **Command and Scripting Interpreter: PowerShell** (**MITRE ATT&CK T1059.001**), este comando podría estar intentando establecer una conexión persistente o inyectar código malicioso en procesos legítimos. Se recomienda revisar la línea de comandos completa, verificar si se utilizó codificación Base64 y auditar las conexiones de red salientes iniciadas por el proceso powershell.exe.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se ejecutó el script malicioso."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que lanzó la ejecución del script."
+    },
+    {
+      "name": "script_command",
+      "required": true,
+      "description": "La línea de comandos completa capturada en el log (incluyendo argumentos)."
+    }
+  ]
+}
