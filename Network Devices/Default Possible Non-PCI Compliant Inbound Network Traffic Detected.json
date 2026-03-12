@@ -1,0 +1,38 @@
+{
+  "name": "Non-PCI Compliant Inbound Network Traffic Detected",
+  "description": "Detecta conexiones entrantes desde internet hacia segmentos de red protegidos utilizando puertos definidos como no permitidos por los estándares de cumplimiento PCI DSS. El uso de protocolos sin cifrar o puertos vulnerables facilita el compromiso de datos sensibles y permite a los adversarios establecer túneles de comunicación (Proxy T1090) saltándose los controles de seguridad exigidos por la industria.",
+  "tags": [
+    "compliance",
+    "pci_dss",
+    "network_security",
+    "insecure_protocols",
+    "segmentation_violation",
+    "T1090",
+    "firewall_logs"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Incumplimiento PCI! Se ha detectado una conexión entrante desde la IP externa **{source_address}** hacia el puerto no seguro **{destination_port}** en el servidor **{dest_ip}**. Bajo el marco de cumplimiento PCI DSS y la técnica de **Proxy** (**MITRE ATT&CK T1090**), este tráfico representa un riesgo de exposición de datos de tarjetas y una violación de la segmentación de red. Se recomienda bloquear el puerto afectado y migrar la comunicación hacia protocolos cifrados (TLS 1.2+).",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección IP externa (fuera de la HOMENET) que intenta la conexión."
+    },
+    {
+      "name": "dest_ip",
+      "required": true,
+      "description": "La dirección IP interna del servidor dentro del alcance PCI."
+    },
+    {
+      "name": "destination_port",
+      "required": true,
+      "description": "El puerto no conforme detectado (ej. 21, 23, 80, 445)."
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "Unix: User Account Deletion Detected",
+  "description": "Detecta la eliminación de una cuenta de usuario en sistemas Unix/Linux. Esta acción puede ser parte de una actividad legítima de administración, pero en un contexto de seguridad, suele indicar un intento de interrupción de servicio (DoS) o una técnica de limpieza tras un compromiso para eliminar evidencias de acceso.",
+  "tags": [
+    "security",
+    "impact",
+    "account_management",
+    "unix",
+    "linux",
+    "account_removal",
+    "T1531",
+    "auditd"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE IMPACTO: Usuario Unix Eliminado! Se ha detectado la eliminación de la cuenta de usuario en el host **{host}**. Bajo la técnica de **Account Access Removal** (**MITRE ATT&CK T1531**), esta acción puede ser un intento deliberado de interrumpir el acceso a sistemas críticos o sabotear las operaciones. Se recomienda verificar inmediatamente si la eliminación fue una tarea administrativa programada y revisar los logs de comandos recientes del usuario que ejecutó la acción.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El servidor Unix donde se eliminó la cuenta."
+    },
+    {
+      "name": "deleted_user",
+      "required": true,
+      "description": "El nombre de la cuenta de usuario que fue removida."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El actor o administrador que ejecutó el comando (ej. root)."
+    }
+  ]
+}

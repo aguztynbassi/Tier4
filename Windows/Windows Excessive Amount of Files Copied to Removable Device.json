@@ -1,0 +1,39 @@
+{
+  "name": "Excessive Data Exfiltration to Removable Storage",
+  "description": "Detecta cuando un usuario copia un volumen inusual de archivos únicos (más de 100) a un dispositivo de almacenamiento removible en una misma sesión. Esta anomalía estadística es un indicador clave de exfiltración masiva de datos, comúnmente asociada con el robo de propiedad intelectual o la preparación para un abandono de puesto laboral por parte de un empleado.",
+  "tags": [
+    "security",
+    "exfiltration",
+    "insider_threat",
+    "dlp",
+    "removable_media",
+    "mass_copy",
+    "T1052.001",
+    "event_4663"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EXFILTRACIÓN MASIVA! Se ha detectado que el usuario **{user}** ha copiado más de 100 archivos únicos (**{DataCopied}** archivos) a un dispositivo removible en el host **{host}**. Este volumen de transferencia bajo la técnica de **Exfiltration over Physical Medium** (**MITRE ATT&CK T1052.001**) es altamente sospechoso de robo de información a gran escala. Se recomienda el bloqueo inmediato de la cuenta y la revisión de los archivos accedidos.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la copia masiva."
+    },
+    {
+      "name": "DataCopied",
+      "required": true,
+      "description": "El recuento total de archivos únicos detectados en la operación de escritura."
+    },
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se originó la transferencia masiva."
+    }
+  ]
+}

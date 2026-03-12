@@ -1,0 +1,44 @@
+{
+  "name": "Webshell Post-Exploitation Activity Detected",
+  "description": "Detecta la ejecución de comandos de reconocimiento y reconocimiento de sistema originados por procesos de servidores web (IIS, Apache, Tomcat, Nginx, PHP). La ejecución de comandos como 'whoami', 'net user' o 'systeminfo' desde un servidor web es un indicador de compromiso (IoC) altamente fiable de una webshell activa, sugiriendo que un atacante remoto está interactuando con el sistema operativo a través del servidor comprometido.",
+  "tags": [
+    "security",
+    "persistence",
+    "privilege_escalation",
+    "webshell",
+    "web_server_compromise",
+    "post_exploitation",
+    "T1505.003",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Webshell Detectada! Se ha detectado una actividad de reconocimiento sospechosa en el host **{host}**. El proceso de servidor web **{parent_image}** ha generado un proceso hijo ejecutando el comando **{command}**. Bajo la técnica de **Web Shell** (**MITRE ATT&CK T1505.003**), esto indica que un atacante externo ha tomado el control del servidor y está realizando un reconocimiento del sistema. Se recomienda el aislamiento inmediato del servidor web y la revisión de los archivos recientemente modificados en los directorios de publicación web.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El servidor web afectado donde se ejecutó el comando."
+    },
+    {
+      "name": "parent_image",
+      "required": true,
+      "description": "El proceso del servidor web (ej. w3wp.exe o httpd.exe) que originó la actividad."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "El comando de reconocimiento ejecutado (ej. whoami, net user)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El contexto de usuario bajo el cual se ejecuta el comando (usualmente cuentas de servicio como iis apppool o www-data)."
+    }
+  ]
+}

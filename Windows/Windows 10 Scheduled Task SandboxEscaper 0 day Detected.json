@@ -1,0 +1,39 @@
+{
+  "name": "Windows Scheduled Task Manipulation (SandboxEscaper 0-day Pattern)",
+  "description": "Detecta la modificación de tareas programadas existentes utilizando schtasks.exe para cambiar el contexto de ejecución del usuario. Esta técnica es frecuentemente utilizada en exploits de escalada de privilegios (como los descubiertos por SandboxEscaper) para forzar la ejecución de comandos maliciosos bajo la cuenta SYSTEM o Administrador mediante el secuestro de una tarea legítima.",
+  "tags": [
+    "security",
+    "privilege_escalation",
+    "execution",
+    "scheduled_tasks",
+    "sandboxescaper",
+    "persistence",
+    "T1053.005",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE ESCALADA DE PRIVILEGIOS! Se ha detectado una modificación sospechosa de una tarea programada en el host **{host}**. El proceso **schtasks.exe** intentó cambiar los privilegios de ejecución utilizando los parámetros **/change** y **/RU**. Bajo la técnica de **Scheduled Task** (**MITRE ATT&CK T1053.005**), este comportamiento coincide con patrones de explotación de vulnerabilidades 0-day para obtener privilegios de SYSTEM. Se recomienda revisar la tarea modificada y el proceso padre de inmediato.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se ejecutó la modificación de la tarea."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa detectada (ej. schtasks /change /TN 'Tarea' /RU SYSTEM)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que invocó schtasks.exe."
+    }
+  ]
+}

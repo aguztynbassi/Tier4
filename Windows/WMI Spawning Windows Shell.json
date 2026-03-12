@@ -1,0 +1,44 @@
+{
+  "name": "WMI Spawning Windows Shell Detected",
+  "description": "Detecta la ejecución de shells de Windows (PowerShell o CMD) iniciadas por el servicio WMI (wmiprvse.exe). Este es un indicador de alta confianza de ejecución remota de comandos. Los atacantes utilizan WMI para lanzar procesos en sistemas remotos de forma que parezcan actividades legítimas del sistema, facilitando el movimiento lateral y la ejecución de payloads maliciosos en memoria.",
+  "tags": [
+    "security",
+    "execution",
+    "lateral_movement",
+    "wmi_lateral_movement",
+    "powershell_execution",
+    "T1047",
+    "T1059.001",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE MOVIMIENTO LATERAL! Se ha detectado que el proceso WMI (**wmiprvse.exe**) ha iniciado una instancia de **{image}** en el host **{host}**. Bajo las técnicas de **WMI** (**T1047**) y **PowerShell** (**T1059.001**), este patrón sugiere una ejecución remota de código iniciada desde otro punto de la red. Se recomienda identificar la IP de origen de la conexión RPC/WMI y analizar la línea de comandos para verificar si se están descargando scripts externos o cifrando archivos.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se originó la shell."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "La shell específica detectada (ej. powershell.exe, cmd.exe)."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa ejecutada por la shell."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "Contexto de usuario (frecuentemente SYSTEM o una cuenta administrativa)."
+    }
+  ]
+}

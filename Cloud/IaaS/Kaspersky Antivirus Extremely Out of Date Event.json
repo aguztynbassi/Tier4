@@ -1,0 +1,39 @@
+{
+  "name": "Kaspersky: Antivirus Database Extremely Out of Date",
+  "description": "Detecta hosts donde las bases de datos de firmas de Kaspersky están críticamente desactualizadas. Un antivirus sin actualizaciones recientes es ineficaz contra amenazas de día cero y variantes de malware modernas. Este estado puede ser resultado de fallos de red o de una acción deliberada de un adversario para degradar las capacidades de detección del endpoint.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "hygiene",
+    "kaspersky",
+    "outdated_signatures",
+    "vulnerability",
+    "T1562.006",
+    "endpoint_health"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD: Endpoint Vulnerable por Desactualización! Se ha detectado que el host **{host}** tiene las bases de datos de Kaspersky extremadamente desactualizadas. Bajo la técnica de **Impair Defenses** (**MITRE ATT&CK T1562.006**), la falta de firmas recientes deja al equipo expuesto a infecciones que el motor de protección no podrá reconocer. Se requiere la actualización manual inmediata y la verificación de la conectividad con el servidor de administración.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo que reporta el estado de desactualización crítica."
+    },
+    {
+      "name": "event_type",
+      "required": true,
+      "description": "La descripción del evento de Kaspersky (ej. Databases are extremely out of date)."
+    },
+    {
+      "name": "last_update",
+      "required": false,
+      "description": "La fecha de la última actualización exitosa registrada en el host."
+    }
+  ]
+}

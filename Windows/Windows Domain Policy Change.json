@@ -1,0 +1,39 @@
+{
+  "name": "Windows Domain Policy Modification Detected",
+  "description": "Detecta cambios en las políticas de seguridad del dominio realizados en un Controlador de Dominio. Las modificaciones en las GPOs de seguridad pueden ser utilizadas por adversarios para reducir el nivel de protección de la infraestructura (como políticas de contraseñas o auditoría) o para facilitar el movimiento lateral y la persistencia en todo el entorno de Active Directory.",
+  "tags": [
+    "security",
+    "privilege_escalation",
+    "defense_evasion",
+    "active_directory",
+    "domain_controller",
+    "gpo_modification",
+    "T1484.001",
+    "event_4739"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD: Cambio en Política de Dominio! Se ha detectado una modificación en la política de seguridad del dominio **{domain}** realizada por el usuario **{user}**. Bajo la técnica de **Domain Strategy Policy Modification** (**MITRE ATT&CK T1484.001**), este cambio puede comprometer la integridad de todo el Active Directory. Se recomienda verificar inmediatamente qué configuración fue alterada y validar si la acción fue autorizada por el equipo de administración de identidad.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "domain",
+      "required": true,
+      "description": "El nombre del dominio de Active Directory afectado."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario (usualmente un administrador de dominio) que realizó el cambio."
+    },
+    {
+      "name": "host",
+      "required": false,
+      "description": "El Controlador de Dominio donde se registró el evento."
+    }
+  ]
+}

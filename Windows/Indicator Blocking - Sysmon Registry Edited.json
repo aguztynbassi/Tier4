@@ -1,0 +1,43 @@
+{
+  "name": "Indicator Blocking: Sysmon Registry Tampering Detected",
+  "description": "Detecta intentos de modificar las llaves de registro asociadas al servicio de Sysmon o a su driver de filtrado (SysmonDrv). Los atacantes realizan estas modificaciones para deshabilitar la recolección de eventos, alterar las reglas de filtrado o detener el servicio por completo, logrando así evadir la detección y cegar a los sensores de seguridad del EDR/SIEM.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "impair_defenses",
+    "sysmon_tampering",
+    "registry_modification",
+    "T1562.006",
+    "critical_alert"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Intento de Desactivar Monitoreo! Se ha detectado una modificación en el registro de Sysmon en la ruta **{target_object}** en el host **{host}**. Esta actividad es un indicador directo de la técnica **Indicator Blocking** (**MITRE ATT&CK T1562.006**), donde un atacante intenta 'cegar' al SOC manipulando el sensor de eventos. Se recomienda verificar de inmediato el estado del servicio Sysmon, identificar el proceso responsable (**{image}**) y tratar este evento como un compromiso activo del sistema.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó el intento de sabotaje al sensor."
+    },
+    {
+      "name": "target_object",
+      "required": true,
+      "description": "La llave de registro de Sysmon afectada (ej. HKLM\\...\\SysmonDrv)."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "El proceso que intentó realizar la modificación del registro."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que ejecutó la acción de manipulación."
+    }
+  ]
+}

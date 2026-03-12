@@ -1,0 +1,44 @@
+{
+  "name": "Unauthorized Root Certificate Installation",
+  "description": "Detecta la adición de nuevos certificados en el almacén de confianza (Root) de Windows mediante la manipulación del registro. Los atacantes utilizan esta técnica para que el sistema confíe ciegamente en binarios maliciosos firmados por ellos o para interceptar comunicaciones cifradas mediante proxies SSL/TLS sin activar alertas en el navegador.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "subvert_trust",
+    "root_certificate",
+    "ssl_inspection",
+    "registry_tampering",
+    "T1553.004",
+    "sysmon_event_13"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SUBVERSIÓN DE CONFIANZA! Se ha detectado la instalación de un certificado raíz en **{target_object}** por el proceso **{image}** en el host **{host}**. Bajo la técnica de **Install Root Certificate** (**MITRE ATT&CK T1553.004**), esto permite a un atacante validar software malicioso o interceptar tráfico HTTPS de forma invisible. Se recomienda verificar de inmediato el propósito de este certificado y si el usuario **{user}** tiene autorización para gestionar la infraestructura de clave pública (PKI).",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se instaló el certificado."
+    },
+    {
+      "name": "target_object",
+      "required": true,
+      "description": "La ruta de registro del almacén de certificados afectado."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "El proceso que realizó la modificación (se excluye svchost.exe para reducir ruido)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que ejecutó la acción."
+    }
+  ]
+}

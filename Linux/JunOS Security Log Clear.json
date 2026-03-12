@@ -1,0 +1,40 @@
+{
+  "name": "JunOS: Security and Audit Logs Cleared",
+  "description": "Detecta el borrado manual de los registros de auditoría o seguridad en dispositivos Juniper JunOS. Esta acción es un indicador de alta criticidad que sugiere un intento de ocultar actividades maliciosas (anti-forensics) o un sabotaje de la visibilidad de red por parte de un usuario con privilegios elevados.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "impact",
+    "junos",
+    "juniper",
+    "log_clearing",
+    "anti_forensics",
+    "T1070.004",
+    "T1485"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD CRÍTICA: Logs de JunOS Borrados! Se ha detectado la limpieza de logs de auditoría en el dispositivo **{host}**. Bajo las técnicas de **Clear Network Logging Data** (**MITRE ATT&CK T1070.004**) y **Data Destruction** (**T1485**), esta acción suele preceder o seguir a un compromiso mayor de la infraestructura de red. Se requiere la revisión inmediata de las conexiones administrativas recientes y la validación de la integridad de la configuración del firewall/router.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre o IP del dispositivo Juniper afectado."
+    },
+    {
+      "name": "user",
+      "required": false,
+      "description": "El usuario que ejecutó el comando de limpieza (usualmente detectado vía TACACS+/RADIUS o logs locales)."
+    },
+    {
+      "name": "command",
+      "required": false,
+      "description": "El comando específico ejecutado (ej. 'clear log' o 'delete log')."
+    }
+  ]
+}

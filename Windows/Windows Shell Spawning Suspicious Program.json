@@ -1,0 +1,44 @@
+{
+  "name": "Windows Shell Spawning Suspicious Living-off-the-Land Binary",
+  "description": "Detecta cuando un intérprete de comandos o motor de scripting de Windows inicia procesos del sistema que son frecuentemente abusados por atacantes. Esta cadena de ejecución es típica de scripts de post-explotación que buscan descargar payloads adicionales, configurar tareas programadas para persistencia o realizar reconocimiento de infraestructura sin introducir herramientas externas, utilizando únicamente binarios firmados por Microsoft.",
+  "tags": [
+    "security",
+    "execution",
+    "living_off_the_land",
+    "lotl",
+    "defense_evasion",
+    "post_exploitation",
+    "T1059",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EJECUCIÓN SOSPECHOSA! Se ha detectado que **{parent_image}** ha iniciado el proceso **{image}** en el host **{host}**. Esta combinación es un indicador clásico de técnicas **Living-off-the-Land** (**MITRE ATT&CK T1059**), donde se abusan herramientas legítimas para actividades maliciosas. Se recomienda inspeccionar la línea de comandos completa para verificar si se están descargando archivos externos o manipulando tareas del sistema por el usuario **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se originó la cadena de procesos."
+    },
+    {
+      "name": "parent_image",
+      "required": true,
+      "description": "El intérprete de comandos o script padre (ej. powershell.exe)."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "El binario de Windows sospechoso iniciado (ej. certutil.exe)."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos ejecutada (ej. certutil -urlcache -f ...)."
+    }
+  ]
+}

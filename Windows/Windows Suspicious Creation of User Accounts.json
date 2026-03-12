@@ -1,0 +1,48 @@
+{
+  "name": "Suspicious Temporary User Account Lifecycle Detected",
+  "description": "Detecta la creación de una cuenta de usuario seguida de su eliminación en un periodo corto de tiempo (menos de 24 horas). Los adversarios utilizan cuentas temporales para realizar acciones maliciosas y luego intentan limpiar sus huellas eliminando la cuenta, buscando evadir la detección de persistencia a largo plazo y auditorías de seguridad periódicas.",
+  "tags": [
+    "security",
+    "persistence",
+    "account_manipulation",
+    "defense_evasion",
+    "ephemeral_account",
+    "T1136",
+    "event_4720_4726"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE PERSISTENCIA EVASIVA! Se ha detectado un ciclo de vida sospechoso para la cuenta **{Account}** en el host **{host}**. La cuenta fue creada por **{CreatedUser}** y eliminada por **{DeletedUser}** en menos de un día. Bajo la técnica de **Create Account** (**MITRE ATT&CK T1136**), este patrón sugiere que la cuenta fue utilizada como un 'backdoor' temporal para ejecutar tareas críticas sin dejar rastro permanente en el sistema de identidades.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Account",
+      "required": true,
+      "description": "El nombre de la cuenta temporal que fue creada y luego eliminada."
+    },
+    {
+      "name": "CreatedUser",
+      "required": true,
+      "description": "El usuario administrativo que creó la cuenta originalmente."
+    },
+    {
+      "name": "DeletedUser",
+      "required": true,
+      "description": "El usuario administrativo que eliminó la cuenta."
+    },
+    {
+      "name": "CreatedTime_ts",
+      "required": true,
+      "description": "Marca de tiempo de la creación (Evento 4720)."
+    },
+    {
+      "name": "DeletedTime_ts",
+      "required": true,
+      "description": "Marca de tiempo de la eliminación (Evento 4726)."
+    }
+  ]
+}

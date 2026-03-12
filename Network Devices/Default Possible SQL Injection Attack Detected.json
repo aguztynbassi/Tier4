@@ -1,0 +1,38 @@
+{
+  "name": "Possible SQL Injection (SQLi) Attack Detected",
+  "description": "Detecta intentos de manipulación de consultas SQL a través de campos de entrada de la aplicación web o parámetros de URL. Los adversarios utilizan caracteres especiales y sintaxis SQL para evadir la lógica de autenticación, extraer información de la base de datos o escalar privilegios dentro de la infraestructura de datos.",
+  "tags": [
+    "security",
+    "initial_access",
+    "sql_injection",
+    "database_security",
+    "web_attack",
+    "T1190",
+    "WAF_logs"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Intrusión en Base de Datos! Se ha detectado un posible intento de **SQL Injection** dirigido al host **{dest_ip}**. La solicitud contiene caracteres de escape o palabras clave de SQL sospechosas. Bajo la técnica de **Exploit Public-Facing Application** (**MITRE ATT&CK T1190**), este evento sugiere un intento de exfiltración de datos o bypass de autenticación. Se recomienda validar si la aplicación utiliza consultas parametrizadas y revisar los logs de errores de la base de datos para detectar comportamientos inusuales.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "dest_ip",
+      "required": true,
+      "description": "Dirección IP del servidor web o de base de datos que recibe la solicitud."
+    },
+    {
+      "name": "url",
+      "required": true,
+      "description": "La URL o recurso que contiene el payload de inyección SQL."
+    },
+    {
+      "name": "source_ip",
+      "required": true,
+      "description": "La IP de origen que realiza la solicitud maliciosa."
+    }
+  ]
+}

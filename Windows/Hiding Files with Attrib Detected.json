@@ -1,0 +1,43 @@
+{
+  "name": "File Hiding via Attrib.exe Detected",
+  "description": "Detecta la ejecución de attrib.exe con el parámetro '+h' para ocultar archivos. Los atacantes suelen utilizar este comando para esconder malware, scripts de persistencia o herramientas de exfiltración en directorios comunes, evitando que el usuario los note a simple vista en el explorador de archivos o mediante comandos de listado básicos.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "persistence",
+    "hidden_files",
+    "file_integrity",
+    "T1564.001",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EVASIÓN: Archivo Ocultado! Se ha detectado el uso de **attrib.exe** en el host **{host}** para ocultar un elemento mediante el comando **{command}**. Bajo la técnica de **Hidden Files and Directories** (**MITRE ATT&CK T1564.001**), este comportamiento es un indicador de que un proceso sospechoso está intentando encubrir su presencia en el sistema de archivos. Se recomienda verificar la ruta del archivo afectado y el proceso padre que originó esta acción.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se ejecutó el comando de ocultamiento."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa ejecutada por attrib.exe."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que inició la ejecución del comando."
+    },
+    {
+      "name": "parent_process",
+      "required": true,
+      "description": "El proceso que lanzó la utilidad attrib.exe."
+    }
+  ]
+}

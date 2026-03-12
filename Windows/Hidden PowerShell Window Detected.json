@@ -1,0 +1,43 @@
+{
+  "name": "Hidden PowerShell Window Execution Detected",
+  "description": "Detecta la ejecución de procesos PowerShell iniciados con el estilo de ventana oculto. Los adversarios utilizan los parámetros '-WindowStyle Hidden' o '-w hid' para ejecutar código malicioso de forma invisible para el usuario, evitando que aparezca la consola en el escritorio. Esta es una técnica común en scripts de phishing, tareas programadas maliciosas y movimientos laterales para operar de manera sigilosa.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "powershell",
+    "hidden_window",
+    "fileless_execution",
+    "T1564.003",
+    "event_4688"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EJECUCIÓN OCULTA! Se ha detectado la ejecución de PowerShell con una ventana oculta en el host **{host}** mediante el comando **{command}**. Bajo la técnica de **Hidden Window** (**MITRE ATT&CK T1564.003**), este comportamiento indica un intento de evadir la detección visual del usuario. Se recomienda investigar la línea de comandos completa para identificar el script o comando ejecutado por el usuario **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se inició la sesión oculta de PowerShell."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que incluye el flag de ocultamiento."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El contexto de usuario que lanzó el proceso."
+    },
+    {
+      "name": "parent_process",
+      "required": true,
+      "description": "El proceso que originó la llamada a PowerShell (ej. explorer.exe, winword.exe)."
+    }
+  ]
+}

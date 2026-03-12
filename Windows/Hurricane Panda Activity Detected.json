@@ -1,0 +1,44 @@
+{
+  "name": "Hurricane Panda (BlackTech) APT Activity Detected",
+  "description": "Detecta indicadores de compromiso asociados con el grupo APT Hurricane Panda. La alerta identifica intentos de escalada de privilegios mediante la adición de usuarios al grupo de administradores locales y la ejecución de binarios con nombres sospechosos (como Win64.exe) utilizados frecuentemente por este actor para el movimiento lateral y el mantenimiento de acceso en redes comprometidas.",
+  "tags": [
+    "security",
+    "apt",
+    "hurricane_panda",
+    "blacktech",
+    "privilege_escalation",
+    "persistence",
+    "T1068",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE APT: Actividad de Hurricane Panda! Se ha detectado la ejecución del comando **{command}** en el host **{host}**. Este comportamiento coincide con los patrones de escalada de privilegios (**MITRE ATT&CK T1068**) atribuidos al grupo **Hurricane Panda**. La adición de usuarios administrativos o la ejecución de binarios sospechosos sugiere un intento de tomar control total del sistema. Se recomienda el aislamiento inmediato del host y una revisión exhaustiva de las cuentas de usuario modificadas por **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la actividad sospechosa."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos ejecutada (ej. net localgroup administrators admin /add)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que inició la actividad maliciosa."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "La ruta del proceso ejecutado (ej. C:\\Windows\\Temp\\Win64.exe)."
+    }
+  ]
+}

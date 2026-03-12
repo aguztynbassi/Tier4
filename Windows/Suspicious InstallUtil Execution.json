@@ -1,0 +1,44 @@
+{
+  "name": "Suspicious System Binary Proxy Execution: InstallUtil",
+  "description": "Detecta el uso de la utilidad InstallUtil.exe para ejecutar código de forma indirecta. Los adversarios abusan de los métodos de desinstalación de esta herramienta para cargar y ejecutar payloads de .NET maliciosos, evitando las políticas de restricción de software y ocultando la ejecución de malware detrás de un proceso legítimo y firmado por Microsoft.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "execution",
+    "lolbin",
+    "installutil",
+    "dotnet_exploitation",
+    "T1218.004",
+    "sysmon_event_3"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EJECUCIÓN PROXY! Se ha detectado una ejecución sospechosa de **InstallUtil.exe** en el host **{host}**. El comando incluye parámetros como **/U** o **/logfile=**, lo que indica un intento de ejecución de código arbitrario bajo la técnica de **InstallUtil Proxy Execution** (**MITRE ATT&CK T1218.004**). Este comportamiento es típico de ataques que buscan evadir el EDR/AV. Se recomienda investigar inmediatamente el archivo .NET que se intentó cargar y el origen del proceso padre.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó el uso de InstallUtil."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa utilizada (ej. InstallUtil.exe /logfile= /LogToConsole=false /U malware.dll)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que ejecutó la herramienta."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "La ruta del binario InstallUtil.exe ejecutado."
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "Data Exfiltration to Hidden Cobra Controlled Email",
+  "description": "Detecta el envío de correos electrónicos desde la organización hacia direcciones externas vinculadas al grupo de amenazas Hidden Cobra. Esta actividad es un indicador directo de exfiltración de datos, donde un host comprometido o un insider envía información sensible, documentos o credenciales directamente a la infraestructura del atacante utilizando protocolos de correo legítimos.",
+  "tags": [
+    "security",
+    "exfiltration",
+    "collection",
+    "hidden_cobra",
+    "lazarus_group",
+    "email_exfiltration",
+    "T1041",
+    "T1114"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EXFILTRACIÓN CRÍTICA! Se ha detectado un correo enviado desde **{sender}** hacia la dirección sospechosa **{receiver}**, vinculada al grupo **Hidden Cobra**. Bajo la técnica de **Exfiltration Over Asymmetric Encrypted Channel** (**MITRE ATT&CK T1041**), este evento sugiere que se están extrayendo datos sensibles de la red. Se requiere la intercepción inmediata del mensaje, el bloqueo de la cuenta del remitente y un análisis forense del host de origen **{host}** para identificar el alcance del robo de información.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "sender",
+      "required": true,
+      "description": "La dirección de correo electrónico interna que envía el mensaje."
+    },
+    {
+      "name": "receiver",
+      "required": true,
+      "description": "La dirección de correo de Hidden Cobra que recibe la información."
+    },
+    {
+      "name": "host",
+      "required": true,
+      "description": "El servidor de correo o host de origen desde donde se procesó el envío."
+    }
+  ]
+}

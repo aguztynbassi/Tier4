@@ -1,0 +1,38 @@
+{
+  "name": "Unusual Domain Controller Authentication Attempt Detected",
+  "description": "Detecta inicios de sesión exitosos en un Controlador de Dominio que utilizan parámetros de autenticación no estándar. Los atacantes suelen buscar métodos de acceso alternativos o protocolos menos monitoreados para evitar las alertas de seguridad tradicionales. Un acceso exitoso al DC mediante métodos inusuales es un indicador crítico de compromiso del corazón de la infraestructura de identidad.",
+  "tags": [
+    "security",
+    "credential_access",
+    "active_directory",
+    "domain_controller",
+    "unusual_auth",
+    "T1110",
+    "event_4624"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD: Autenticación Anómala en DC! Se ha registrado un inicio de sesión exitoso en el Controlador de Dominio **{host}** mediante un método de autenticación no convencional desde la IP **{source_address}**. Bajo la técnica de **Brute Force** (**MITRE ATT&CK T1110**) o el uso de protocolos obsoletos, este evento sugiere que el usuario **{TargetUserName}** ha accedido al sistema de una manera que evade los flujos normales. Se requiere validación inmediata para descartar el uso de herramientas de hacking o proxies de autenticación.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del Controlador de Dominio donde ocurrió la autenticación."
+    },
+    {
+      "name": "TargetUserName",
+      "required": true,
+      "description": "La cuenta de usuario que logró autenticarse."
+    },
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección IP de origen que no pertenece a los rangos de confianza."
+    }
+  ]
+}

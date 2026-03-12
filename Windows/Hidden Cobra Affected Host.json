@@ -1,0 +1,39 @@
+{
+  "name": "Hidden Cobra (Lazarus Group) Malware or Artifact Detected",
+  "description": "Detecta la presencia de archivos, rutas o hashes específicos asociados con el grupo de amenazas Hidden Cobra. Esta alerta se activa cuando se encuentra un artefacto conocido (como herramientas de post-explotación, backdoors o troyanos) en un Windows Server, indicando una infección activa o un compromiso previo por parte de este actor APT.",
+  "tags": [
+    "security",
+    "threat_intelligence",
+    "hidden_cobra",
+    "lazarus_group",
+    "apt",
+    "malware_detected",
+    "T1518.001",
+    "ioc_match"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA DE APT! Se ha detectado un artefacto vinculado a **Hidden Cobra** en el host **{host}**. El elemento identificado (**{file}**) coincide con la inteligencia de amenazas conocida para este grupo estatal. Bajo la técnica de **Software Discovery** (**MITRE ATT&CK T1518.001**), este hallazgo confirma que el servidor ha sido afectado por herramientas del Lazarus Group. Se recomienda el aislamiento inmediato del host y el inicio del protocolo de respuesta ante incidentes para APT.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El servidor afectado por el hallazgo."
+    },
+    {
+      "name": "file",
+      "required": true,
+      "description": "El nombre del archivo, ruta o hash detectado."
+    },
+    {
+      "name": "hash",
+      "required": false,
+      "description": "El hash SHA256 del archivo malicioso identificado."
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "name": "Image File Execution Options (IFEO) Debugger Injection",
+  "description": "Detecta la modificación de las llaves de registro de Image File Execution Options (IFEO). Los atacantes abusan de la funcionalidad de 'depurador' para redirigir la ejecución de aplicaciones legítimas hacia binarios maliciosos. Esto permite establecer persistencia de largo plazo y, si se aplica a herramientas de accesibilidad, lograr escalada de privilegios y acceso remoto al sistema sin necesidad de iniciar sesión.",
+  "tags": [
+    "security",
+    "persistence",
+    "privilege_escalation",
+    "defense_evasion",
+    "ifeo_injection",
+    "registry_tampering",
+    "T1546.012",
+    "sysmon_event_13"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SECUESTRO DE EJECUCIÓN! Se ha detectado una modificación en la llave de registro de IFEO: **{target_object}** en el host **{host}**. El uso de la subllave 'Debugger' es una técnica de **IFEO Injection** (**MITRE ATT&CK T1546.012**) utilizada para interceptar el inicio de aplicaciones. Si el ejecutable redirigido es una herramienta de sistema, un atacante podría haber obtenido privilegios de SYSTEM. Se recomienda validar inmediatamente el valor de la llave y el origen del proceso **{image}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se realizó la inyección en el registro."
+    },
+    {
+      "name": "target_object",
+      "required": true,
+      "description": "La ruta completa de la llave IFEO modificada (ej. ...\\Image File Execution Options\\notepad.exe)."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "El proceso que realizó la modificación en el registro."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que ejecutó la acción."
+    }
+  ]
+}

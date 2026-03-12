@@ -1,0 +1,39 @@
+{
+  "name": "Hidden Cobra Vulnerable Host Identified",
+  "description": "Identifica activos en la red que presentan vulnerabilidades críticas (CVEs) conocidas por ser explotadas activamente por el grupo de amenazas Hidden Cobra (Lazarus Group). Esta detección permite una priorización basada en inteligencia de amenazas, centrando los esfuerzos de remediación en los activos que representan el mayor riesgo de ser utilizados para el acceso inicial o el movimiento lateral por este actor estatal.",
+  "tags": [
+    "security",
+    "vulnerability_management",
+    "hidden_cobra",
+    "lazarus_group",
+    "apt",
+    "threat_intelligence",
+    "T1518.001",
+    "T1211"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE RIESGO APT: Host Vulnerable a Hidden Cobra! Se ha detectado que el host **{host}** posee la vulnerabilidad **{vulnerability}** (CVE: **{cve_id}**), la cual es un vector de ataque preferido por el grupo **Hidden Cobra**. Bajo la técnica de **Software Discovery** (**MITRE ATT&CK T1518.001**), este activo es un objetivo de alta prioridad para la explotación. Se recomienda el parcheo inmediato o la implementación de controles compensatorios para evitar un compromiso por parte de este actor estatal.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del host o dominio donde se detectó la vulnerabilidad."
+    },
+    {
+      "name": "vulnerability",
+      "required": true,
+      "description": "Descripción de la vulnerabilidad detectada por el escáner."
+    },
+    {
+      "name": "cve_id",
+      "required": true,
+      "description": "El identificador CVE específico (ej. CVE-2017-0144)."
+    }
+  ]
+}

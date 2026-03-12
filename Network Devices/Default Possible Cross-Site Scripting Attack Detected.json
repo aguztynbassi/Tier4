@@ -1,0 +1,38 @@
+{
+  "name": "Possible Cross-Site Scripting (XSS) Attack Detected",
+  "description": "Detecta intentos de inyección de código mediante la identificación de etiquetas <script> en los parámetros de la URL o recursos solicitados. Un ataque XSS exitoso permite al atacante ejecutar scripts en el navegador de la víctima para robar cookies de sesión, realizar acciones en nombre del usuario o redirigir a los clientes hacia sitios maliciosos.",
+  "tags": [
+    "security",
+    "initial_access",
+    "web_attack",
+    "xss",
+    "injection",
+    "T1190",
+    "webserver_logs"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Ataque Web! Se ha detectado un posible intento de **Cross-Site Scripting (XSS)** dirigido al servidor **{dest_ip}**. La URL solicitada contiene etiquetas de script, lo que indica un intento de explotación de vulnerabilidades en la aplicación web. Bajo la técnica de **Exploit Public-Facing Application** (**MITRE ATT&CK T1190**), este evento requiere una revisión inmediata de los logs de la aplicación para confirmar si el servidor respondió con un código 200 (éxito) o si la entrada fue sanitizada correctamente.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "dest_ip",
+      "required": true,
+      "description": "Dirección IP del servidor web que recibió la solicitud maliciosa."
+    },
+    {
+      "name": "url",
+      "required": true,
+      "description": "La URL completa que contiene la carga útil (payload) de XSS."
+    },
+    {
+      "name": "source_ip",
+      "required": true,
+      "description": "La dirección IP de origen desde donde se lanzó el ataque."
+    }
+  ]
+}

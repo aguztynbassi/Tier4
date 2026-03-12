@@ -1,0 +1,44 @@
+{
+  "name": "WMI Process Execution Detected",
+  "description": "Detecta la ejecución de procesos iniciados a través de WMI (Windows Management Instrumentation). Los adversarios abusan de WMI para ejecutar código malicioso, realizar movimientos laterales y obtener persistencia de forma sigilosa. Al ser una herramienta legítima de administración, el uso de WMI permite evadir detecciones basadas únicamente en firmas de archivos, operando a menudo a través de procesos hijos de wmiprvse.exe.",
+  "tags": [
+    "security",
+    "execution",
+    "wmi",
+    "wmic",
+    "lateral_movement",
+    "living_off_the_land",
+    "T1047",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Ejecución vía WMI! Se ha detectado la creación de un proceso sospechoso en el host **{host}** iniciado por el servicio WMI (**wmiprvse.exe**). Bajo la técnica de **Windows Management Instrumentation** (**MITRE ATT&CK T1047**), este comportamiento podría indicar una ejecución remota de comandos o un intento de evasión de defensas. Se recomienda analizar el árbol de procesos, verificar la línea de comandos ejecutada por **{image}** y validar si el usuario **{user}** tiene justificación para realizar tareas de administración mediante WMI.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se detectó la actividad de WMI."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El contexto de usuario bajo el cual se ejecutó el proceso."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa ejecutada (crucial para identificar la intención)."
+    },
+    {
+      "name": "parent_image",
+      "required": true,
+      "description": "El proceso padre, usualmente wmiprvse.exe para ejecuciones remotas."
+    }
+  ]
+}

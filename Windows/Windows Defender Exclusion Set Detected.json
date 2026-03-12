@@ -1,0 +1,45 @@
+{
+  "name": "Windows Defender Antivirus Exclusion Added",
+  "description": "Detecta la adición de exclusiones en Windows Defender a través del registro o mediante políticas de grupo. Los adversarios abusan de esta característica para evitar que sus binarios maliciosos, scripts o herramientas de post-explotación sean detectados o eliminados por el motor de escaneo en tiempo real, estableciendo un directorio o tipo de archivo 'seguro' para operar.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "impair_defenses",
+    "windows_defender",
+    "exclusion_list",
+    "registry_tampering",
+    "T1562.001",
+    "event_5007",
+    "sysmon_event_13"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EVASIÓN: Exclusión en Antivirus! Se ha detectado la adición de una nueva ruta o extensión a la lista de exclusiones de Windows Defender en el host **{host}**. El objeto afectado es **{target_object}**. Bajo la técnica de **Impair Defenses** (**MITRE ATT&CK T1562.001**), este comportamiento es un indicador claro de que un atacante está preparando el sistema para ejecutar malware sin ser detectado. Se recomienda verificar la legitimidad de la exclusión y el proceso que realizó el cambio.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se modificó la configuración de Windows Defender."
+    },
+    {
+      "name": "target_object",
+      "required": true,
+      "description": "La ruta de registro o el valor específico de la exclusión añadida (ej. C:\\Users\\Public o .exe)."
+    },
+    {
+      "name": "new_value",
+      "required": false,
+      "description": "El detalle del valor configurado en la llave de registro."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la modificación."
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "name": "Windows Critical Process with Suspicious Parent Directory",
+  "description": "Detecta la ejecución de procesos críticos del sistema (lsass.exe, svchost.exe, etc.) cuyo proceso padre no se encuentra en las rutas estándar de Windows (System32 o SysWOW64). Los atacantes utilizan el 'Masquerading' para nombrar sus payloads como procesos legítimos del sistema y así confundir a los analistas y evadir herramientas de seguridad que no verifican la integridad o la ruta de los binarios.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "masquerading",
+    "critical_processes",
+    "system_integrity",
+    "T1036",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EVASIÓN: Proceso Crítico Sospechoso! Se ha detectado la ejecución de **{image}** en el host **{host}**, pero su proceso padre (**{parent_image}**) se encuentra fuera de los directorios protegidos de Windows. Bajo la técnica de **Masquerading** (**MITRE ATT&CK T1036**), este comportamiento suele indicar que un malware está suplantando la identidad de un proceso del sistema para ocultarse. Se recomienda aislar el host, verificar la firma digital del ejecutable y analizar las conexiones de red salientes.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se detectó el proceso inusual."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "El nombre del proceso legítimo suplantado (ej. lsass.exe)."
+    },
+    {
+      "name": "parent_image",
+      "required": true,
+      "description": "La ruta completa del proceso padre sospechoso."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos utilizada para la ejecución."
+    }
+  ]
+}

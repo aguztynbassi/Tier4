@@ -1,0 +1,45 @@
+{
+  "name": "Ursnif Malware: Registry Persistence Pattern Detected",
+  "description": "Detecta la creación o modificación de llaves de registro en la ruta AppDataLow\\Software\\Microsoft, un comportamiento característico del malware Ursnif/Gozi. Este troyano utiliza el registro para almacenar payloads ofuscados y datos de configuración, permitiéndole evadir soluciones antivirus tradicionales que se centran en el escaneo de archivos físicos.",
+  "tags": [
+    "security",
+    "execution",
+    "persistence",
+    "ursnif",
+    "gozi",
+    "registry_storage",
+    "fileless_malware",
+    "T1112",
+    "sysmon_event_13"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE MALWARE: Patrón de Ursnif Detectado! Se ha registrado la creación de una llave de registro inusual en **{target_object}** en el host **{host}**. Este artefacto coincide con el comportamiento de almacenamiento de **Ursnif/Gozi** (**MITRE ATT&CK T1112**). Esta técnica permite al malware ejecutar código malicioso directamente desde el registro. Se recomienda realizar un volcado de la llave de registro para buscar scripts ofuscados y analizar el proceso padre que realizó la escritura.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la actividad del registro."
+    },
+    {
+      "name": "target_object",
+      "required": true,
+      "description": "La ruta completa de la llave de registro modificada."
+    },
+    {
+      "name": "details",
+      "required": false,
+      "description": "El contenido o valor escrito en la llave (puede contener datos binarios o scripts base64)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario bajo cuyo contexto se realizó la modificación."
+    }
+  ]
+}
