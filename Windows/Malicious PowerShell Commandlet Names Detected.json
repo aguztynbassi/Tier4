@@ -1,0 +1,39 @@
+{
+  "name": "Execution: Malicious PowerShell Commandlet or Framework Detected",
+  "description": "Detecta la ejecución de comandos de PowerShell o la creación de scripts que contienen nombres de funciones vinculadas a frameworks de explotación conocidos (ej. Invoke-Mimikatz, Get-GPPPassword, Invoke-Shellcode). Estos commandlets no forman parte del set estándar de administración de Windows y su presencia suele indicar una fase activa de post-explotación, robo de credenciales o inyección de código en memoria.",
+  "tags": [
+    "security",
+    "execution",
+    "powershell_exploitation",
+    "post_exploitation",
+    "mimikatz_detection",
+    "offensive_security",
+    "T1059.001",
+    "sysmon_event_11"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Framework de Explotación PowerShell Detectado! Se ha identificado el uso del comando o archivo malicioso **{command}** en el host **{host}**. Bajo la técnica de **PowerShell** (**MITRE ATT&CK T1059.001**), esto sugiere el uso de herramientas ofensivas para robo de credenciales o ejecución remota. Se requiere el aislamiento inmediato del sistema y la revisión de procesos activos en memoria.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó el comando o archivo sospechoso."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "El nombre del commandlet malicioso o la línea de comandos detectada (ej. Invoke-TokenManipulation)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que ejecutó el comando, fundamental para distinguir entre administración legítima y posible compromiso de cuenta."
+    }
+  ]
+}

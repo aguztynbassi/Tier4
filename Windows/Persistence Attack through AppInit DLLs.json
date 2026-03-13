@@ -1,0 +1,44 @@
+{
+  "name": "Persistence: AppInit_DLLs Registry Modification Detected",
+  "description": "Detecta cambios en los valores de registro AppInit_DLLs o LoadAppInit_DLLs. Los adversarios abusan de esta característica para cargar DLLs personalizadas en el espacio de direcciones de casi todos los procesos en modo usuario que utilizan la biblioteca user32.dll, facilitando la persistencia a largo plazo y la inyección de código en múltiples procesos del sistema.",
+  "tags": [
+    "security",
+    "persistence",
+    "privilege_escalation",
+    "code_injection",
+    "appinit_dlls",
+    "registry_integrity",
+    "T1546.001",
+    "sysmon_event_13"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE PERSISTENCIA: Modificación de AppInit_DLLs! Se ha detectado un cambio en el valor de registro **{target_object}** en el host **{host}**. Bajo la técnica de **AppInit DLLs** (**MITRE ATT&CK T1546.001**), esto indica que una biblioteca potencialmente maliciosa se inyectará en la mayoría de los procesos del sistema. Se requiere el análisis inmediato de la DLL vinculada.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la modificación del registro para persistencia."
+    },
+    {
+      "name": "target_object",
+      "required": true,
+      "description": "La ruta de la llave de registro modificada (AppInit_DLLs o LoadAppInit_DLLs)."
+    },
+    {
+      "name": "details",
+      "required": false,
+      "description": "El valor o ruta de la DLL que se ha intentado registrar."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la modificación (generalmente requiere privilegios de administrador)."
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "Execution: NoPowerShell Tool Activity Detected",
+  "description": "Detecta la ejecución de la herramienta NoPowerShell, la cual permite a los atacantes ejecutar scripts de PowerShell sin invocar el binario powershell.exe. La detección se basa en la creación de archivos de log específicos (.exe.log) asociados a procesos del sistema, lo que indica un intento de evadir el monitoreo de PowerShell y el registro de comandos tradicional.",
+  "tags": [
+    "security",
+    "execution",
+    "evasion",
+    "nopowershell",
+    "dotnet_abuse",
+    "lolbins",
+    "T1129",
+    "sysmon_event_11"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EVASIÓN: Herramienta NoPowerShell Detectada! Se ha identificado la creación del archivo de log **{file}** en el host **{host}**. Bajo la técnica de **Shared Modules** (**MITRE ATT&CK T1129**), esto sugiere el uso de herramientas que ejecutan comandos .NET/PowerShell evadiendo el logging estándar de scripts. Se requiere la inspección inmediata del proceso creador y la actividad de red asociada.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó el artefacto de NoPowerShell."
+    },
+    {
+      "name": "file",
+      "required": true,
+      "description": "El nombre del archivo .log creado (ej. rundll32.exe.log, mshta.exe.log)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que ejecutó la herramienta de evasión."
+    }
+  ]
+}

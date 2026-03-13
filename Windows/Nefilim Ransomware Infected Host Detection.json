@@ -1,0 +1,39 @@
+{
+  "name": "Impact: Nefilim Ransomware Infection Detected",
+  "description": "Detecta la presencia de archivos ejecutables cuyos hashes coinciden con variantes conocidas del ransomware Nefilim. Esta amenaza es conocida por su modelo de doble extorsión, donde los atacantes exfiltran datos confidenciales antes de iniciar el proceso de cifrado masivo, lo que representa un riesgo crítico de pérdida de datos y exposición de información sensible.",
+  "tags": [
+    "security",
+    "impact",
+    "ransomware",
+    "nefilim",
+    "double_extortion",
+    "data_encryption",
+    "T1486",
+    "ioc_match"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡EMERGENCIA: Infección por Ransomware Nefilim! Se ha detectado un archivo con un hash malicioso (**{hash}**) perteneciente a la familia Nefilim en el host **{host}**. Bajo la técnica de **Data Encrypted for Impact** (**MITRE ATT&CK T1486**), esto indica una fase avanzada de compromiso con riesgo inminente de cifrado de archivos y exfiltración de datos. Se requiere el aislamiento inmediato del host de la red.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se identificó el binario del ransomware."
+    },
+    {
+      "name": "hash",
+      "required": true,
+      "description": "El valor hash (MD5/SHA1/SHA256) del archivo que activó la detección."
+    },
+    {
+      "name": "file_path",
+      "required": false,
+      "description": "La ruta de ubicación del binario malicioso en el disco."
+    }
+  ]
+}

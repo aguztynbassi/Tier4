@@ -1,0 +1,39 @@
+{
+  "name": "Defense Evasion: MSHTA JavaScript Execution Detected",
+  "description": "Detecta la ejecución de mshta.exe procesando código JavaScript directamente desde la línea de comandos. Esta técnica es utilizada frecuentemente por atacantes para ejecutar scripts maliciosos (como descargadores de malware o balizas de C2) utilizando un binario legítimo de Windows, evadiendo así las soluciones de seguridad que bloquean motores de scripting comunes como wscript.exe o powershell.exe.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "execution",
+    "lolbins",
+    "mshta_abuse",
+    "scripting_evasion",
+    "T1218.005",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EVASIÓN: Ejecución de MSHTA con JavaScript! Se ha detectado el comando **{command}** en el host **{host}**. Bajo la técnica de **Mshta** (**MITRE ATT&CK T1218.005**), el uso de este binario para procesar scripts es un indicador de alta fidelidad de actividad maliciosa, a menudo asociada con la fase de acceso inicial o ejecución de payloads. Se requiere el análisis inmediato de la línea de comandos.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la ejecución anómala de mshta.exe."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que contiene el código JavaScript u objetos ActiveX."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que inició el proceso mshta.exe."
+    }
+  ]
+}

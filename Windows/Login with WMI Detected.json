@@ -1,0 +1,39 @@
+{
+  "name": "Execution: Lateral Movement via WMI Login",
+  "description": "Detecta inicios de sesión exitosos en el sistema donde el proceso de origen es WmiPrvSE.exe. El instrumental de administración de Windows (WMI) es una característica legítima que los atacantes abusan para ejecutar procesos de forma remota, interactuar con el sistema de archivos o recolectar información del host sin necesidad de herramientas externas. Un inicio de sesión vinculado a WMI es un indicador clave de movimiento lateral o ejecución remota 'Living off the Land'.",
+  "tags": [
+    "security",
+    "execution",
+    "lateral_movement",
+    "wmi_abuse",
+    "wmiprvse",
+    "event_4624",
+    "T1047",
+    "remote_execution"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE MOVIMIENTO LATERAL: Inicio de Sesión WMI! Se ha detectado un acceso exitoso al host **{host}** mediante el proceso **WmiPrvSE.exe** por parte del usuario **{user}**. Bajo la técnica de **Windows Management Instrumentation** (**MITRE ATT&CK T1047**), esto indica que se está ejecutando código o comandos de forma remota desde otro punto de la red. Se requiere auditoría inmediata de los procesos hijos de WMI.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo que recibió la conexión y donde se registró el inicio de sesión."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario utilizada para la autenticación remota."
+    },
+    {
+      "name": "source_ip",
+      "required": false,
+      "description": "La dirección IP de origen desde la cual se inició la conexión WMI."
+    }
+  ]
+}

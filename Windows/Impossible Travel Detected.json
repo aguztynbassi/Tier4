@@ -1,0 +1,39 @@
+{
+  "name": "Identity: Impossible Travel Detection via GeoIP Analysis",
+  "description": "Detecta inicios de sesión exitosos de un mismo usuario desde múltiples países o ubicaciones geográficas distantes en un intervalo de tiempo reducido. Este comportamiento es un indicador clave de compromiso de cuenta, sugiriendo que las credenciales han sido robadas y están siendo utilizadas por un actor externo, o que el usuario está utilizando servicios de proxy/VPN sospechosos para evadir controles de acceso.",
+  "tags": [
+    "security",
+    "identity_protection",
+    "impossible_travel",
+    "credential_compromise",
+    "geoip_analysis",
+    "anomaly_detection",
+    "T1078",
+    "login_event"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA DE IDENTIDAD: Viaje Imposible Detectado! El usuario **{user}** ha registrado inicios de sesión desde múltiples países: **{countries}**. Bajo la técnica de **Valid Accounts** (**MITRE ATT&CK T1078**), este acceso geográficamente inconsistente sugiere un compromiso de credenciales activo. Se requiere la revocación inmediata de sesiones y el restablecimiento de contraseña.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "user",
+      "required": true,
+      "description": "El nombre de la cuenta de usuario afectada."
+    },
+    {
+      "name": "countries",
+      "required": true,
+      "description": "Lista de países desde los cuales se originaron las conexiones (ej. Argentina, Rusia)."
+    },
+    {
+      "name": "DC",
+      "required": true,
+      "description": "Conteo de países distintos detectados en el periodo de tiempo analizado."
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "name": "Impact: LockCrypt Ransomware Encrypted File Pattern",
+  "description": "Detecta el cifrado masivo de archivos asociado al ransomware LockCrypt mediante la identificación de operaciones de renombrado que agregan la extensión '.lock'. Esta regla monitorea cambios rápidos en la integridad de los archivos, lo cual es un indicador directo del impacto final de la infección, donde el atacante busca destruir la disponibilidad de los datos (T1485) y exigir un rescate por su recuperación (T1486).",
+  "tags": [
+    "security",
+    "impact",
+    "ransomware",
+    "lockcrypt",
+    "data_destruction",
+    "file_integrity_monitoring",
+    "T1486",
+    "T1485"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE RANSOMWARE: LockCrypt en ejecución! Se ha detectado un volumen inusual de archivos renombrados con la extensión **.lock** en el host **{host}**. Bajo la técnica de **Data Encrypted for Impact** (**MITRE ATT&CK T1486**), esto indica que el proceso de cifrado está activo en el directorio **{path}**. Se requiere el apagado inmediato del host para preservar los archivos aún no afectados.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se están cifrando los archivos."
+    },
+    {
+      "name": "path",
+      "required": true,
+      "description": "La ruta del directorio donde se detectó la mayor actividad de cifrado."
+    },
+    {
+      "name": "OriginalFileName",
+      "required": true,
+      "description": "El nombre original del archivo antes de ser cifrado."
+    },
+    {
+      "name": "EncryptedFileName",
+      "required": true,
+      "description": "El nuevo nombre del archivo con la extensión .lock."
+    }
+  ]
+}

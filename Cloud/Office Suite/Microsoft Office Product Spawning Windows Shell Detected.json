@@ -1,0 +1,45 @@
+{
+  "name": "Execution: Microsoft Office Product Spawning Windows Shell or System Tool",
+  "description": "Detecta cuando una aplicación de Microsoft Office inicia un intérprete de comandos (CMD, PowerShell) o herramientas del sistema (WMIC, Rundll32, MSHTA). Este comportamiento es un indicador de alta fidelidad de ataques basados en documentos maliciosos (Phishing), donde macros o vulnerabilidades ejecutan código para descargar payloads, evadir defensas o ganar acceso inicial al sistema.",
+  "tags": [
+    "security",
+    "execution",
+    "phishing",
+    "malicious_document",
+    "macros",
+    "lolbins",
+    "T1059",
+    "T1204.002",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA DE EJECUCIÓN: Proceso de Office Sospechoso! La aplicación **{parent_process}** ha iniciado a **{process}** en el host **{host}**. Bajo la técnica de **Command and Scripting Interpreter** (**MITRE ATT&CK T1059**), esto indica la ejecución de un documento malicioso. Se requiere el aislamiento inmediato del equipo y la revisión del archivo de Office abierto por el usuario **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se originó la ejecución desde Office."
+    },
+    {
+      "name": "parent_process",
+      "required": true,
+      "description": "La aplicación de Office que lanzó el comando (ej. WINWORD.EXE)."
+    },
+    {
+      "name": "process",
+      "required": true,
+      "description": "El intérprete o herramienta iniciada (ej. powershell.exe, mshta.exe)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que abrió el documento sospechoso."
+    }
+  ]
+}

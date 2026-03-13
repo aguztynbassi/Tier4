@@ -1,0 +1,44 @@
+{
+  "name": "Defense Evasion: AppLocker Bypass via Trusted Windows Binaries",
+  "description": "Detecta la ejecución de binarios de Windows legítimos y firmados (como MSBuild, Regasm, InstallUtil) utilizados para evadir las políticas de control de aplicaciones de AppLocker. Estos binarios pueden procesar código malicioso en memoria o ejecutar scripts sin que el archivo malicioso sea analizado directamente por los controles de restricción de software.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "applocker_bypass",
+    "lolbins",
+    "trusted_binary_proxy",
+    "T1218",
+    "T1127",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EVASIÓN: Posible Bypass de AppLocker! Se ha detectado la ejecución del binario confiable **{image}** con una línea de comandos sospechosa en el host **{host}**. Bajo la técnica de **System Binary Proxy Execution** (**MITRE ATT&CK T1218**), este comportamiento sugiere que un atacante está utilizando una utilidad legítima para ejecutar código no autorizado. Se recomienda investigar la fuente del archivo o script invocado por el comando.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la ejecución del binario de bypass."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "El ejecutable utilizado (ej. MSBuild.exe, Regasm.exe)."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa ejecutada por el binario."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que inició el proceso."
+    }
+  ]
+}

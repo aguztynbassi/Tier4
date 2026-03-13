@@ -1,0 +1,38 @@
+{
+  "name": "Persistence: New Local Account Creation Detected",
+  "description": "Detecta la creación de nuevas cuentas de usuario locales mediante el comando 'net user /add'. Los atacantes crean cuentas locales para asegurar un punto de entrada independiente de las credenciales de dominio, permitiéndoles mantener el acceso al host incluso si sus otros métodos de persistencia son eliminados o si se fuerzan cambios de contraseña masivos.",
+  "tags": [
+    "security",
+    "persistence",
+    "account_creation",
+    "backdoor_account",
+    "local_users",
+    "T1136.001",
+    "win_server_event"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE PERSISTENCIA: Creación de Cuenta Detectada! El usuario **{user}** ha creado una nueva cuenta local mediante el comando **{command}** en el host **{host}**. Bajo la técnica de **Create Account** (**MITRE ATT&CK T1136**), esto indica el establecimiento de un backdoor a nivel de usuario. Se requiere la validación inmediata de la cuenta recién creada.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se creó la cuenta sospechosa."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa utilizada (incluyendo el nombre del usuario creado)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta que ejecutó la creación del nuevo usuario (generalmente requiere privilegios elevados)."
+    }
+  ]
+}

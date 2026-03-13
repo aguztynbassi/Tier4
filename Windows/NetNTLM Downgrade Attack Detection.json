@@ -1,0 +1,39 @@
+{
+  "name": "Defense Evasion: NetNTLM Downgrade Attack Detected",
+  "description": "Detecta intentos de degradar la seguridad de los protocolos de autenticación NTLM mediante la modificación de valores en el registro. Los atacantes reducen estos niveles de seguridad para forzar al sistema a enviar hashes vulnerables (LM/NTLMv1) que pueden ser interceptados y crackeados fácilmente, permitiendo el acceso no autorizado y el movimiento lateral.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "credential_access",
+    "ntlm_downgrade",
+    "registry_manipulation",
+    "T1562.001",
+    "T1112",
+    "event_4657"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD: Downgrade de NTLM Detectado! Se ha detectado una modificación sospechosa en la política de autenticación LSA (**{object_value}**) en el host **{host}**. Bajo la técnica de **Impair Defenses** (**MITRE ATT&CK T1562.001**), este cambio busca forzar protocolos de autenticación débiles para facilitar el robo de credenciales. Se requiere revertir el valor a su estado seguro y validar la actividad del usuario **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se realizó la degradación de la seguridad de autenticación."
+    },
+    {
+      "name": "object_value",
+      "required": true,
+      "description": "El nombre del valor de registro modificado (ej. LmCompatibilityLevel)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la modificación en las políticas de seguridad."
+    }
+  ]
+}

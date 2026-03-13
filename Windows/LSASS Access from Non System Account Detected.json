@@ -1,0 +1,39 @@
+{
+  "name": "Credential Access: LSASS Access from Non-System Account",
+  "description": "Detecta intentos de acceso al proceso Local Security Authority Subsystem Service (LSASS) realizados por cuentas que no son de sistema. LSASS es el proceso responsable de gestionar las credenciales en Windows; el acceso directo por parte de usuarios (incluso administradores) es un indicador clave de herramientas de explotación como Mimikatz, Dumpert o scripts que buscan volcar secretos de autenticación de la memoria.",
+  "tags": [
+    "security",
+    "credential_access",
+    "lsass_access",
+    "mimikatz_detection",
+    "privilege_abuse",
+    "T1003",
+    "event_4663",
+    "event_4656"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Acceso Anómalo a LSASS! Se ha detectado que la cuenta **{user}** ha solicitado acceso al proceso **lsass.exe** en el host **{host}**. Bajo la técnica de **OS Credential Dumping** (**MITRE ATT&CK T1003**), este acceso desde una cuenta que no es de sistema sugiere un intento de robo de credenciales mediante herramientas ofensivas. Se requiere el aislamiento inmediato del host.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se registró el acceso sospechoso al proceso de seguridad."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que intentó acceder a LSASS (excluyendo cuentas de máquina/sistema)."
+    },
+    {
+      "name": "process_name",
+      "required": false,
+      "description": "El nombre del proceso que solicitó el acceso a LSASS (ej. mimikatz.exe, powershell.exe)."
+    }
+  ]
+}

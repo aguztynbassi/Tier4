@@ -1,0 +1,39 @@
+{
+  "name": "Discovery: Permission Groups Enumeration via Net Commands",
+  "description": "Detecta la ejecución de comandos para enumerar la pertenencia a grupos locales o de dominio. Los adversarios utilizan 'net group' y 'net localgroup' para identificar cuentas con privilegios administrativos o acceso a recursos críticos, permitiéndoles mapear la estructura de permisos de la red y seleccionar objetivos para la escalada de privilegios.",
+  "tags": [
+    "security",
+    "discovery",
+    "reconnaissance",
+    "permission_groups",
+    "group_enumeration",
+    "lolbins",
+    "T1069",
+    "win_server_event"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE RECONOCIMIENTO: Enumeración de Grupos Detectada! El usuario **{user}** ha ejecutado el comando **{command}** en el host **{host}**. Bajo la técnica de **Permission Groups Discovery** (**MITRE ATT&CK T1069**), este comportamiento indica un intento de identificar cuentas privilegiadas en el sistema o el dominio. Se requiere validar la legitimidad de esta consulta.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se realizó la enumeración de grupos de seguridad."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos ejecutada (ej. net localgroup administrators, net group \"Domain Admins\" /domain)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que inició la actividad de descubrimiento de grupos."
+    }
+  ]
+}

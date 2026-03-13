@@ -1,0 +1,39 @@
+{
+  "name": "Discovery: System Information Discovery via Net Config",
+  "description": "Detecta la ejecución del comando 'net config' para enumerar información detallada sobre la configuración del sistema operativo, el dominio y los servicios de red activos. Los adversarios utilizan esta información para identificar el rol del host comprometido dentro de la infraestructura y ajustar sus técnicas de explotación o movimiento lateral basándose en el sistema operativo y el entorno detectado.",
+  "tags": [
+    "security",
+    "discovery",
+    "reconnaissance",
+    "system_info",
+    "net_config",
+    "lolbins",
+    "T1082",
+    "win_server_event"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE RECONOCIMIENTO: Información del Sistema Solicitada! El usuario **{user}** ha ejecutado el comando **{command}** en el host **{host}**. Bajo la técnica de **System Information Discovery** (**MITRE ATT&CK T1082**), este comportamiento indica un intento de recolectar metadatos del sistema para planificar fases posteriores del ataque. Se requiere validar si esta actividad es parte de un diagnóstico legítimo.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se realizó la consulta de configuración del sistema."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos ejecutada (ej. net config workstation, net config server)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que inició la actividad de descubrimiento."
+    }
+  ]
+}

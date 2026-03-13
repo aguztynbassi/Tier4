@@ -1,0 +1,44 @@
+{
+  "name": "Lateral Movement: Remote Service Installation for Persistence and Execution",
+  "description": "Detecta la instalación de nuevos servicios configurados para inicio automático que están asociados con herramientas de acceso remoto o nombres de servicios sospechosos. Los atacantes instalan servicios en equipos remotos para ejecutar comandos con privilegios de SYSTEM, establecer persistencia y moverse lateralmente a través de la red corporativa utilizando credenciales comprometidas.",
+  "tags": [
+    "security",
+    "lateral_movement",
+    "persistence",
+    "remote_services",
+    "service_installation",
+    "system_privileges",
+    "T1210",
+    "win_server_event_7045"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE MOVIMIENTO LATERAL: Servicio Remoto Instalado! Se ha detectado la instalación del servicio **{service}** con inicio automático en el host **{host}**. Bajo la técnica de **Remote Services** (**MITRE ATT&CK T1210**), este comportamiento indica que un atacante ha ganado acceso administrativo remoto y está intentando asegurar su presencia en el equipo. Se requiere la revisión inmediata del binario del servicio.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se instaló el nuevo servicio sospechoso."
+    },
+    {
+      "name": "service",
+      "required": true,
+      "description": "El nombre del servicio instalado (ej. remotesvc, vncservice, psexec)."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "La ruta del archivo ejecutable asociado al servicio (Service File Path)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la instalación del servicio (generalmente una cuenta con privilegios administrativos)."
+    }
+  ]
+}

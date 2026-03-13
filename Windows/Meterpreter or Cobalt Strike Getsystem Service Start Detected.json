@@ -1,0 +1,39 @@
+{
+  "name": "Privilege Escalation: Meterpreter/Cobalt Strike Getsystem via Named Pipe Impersonation",
+  "description": "Detecta intentos de elevación de privilegios al nivel de SYSTEM mediante la técnica de Named Pipe Impersonation, comúnmente utilizada por los comandos 'getsystem' de Meterpreter y Cobalt Strike. La regla monitorea la creación de procesos hijos de 'services.exe' que utilizan redirecciones de eco hacia pipes nombrados, lo cual es un indicador de alta confianza de una escalada de privilegios en curso.",
+  "tags": [
+    "security",
+    "privilege_escalation",
+    "meterpreter",
+    "cobalt_strike",
+    "getsystem",
+    "named_pipes",
+    "T1134",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Escalada de Privilegios Detectada! Se ha identificado el uso de 'getsystem' en el host **{host}**. El proceso **services.exe** inició un comando sospechoso (**{command}**) para obtener privilegios de SYSTEM. Bajo la técnica de **Access Token Manipulation** (**MITRE ATT&CK T1134**), esto indica que un atacante tiene control total sobre el sistema local. Se requiere el aislamiento inmediato del host.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó el intento de escalada a SYSTEM."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos detectada que involucra el pipe (ej. cmd.exe /c echo hello > \\\\.\\pipe\\...). "
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El contexto de usuario que originó el servicio (generalmente SYSTEM o un administrador local)."
+    }
+  ]
+}

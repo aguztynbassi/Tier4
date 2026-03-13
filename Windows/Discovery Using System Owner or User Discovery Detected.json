@@ -1,0 +1,39 @@
+{
+  "name": "Discovery: System Owner or User Discovery Detected",
+  "description": "Detecta la ejecución de comandos para identificar al usuario actual, sus privilegios y otros usuarios con sesiones activas en el sistema. Los atacantes utilizan herramientas como 'whoami', 'quser' o 'wmic' para determinar su contexto de seguridad inicial y planificar movimientos laterales hacia sesiones de usuarios con mayores privilegios que estén activos en el mismo host.",
+  "tags": [
+    "security",
+    "discovery",
+    "reconnaissance",
+    "user_enumeration",
+    "whoami",
+    "privileged_access",
+    "T1033",
+    "win_server_event"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE RECONOCIMIENTO: Descubrimiento de Usuario Detectado! El usuario **{user}** ha ejecutado el comando **{command}** en el host **{host}**. Bajo la técnica de **System Owner/User Discovery** (**MITRE ATT&CK T1033**), este comportamiento suele ser la primera acción tras un compromiso para validar niveles de privilegio. Se requiere verificar si esta actividad es parte de una tarea administrativa legítima.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se realizó la consulta de información de usuario."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos ejecutada (ej. whoami /priv, quser, wmic useraccount)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que inició la actividad de descubrimiento."
+    }
+  ]
+}

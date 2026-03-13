@@ -1,0 +1,38 @@
+{
+  "name": "Persistence: New Windows Service Creation Detected",
+  "description": "Detecta la creación de nuevos servicios del sistema mediante herramientas de línea de comandos. Los atacantes utilizan servicios para asegurar que su carga útil se ejecute automáticamente tras un reinicio y para operar con privilegios de SYSTEM, facilitando el control total del host y evadiendo mecanismos de detección basados en sesiones de usuario.",
+  "tags": [
+    "security",
+    "persistence",
+    "privilege_escalation",
+    "windows_service",
+    "service_control_manager",
+    "T1543.003",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE PERSISTENCIA: Nuevo Servicio Creado! Se ha detectado la creación de un servicio mediante el comando **{command}** en el host **{host}**. Bajo la técnica de **Windows Service** (**MITRE ATT&CK T1543.003**), este método permite la ejecución automática de código con privilegios elevados. Se recomienda validar la legitimidad del binario en la ruta definida y el usuario **{user}** que realizó la acción.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se registró la creación del servicio."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que incluye el nombre del servicio y la ruta del binario (binpath)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que ejecutó el comando de creación del servicio."
+    }
+  ]
+}

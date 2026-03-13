@@ -1,0 +1,35 @@
+{
+  "name": "Vulnerability: Matrix Ransomware Vector - IE & Flash Exposure",
+  "description": "Identifica activos vulnerables a fallas específicas en Internet Explorer y Flash Player (CVE-2016-0189, CVE-2015-8651) que son explotadas por el ransomware Matrix a través de Exploit Kits. La presencia de estas vulnerabilidades permite la ejecución de código remoto (RCE) sin interacción del usuario más allá de la navegación web, facilitando el acceso inicial y la descarga del payload de ransomware.",
+  "tags": [
+    "security",
+    "vulnerability_management",
+    "matrix_ransomware",
+    "exploit_kit",
+    "legacy_software",
+    "internet_explorer",
+    "flash_player",
+    "T1518",
+    "T1211"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE VECTOR DE RANSOMWARE: Exposición a Matrix Detectada! El activo **{source_address}** presenta la vulnerabilidad **{cve_id}**. Bajo la técnica de **Software Discovery** (**MITRE ATT&CK T1518**), este fallo en software heredado es un vector crítico para el ransomware Matrix mediante Exploit Kits. Se requiere la desinstalación inmediata de Flash Player y la actualización o restricción de Internet Explorer.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección IP o nombre del host que presenta la vulnerabilidad."
+    },
+    {
+      "name": "cve_id",
+      "required": true,
+      "description": "El identificador de la vulnerabilidad detectada (ej. CVE-2016-0189)."
+    }
+  ]
+}

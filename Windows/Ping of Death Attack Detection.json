@@ -1,0 +1,38 @@
+{
+  "name": "Network: Ping of Death / Malformed IP Packet Detection",
+  "description": "Detecta la recepción de paquetes IP o fragmentos que exceden el límite teórico de 65,535 bytes. Este comportamiento es característico del ataque Ping of Death, diseñado para causar el colapso del sistema operativo mediante un desbordamiento de búfer durante el proceso de reensamblaje de fragmentos en la pila TCP/IP.",
+  "tags": [
+    "security",
+    "impact",
+    "denial_of_service",
+    "ping_of_death",
+    "packet_fragmentation",
+    "network_vulnerability",
+    "buffer_overflow"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE IMPACTO: Ataque Ping of Death Detectado! Se ha recibido un paquete con un tamaño ilegal de **{packet_length}** bytes desde **{source_address}**. Bajo la táctica de **Impacto** (**MITRE ATT&CK TA0040**), este intento de Denegación de Servicio busca colapsar la pila de red del host **{host}**. Se recomienda bloquear la IP de origen y verificar la estabilidad del sistema afectado.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo que recibió el paquete malformado."
+    },
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección IP de origen que envió el paquete de gran tamaño."
+    },
+    {
+      "name": "packet_length",
+      "required": true,
+      "description": "El tamaño total del paquete detectado por el sensor de red."
+    }
+  ]
+}

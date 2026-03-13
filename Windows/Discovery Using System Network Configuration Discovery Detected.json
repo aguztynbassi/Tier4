@@ -1,0 +1,39 @@
+{
+  "name": "Discovery: System Network Configuration Discovery Detected",
+  "description": "Detecta la ejecución de comandos nativos de Windows utilizados para enumerar la configuración de red, interfaces, tablas de enrutamiento y configuraciones de firewall. Los atacantes realizan estas acciones inmediatamente después del acceso inicial para comprender el entorno de red del host comprometido y localizar otros objetivos potenciales para el movimiento lateral.",
+  "tags": [
+    "security",
+    "discovery",
+    "network_reconnaissance",
+    "reconnaissance",
+    "enumeration",
+    "lolbins",
+    "T1016",
+    "win_server_event"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE RECONOCIMIENTO: Descubrimiento de Red Detectado! El usuario **{user}** ha ejecutado el comando **{command}** en el host **{host}**. Bajo la técnica de **System Network Configuration Discovery** (**MITRE ATT&CK T1016**), este comportamiento es típico de un atacante mapeando la red interna tras un compromiso inicial. Se requiere la revisión inmediata de la actividad del usuario.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se ejecutaron los comandos de descubrimiento de red."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos específica (ej. ipconfig /all, route print, arp -a)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que inició la actividad de descubrimiento."
+    }
+  ]
+}

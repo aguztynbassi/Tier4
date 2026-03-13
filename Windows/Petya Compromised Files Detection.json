@@ -1,0 +1,40 @@
+{
+  "name": "Endpoint: Petya/NotPetya Binary or Compromised File Detected",
+  "description": "Detecta la presencia de archivos en el sistema cuyos valores de hash (MD5/SHA256) coinciden con los conocidos para el ransomware Petya o sus variantes. Esto incluye tanto el ejecutable malicioso inicial como los archivos de soporte utilizados para el cifrado del MBR y la propagación lateral.",
+  "tags": [
+    "security",
+    "impact",
+    "ransomware",
+    "petya",
+    "notpetya",
+    "file_integrity",
+    "ioc_match",
+    "T1486",
+    "T1485"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE MALWARE: Hash de Petya Identificado! Se ha detectado un archivo con un digest conocido de Petya en la ruta **{path}** del host **{host}**. Bajo la técnica de **Data Destruction** (**MITRE ATT&CK T1485**), esto indica la presencia de un componente crítico del ransomware. Es imperativo aislar el host y realizar una revisión de integridad del Master Boot Record (MBR) de forma inmediata.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde el escáner de integridad localizó el archivo comprometido."
+    },
+    {
+      "name": "path",
+      "required": true,
+      "description": "La ruta completa del archivo detectado."
+    },
+    {
+      "name": "digest",
+      "required": true,
+      "description": "El valor de hash que generó la coincidencia con los IOCs de Petya."
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "Discovery: Active Directory Account Discovery via DSQuery",
+  "description": "Detecta el uso de la herramienta dsquery.exe para enumerar cuentas de usuario, grupos o equipos dentro de Active Directory. Los adversarios utilizan estas consultas para mapear la jerarquía del dominio, identificar cuentas de administradores y localizar objetivos críticos para el movimiento lateral y la escalada de privilegios tras el compromiso inicial.",
+  "tags": [
+    "security",
+    "discovery",
+    "reconnaissance",
+    "active_directory",
+    "account_enumeration",
+    "dsquery",
+    "T1087.002",
+    "win_server_event"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE RECONOCIMIENTO: Consulta de Active Directory Detectada! El usuario **{user}** ha ejecutado el comando **{command}** en el host **{host}**. Bajo la técnica de **Account Discovery** (**MITRE ATT&CK T1087**), este comportamiento indica un mapeo exhaustivo del dominio para identificar cuentas privilegiadas. Se requiere validar inmediatamente si esta actividad está autorizada.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo desde donde se lanzó la consulta al Active Directory."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos ejecutada (ej. dsquery user, dsquery group)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que inició la actividad de descubrimiento de cuentas."
+    }
+  ]
+}

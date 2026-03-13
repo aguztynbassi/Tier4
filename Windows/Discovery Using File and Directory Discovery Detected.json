@@ -1,0 +1,39 @@
+{
+  "name": "Discovery: File and Directory Enumeration via Native Tools",
+  "description": "Detecta la ejecución de comandos para listar archivos y estructuras de directorios. Los adversarios utilizan 'dir' y 'tree' para mapear el sistema de archivos del host comprometido, buscando archivos de configuración, backups, scripts con credenciales embebidas o carpetas compartidas que contengan información crítica para la organización.",
+  "tags": [
+    "security",
+    "discovery",
+    "reconnaissance",
+    "file_system_enumeration",
+    "directory_discovery",
+    "lolbins",
+    "T1083",
+    "win_server_event"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE RECONOCIMIENTO: Enumeración de Archivos Detectada! El usuario **{user}** ha ejecutado el comando **{command}** en el host **{host}**. Bajo la técnica de **File and Directory Discovery** (**MITRE ATT&CK T1083**), este comportamiento indica un mapeo del sistema de archivos en busca de datos sensibles. Se requiere validar si esta actividad es parte de una tarea de mantenimiento legítima.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se realizó el descubrimiento de archivos y carpetas."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos ejecutada (ej. dir /s /b, tree /f)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que inició la actividad de descubrimiento en el sistema de archivos."
+    }
+  ]
+}

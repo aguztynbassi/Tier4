@@ -1,0 +1,43 @@
+{
+  "name": "Execution: Non-Interactive PowerShell Activity",
+  "description": "Detecta instancias de powershell.exe que no fueron iniciadas por el shell gráfico (explorer.exe). Este comportamiento es común en ejecuciones automáticas de malware, shells remotas o scripts de post-explotación que buscan operar en segundo plano sin la intervención directa del usuario.",
+  "tags": [
+    "security",
+    "execution",
+    "powershell_abuse",
+    "headless_execution",
+    "malicious_scripting",
+    "T1059.001",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EJECUCIÓN: PowerShell No Interactivo! Se ha detectado la ejecución de **powershell.exe** con un proceso padre inusual (**{parent_image}**) en el host **{host}**. Bajo la técnica de **PowerShell** (**MITRE ATT&CK T1059.001**), este comportamiento sugiere una ejecución automatizada que podría ser parte de un script de compromiso inicial o persistencia.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la ejecución anómala de PowerShell."
+    },
+    {
+      "name": "parent_image",
+      "required": true,
+      "description": "El proceso que inició a PowerShell (ej. w3wp.exe, winword.exe, sqlservr.exe)."
+    },
+    {
+      "name": "command",
+      "required": false,
+      "description": "La línea de comandos ejecutada, útil para identificar scripts ofuscados o parámetros -EncodedCommand."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario bajo el cual se ejecuta el proceso."
+    }
+  ]
+}

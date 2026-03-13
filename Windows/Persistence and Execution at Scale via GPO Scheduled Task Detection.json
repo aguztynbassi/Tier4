@@ -1,0 +1,45 @@
+{
+  "name": "AD: Persistence and Mass Execution via GPO Scheduled Task",
+  "description": "Detecta la modificación o creación de archivos de configuración de tareas programadas dentro del recurso compartido SYSVOL. Los atacantes abusan de las Directivas de Grupo (GPO) para desplegar malware, ejecutar comandos o establecer persistencia a escala en toda la infraestructura organizacional, siendo una técnica común en las fases finales de ataques de ransomware.",
+  "tags": [
+    "security",
+    "persistence",
+    "lateral_movement",
+    "execution",
+    "active_directory",
+    "gpo_abuse",
+    "ransomware_deployment",
+    "T1053.005",
+    "event_5145"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Despliegue Masivo vía GPO! Se ha detectado un intento de escritura en **ScheduledTasks.xml** dentro de SYSVOL por parte del usuario **{user}**. Bajo la técnica de **Scheduled Task/Job** (**MITRE ATT&CK T1053.005**), esto indica que un atacante está intentando ejecutar código en múltiples hosts simultáneamente mediante políticas de grupo. Se requiere auditoría inmediata de las GPOs modificadas y el bloqueo preventivo de la cuenta de origen.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El Controlador de Dominio donde se registró el acceso al recurso SYSVOL."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la modificación en la política de grupo."
+    },
+    {
+      "name": "relative_target",
+      "required": true,
+      "description": "La ruta relativa dentro de SYSVOL que apunta al archivo de la tarea programada."
+    },
+    {
+      "name": "source_address",
+      "required": false,
+      "description": "La dirección IP desde la cual se realizó la conexión al recurso compartido."
+    }
+  ]
+}

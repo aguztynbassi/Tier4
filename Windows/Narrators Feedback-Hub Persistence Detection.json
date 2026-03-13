@@ -1,0 +1,39 @@
+{
+  "name": "Persistence: Narrator Feedback-Hub Abuse Detected",
+  "description": "Detecta la manipulación de las llaves de registro de la aplicación Feedback-Hub de Windows. Los atacantes modifican estas entradas para secuestrar el comando de apertura de la aplicación, permitiendo que un binario malicioso se ejecute de forma persistente. Al eliminar 'DelegateExecute', evitan que Windows use el manejador estándar de AppX, forzando la ejecución del comando definido por el atacante en el valor predeterminado.",
+  "tags": [
+    "security",
+    "persistence",
+    "registry_hijacking",
+    "feedback_hub_abuse",
+    "appx_persistence",
+    "T1547.001",
+    "sysmon_event_12",
+    "sysmon_event_13"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE PERSISTENCIA: Secuestro de Feedback-Hub! Se ha detectado una modificación crítica en el registro de la aplicación Feedback-Hub (**{target_object}**) en el host **{host}**. Bajo la técnica de **Registry Hijacking** (**MITRE ATT&CK T1547.001**), este cambio permite al atacante ejecutar código arbitrario de forma persistente al invocar funciones del Narrador. Se requiere la reversión inmediata de los valores de registro y la investigación del proceso creador.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la manipulación de la persistencia de AppX."
+    },
+    {
+      "name": "target_object",
+      "required": true,
+      "description": "La ruta de la llave de registro del Feedback-Hub que fue modificada (AppXypsaf9f...)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la modificación en el registro."
+    }
+  ]
+}

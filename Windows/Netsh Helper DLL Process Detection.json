@@ -1,0 +1,38 @@
+{
+  "name": "Persistence: Netsh Helper DLL Registration Detected",
+  "description": "Detecta el registro de DLLs de ayuda (helpers) mediante la utilidad netsh. Los atacantes utilizan esta capacidad para lograr persistencia y ejecución de código arbitrario. Al registrar un helper malicioso, el código del atacante se carga automáticamente cada vez que se invoca netsh.exe, ocultando la actividad maliciosa dentro de un proceso legítimo de Windows.",
+  "tags": [
+    "security",
+    "persistence",
+    "netsh_helper",
+    "code_execution",
+    "defense_evasion",
+    "T1546.007",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE PERSISTENCIA: Registro de Netsh Helper! Se ha detectado un comando para agregar un nuevo helper (**{command}**) en el host **{host}**. Bajo la técnica de **Netsh Helper DLL** (**MITRE ATT&CK T1546.007**), esto sugiere un intento de establecer persistencia mediante la carga de módulos maliciosos en netsh.exe. Se requiere la validación inmediata del origen y la firma de la DLL mencionada.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se registró la ejecución del comando netsh."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que especifica la DLL del helper que se está añadiendo."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó el registro de la DLL."
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "name": "Exploit: .NET CLR Loaded by Microsoft Office Application",
+  "description": "Detecta la carga del Common Language Runtime (CLR) de .NET dentro de procesos de Microsoft Office (Word, Excel, PowerPoint, Outlook). Este comportamiento es altamente sospechoso y suele indicar el uso de documentos maliciosos que ejecutan código .NET en memoria para evadir la detección de antivirus tradicionales, permitiendo la ejecución de payloads avanzados y balizas de Mando y Control (C2).",
+  "tags": [
+    "security",
+    "initial_access",
+    "phishing",
+    "maldoc",
+    "dotnet_injection",
+    "vsto_abuse",
+    "T1566.001",
+    "sysmon_event_7"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE INYECCIÓN: Código .NET en Office! Se ha detectado que el proceso **{source_image}** ha cargado el módulo **clr.dll** en el host **{host}**. Bajo la técnica de **Phishing: Malicious File** (**MITRE ATT&CK T1566.001**), este es un indicador fuerte de que un documento malicioso está ejecutando código .NET (C# o PowerShell) para comprometer el sistema. Se recomienda el aislamiento del host y la revisión de los archivos abiertos recientemente por la aplicación afectada.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la carga inusual del CLR."
+    },
+    {
+      "name": "source_image",
+      "required": true,
+      "description": "La aplicación de Office que cargó el módulo (ej. WINWORD.EXE)."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "La ruta de la DLL de .NET cargada (generalmente clr.dll o clrjit.dll)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que estaba utilizando la aplicación de Office."
+    }
+  ]
+}

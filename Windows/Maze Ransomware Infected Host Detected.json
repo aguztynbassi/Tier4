@@ -1,0 +1,39 @@
+{
+  "name": "Impact: Maze Double Extortion Ransomware Infection Detected",
+  "description": "Detecta la presencia de binarios confirmados del ransomware Maze mediante la comparación de hashes de archivos. Maze es conocido por su modelo de doble extorsión, donde los datos son cifrados para interrumpir la disponibilidad y exfiltrados para chantajear a la organización con su publicación. Una coincidencia de hash indica que el payload malicioso ha tocado el disco o se ha ejecutado en el host.",
+  "tags": [
+    "security",
+    "impact",
+    "ransomware",
+    "maze_infection",
+    "incident_response",
+    "data_encryption",
+    "T1486",
+    "malware_hash"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡EMERGENCIA: Infección por Ransomware Maze Confirmada! Se ha detectado un archivo con un hash malicioso perteneciente a Maze en el host **{host}**. Bajo la técnica de **Data Encrypted for Impact** (**MITRE ATT&CK T1486**), esto indica una fase terminal del ataque. Se requiere el aislamiento físico y lógico inmediato del activo para detener el cifrado de archivos y la propagación en la red.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del equipo infectado donde se localizó el hash malicioso."
+    },
+    {
+      "name": "hash",
+      "required": true,
+      "description": "El valor del hash (SHA256/MD5) que disparó la alerta positiva."
+    },
+    {
+      "name": "file_path",
+      "required": false,
+      "description": "La ubicación del archivo malicioso detectado en el sistema de archivos."
+    }
+  ]
+}

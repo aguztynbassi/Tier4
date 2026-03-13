@@ -1,0 +1,39 @@
+{
+  "name": "Vulnerability: Meltdown and Spectre Side-Channel Exposure",
+  "description": "Identifica sistemas vulnerables a ataques de canal lateral por ejecución especulativa (Meltdown y Spectre). Estas vulnerabilidades permiten que procesos no privilegiados lean datos sensibles (contraseñas, llaves de cifrado, secretos del kernel) de la memoria de otros procesos o del sistema operativo, rompiendo el aislamiento fundamental entre el hardware y el software.",
+  "tags": [
+    "security",
+    "vulnerability_management",
+    "hardware_vulnerability",
+    "side_channel_attack",
+    "speculative_execution",
+    "meltdown",
+    "spectre",
+    "T1518"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD DE HARDWARE: Meltdown/Spectre Detectado! El activo **{source_address}** es vulnerable a ataques de ejecución especulativa (**{cve_id}**). Bajo la técnica de **Software Discovery** (**MITRE ATT&CK T1518**), esta falla permite la filtración de secretos directamente desde la memoria del CPU. Se requiere la aplicación urgente de parches de microcódigo y actualizaciones de SO según la solución propuesta: **{solution}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección IP o nombre del host afectado por la vulnerabilidad."
+    },
+    {
+      "name": "cve_id",
+      "required": true,
+      "description": "El identificador de la vulnerabilidad (ej. CVE-2017-5753, CVE-2017-5754, CVE-2017-5715)."
+    },
+    {
+      "name": "solution",
+      "required": true,
+      "description": "Las instrucciones de mitigación proporcionadas por el escáner (parches de KB, BIOS, etc.)."
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "Defense Evasion: Ping Execution with Hex-Encoded IP",
+  "description": "Detecta el uso del comando ping con direcciones IP representadas en formato hexadecimal. Esta técnica es utilizada por atacantes para evadir filtros de seguridad y sistemas de detección basados en firmas que monitorizan conexiones hacia direcciones IP sospechosas en su formato estándar (Dotted Decimal), permitiendo ocultar el destino real de la comunicación.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "obfuscation",
+    "network_discovery",
+    "reconnaissance",
+    "ping_hex",
+    "T1027",
+    "T1140"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EVASIÓN: Ping Ofuscado Detectado! Se ha ejecutado el comando **ping** utilizando una dirección IP en formato hexadecimal en el host **{host}**. Bajo la técnica de **Obfuscated Files or Information** (**MITRE ATT&CK T1027**), este comportamiento sugiere un intento de evadir la monitorización de red para contactar un host remoto. Se recomienda decodificar la dirección IP y verificar su reputación.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se ejecutó el comando ping."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que contiene la dirección en hexadecimal (ej. ping 0x...)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que ejecutó el comando de red."
+    }
+  ]
+}

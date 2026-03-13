@@ -1,0 +1,39 @@
+{
+  "name": "Impact: Matrix Ransomware File Encryption Detected",
+  "description": "Detecta el renombrado masivo de archivos con patrones de extensión asociados al ransomware Matrix. Esta alerta es un indicador de compromiso (IoC) de etapa final, donde el malware ya ha cifrado los datos del usuario y ha renombrado los archivos para incluir la información de contacto del atacante y el identificador de la víctima.",
+  "tags": [
+    "security",
+    "impact",
+    "ransomware",
+    "matrix_ransomware",
+    "file_encryption",
+    "integrity_monitoring",
+    "T1486",
+    "T1560"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡EMERGENCIA: Cifrado de Archivos por Matrix en Curso! Se ha detectado el renombrado del archivo **{OriginalFileName}** a **{EncryptedFileName}** en el host **{host}**. Bajo la técnica de **Data Encrypted for Impact** (**MITRE ATT&CK T1486**), esto indica que el ransomware Matrix está destruyendo la disponibilidad de los datos. Se requiere el apagado inmediato del host para preservar los archivos restantes.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se están detectando los archivos renombrados."
+    },
+    {
+      "name": "EncryptedFileName",
+      "required": true,
+      "description": "El nuevo nombre del archivo tras el cifrado (ej. [ID-1234][email@protonmail.com].MTX)."
+    },
+    {
+      "name": "OriginalFileName",
+      "required": true,
+      "description": "El nombre original del archivo antes de ser procesado por el ransomware."
+    }
+  ]
+}

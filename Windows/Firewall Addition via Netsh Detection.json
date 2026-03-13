@@ -1,0 +1,38 @@
+{
+  "name": "Defense Evasion: Firewall Rule Addition via Netsh",
+  "description": "Detecta intentos de añadir reglas o modificar la configuración del firewall de Windows utilizando el comando heredado netsh firewall. Los atacantes emplean esta técnica para permitir tráfico malicioso entrante o saliente, deshabilitar notificaciones de bloqueo y evadir la protección perimetral del host, facilitando la persistencia y el control remoto.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "firewall_manipulation",
+    "netsh_abuse",
+    "network_security",
+    "T1562.004",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD: Modificación de Firewall! Se ha detectado la adición de una regla mediante el comando **{command}** en el host **{host}**. Bajo la técnica de **Disable or Modify System Firewall** (**MITRE ATT&CK T1562.004**), este cambio busca perforar la política de seguridad local para permitir comunicaciones no autorizadas. Se requiere la revisión inmediata de la regla creada y del usuario **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se ejecutó el comando para alterar el firewall."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que especifica la regla añadida (puerto, protocolo, nombre)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la modificación de la seguridad."
+    }
+  ]
+}

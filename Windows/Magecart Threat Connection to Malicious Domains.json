@@ -1,0 +1,39 @@
+{
+  "name": "C2/Exfiltration: Connection to Known Magecart Malicious Domains",
+  "description": "Detecta intentos de resolución DNS o conexiones web hacia dominios identificados como infraestructura de Magecart. Estos dominios suelen alojar los scripts maliciosos (skimmers) que se cargan en las páginas de pago o actúan como puntos de recepción para los datos de tarjetas de crédito exfiltrados. Dado que Magecart utiliza frecuentemente nombres de dominio que imitan servicios analíticos o de CDN legítimos, esta regla es clave para identificar el fraude mediante reputación de dominio.",
+  "tags": [
+    "security",
+    "command_and_control",
+    "magecart",
+    "web_skimming",
+    "credit_card_fraud",
+    "domain_reputation",
+    "T1090",
+    "pci_compliance"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD ECOMMERCE: Dominio Magecart Detectado! Se ha detectado una conexión hacia el dominio malicioso **{domain}** desde el host **{host}**. Bajo la técnica de **Proxy** (**MITRE ATT&CK T1090**), esto indica un compromiso de Web Skimming activo donde los datos de pago de los clientes están siendo recolectados o exfiltrados. Se requiere el bloqueo inmediato del dominio y la auditoría de los scripts cargados en el frontend.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "La dirección IP del cliente o servidor que realizó la petición al dominio malicioso."
+    },
+    {
+      "name": "domain",
+      "required": true,
+      "description": "El nombre de dominio (FQDN) identificado como parte de la infraestructura de Magecart."
+    },
+    {
+      "name": "url",
+      "required": false,
+      "description": "La URL completa solicitada, útil para identificar si se trata de la descarga del skimmer o del envío de los datos robados."
+    }
+  ]
+}

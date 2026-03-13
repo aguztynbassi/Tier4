@@ -1,0 +1,40 @@
+{
+  "name": "Windows: Reverse RDP Lateral Movement via tsclient",
+  "description": "Detecta intentos de escribir archivos en la carpeta de inicio (Startup) de una máquina remota a través de una sesión RDP activa. El atacante utiliza el proceso 'mstsc.exe' y el recurso compartido 'tsclient' para colocar artefactos maliciosos en el equipo del administrador que se ha conectado, permitiendo el movimiento lateral desde un servidor comprometido hacia la estación de trabajo de origen.",
+  "tags": [
+    "security",
+    "lateral_movement",
+    "persistence",
+    "rdp_hijacking",
+    "tsclient_abuse",
+    "reverse_lateral_movement",
+    "T1563.002",
+    "T1547.001",
+    "sysmon_event_11"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE MOVIMIENTO LATERAL INVERSO! Se ha detectado que el proceso **mstsc.exe** ha creado el archivo **{file}** en la carpeta de inicio remota. Bajo la técnica de **Remote Service Session Hijacking** (**MITRE ATT&CK T1563.002**), esto indica un intento de comprometer la máquina del administrador que inició la sesión RDP utilizando el recurso **tsclient**. Existe un riesgo crítico de que el atacante logre persistencia en estaciones de trabajo de administración. Se recomienda bloquear inmediatamente la redirección de unidades en las políticas de RDP.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El servidor comprometido desde donde el atacante está intentando 'saltar' hacia atrás."
+    },
+    {
+      "name": "file",
+      "required": true,
+      "description": "La ruta del archivo malicioso creado en la carpeta Startup del cliente RDP."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario cuya sesión RDP está siendo abusada para el ataque."
+    }
+  ]
+}

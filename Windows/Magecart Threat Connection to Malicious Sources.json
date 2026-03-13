@@ -1,0 +1,39 @@
+{
+  "name": "C2/Exfiltration: Connection to Known Magecart Infrastructure",
+  "description": "Detecta conexiones de red hacia direcciones IP catalogadas como centros de comando y control (C2) o puntos de exfiltración de los grupos Magecart. Esta actividad es un indicador de que un script de Web Skimming ha capturado información de pago de clientes y está intentando enviarla a la infraestructura del atacante. La detección por IP es fundamental para identificar skimmers que utilizan direcciones estáticas para evitar la resolución de dominios sospechosos.",
+  "tags": [
+    "security",
+    "command_and_control",
+    "magecart",
+    "web_skimming",
+    "credit_card_theft",
+    "pci_dss",
+    "T1090",
+    "network_egress"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE ROBO DE DATOS: Conexión Magecart Detectada! El host **{source_address}** se ha conectado a una IP maliciosa vinculada a Magecart (**{destination_address}**) en **{country}**. Bajo la técnica de **Proxy** (**MITRE ATT&CK T1090**), esto indica una exfiltración activa de datos de tarjetas de crédito. Se requiere el bloqueo inmediato de la IP y la auditoría de los scripts en la página de checkout.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección IP (servidor o cliente) que originó la conexión hacia el destino malicioso."
+    },
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "La IP externa identificada como parte de la infraestructura de Magecart."
+    },
+    {
+      "name": "country",
+      "required": true,
+      "description": "El país donde se aloja la infraestructura del atacante según GeoIP."
+    }
+  ]
+}

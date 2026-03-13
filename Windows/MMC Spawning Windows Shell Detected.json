@@ -1,0 +1,40 @@
+{
+  "name": "Defense Evasion: MMC Spawning Windows Shell or Scripting Tools",
+  "description": "Detecta la ejecución de intérpretes de comandos, motores de scripting o herramientas de administración (como PowerShell, CMD o Regsvr32) iniciados por mmc.exe. El abuso de la Consola de Administración de Microsoft para ejecutar comandos indirectamente es una táctica de evasión que busca ocultar la actividad maliciosa bajo un proceso administrativo legítimo y firmado por Windows.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "execution",
+    "indirect_command_execution",
+    "lolbins",
+    "mmc_abuse",
+    "T1202",
+    "T1059",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EVASIÓN: Ejecución indirecta vía MMC! Se ha detectado que **mmc.exe** ha iniciado el proceso **{image}** en el host **{host}**. Bajo la técnica de **Indirect Command Execution** (**MITRE ATT&CK T1202**), este comportamiento es inusual y sugiere que un atacante está utilizando la consola de administración como proxy para ejecutar scripts o comandos. Se requiere una revisión inmediata del usuario **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la ejecución de la shell desde MMC."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "El proceso hijo iniciado (ej. powershell.exe, cmd.exe, regsvr32.exe)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que está operando la consola MMC."
+    }
+  ]
+}

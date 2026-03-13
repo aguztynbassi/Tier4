@@ -1,0 +1,40 @@
+{
+  "name": "Ransomware: Petya / NotPetya Execution Patterns Detected",
+  "description": "Detecta la creación de tareas programadas y comandos específicos asociados con el ciclo de vida del ransomware Petya/NotPetya. Estos patrones suelen incluir comandos de apagado forzado, ejecución de procesos de cifrado de disco y el uso de herramientas de descubrimiento de red para facilitar la propagación lateral a través de vulnerabilidades SMB o credenciales robadas.",
+  "tags": [
+    "security",
+    "ransomware",
+    "petya",
+    "notpetya",
+    "defense_evasion",
+    "discovery",
+    "lateral_movement",
+    "T1046",
+    "T1211"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Actividad de Petya Detectada! Se ha registrado la creación de una tarea programada sospechosa (**{task}**) en el host **{host}**, coincidente con indicadores de compromiso del ransomware Petya. Bajo la técnica de **Software Discovery** (**MITRE ATT&CK T1518**) y **Exploitation for Privilege Escalation** (**T1211**), este evento sugiere un intento de cifrado inminente o propagación lateral. Se requiere el aislamiento inmediato del host y la desconexión de recursos compartidos.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó el comando o tarea vinculada a Petya."
+    },
+    {
+      "name": "task",
+      "required": true,
+      "description": "El comando o nombre de la tarea programada identificada (ej. shutdown.exe /r /f)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El contexto de usuario bajo el cual se registró la tarea."
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "APT: Mustang Panda Dropper Activity Detected",
+  "description": "Detecta parámetros de procesos y patrones de comandos específicos asociados con los droppers del grupo Mustang Panda (también conocido como TA416 o RedDelta). La regla identifica el uso de variables de entorno ofuscadas, la creación de tareas programadas con nombres señuelo como 'Security Script' y la ejecución de scripts VBScript desde archivos de texto, tácticas diseñadas para evadir soluciones de monitoreo estándar.",
+  "tags": [
+    "security",
+    "apt",
+    "mustang_panda",
+    "red_delta",
+    "dropper",
+    "defense_evasion",
+    "environment_variable_obfuscation",
+    "T1587.001",
+    "T1211"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE APT: Actividad de Mustang Panda Detectada! Se ha detectado un comando sospechoso con parámetros de dropper (**{command}**) en el host **{host}**. Bajo las técnicas de **Develop Capabilities** (**T1587.001**) y **Exploitation for Defense Evasion** (**T1211**), este patrón es característico de intrusiones dirigidas por Mustang Panda. Se requiere el análisis forense inmediato de los archivos creados en el directorio Temp.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la ejecución del dropper."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que incluye la ofuscación de variables o nombres de archivos sospechosos."
+    },
+    {
+      "name": "process",
+      "required": true,
+      "description": "El nombre del proceso ejecutor (ej. wtask.exe o winwsh.exe)."
+    }
+  ]
+}

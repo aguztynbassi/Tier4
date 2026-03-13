@@ -1,0 +1,39 @@
+{
+  "name": "Persistence: Logon Script Modification or Execution",
+  "description": "Detecta la creación, modificación o ejecución de scripts de inicio de sesión mediante el valor de registro 'UserInitMprLogonScript' o la ejecución sospechosa desde userinit.exe. Los atacantes utilizan este mecanismo para asegurar que su código se ejecute en el contexto del usuario cada vez que este se autentica, permitiendo mantener el control del host tras reinicios o cierres de sesión.",
+  "tags": [
+    "security",
+    "persistence",
+    "lateral_movement",
+    "registry_modification",
+    "userinit_abuse",
+    "T1037",
+    "sysmon_event_1",
+    "sysmon_event_13"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE PERSISTENCIA: Logon Script Detectado! Se ha detectado una actividad inusual vinculada a **UserInitMprLogonScript** en el host **{host}**. Bajo la técnica de **Boot or Logon Initialization Scripts** (**MITRE ATT&CK T1037**), esto indica que un atacante ha configurado un script para ejecutarse automáticamente al inicio de sesión. Se requiere la revisión inmediata del comando: **{command}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la persistencia."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos o el script que se ha configurado para ejecutarse."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario afectado por el script de inicio de sesión."
+    }
+  ]
+}

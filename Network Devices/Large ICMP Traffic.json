@@ -1,0 +1,39 @@
+{
+  "name": "Network: Large ICMP Datagram Detected",
+  "description": "Detecta la recepción de datagramas ICMP con un tamaño superior a 1024 bytes. Los paquetes ICMP inusualmente grandes pueden indicar intentos de exfiltración de datos a través de túneles ICMP, escaneo de red avanzado para determinar el MTU, o intentos de denegación de servicio (DoS) mediante la fragmentación de paquetes.",
+  "tags": [
+    "network_security",
+    "icmp_anomaly",
+    "discovery",
+    "data_exfiltration",
+    "dos_attack",
+    "T1046",
+    "firewall_events",
+    "ids_ips"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE ANOMALÍA DE RED: Tráfico ICMP Anormal! Se ha detectado la recepción de paquetes ICMP con una longitud de **{packet_length}** bytes desde **{source_address}** hacia **{destination_address}**. Bajo la técnica de **Network Service Scanning** (**MITRE ATT&CK T1046**), el uso de paquetes ICMP grandes es una técnica común para evadir firewalls que solo inspeccionan el tráfico TCP/UDP. Se recomienda verificar si existe un flujo constante de estos paquetes, lo que sugeriría una sesión de exfiltración de datos activa.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección IP de origen que envía los paquetes ICMP grandes."
+    },
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "La dirección IP de destino que recibe el tráfico."
+    },
+    {
+      "name": "packet_length",
+      "required": true,
+      "description": "El tamaño total del paquete detectado (debe ser > 1024)."
+    }
+  ]
+}

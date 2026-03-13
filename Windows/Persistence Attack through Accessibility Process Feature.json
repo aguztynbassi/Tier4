@@ -1,0 +1,39 @@
+{
+  "name": "Persistence: Accessibility Features Abuse (Sticky Keys/Utilman)",
+  "description": "Detecta el intento de establecer persistencia mediante el secuestro de binarios de accesibilidad de Windows. Los atacantes modifican el registro (IFEO) o reemplazan los ejecutables legítimos (como sethc.exe o utilman.exe) por cmd.exe o powershell.exe. Esto permite obtener una consola con privilegios de SYSTEM desde la pantalla de bloqueo de Windows, evadiendo por completo la autenticación del usuario.",
+  "tags": [
+    "security",
+    "persistence",
+    "privilege_escalation",
+    "accessibility_features",
+    "sticky_keys_abuse",
+    "utilman_exploitation",
+    "T1546.008",
+    "ifeo_injection"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE PERSISTENCIA CRÍTICA: Secuestro de Accesibilidad! Se ha detectado la ejecución o modificación de un proceso de accesibilidad (**{process}**) en el host **{host}**. Bajo la técnica de **Accessibility Features** (**MITRE ATT&CK T1546.008**), esto indica la presencia de un backdoor que permite el acceso total al sistema sin credenciales. Se requiere la inspección inmediata del registro y los binarios de sistema.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó el abuso de las funciones de accesibilidad."
+    },
+    {
+      "name": "process",
+      "required": true,
+      "description": "El binario de accesibilidad involucrado (ej. sethc.exe, utilman.exe, osk.exe)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario (generalmente SYSTEM) bajo el cual se disparó la ejecución sospechosa."
+    }
+  ]
+}

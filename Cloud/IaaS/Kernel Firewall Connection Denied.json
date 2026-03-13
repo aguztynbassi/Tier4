@@ -1,0 +1,44 @@
+{
+  "name": "Kernel Firewall: Aggressive Connection Denial Detected",
+  "description": "Detecta un patrón de escaneo o ataque de denegación de servicio donde un único origen intenta establecer múltiples conexiones denegadas hacia un mismo destino en menos de un minuto. Este comportamiento es típico de herramientas de reconocimiento automatizado o ataques coordinados que buscan saturar los recursos del firewall del sistema o identificar puertos abiertos para el movimiento lateral.",
+  "tags": [
+    "security",
+    "network_security",
+    "firewall_deny",
+    "reconnaissance",
+    "dos_attack",
+    "kernel_events",
+    "T1498",
+    "T1090"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE ESCANEO DE RED! El firewall del kernel en el host **{host}** ha denegado 10 o más intentos de conexión desde **{source_address}** hacia **{destination_address}** en un minuto. Bajo la técnica de **Network Denial of Service** (**MITRE ATT&CK T1498**), este tráfico sugiere un intento de reconocimiento agresivo o una fase de denegación de servicio. Se recomienda bloquear la IP de origen a nivel perimetral y verificar si existen otros indicadores de compromiso en el destino afectado.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El sistema donde el kernel está registrando los bloqueos de firewall."
+    },
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección IP de origen que genera el tráfico denegado."
+    },
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "La dirección IP de destino (usualmente un servidor crítico o el propio host)."
+    },
+    {
+      "name": "destination_port",
+      "required": false,
+      "description": "El puerto o rango de puertos que el atacante intenta alcanzar."
+    }
+  ]
+}

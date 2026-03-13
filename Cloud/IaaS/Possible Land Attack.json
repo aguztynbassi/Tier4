@@ -1,0 +1,39 @@
+{
+  "name": "Cisco: LAND Attack Detection (Event 106017)",
+  "description": "Detecta un ataque LAND reportado por dispositivos Cisco ASA/FTD. Esta vulnerabilidad ocurre cuando un atacante envía paquetes con la misma IP y puerto de origen que los de destino. El objetivo es causar una denegación de servicio al forzar al sistema a responderse a sí mismo de forma infinita, agotando los recursos de procesamiento del host o del firewall.",
+  "tags": [
+    "security",
+    "impact",
+    "dos_attack",
+    "cisco_asa",
+    "land_attack",
+    "network_infrastructure",
+    "T1498",
+    "event_106017"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE IMPACTO: Ataque LAND Detectado! El firewall ha registrado el evento **106017**, indicando un intento de ataque LAND hacia el host **{destination_address}**. Bajo la técnica de **Network Denial of Service** (**MITRE ATT&CK T1498**), este tráfico malformado intenta colapsar la pila TCP/IP del destino. Se recomienda verificar la salud del dispositivo afectado y asegurar que las reglas de anti-spoofing estén activas en el perímetro.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "La dirección IP del objetivo (que en este ataque coincide con la IP de origen falsificada)."
+    },
+    {
+      "name": "destination_port",
+      "required": false,
+      "description": "El puerto atacado (que coincide con el puerto de origen)."
+    },
+    {
+      "name": "interface",
+      "required": false,
+      "description": "La interfaz del firewall por donde ingresó el paquete malicioso."
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Network: Potential Denial of Service (DoS) Attack Detected",
+  "description": "Detecta patrones de tráfico sospechosos reportados por dispositivos de red y seguridad que indican un ataque de Denegación de Servicio. Esta actividad busca abrumar los recursos de un sistema o red, impidiendo que los usuarios legítimos accedan a los servicios. Puede manifestarse como inundaciones de paquetes (SYN, ICMP, UDP) o ataques a nivel de aplicación (HTTP Flood).",
+  "tags": [
+    "security",
+    "impact",
+    "availability",
+    "dos_attack",
+    "network_flood",
+    "resource_exhaustion",
+    "T1498",
+    "T1499",
+    "initial_access"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE IMPACTO: Posible Ataque DoS en curso! Se ha detectado tráfico sospechoso desde **{source_address}** hacia **{destination_address}** identificado como un ataque de Denegación de Servicio. Bajo las técnicas de **Network Denial of Service** (**MITRE ATT&CK T1498**) y **Endpoint Denial of Service** (**T1499**), esta actividad puede provocar la caída de servicios críticos. Se recomienda la activación inmediata de los protocolos de mitigación en el firewall/WAF y verificar la carga de CPU/Memoria en el destino afectado.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección IP de origen que genera el tráfico anómalo."
+    },
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "El activo o servidor que está siendo objetivo del ataque."
+    },
+    {
+      "name": "attack_type",
+      "required": false,
+      "description": "El tipo específico de DoS detectado (ej. SYN Flood, Slowloris, ICMP Flood)."
+    }
+  ]
+}

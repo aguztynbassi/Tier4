@@ -1,0 +1,39 @@
+{
+  "name": "Defense Evasion: Deobfuscation and Decoding via Certutil",
+  "description": "Detecta el uso de certutil.exe para decodificar archivos o información. Los adversarios utilizan esta herramienta nativa para transformar payloads ofuscados o codificados (comúnmente en Base64) en binarios ejecutables una vez que han sido descargados en el host, permitiendo que el malware evite la detección por firmas de antivirus y sistemas de inspección de red durante el tránsito.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "deobfuscation",
+    "certutil_abuse",
+    "base64_decoding",
+    "lolbins",
+    "T1140",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EVASIÓN: Decodificación de Payload Detectada! El usuario **{user}** ha ejecutado **certutil.exe** con comandos de decodificación en el host **{host}**. Bajo la técnica de **Deobfuscate/Decode Files** (**MITRE ATT&CK T1140**), esto indica que un archivo sospechoso ha sido transformado en su forma ejecutable final. Se requiere el análisis inmediato del archivo de origen y el de destino.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se realizó la operación de decodificación."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa (ej. certutil -decode input.txt output.exe)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que ejecutó la herramienta de sistema."
+    }
+  ]
+}

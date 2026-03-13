@@ -1,0 +1,40 @@
+{
+  "name": "Ransomware: NotPetya Post-Exploitation Activity Detected",
+  "description": "Detecta patrones de ejecución específicos del ransomware NotPetya, incluyendo el uso de rundll32 para cargar payloads maliciosos desde archivos .dat y la comunicación mediante Named Pipes en carpetas temporales para el movimiento de credenciales. Estas acciones son precursoras del cifrado del MBR y la destrucción de logs del sistema.",
+  "tags": [
+    "security",
+    "ransomware",
+    "notpetya",
+    "defense_evasion",
+    "credential_movement",
+    "rundll32_abuse",
+    "named_pipes",
+    "T1218.011",
+    "T1070"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE DESTRUCCIÓN: Actividad de NotPetya Detectada! Se ha registrado una ejecución sospechosa de **rundll32.exe** o comunicación por **Named Pipes** (**{command}**) en el host **{host}**. Bajo la técnica de **Indicator Removal** (**MITRE ATT&CK T1070**), este comportamiento precede al borrado de logs y al cifrado destructivo del sistema. Se requiere el aislamiento inmediato de la red para prevenir la propagación vía EternalBlue.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó el comando o la carga del payload de NotPetya."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos que contiene la referencia a la Named Pipe o la carga del archivo .dat."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario bajo el cual se ejecuta el proceso malicioso."
+    }
+  ]
+}

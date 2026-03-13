@@ -1,0 +1,39 @@
+{
+  "name": "APT: Operation Wocao Activity Detection",
+  "description": "Detecta una serie de comandos y herramientas vinculados a la Operación Wocao. Incluye el uso de herramientas de reconocimiento personalizadas (checkadmin.exe), modificación de reglas de firewall para permitir tráfico de PowerShell, persistencia mediante servicios y tareas programadas (win32times), y la recolección de credenciales mediante el acceso a archivos de configuración de KeePass y sesiones de PuTTY.",
+  "tags": [
+    "security",
+    "apt_activity",
+    "operation_wocao",
+    "credential_access",
+    "persistence",
+    "defense_evasion",
+    "T1036",
+    "T1053.005"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Actividad de Operación Wocao Detectada! Se ha identificado la ejecución de comandos altamente sospechosos (**{command}**) en el host **{host}**. Bajo las técnicas de **Masquerading** (**T1036**) y **Scheduled Task** (**T1053.005**), estos IoCs coinciden con el reporte de la Operación Wocao. Se requiere el aislamiento inmediato del host y una revisión profunda de las conexiones de red salientes hacia servidores de C2.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó el comando o herramienta de la Operación Wocao."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos específica que disparó la detección."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario bajo el cual se registró la actividad maliciosa."
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "name": "Network: MSHTA Network Connection Detected",
+  "description": "Detecta eventos de conexión de red originados por el proceso mshta.exe o sus procesos hijos. El uso de MSHTA para realizar peticiones externas es un indicador táctico de que el binario está siendo utilizado como proxy para descargar archivos .hta maliciosos, scripts ofuscados o para establecer comunicación con un servidor de mando y control (C2), evadiendo firewalls que confían en procesos firmados por Microsoft.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "network_connection",
+    "mshta_abuse",
+    "lolbins",
+    "command_and_control",
+    "T1218.005",
+    "sysmon_event_3"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE RED: Conexión sospechosa de MSHTA! Se ha detectado que **mshta.exe** ha iniciado una conexión hacia **{destination_ip}** en el puerto **{destination_port}** desde el host **{host}**. Bajo la técnica de **Mshta** (**MITRE ATT&CK T1218.005**), esto sugiere la descarga de un payload remoto o actividad de C2. Se requiere el bloqueo inmediato de la IP de destino y la inspección del proceso.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde mshta.exe inició la actividad de red."
+    },
+    {
+      "name": "destination_ip",
+      "required": true,
+      "description": "La dirección IP externa a la que se conectó el proceso mshta."
+    },
+    {
+      "name": "destination_port",
+      "required": true,
+      "description": "El puerto de destino utilizado (comúnmente 80 o 443)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario bajo el cual se está ejecutando la conexión de red."
+    }
+  ]
+}

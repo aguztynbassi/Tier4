@@ -1,0 +1,40 @@
+{
+  "name": "APT: OceanLotus (APT32) Registry Persistence Detected",
+  "description": "Detecta la creación o modificación de llaves de registro específicas asociadas con el grupo APT32 (OceanLotus). Estas llaves suelen involucrar el secuestro de clases COM (CLSID) y la creación de entradas de aplicaciones falsas para cargar DLLs maliciosas de forma persistente, evadiendo las herramientas de seguridad tradicionales que no monitorean cambios profundos en el registro.",
+  "tags": [
+    "security",
+    "apt_activity",
+    "oceanlotus",
+    "apt32",
+    "persistence",
+    "defense_evasion",
+    "registry_hijacking",
+    "T1112",
+    "sysmon_event_13"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Actividad de OceanLotus (APT32)! Se ha detectado la creación de una llave de registro sospechosa (**{target_object}**) en el host **{host}**. Bajo la técnica de **Modify Registry** (**MITRE ATT&CK T1112**), este patrón coincide con los métodos de persistencia utilizados por el grupo APT32 para cargar malware de forma sigilosa. Se requiere un análisis forense del host y la revisión de procesos que interactúan con COM.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se registró la modificación maliciosa del registro."
+    },
+    {
+      "name": "target_object",
+      "required": true,
+      "description": "La ruta completa de la llave o valor de registro modificado."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la modificación, crucial para identificar cuentas administrativas comprometidas."
+    }
+  ]
+}

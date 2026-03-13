@@ -1,0 +1,39 @@
+{
+  "name": "VM: KRACK (Key Reinstallation Attack) Vulnerable Assets Detected",
+  "description": "Identifica dispositivos en la red que son vulnerables a los ataques KRACK en el protocolo WPA2. Un atacante que explote esta vulnerabilidad puede reinstalar una llave de cifrado ya utilizada, permitiendo el descifrado de paquetes, el secuestro de conexiones HTTP y la inyección de contenido malicioso en el tráfico inalámbrico del host afectado.",
+  "tags": [
+    "vulnerability_management",
+    "qualys",
+    "krack_attack",
+    "wpa2_vulnerability",
+    "wireless_security",
+    "T1046",
+    "T1211",
+    "network_discovery"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE VULNERABILIDAD CRÍTICA: KRACK Detectado! El activo **{source_address}** ha sido identificado con el ID de Qualys **{qualys_id}**, indicando que es vulnerable a ataques de reinstalación de llave (KRACK). Bajo la técnica de **Exploitation of Remote Services** (**MITRE ATT&CK T1211**), un atacante cercano podría romper el cifrado WPA2 para interceptar comunicaciones sensibles. Se requiere la actualización inmediata del firmware del adaptador de red o del sistema operativo del host.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección IP del dispositivo vulnerable detectado por Qualys."
+    },
+    {
+      "name": "qualys_id",
+      "required": true,
+      "description": "El QID específico que identifica la variante de la vulnerabilidad KRACK."
+    },
+    {
+      "name": "host_name",
+      "required": false,
+      "description": "El nombre del equipo afectado para facilitar su localización física."
+    }
+  ]
+}

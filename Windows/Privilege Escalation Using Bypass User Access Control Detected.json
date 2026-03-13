@@ -1,0 +1,38 @@
+{
+  "name": "Privilege Escalation: UAC Bypass Activity Detected",
+  "description": "Detecta intentos de evadir el Control de Cuentas de Usuario (UAC) mediante el abuso de binarios de confianza de Windows o la manipulación de tokens de elevación. Los atacantes utilizan estas técnicas para elevar sus privilegios de un nivel de integridad medio a uno alto sin que el usuario reciba una notificación de consentimiento, permitiendo el control administrativo total del sistema.",
+  "tags": [
+    "security",
+    "privilege_escalation",
+    "uac_bypass",
+    "defense_evasion",
+    "token_manipulation",
+    "T1548.002",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD: Bypass de UAC detectado! Se ha identificado una ejecución sospechosa vinculada a la elevación de privilegios (**{command}**) en el host **{host}**. Bajo la técnica de **Bypass User Account Control** (**MITRE ATT&CK T1548.002**), este comportamiento indica que un atacante está intentando obtener permisos de administrador de forma silenciosa. Se requiere investigar la cadena de procesos de inmediato.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó el intento de escalada de privilegios."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que disparó la alerta (ej. ejecución de eventvwr.exe o scripts de elevación)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que está intentando elevar sus privilegios en el sistema."
+    }
+  ]
+}

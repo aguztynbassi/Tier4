@@ -1,0 +1,44 @@
+{
+  "name": "Privilege Escalation: Application Shimming Activity Detected",
+  "description": "Detecta la instalación o el registro de bases de datos de compatibilidad (.sdb) mediante el uso de sdbinst.exe o la manipulación directa del registro. Los adversarios utilizan 'Application Shimming' para interceptar funciones de la API de Windows, lo que les permite ejecutar código malicioso, evadir el Control de Cuentas de Usuario (UAC) o establecer persistencia persistente bajo el pretexto de solucionar problemas de compatibilidad de software.",
+  "tags": [
+    "security",
+    "privilege_escalation",
+    "persistence",
+    "application_shimming",
+    "defense_evasion",
+    "sdbinst_abuse",
+    "T1546.011",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD: Instalación de Shim Detectada! Se ha detectado el uso de **sdbinst.exe** o la modificación de objetos de shim (**{target_object}**) en el host **{host}**. Bajo la técnica de **Application Shimming** (**MITRE ATT&CK T1546.011**), esto sugiere un intento de interceptar la ejecución de aplicaciones para elevar privilegios o evadir defensas. Se requiere inspeccionar la base de datos .sdb instalada.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la instalación del shim."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "El proceso responsable de la acción (ej. sdbinst.exe)."
+    },
+    {
+      "name": "target_object",
+      "required": false,
+      "description": "La llave de registro o el archivo .sdb involucrado en la operación."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que ejecutó la instalación de la base de datos de compatibilidad."
+    }
+  ]
+}

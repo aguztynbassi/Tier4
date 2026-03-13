@@ -1,0 +1,39 @@
+{
+  "name": "Execution: New Driver File Created in System Directory",
+  "description": "Detecta la creación de nuevos archivos de controladores (.sys) en las rutas del sistema de Windows. La carga de drivers no autorizados es una técnica utilizada por rootkits y malware sofisticado para obtener privilegios de kernel, evadir defensas y manipular el hardware o el tráfico de red a nivel de sistema.",
+  "tags": [
+    "security",
+    "execution",
+    "kernel_mode",
+    "driver_installation",
+    "persistence",
+    "rootkit_detection",
+    "T1129",
+    "sysmon_event_11"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE KERNEL: Nuevo Driver Detectado! Se ha creado un archivo de controlador en la ruta **{path}** del host **{host}**. Bajo la técnica de **Shared Modules** (**MITRE ATT&CK T1129**), esto podría indicar un intento de instalar un rootkit o un driver malicioso para evadir defensas. Se requiere la validación inmediata de la firma digital del archivo y del proceso responsable de su creación.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la creación del archivo de driver."
+    },
+    {
+      "name": "path",
+      "required": true,
+      "description": "La ruta completa y el nombre del archivo .sys creado."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que inició el proceso de creación del archivo."
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "name": "Defense Evasion: Masquerading File Location Detected",
+  "description": "Detecta la creación de archivos ejecutables o scripts en directorios críticos del sistema (System32, SysWOW64) o carpetas de usuario comúnmente abusadas (Temp, AppData). Los adversarios manipulan la ubicación de sus artefactos para evadir defensas, aprovechando que muchas herramientas de seguridad o administradores asumen que los archivos en rutas del sistema son legítimos por defecto.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "masquerading",
+    "file_integrity",
+    "sysmon_event_11",
+    "T1036",
+    "malware_persistence"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EVASIÓN: Ubicación de Archivo Sospechosa! Se ha detectado la creación del archivo **{file}** en una ruta crítica (**{image}**) del host **{host}**. Bajo la técnica de **Masquerading** (**MITRE ATT&CK T1036**), esto indica un intento de ocultar malware en directorios del sistema o carpetas temporales. Se requiere la validación inmediata de la legitimidad y firma digital del archivo.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la creación del archivo sospechoso."
+    },
+    {
+      "name": "file",
+      "required": true,
+      "description": "El nombre del archivo creado (ej. svchost.exe, script.ps1)."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "La ruta completa donde se depositó el archivo (ej. C:\\Windows\\System32\\...)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la operación de escritura en el disco."
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Credential Access: Network Sniffing via TShark Detected",
+  "description": "Detecta la ejecución de tshark.exe y otras herramientas de captura de paquetes. Los adversarios utilizan el sniffing de red para interceptar tráfico de red con el fin de obtener credenciales, tokens de autenticación y otros datos sensibles que se transmiten en texto plano o protocolos vulnerables, facilitando la escalada de privilegios y el movimiento lateral sin generar ruido de autenticación fallida.",
+  "tags": [
+    "security",
+    "credential_access",
+    "discovery",
+    "network_sniffing",
+    "packet_capture",
+    "tshark",
+    "wireshark",
+    "T1040",
+    "win_server_event"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE ACCESO A CREDENCIALES: Sniffing de Red Detectado! El usuario **{user}** ha ejecutado el comando **{command}** en el host **{host}**. Bajo la técnica de **Network Sniffing** (**MITRE ATT&CK T1040**), este comportamiento indica un intento de interceptar tráfico sensible en la red. Se requiere la revisión inmediata de la legitimidad de esta herramienta en el host.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se inició la captura de tráfico de red."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos ejecutada (ej. tshark -i 1 -w capture.pcap)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que lanzó el proceso de sniffing (generalmente requiere privilegios de administrador o de red)."
+    }
+  ]
+}

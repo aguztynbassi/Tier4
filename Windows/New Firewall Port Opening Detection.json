@@ -1,0 +1,49 @@
+{
+  "name": "Command & Control: New Firewall Port Opening Detected",
+  "description": "Detecta la creación o modificación de reglas en el Firewall de Windows mediante cambios en el registro. Los atacantes suelen abrir puertos específicos para permitir la entrada de conexiones desde servidores de Mando y Control (C2) o para facilitar el movimiento lateral mediante protocolos como SMB o RDP desde el exterior.",
+  "tags": [
+    "security",
+    "command_and_control",
+    "firewall_evasion",
+    "network_security",
+    "registry_monitor",
+    "non_standard_port",
+    "T1571",
+    "event_4657"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE RED: Puerto Abierto en Firewall! Se ha detectado una nueva regla de firewall (**{rule}**) que habilita el puerto **{port}/{protocol}** en el host **{host}**. Bajo la técnica de **Non-Standard Port** (**MITRE ATT&CK T1571**), este cambio en la política de seguridad puede estar siendo utilizado para establecer persistencia de red o un canal de C2. Se recomienda validar la legitimidad de esta regla de inmediato.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El servidor o estación de trabajo donde se modificó la política de firewall."
+    },
+    {
+      "name": "rule",
+      "required": true,
+      "description": "El nombre descriptivo de la regla de firewall creada o modificada."
+    },
+    {
+      "name": "port",
+      "required": true,
+      "description": "El número de puerto que ha sido habilitado."
+    },
+    {
+      "name": "protocol",
+      "required": true,
+      "description": "El protocolo utilizado (TCP o UDP)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la modificación en el registro del sistema."
+    }
+  ]
+}

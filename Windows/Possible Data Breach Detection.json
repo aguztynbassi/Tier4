@@ -1,0 +1,39 @@
+{
+  "name": "DLP: Potential Data Breach / Exfiltration by High-Risk Users",
+  "description": "Detecta intentos de transferencia no autorizada de datos sensibles mediante aplicaciones de correo, almacenamiento en la nube o dispositivos de almacenamiento removibles. La regla monitoriza específicamente actividades de usuarios en proceso de desvinculación o ex-empleados, identificando el envío de archivos a dominios externos no confiables o la subida masiva de información a servicios cloud personales.",
+  "tags": [
+    "security",
+    "exfiltration",
+    "dlp",
+    "insider_threat",
+    "data_breach",
+    "cloud_storage_abuse",
+    "T1567.002",
+    "high_risk_users"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EXFILTRACIÓN: Posible Robo de Datos! Se ha detectado una transferencia de datos sospechosa originada por el usuario **{user}** (identificado en la lista de desvinculaciones) hacia **{destination}**. Bajo la técnica de **Exfiltration to Cloud Storage** (**MITRE ATT&CK T1567.002**), esta actividad sugiere la extracción de información corporativa mediante servicios web o medios físicos. Se recomienda la revocación inmediata de accesos y la auditoría de los archivos transferidos.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que está realizando la transferencia de datos."
+    },
+    {
+      "name": "destination",
+      "required": true,
+      "description": "El destino de la información (dominio de correo externo, aplicación cloud o dispositivo USB)."
+    },
+    {
+      "name": "object",
+      "required": false,
+      "description": "El nombre del archivo o adjunto detectado en la transferencia."
+    }
+  ]
+}

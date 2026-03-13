@@ -1,0 +1,40 @@
+{
+  "name": "Discovery & Lateral Movement: Net.exe Activity Detected",
+  "description": "Detecta el uso de net.exe y net1.exe para realizar tareas de enumeración de cuentas, grupos, recursos compartidos y administración de servicios. Estas herramientas son fundamentales para que los atacantes comprendan el entorno de red, identifiquen objetivos de alto valor y preparen el movimiento lateral o la desactivación de controles de seguridad.",
+  "tags": [
+    "security",
+    "discovery",
+    "lateral_movement",
+    "defense_evasion",
+    "enumeration",
+    "lotl",
+    "T1049",
+    "T1135",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE RECONOCIMIENTO: Uso de Net.exe Detectado! Se ha ejecutado el comando **{command}** en el host **{host}**. Dependiendo de los parámetros, esta actividad puede indicar desde una enumeración de usuarios (**T1087**) hasta el descubrimiento de recursos de red (**T1135**). Se requiere validar si el usuario **{user}** tiene justificación administrativa para esta ejecución.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se ejecutó la herramienta net.exe/net1.exe."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa (ej. net user /domain, net localgroup administrators)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que lanzó el comando."
+    }
+  ]
+}
