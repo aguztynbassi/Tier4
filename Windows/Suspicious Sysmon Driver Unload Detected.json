@@ -1,0 +1,68 @@
+[
+  {
+    "name": "Suspicious Sysmon Driver Unload Detected",
+    "description": "Detects attempts to unload the Sysmon driver (SysmonDrv) using `fltmc.exe`. Adversaries may do this to evade detection by disabling Sysmon.",
+    "tags": [
+      "security",
+      "detection",
+      "persistence",
+      "indicator removal",
+      "impair defenses",
+      "disable security tools",
+      "TA0005",
+      "T1070",
+      "T1562",
+      "T1562.002",
+      "Windows",
+      "Sysmon",
+      "fltmc",
+      "driver_unload",
+      "anti_forensics"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: Critical security tool impairment attempt detected on host '{host}' by user '{user}'. The `fltmc.exe` process at '{process_path}' was executed with command line '{command_line}', attempting to unload the Sysmon driver (`SysmonDrv`). This is a strong indicator of an adversary attempting to disable Sysmon logging and evade detection. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**IMMEDIATE AND URGENT ACTION REQUIRED:** This is a critical security incident. Isolate the affected system immediately. Verify the status of the Sysmon service and re-enable it if necessary. Conduct a thorough forensic investigation to identify the source of this attempt to disable security tools and any malicious activity that may have occurred while Sysmon was potentially compromised. This alert signifies a high-priority threat.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Windows Security Event ID for Process Creation (4688)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was executed, which should be 'fltmc.exe'."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the fltmc.exe executable."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute fltmc.exe, including 'unload' and 'SysmonDrv'."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which fltmc.exe was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

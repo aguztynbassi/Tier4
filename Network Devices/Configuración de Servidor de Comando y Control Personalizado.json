@@ -1,0 +1,59 @@
+{
+  "name": "Configuración de Servidor de Comando y Control Personalizado",
+  "description": "Detección de actividades relacionadas con la configuración de servidores de comando y control (C2) personalizados. Esta actividad puede indicar un intento de un adversario de establecer una infraestructura para controlar sistemas comprometidos.",
+  "tags": [
+    "security",
+    "detection",
+    "critical",
+    "network",
+    "resource_development",
+    "c2_infrastructure",
+    "TA0042",
+    "T1583.006"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "ALERTA CRÍTICA: ¡Configuración de Servidor de Comando y Control (C2) Personalizado Detectada!\\n\\n**Se ha detectado una actividad de creación de un servidor con el rol de Comando y Control (C2) en el host '{host}' a las {Timestamp}.** Esta acción es un fuerte indicador de que un adversario podría estar estableciendo infraestructura para controlar sistemas comprometidos o para futuras operaciones maliciosas.\\n\\n**Detalles del Evento:**\\n* **Timestamp**: {Timestamp}\\n* **Host Afectado**: '{host}'\\n* **Dirección IP de Origen**: '{source_address}'\\n* **Usuario que Realizó la Configuración**: '{user}'\\n* **Tipo de Actividad**: '{activity}' (creación de servidor)\\n* **Rol del Servidor Detectado**: '{role}' (comando y control)\\n* **ID de la Regla**: {RuleName}\\n\\nEsta detección se correlaciona directamente con la táctica de **Desarrollo de Recursos (TA0042)** y la técnica **Adquirir Infraestructura: Servidor de C2 (T1583.006)** del marco MITRE ATT&CK. La creación de un servidor C2 es un paso fundamental en la preparación de ataques avanzados y representa una amenaza inminente.\\n\\n**ACCIONES INMEDIATAS RECOMENDADAS (PRIORIDAD EXTREMA - ¡RESPONDER AHORA!):**\\n\\n1.  **AISLAR EL SERVIDOR:** Desconecte o aísle inmediatamente el host '{host}' de la red para evitar que se convierta en una plataforma de lanzamiento para ataques o para controlar sistemas ya comprometidos.\\n2.  **INVESTIGAR LA CUENTA/USUARIO:** Investigue a fondo la cuenta de usuario '{user}'. ¿Es una cuenta legítima? ¿Ha sido comprometida? Revise todas las actividades recientes de esta cuenta.\\n3.  **ANÁLISIS FORENSE DEL HOST:** Realice un análisis forense completo del host '{host}'. Busque: \\n    * Herramientas de C2 instaladas o configuradas (ej. Cobalt Strike, Covenant, Empire). \\n    * Archivos inusuales, scripts o configuraciones.\\n    * Persistencia establecida.\\n    * Conexiones de red salientes inusuales.\\n4.  **REVISAR LA INFRAESTRUCTURA DE RED:** Identifique y bloquee cualquier dirección IP o dominio asociado con este servidor C2 en su perímetro de red (firewalls, IDS/IPS).\\n5.  **INTELIGENCIA DE AMENAZAS:** Consulte fuentes de inteligencia de amenazas para ver si la dirección IP de origen '{source_address}' o cualquier otro indicador asociado con esta actividad es conocido por estar involucrado en actividades maliciosas.\\n6.  **ESCALAR:** Escalar inmediatamente a los equipos de respuesta a incidentes y administradores de seguridad para una investigación y contención coordinadas.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp when the C2 server configuration activity was detected."
+    },
+    {
+      "name": "host",
+      "required": true,
+      "description": "The hostname of the server where the C2 configuration activity occurred."
+    },
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "The source IP address from which the configuration activity originated."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the server configuration."
+    },
+    {
+      "name": "activity",
+      "required": true,
+      "description": "The type of activity detected, expected to be 'create_server'."
+    },
+    {
+      "name": "role",
+      "required": true,
+      "description": "The role identified for the server, expected to be 'c2'."
+    },
+    {
+      "name": "RuleName",
+      "required": false,
+      "description": "The name of the Sigma rule that triggered the event, if applicable."
+    }
+  ]
+}

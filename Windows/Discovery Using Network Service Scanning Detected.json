@@ -1,0 +1,39 @@
+{
+  "name": "Discovery: Network Service Scanning via Nmap or Native Tools",
+  "description": "Detecta el uso de herramientas de escaneo de red para identificar servicios activos, puertos abiertos y versiones de software en equipos remotos. Los adversarios utilizan estas herramientas para mapear la superficie de ataque interna y localizar servicios vulnerables (como SMB, RDP o RPC) que faciliten el movimiento lateral.",
+  "tags": [
+    "security",
+    "discovery",
+    "reconnaissance",
+    "network_scanning",
+    "port_scan",
+    "lolbins",
+    "T1046",
+    "win_server_event"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE RECONOCIMIENTO: Escaneo de Red Detectado! El usuario **{user}** ha ejecutado el comando **{command}** en el host **{host}**. Bajo la técnica de **Network Service Scanning** (**MITRE ATT&CK T1046**), este comportamiento indica un intento de identificar servicios vulnerables en la red para movimiento lateral. Se requiere la revisión inmediata de la actividad de red saliente.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo desde donde se está originando el escaneo de red."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos ejecutada (ej. nmap -sP, telnet [IP] [Port])."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que inició la actividad de escaneo de servicios."
+    }
+  ]
+}

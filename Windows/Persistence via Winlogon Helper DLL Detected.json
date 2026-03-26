@@ -1,0 +1,43 @@
+{
+  "name": "Persistence: Winlogon Helper DLL or Shell Modification Detected",
+  "description": "Detecta modificaciones sospechosas en las llaves de registro de Winlogon (como Shell, Userinit o Notify). Los adversarios utilizan estas llaves para asegurar que su código malicioso se ejecute automáticamente cada vez que un usuario inicia sesión en el sistema. Dado que Winlogon es un proceso crítico de Windows, el abuso de sus componentes permite una persistencia robusta y la ejecución con altos privilegios.",
+  "tags": [
+    "security",
+    "persistence",
+    "winlogon_abuse",
+    "boot_autostart",
+    "registry_modification",
+    "T1547.004",
+    "win_server_event_4657"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE PERSISTENCIA: Modificación en Winlogon! Se ha detectado un cambio en el valor de registro **{path}** en el host **{host}**. Bajo la técnica de **Winlogon Helper DLL** (**MITRE ATT&CK T1547.004**), esto sugiere que un atacante ha configurado el inicio automático de código malicioso durante el login. Se requiere la validación inmediata del nuevo valor: **{new_value}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la modificación en la configuración de Winlogon."
+    },
+    {
+      "name": "path",
+      "required": true,
+      "description": "La ruta específica de la llave de registro modificada."
+    },
+    {
+      "name": "new_value",
+      "required": true,
+      "description": "El nuevo contenido asignado a la llave (ej. ruta a un binario sospechoso)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la modificación del registro."
+    }
+  ]
+}

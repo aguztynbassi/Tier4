@@ -1,0 +1,39 @@
+{
+  "name": "Discovery: System Service Discovery Detected",
+  "description": "Detecta la ejecución de comandos para listar servicios activos y procesos en ejecución. Los atacantes utilizan herramientas como 'net start' o 'tasklist' para identificar qué defensas están activas (EDR/AV), qué servicios de red están disponibles y qué aplicaciones podrían ser vulnerables a una escalada de privilegios o explotación.",
+  "tags": [
+    "security",
+    "discovery",
+    "reconnaissance",
+    "service_enumeration",
+    "process_listing",
+    "lolbins",
+    "T1007",
+    "win_server_event"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE RECONOCIMIENTO: Enumeración de Servicios Detectada! El usuario **{user}** ha ejecutado el comando **{command}** en el host **{host}**. Bajo la técnica de **System Service Discovery** (**MITRE ATT&CK T1007**), este comportamiento suele preceder a intentos de desactivación de seguridad o búsqueda de vectores de explotación. Se requiere validar la legitimidad de la consulta.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se realizó la enumeración de servicios o procesos."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos ejecutada (ej. net start, tasklist /v)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que inició la actividad de descubrimiento."
+    }
+  ]
+}

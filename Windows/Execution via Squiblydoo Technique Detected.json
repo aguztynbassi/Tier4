@@ -1,0 +1,54 @@
+[
+  {
+    "name": "Execution via Squiblydoo Technique Detected",
+    "description": "Detects the execution of the Squiblydoo technique, which involves using `scrobj.dll` to execute arbitrary code.",
+    "tags": [
+      "security",
+      "detection",
+      "execution",
+      "defense evasion",
+      "signed binary proxy execution",
+      "Mshta",
+      "TA0002",
+      "TA0005",
+      "T1218",
+      "T1218.010",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Squiblydoo technique detected: Suspicious loading of `scrobj.dll` indicating potential arbitrary code execution. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **Image Loaded** {Image}, **User** {User}, **Computer** {Computer}. Investigate this high-risk activity immediately for signs of malicious code execution and defense evasion.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for Image Load (7)."
+      },
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The path of the loaded image (scrobj.dll)."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the process was executed."
+      },
+      {
+        "name": "Computer",
+        "required": true,
+        "description": "The computer on which the event occurred."
+      }
+    ]
+  }
+]

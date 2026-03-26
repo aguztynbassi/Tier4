@@ -1,0 +1,33 @@
+{
+  "name": "WMI Persistence - Script Event Consumer Detected",
+  "description": "Detecta la ejecución del proceso `scrcons.exe`, el cual es invocado por el servicio WMI para ejecutar scripts almacenados en el repositorio CIM. Esta técnica, conocida como ActiveScriptEventConsumer, es utilizada por adversarios para lograr persistencia y movimiento lateral, permitiendo la ejecución de código malicioso en respuesta a eventos del sistema sin necesidad de archivos de script físicos en el disco.",
+  "tags": [
+    "security",
+    "persistence",
+    "lateral_movement",
+    "wmi",
+    "scrcons",
+    "T1546.003",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Persistencia Crítica! Se ha detectado la ejecución de **scrcons.exe** en el host **{host}**. Este proceso es responsable de ejecutar scripts de WMI directamente desde la base de datos del sistema. La activación de un **ActiveScriptEventConsumer** es una técnica clásica de **Event Triggered Execution: WMI Event Subscription** (**MITRE ATT&CK T1546.003**), diseñada para evadir la detección basada en archivos y mantener el acceso permanente. El proceso fue iniciado por el usuario **{user}**. Se requiere una inspección inmediata del repositorio WMI para extraer y analizar el script ejecutado.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del servidor o estación de trabajo donde se activó el consumidor de scripts."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario (generalmente SYSTEM) asociada a la ejecución del servicio."
+    }
+  ]
+}

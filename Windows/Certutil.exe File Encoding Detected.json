@@ -1,0 +1,48 @@
+[
+  {
+    "name": "Certutil.exe File Encoding Detected",
+    "description": "Detecta el uso de 'certutil.exe' con el parámetro '-encode', una táctica comúnmente abusada por adversarios para codificar archivos en Base64. Esta técnica se utiliza para evasión de defensa, ofuscación de payloads maliciosos y preparación de datos para exfiltración, permitiendo que la actividad maliciosa evite los controles de seguridad.",
+    "tags": [
+      "security",
+      "defense_evasion",
+      "obfuscation",
+      "exfiltration",
+      "T1027",
+      "T1027.001",
+      "T1059",
+      "lolbas",
+      "sysmon",
+      "windows_utilities"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Se ha observado una actividad sospechosa en el host **{computer_name}**: el proceso nativo de Windows 'certutil.exe' se ha ejecutado con el parámetro '-encode' mediante la línea de comandos **{command_line}**. Esta es una táctica de evasión de defensa bien conocida (**MITRE ATT&CK T1027**) en la que los adversarios codifican archivos en Base64 para ofuscar payloads o preparar datos para la exfiltración. El comando fue ejecutado por el usuario **{user}** con el proceso padre **{parent_image}**. Se recomienda una investigación inmediata para determinar el propósito de la codificación y si el archivo de entrada o el de salida son maliciosos. Confirme si esta es una actividad legítima de administración de certificados, lo cual es muy poco común para archivos arbitrarios.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "La línea de comandos completa que incluye 'certutil.exe -encode'."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "El usuario que ejecutó el comando."
+      },
+      {
+        "name": "parent_image",
+        "required": true,
+        "description": "La imagen del proceso padre que invocó a 'certutil.exe'."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "El nombre del equipo donde ocurrió el evento."
+      }
+    ]
+  }
+]

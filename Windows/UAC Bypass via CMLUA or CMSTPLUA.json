@@ -1,0 +1,52 @@
+[
+  {
+    "name": "UAC Bypass via CMLUA or CMSTPLUA",
+    "description": "Detects the loading of CMLUA, CMSTPLUA, or CMLUAUTIL DLLs, which can be indicative of a User Account Control (UAC) bypass attempt.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "abuse elevation control mechanism",
+      "bypass user account control",
+      "TA0005",
+      "T1548",
+      "T1548.002",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: A potential User Account Control (UAC) bypass attempt has been detected on a Windows system. The suspicious DLL '{image_loaded}' was loaded by process '{process_name}' under user '{user}'. This indicates an attempt to elevate privileges without user consent. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Loaded Image (DLL)**: {image_loaded}\n* **User**: {user}\n\n**IMMEDIATE ACTION REQUIRED:** This is a critical security incident. Isolate the affected system immediately. Investigate the process that loaded the DLL and determine if the UAC bypass was successful. Conduct a thorough forensic analysis to identify the source of the attack and any further malicious activity. This activity often precedes more severe compromise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the image load event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Image Load (7)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that loaded the suspicious DLL."
+      },
+      {
+        "name": "image_loaded",
+        "required": true,
+        "description": "The full path to the loaded DLL (e.g., 'cmlua.dll', 'cmstplua.dll', 'cmluautil.dll')."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process was executed."
+      }
+    ]
+  }
+]

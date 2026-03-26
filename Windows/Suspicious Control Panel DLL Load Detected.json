@@ -1,0 +1,39 @@
+{
+  "name": "Suspicious Control Panel DLL Load Detected",
+  "description": "Detects the execution of `rundll32.exe` from `control.exe`, a suspicious activity that could indicate an adversary is using a signed binary proxy execution technique to evade security defenses. This technique has been observed in attacks by groups like Equation Group.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "proxy_execution",
+    "T1574",
+    "T1574.002",
+    "T1218",
+    "T1218.011",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a suspicious process, **`rundll32.exe`**, was launched by **`control.exe`**. The command line is **{command}**. This is a strong indicator of **Signed Binary Proxy Execution** (**MITRE ATT&CK T1218.011**), a technique used by adversaries to execute malicious code while masquerading as a legitimate Windows process. This activity is a significant red flag for **Defense Evasion**. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious code. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The full command line that was executed by control.exe."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

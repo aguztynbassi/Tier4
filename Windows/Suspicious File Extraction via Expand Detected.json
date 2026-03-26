@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Suspicious File Extraction via Expand Detected",
+    "description": "Detects the use of the `expand.exe` process to extract files from potentially suspicious locations or with suspicious parameters. Adversaries may use this to download or copy malicious files.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "command and control",
+      "ingress tool transfer",
+      "signed binary proxy execution",
+      "TA0005",
+      "TA0011",
+      "T1105",
+      "T1218",
+      "Windows",
+      "expand",
+      "file_extraction"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: Suspicious file extraction using `expand.exe` detected on host '{host}' by user '{user}'. The `expand.exe` process at '{process_path}' was executed with command line '{command_line}', indicating the extraction of files (likely from a CAB archive) to a suspicious location or with suspicious parameters. This is a critical indicator of potential malicious activity, as adversaries often abuse `expand.exe` for ingress tool transfer, defense evasion, or deploying malicious payloads. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**IMMEDIATE AND URGENT ACTION REQUIRED:** This is a critical security incident. Isolate the affected system immediately. Examine the source CAB file and the extracted files to determine their content and purpose. Investigate the parent process that launched `expand.exe` and look for any associated malicious network connections or file modifications. This alert signifies an active threat and potential system compromise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Windows Security Event ID for Process Creation (4688)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was executed, which should be 'expand.exe'."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the expand.exe executable."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute expand.exe, including suspicious arguments related to CAB files and target paths."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which expand.exe was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

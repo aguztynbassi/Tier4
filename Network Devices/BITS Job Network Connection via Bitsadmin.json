@@ -1,0 +1,54 @@
+{
+  "name": "BITS Job Network Connection via Bitsadmin.exe",
+  "description": "Detects network connections initiated directly by `bitsadmin.exe`. Adversaries may abuse this legitimate Windows service to download or upload malicious payloads, establish command and control (C2), or maintain persistence on a system, often bypassing some network defenses.",
+  "tags": [
+    "security",
+    "persistence",
+    "defense_evasion",
+    "command_and_control",
+    "T1197",
+    "lolbas",
+    "sysmon",
+    "windows_processes"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A suspicious network connection was initiated directly by `bitsadmin.exe` on the host **{computer_name}**. The process, running under user **{user}**, connected to the destination **{destination_hostname}** (**{destination_ip}**:{destination_port}) with the command line **{command_line}**. This activity is a known technique for **Defense Evasion** and **Command and Control** (**MITRE ATT&CK T1197**). Although `bitsadmin.exe` is a legitimate tool, direct network connections are highly suspicious. Immediate investigation is required to determine if this is a benign administrative task or a malicious file transfer. Analyze the destination and the full command line to assess the threat.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "destination_hostname",
+      "required": true,
+      "description": "The destination hostname of the network connection."
+    },
+    {
+      "name": "destination_ip",
+      "required": true,
+      "description": "The destination IP address of the network connection."
+    },
+    {
+      "name": "destination_port",
+      "required": true,
+      "description": "The destination port of the network connection."
+    },
+    {
+      "name": "command_line",
+      "required": true,
+      "description": "The full command line of the bitsadmin.exe process."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account under which the process ran."
+    },
+    {
+      "name": "computer_name",
+      "required": true,
+      "description": "The name of the computer where the event occurred."
+    }
+  ]
+}

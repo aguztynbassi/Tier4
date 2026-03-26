@@ -1,0 +1,39 @@
+{
+  "name": "Suspicious Outbound Kerberos Connection",
+  "description": "Detects outbound network activity via the default Kerberos port (88). This could indicate an adversary attempting lateral movement or privilege escalation via delegation, which are common credential access techniques.",
+  "tags": [
+    "security",
+    "lateral_movement",
+    "credential_access",
+    "kerberoasting",
+    "T1558",
+    "T1558.003",
+    "sysmon",
+    "windows_network_connections"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "An alert has been triggered on the host **{host}**: a suspicious process, **{image}**, is attempting an outbound network connection on the Kerberos default port **88**. This is a strong indicator of **Lateral Movement** or a first-stage **Privilege Escalation** attack (**MITRE ATT&CK T1558.003**), such as Kerberoasting. The process is not a standard system process that would typically communicate on this port. Immediate investigation is required to determine the legitimacy of this action and to block the malicious process. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "The process image that is attempting to establish the connection."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

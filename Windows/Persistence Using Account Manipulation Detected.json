@@ -1,0 +1,39 @@
+{
+  "name": "Persistence: Local Group Membership Manipulation Detected",
+  "description": "Detecta la adición de usuarios a grupos locales de seguridad mediante el comando 'net localgroup /add'. Los adversarios manipulan la pertenencia a grupos para escalar privilegios y establecer persistencia, asegurando que sus cuentas controladas mantengan acceso administrativo o capacidades de acceso remoto (RDP) de forma permanente en el host.",
+  "tags": [
+    "security",
+    "persistence",
+    "privilege_escalation",
+    "account_manipulation",
+    "local_groups",
+    "administrative_access",
+    "T1098",
+    "win_server_event"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE PERSISTENCIA: Manipulación de Grupos Locales! Se ha detectado que el usuario **{user}** ejecutó el comando **{command}** en el host **{host}**. Bajo la técnica de **Account Manipulation** (**MITRE ATT&CK T1098**), esto indica un intento de elevar privilegios o consolidar el acceso mediante la adición de miembros a grupos restringidos. Se requiere auditoría inmediata de la cuenta afectada.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se realizó la modificación del grupo local."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa utilizada para agregar el usuario al grupo."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que inició la acción de modificación de grupos."
+    }
+  ]
+}

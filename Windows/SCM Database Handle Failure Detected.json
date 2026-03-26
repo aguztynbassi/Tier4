@@ -1,0 +1,57 @@
+{
+    "name": "SCM Database Handle Failure Detected",
+    "description": "Detection of a failure when handling the SCM (Service Control Manager) database. This can indicate an attempt by an attacker to manipulate services or evade defenses by interfering with the legitimate operation of the SCM. The detection specifically looks for errors related to database opening or access, which might occur during a malicious attempt to alter service configurations or disable security services.",
+    "tags": [
+        "security",
+        "detection",
+        "windows",
+        "TA0005",
+        "T1562",
+        "T1562.001"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the security event at `{timestamp}` on host `{hostname}` where a failure to handle the SCM database was detected. The event involved the process `{process_name}` with Process ID `{process_id}` and resulted in a failure status of `{failure_status}` when trying to open/access the SCM database. Analyze the command line (`{command_line}`) for any suspicious arguments and review the user (`{user}`) associated with the activity. Provide a summary of your findings and determine if this is a legitimate system error or a potential malicious activity. If malicious, identify the potential threat and suggest immediate mitigation steps.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        },
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname where the event was detected."
+        },
+        {
+            "name": "process_name",
+            "required": true,
+            "description": "The name of the process that attempted to access the SCM database."
+        },
+        {
+            "name": "process_id",
+            "required": true,
+            "description": "The Process ID of the process that attempted to access the SCM database."
+        },
+        {
+            "name": "failure_status",
+            "required": true,
+            "description": "The status code indicating the nature of the failure when handling the SCM database."
+        },
+        {
+            "name": "command_line",
+            "required": true,
+            "description": "The full command line of the process that attempted to access the SCM database."
+        },
+        {
+            "name": "user",
+            "required": true,
+            "description": "The user account under which the process was executed."
+        }
+    ]
+}

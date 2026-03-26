@@ -1,0 +1,48 @@
+{
+    "name": "Register new Logon Process by Rubeus",
+    "description": "Rubeus, a popular open-source tool for Kerberos attacks, is used to register a new logon process. This behavior indicates a potential attempt by an adversary to hijack a legitimate process or service to maintain persistence or evade detection. The detection is based on the behavioral analysis of Rubeus registering a new logon process on a Windows system.",
+    "tags": [
+        "TA0006",
+        "TA0005",
+        "T1546",
+        "T1546.002",
+        "security",
+        "detection",
+        "Windows"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the logon process registration attempt by Rubeus at `{timestamp}` on host `{hostname}`. The command line detected was `{command_line}`. Analyze the user (`{user_name}`) who executed the command and the new logon process that was registered (`{new_logon_process}`). Determine if this is a legitimate administrative action or a malicious attempt to maintain persistence. Provide a summary of the findings and suggest immediate containment and remediation steps.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        },
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname where the activity was detected."
+        },
+        {
+            "name": "command_line",
+            "required": true,
+            "description": "The full command line of the process."
+        },
+        {
+            "name": "user_name",
+            "required": true,
+            "description": "The user account under which the process was executed."
+        },
+        {
+            "name": "new_logon_process",
+            "required": true,
+            "description": "The name of the new logon process that was registered."
+        }
+    ]
+}

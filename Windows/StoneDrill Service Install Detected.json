@@ -1,0 +1,26 @@
+{
+  "name": "StoneDrill Service Install Detected",
+  "description": "Detection of the malicious 'Microsoft Network Realtime Inspection Service' installation, as described in the StoneDrill report by Kaspersky. This service is used by the StoneDrill malware to establish persistence and execute malicious code.",
+  "tags": [
+    "security",
+    "persistence",
+    "create_or_modify_system_process",
+    "T1543",
+    "windows_event_log"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a new Windows service with a suspicious name, 'Microsoft Network Realtime Inspection Service', was installed. The event occurred with Event ID **7045**. This is a strong indicator of **Persistence** (**MITRE ATT&CK T1543**), where an adversary is attempting to establish a foothold by creating a malicious service. This specific service name has been associated with the StoneDrill malware. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious service.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    }
+  ]
+}

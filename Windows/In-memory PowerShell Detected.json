@@ -1,0 +1,39 @@
+{
+  "name": "In-Memory PowerShell Execution Detected",
+  "description": "Detecta la carga del motor de PowerShell (System.Management.Automation.dll) por procesos inusuales. Los atacantes utilizan esta técnica para ejecutar scripts de PowerShell directamente en la memoria de otro proceso, evitando la creación del proceso powershell.exe. Esto permite evadir detecciones basadas en líneas de comandos y scripts visibles en el disco, facilitando la ejecución de malware 'fileless'.",
+  "tags": [
+    "security",
+    "execution",
+    "fileless_attack",
+    "powershell_injection",
+    "post_exploitation",
+    "meterpreter",
+    "T1059.001",
+    "sysmon_event_7"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EJECUCIÓN FILELESS! El proceso **{source_image}** ha cargado el motor de PowerShell en memoria en el host **{host}**. Bajo la técnica de **PowerShell In-Memory** (**MITRE ATT&CK T1059.001**), este comportamiento sugiere que un malware está ejecutando scripts de forma oculta sin lanzar la consola de PowerShell. Se recomienda investigar el origen de **{source_image}**, revisar las conexiones de red salientes y buscar evidencias de inyección de código por parte del usuario **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la carga de la DLL."
+    },
+    {
+      "name": "source_image",
+      "required": true,
+      "description": "El proceso que cargó la DLL de PowerShell (ej. un ejecutable sospechoso en Temp)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario bajo el cual se ejecuta el proceso."
+    }
+  ]
+}

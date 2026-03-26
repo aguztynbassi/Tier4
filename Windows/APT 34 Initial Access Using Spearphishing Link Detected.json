@@ -1,0 +1,43 @@
+{
+  "name": "APT 34 Initial Access Using Spearphishing Link Detected",
+  "description": "Detecta intentos de acceso inicial mediante enlaces de Spearphishing dirigidos a infraestructura conocida de APT 34 (OilRig). La detección se basa en la identificación de URLs maliciosas en los logs de tráfico o de correo que coinciden con direcciones IP y dominios asociados históricamente a este actor de amenazas.",
+  "tags": [
+    "security",
+    "initial_access",
+    "spearphishing",
+    "apt34",
+    "oilrig",
+    "T1566.002",
+    "email_security"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Acceso Inicial Detectada! Se ha registrado una conexión o un evento de correo malicioso vinculado a la infraestructura de **APT 34 (OilRig)** en el host **{host}**. El sistema detectó acceso al dominio malicioso **{domain}** o la IP **{source_address}**, los cuales están catalogados como vectores de **Spearphishing** (**MITRE ATT&CK T1566**). El usuario involucrado es **{user}**. Dado que este es un intento de intrusión activa, se recomienda bloquear el acceso a nivel perimetral, restablecer las credenciales del usuario y analizar el endpoint en busca de payloads descargados.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del equipo o servidor desde donde se originó el tráfico hacia el enlace."
+    },
+    {
+      "name": "domain",
+      "required": true,
+      "description": "El dominio de spearphishing detectado en el tráfico de red o log de correo."
+    },
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección IP de origen del ataque identificada en la lista de IOCs."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta del usuario que recibió el correo o interactuó con el enlace."
+    }
+  ]
+}

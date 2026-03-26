@@ -1,0 +1,39 @@
+{
+  "name": "Network: Unauthorized Outbound Spam / Botnet Activity",
+  "description": "Detecta intentos de envío de correo electrónico (SMTP) desde hosts internos que no son servidores de correo autorizados. Esta actividad es característica de sistemas comprometidos por spambots que utilizan la red corporativa para distribuir correo basura o phishing, lo que suele provocar que las direcciones IP de la organización sean bloqueadas en listas de reputación globales (RBL).",
+  "tags": [
+    "security",
+    "botnet",
+    "spam_outbound",
+    "impact",
+    "reputation_risk",
+    "smtp_abuse",
+    "T1498",
+    "T1090"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD: Spam Saliente Detectado! El host interno **{source_address}** está intentando enviar correo electrónico directamente a internet a través del puerto 25. Bajo la técnica de **Network Denial of Service** (**MITRE ATT&CK T1498**) y **Proxy** (**T1090**), este comportamiento indica que el host podría estar infectado con malware de botnet. Se recomienda bloquear el tráfico SMTP saliente desde este host y auditar procesos de red inusuales de forma inmediata.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección IP interna que intenta realizar el envío de correo no autorizado."
+    },
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "La dirección IP externa (servidor de correo remoto) que recibe la conexión."
+    },
+    {
+      "name": "method",
+      "required": false,
+      "description": "El comando SMTP detectado (ej. HELO o EHLO)."
+    }
+  ]
+}

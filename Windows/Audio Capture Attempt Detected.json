@@ -1,0 +1,49 @@
+[
+  {
+    "name": "Audio Capture Attempt Detected",
+    "description": "Detects suspicious activities related to audio capture, including the direct execution of `SoundRecorder.exe` with recording parameters or PowerShell commands designed to interact with audio devices or record sound. This is a critical indicator of an adversary attempting to collect sensitive information from a victim's microphone.",
+    "tags": [
+      "security",
+      "collection",
+      "audio_capture",
+      "T1123",
+      "sysmon",
+      "windows_processes"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A critical alert has been triggered on the host **{computer_name}**: an attempt at **Audio Capture** (**MITRE ATT&CK T1123**) has been detected. The process **{image}**, running under the user **{user}**, executed the command line **{command_line}**, which contains patterns indicative of recording audio or interacting with audio APIs. The parent process was **{parent_image}**. This activity is a strong indicator of an adversary attempting to collect sensitive information from the host's microphone. Immediate investigation is required to determine if this is a legitimate use of the audio recorder or a malicious attempt to eavesdrop. This is a high-priority event that should be treated as a security incident until proven otherwise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "image",
+        "required": true,
+        "description": "The path to the executing binary (e.g., 'SoundRecorder.exe' or 'powershell.exe')."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line that indicates audio capture activity."
+      },
+      {
+        "name": "parent_image",
+        "required": true,
+        "description": "The parent process that initiated the command."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process ran."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      }
+    ]
+  }
+]

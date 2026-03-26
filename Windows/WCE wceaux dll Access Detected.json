@@ -1,0 +1,43 @@
+{
+  "name": "WCE: wceaux.dll Component Access Detected",
+  "description": "Detecta el acceso, creación o manipulación del archivo wceaux.dll, un artefacto específico de la herramienta Windows Credential Editor (WCE). Este componente es fundamental para la ejecución de ataques Pass-the-Hash y la ejecución remota de comandos. Su presencia indica que un atacante con privilegios administrativos está intentando suplantar identidades para el movimiento lateral.",
+  "tags": [
+    "security",
+    "credential_access",
+    "pass_the_hash",
+    "wce",
+    "lateral_movement",
+    "T1003",
+    "event_4663"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE MOVIMIENTO LATERAL: WCE Detectado! Se ha registrado acceso al archivo crítico **wceaux.dll** en el host **{host}**. Este archivo es un componente inequívoco de la herramienta **Windows Credential Editor**. Bajo la técnica de **OS Credential Dumping** (**MITRE ATT&CK T1003**), esto indica que el usuario **{user}** (o un atacante bajo su contexto) está realizando ataques de Pass-the-Hash para comprometer otros sistemas. Se requiere aislamiento inmediato y rotación de credenciales.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó el acceso a la DLL maliciosa."
+    },
+    {
+      "name": "object_name",
+      "required": true,
+      "description": "La ruta completa donde se localizó wceaux.dll."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la operación sobre el archivo."
+    },
+    {
+      "name": "access_mask",
+      "required": false,
+      "description": "El tipo de acceso (lectura, escritura, ejecución) detectado en el evento 4663."
+    }
+  ]
+}

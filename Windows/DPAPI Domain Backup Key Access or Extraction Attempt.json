@@ -1,0 +1,57 @@
+[
+  {
+    "name": "DPAPI Domain Backup Key Access or Extraction Attempt",
+    "description": "Detects suspicious activity related to DPAPI domain backup keys. This includes attempts to back up the DPAPI master key and attempts to extract the LSA secret DPAPI domain backup key from Domain Controllers. Successful extraction of these keys can allow an attacker to decrypt sensitive data protected by DPAPI.",
+    "tags": [
+      "security",
+      "detection",
+      "windows",
+      "credential access",
+      "OS credential dumping",
+      "LSASS memory",
+      "TA0006",
+      "T1003",
+      "T1003.001"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Suspicious DPAPI domain backup key access or extraction attempt detected. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **User** {user}, **Process Name** {process_name}, **Object Name** {object_name}, **Access Mask** {access_mask}. Investigate this critical event immediately as it may indicate an attempt to decrypt sensitive data or escalate privileges.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for DPAPI master key backup (4692) or object access (4662)."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The account performing the operation."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The process attempting the backup or extraction."
+      },
+      {
+        "name": "object_name",
+        "required": true,
+        "description": "The name of the object being accessed (e.g., *BCKUPKEY*)."
+      },
+      {
+        "name": "access_mask",
+        "required": true,
+        "description": "The access mask (e.g., 0x2 for READ)."
+      }
+    ]
+  }
+]

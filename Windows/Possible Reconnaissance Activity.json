@@ -1,0 +1,81 @@
+[
+  {
+    "name": "Possible Reconnaissance Activity",
+    "description": "Detects possible reconnaissance activity, such as the execution of multiple discovery commands within a short timeframe.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "system network configuration discovery",
+      "system owner/user discovery",
+      "permission groups discovery",
+      "domain groups",
+      "system information discovery",
+      "account discovery",
+      "domain account",
+      "network share discovery",
+      "domain trust discovery",
+      "TA0005",
+      "T1016",
+      "T1033",
+      "T1069",
+      "T1069.002",
+      "T1082",
+      "T1087",
+      "T1087.002",
+      "T1135",
+      "T1482",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "High-severity alert: Possible reconnaissance activity detected. Multiple discovery commands ({process_path}) were executed by user '{user}' on host '{host}' within a short timeframe ({interval} seconds). This behavior is highly indicative of an attacker attempting to map the network or gather information about the environment. Event Details:\n\n* **Timestamp**: {timestamp}\n* **User**: {user}\n* **Host**: {host}\n* **Domain**: {domain}\n* **Executed Command**: {command}\n* **Total Commands Executed**: {count}\n\n**Immediately investigate this activity.** This could be a precursor to further malicious actions like lateral movement or privilege escalation. Review the full command history for the user and host.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the last detected discovery command execution."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account that executed the discovery commands."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the discovery commands were executed."
+      },
+      {
+        "name": "domain",
+        "required": true,
+        "description": "The domain of the user account."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The path of the executable that triggered the alert (e.g., whoami.exe, nltest.exe, net1.exe, ipconfig.exe, systeminfo.exe). Since aggregation applies, this would be a list or a representative command."
+      },
+      {
+        "name": "command",
+        "required": true,
+        "description": "The full command line of the executed discovery command."
+      },
+      {
+        "name": "count",
+        "required": true,
+        "description": "The number of discovery commands executed within the specified interval."
+      },
+      {
+        "name": "interval",
+        "required": true,
+        "description": "The time interval (in seconds) within which the multiple commands were detected (default 60 seconds)."
+      }
+    ]
+  }
+]

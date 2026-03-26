@@ -1,0 +1,51 @@
+[
+  {
+    "name": "Browser Data Discovery or Collection Attempt",
+    "description": "Detects attempts to enumerate, locate, or access sensitive browser-related files such as bookmarks, history, and login data. Adversaries perform this discovery to collect credentials, gain persistent access to online services, or gather intelligence. This activity is a critical step in the collection phase of an attack.",
+    "tags": [
+      "security",
+      "discovery",
+      "collection",
+      "credential_access",
+      "T1217",
+      "T1552.001",
+      "sysmon",
+      "windows_processes"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A suspicious process on the host **{computer_name}** has attempted to discover or collect sensitive browser data. The command line **{command_line}**, executed by the process **{image}** under the user **{user}**, contains references to common browser data files like `Login Data`, `Cookies`, or `places.sqlite`. This activity is a clear indicator of **browser data collection** (**MITRE ATT&CK T1552.001**), a step often taken by adversaries to steal credentials and session cookies. The parent process was **{parent_image}**. Immediate investigation is required to determine the legitimacy of this activity. If it's not a known, trusted backup or security tool, it should be treated as a security incident.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "image",
+        "required": true,
+        "description": "The process image (e.g., cmd.exe, powershell.exe) that performed the discovery."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line that includes references to browser data files."
+      },
+      {
+        "name": "parent_image",
+        "required": true,
+        "description": "The parent process that invoked the command."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process ran."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      }
+    ]
+  }
+]

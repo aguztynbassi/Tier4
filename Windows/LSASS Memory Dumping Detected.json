@@ -1,0 +1,43 @@
+{
+  "name": "Credential Access: LSASS Memory Dumping via ProcDump",
+  "description": "Detecta el uso de herramientas de línea de comandos para realizar un volcado de la memoria del proceso Local Security Authority Subsystem Service (LSASS). Los atacantes extraen este volcado (.dmp) para procesarlo de forma offline (frecuentemente con Mimikatz) y obtener credenciales de usuarios con sesión iniciada. El uso de procdump.exe es una técnica común para evadir detecciones basadas en firmas de malware tradicional al utilizar una herramienta legítima de administración.",
+  "tags": [
+    "security",
+    "credential_access",
+    "lsass_dumping",
+    "procdump",
+    "mimikatz_offline",
+    "T1003",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Intento de Volcado de Credenciales (LSASS)! Se ha detectado la ejecución de **{image}** con parámetros destinados a volcar la memoria de LSASS en el host **{host}**. Bajo la técnica de **OS Credential Dumping** (**MITRE ATT&CK T1003**), esto indica un intento inminente de robo de identidades administrativas. Se requiere el aislamiento inmediato del host y la invalidación de sesiones de usuario.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se intentó realizar el volcado de memoria."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "El ejecutable utilizado para el volcado (ej. procdump.exe o comsvcs.dll)."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que especifica el proceso objetivo (lsass) y el archivo de salida."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que ejecutó la herramienta, generalmente requiere privilegios de SYSTEM o Administrador."
+    }
+  ]
+}

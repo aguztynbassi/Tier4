@@ -1,0 +1,44 @@
+{
+  "name": "C2: Communication with Known Malicious Infrastructure via Common Ports",
+  "description": "Detecta conexiones de red salientes hacia direcciones IP identificadas como infraestructura de Comando y Control (C2) que operan sobre puertos estándar (HTTP/HTTPS). Los adversarios utilizan estos puertos para evadir restricciones de firewall y ocultar sus balizas (beacons) dentro del flujo de tráfico web legítimo de la empresa.",
+  "tags": [
+    "security",
+    "command_and_control",
+    "threat_intelligence",
+    "proxy_logs",
+    "beaconing",
+    "c2_traffic",
+    "T1571",
+    "network_security"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE C2: Conexión Maliciosa Confirmada! El host **{source_address}** se ha conectado a la IP **{destination_address}** a través del puerto **{destination_port}**. Esta dirección está catalogada como **{ti_category}** por los servicios de Inteligencia de Amenazas. Bajo la técnica de **Commonly Used Port** (**MITRE ATT&CK T1571**), esto indica un posible compromiso del host intentando comunicarse con su servidor de control.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección IP interna del host que inició la comunicación."
+    },
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "La dirección IP externa marcada como maliciosa."
+    },
+    {
+      "name": "destination_port",
+      "required": true,
+      "description": "El puerto utilizado para la conexión (ej. 443, 80)."
+    },
+    {
+      "name": "ti_category",
+      "required": true,
+      "description": "La categoría de la amenaza según el feed de TI (ej. Botnet, C2, Malware)."
+    }
+  ]
+}

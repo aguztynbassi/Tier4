@@ -1,0 +1,38 @@
+{
+  "name": "Token Impersonation Activity Detected",
+  "description": "Detecta el uso de privilegios críticos de suplantación (SeImpersonatePrivilege o SeAssignPrimaryTokenPrivilege). Los atacantes abusan de estos privilegios para elevar sus permisos de un nivel de servicio (como IIS o SQL Server) a SYSTEM, permitiéndoles tomar control total del host comprometido mediante la creación de procesos con el token de seguridad de una cuenta con mayores privilegios.",
+  "tags": [
+    "security",
+    "privilege_escalation",
+    "token_manipulation",
+    "potato_attacks",
+    "seimpersonate",
+    "T1134",
+    "event_4672"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Escalada de Privilegios Crítica! Se ha detectado el uso del privilegio de suplantación **{privilege_used}** en el host **{host}**. Bajo la técnica de **Access Token Manipulation** (**MITRE ATT&CK T1134**), este evento sugiere que un proceso está intentando elevar sus privilegios para actuar como **SYSTEM** u otro usuario administrativo. Este patrón es característico de ataques de tipo 'Potato' que aprovechan servicios mal configurados. Se recomienda auditar inmediatamente qué proceso solicitó este privilegio y si la cuenta involucrada tiene una justificación técnica para poseerlo.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se registró el uso del privilegio especial."
+    },
+    {
+      "name": "privilege_used",
+      "required": true,
+      "description": "El privilegio específico detectado (SeImpersonatePrivilege o SeAssignPrimaryTokenPrivilege)."
+    },
+    {
+      "name": "SubjectUserName",
+      "required": true,
+      "description": "La cuenta de usuario que ejecutó la acción de suplantación."
+    }
+  ]
+}

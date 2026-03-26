@@ -1,0 +1,69 @@
+{
+  "name": "Suspicious FTP Transfer",
+  "description": "A large FTP transfer was detected, which could indicate data exfiltration. This warrants immediate investigation to determine legitimacy and potential compromise.",
+  "tags": [
+    "security",
+    "detection",
+    "high",
+    "network",
+    "ftp",
+    "data_exfiltration",
+    "TA0010",
+    "T1048.001"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "HIGH SEVERITY ALERT: Suspicious FTP Transfer Detected.\\n\\nA large FTP transfer of {bytes_transferred} bytes occurred from source IP {source_ip}:{source_port} to destination IP {destination_ip}:{destination_port} at {Timestamp}. The transfer was performed by user '{user}' for file '{filename}'. This could indicate data exfiltration.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Source IP**: {source_ip}\\n* **Source Port**: {source_port}\\n* **Destination IP**: {destination_ip}\\n* **Destination Port**: {destination_port}\\n* **User**: {user}\\n* **Filename**: {filename}\\n* **Bytes Transferred**: {bytes_transferred}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY):**\\n\\n1.  **IMMEDIATE NETWORK SEGMENTATION/BLOCK:** If the destination IP is external and unknown, immediately block traffic to/from {destination_ip} at the network perimeter (firewall/proxy). If the source host is internal, consider isolating it from the network.\\n2.  **VERIFY LEGITIMACY:** Contact the user '{user}' and relevant business owners to determine if this large FTP transfer was legitimate and authorized. Gather context around the purpose of the transfer and the nature of the '{filename}'.\\n3.  **INVESTIGATE SOURCE HOST:** If the transfer is deemed suspicious:\\n    * Inspect the source host associated with {source_ip} for signs of compromise (e.g., malware, unusual processes, other network connections). \\n    * Review recent user activity for '{user}'.\\n4.  **INVESTIGATE DESTINATION:** Analyze the destination IP {destination_ip}. Is it a known legitimate business partner, cloud storage, or an unknown/suspicious external IP? Conduct OSINT on the destination IP.\\n5.  **REVIEW FILE CONTENT (if possible):** If the FTP server logs provide information or a copy of the file, analyze the content of '{filename}' for sensitive data. This may require forensic steps.\\n6.  **THREAT HUNT:** Search your network for other large FTP transfers, unusual network connections, or other indicators of compromise related to data exfiltration.\\n7.  **CONTAINMENT & ERADICATION:** If confirmed as exfiltration, follow your organization's incident response plan for data breach, including containment, eradication, and recovery steps.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of the FTP transfer event."
+    },
+    {
+      "name": "source_ip",
+      "required": true,
+      "description": "The source IP address from which the FTP transfer originated."
+    },
+    {
+      "name": "destination_ip",
+      "required": true,
+      "description": "The destination IP address to which the FTP transfer was made."
+    },
+    {
+      "name": "source_port",
+      "required": true,
+      "description": "The source port used for the FTP transfer."
+    },
+    {
+      "name": "destination_port",
+      "required": true,
+      "description": "The destination port used for the FTP transfer (typically 20 or 21)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The FTP user account involved in the transfer."
+    },
+    {
+      "name": "filename",
+      "required": true,
+      "description": "The name of the file transferred via FTP."
+    },
+    {
+      "name": "bytes_transferred",
+      "required": true,
+      "description": "The size of the transferred file in bytes."
+    },
+    {
+      "name": "ComputerName",
+      "required": false,
+      "description": "The hostname of the system where the transfer was initiated (if available from logs)."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+    "name": "REvil-Sodinokibi Ransomware Infected Host Detected",
+    "description": "REvil (Sodinokibi) Ransomware infected host is detected. The alert uses the `REvil-Sodinokibi Ransomware` list to check for IOC hashes in the logs. This indicates a high probability of an active infection or an attempted attack.",
+    "tags": [
+        "TA0040",
+        "T1486",
+        "security",
+        "detection",
+        "Firewall",
+        "IDS/IPS",
+        "Windows Sysmon"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the REvil (Sodinokibi) ransomware infection on the host `{hostname}` at `{timestamp}`. The alert was triggered by a file with the hash `{file_hash}`. Identify the source of the infection, the files that were encrypted, and any network communication associated with the malware. Recommend steps to isolate the host, eradicate the malware, and restore affected files.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname of the affected host."
+        },
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        },
+        {
+            "name": "file_hash",
+            "required": true,
+            "description": "The hash of the file that matched an entry in the REvil-Sodinokibi Ransomware list."
+        }
+    ]
+}

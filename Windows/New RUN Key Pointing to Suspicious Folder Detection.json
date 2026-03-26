@@ -1,0 +1,43 @@
+{
+  "name": "Persistence: Suspicious Run Key Creation",
+  "description": "Detecta la creación de valores en las llaves de registro Run o RunOnce que apuntan a directorios inusuales o temporales. Los atacantes utilizan estas llaves para asegurar que su código malicioso se ejecute automáticamente cada vez que un usuario inicia sesión, ocultando los ejecutables en rutas con permisos de escritura laxos como Temp, AppData o la Papelera de Reciclaje.",
+  "tags": [
+    "security",
+    "persistence",
+    "registry_run_keys",
+    "malware_autostart",
+    "defense_evasion",
+    "T1547.001",
+    "sysmon_event_13"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE PERSISTENCIA: Llave Run Sospechosa! Se ha creado una nueva entrada de inicio automático en **{target_object}** apuntando a un binario en una ruta inusual (**{detail}**) en el host **{host}**. Bajo la técnica de **Registry Run Keys** (**MITRE ATT&CK T1547.001**), este es un método clásico para asegurar la supervivencia del malware tras un reinicio. Se requiere la inspección del binario y del proceso que realizó la modificación.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la modificación del registro."
+    },
+    {
+      "name": "target_object",
+      "required": true,
+      "description": "La ruta de la llave de registro afectada (Run o RunOnce)."
+    },
+    {
+      "name": "detail",
+      "required": true,
+      "description": "El valor de la llave, que contiene la ruta al ejecutable sospechoso."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó el cambio en el registro."
+    }
+  ]
+}

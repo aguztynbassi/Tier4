@@ -1,0 +1,34 @@
+{
+  "name": "Possible SquiblyTwo Attack Detected",
+  "description": "Detecta la ejecución de WMIC realizando peticiones hacia recursos externos para cargar hojas de estilo (XSL). Esta técnica, conocida como SquiblyTwo, permite la ejecución de scripts maliciosos en memoria, evadiendo el control de aplicaciones y el escaneo de archivos en disco. La detección emplea imphash para identificar el binario de WMIC aunque este haya sido renombrado.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "execution",
+    "wmi",
+    "squiblytwo",
+    "lolbin",
+    "T1220",
+    "T1047"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Ejecución de Script Remoto (SquiblyTwo)! Se ha detectado un posible ataque de **SquiblyTwo** en el host **{host}**. El proceso identificado mediante imphash como WMIC intentó descargar y ejecutar un archivo remoto usando el comando: **{command}**. Bajo las técnicas de **XSL Scripting** (**MITRE ATT&CK T1220**) y **WMI** (**T1047**), esto indica un intento de ejecución de código arbitrario que evade la mayoría de las defensas perimetrales. Se requiere el aislamiento inmediato del host y el bloqueo de la URL de destino en el firewall.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se ejecutó el comando sospechoso."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que incluye el parámetro /format y la URL http/https."
+    }
+  ]
+}

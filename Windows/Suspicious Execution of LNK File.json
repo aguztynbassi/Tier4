@@ -1,0 +1,65 @@
+[
+  {
+    "name": "Suspicious Execution of LNK File",
+    "description": "Detects the execution of suspicious LNK files that spawn PowerShell or command prompt and have high entropy in the command field.",
+    "tags": [
+      "security",
+      "detection",
+      "execution",
+      "malicious file",
+      "TA0002",
+      "T1204.002",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "High-severity alert: Suspicious execution of an LNK file detected. This LNK file, launched by Explorer.exe, spawned a PowerShell or Command Prompt process with a high-entropy command, which often indicates obfuscated or malicious code. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Process GUID**: {process_guid}\n* **Event ID**: {event_id}\n* **User**: {user}\n* **Process Path**: {process_path}\n* **Parent Process Path**: {parent_process_path}\n* **Command Line**: {command}\n* **Command Entropy**: {command_entropy}\n\n**Immediately investigate this event.** This activity is highly indicative of initial access or execution of malicious payloads via LNK files. Analyze the LNK file and the spawned process for further indicators of compromise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "process_guid",
+        "required": true,
+        "description": "The unique identifier of the spawned process (cmd.exe or powershell.exe)."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Process Creation (1)."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process was created."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the spawned process (cmd.exe or powershell.exe)."
+      },
+      {
+        "name": "parent_process_path",
+        "required": true,
+        "description": "The full path to the parent process, which should be 'explorer.exe'."
+      },
+      {
+        "name": "command",
+        "required": true,
+        "description": "The full command line of the spawned process."
+      },
+      {
+        "name": "command_entropy",
+        "required": true,
+        "description": "The calculated entropy of the command line, indicating randomness (should be greater than 5)."
+      }
+    ]
+  }
+]

@@ -1,0 +1,85 @@
+[
+  {
+    "name": "DHCP Server Callout DLL Registry Modification",
+    "description": "Detection of suspicious modifications to DHCP Server Callout DLL registry keys, indicating potential persistence or privilege escalation.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "persistence",
+      "privilege_escalation",
+      "defense_evasion",
+      "dll_injection",
+      "system_service_abuse",
+      "TA0003",
+      "TA0004",
+      "TA0005",
+      "T1543",
+      "T1543.003",
+      "T1574",
+      "T1574.002",
+      "T1112"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: DHCP Server Callout DLL Registry Modification Detected!\\n\\nSuspicious modification to a DHCP Server Callout DLL registry key ('{TargetObject}') was detected on host '{ComputerName}' by user '{User}' via process '{ProcessName}' (Image: '{Image}', CommandLine: '{CommandLine}') at {Timestamp}. The new value set was: '{Details}'.\\n\\nThis is a critical indicator of a **Persistence (T1543.003 - Windows Service Modification)** and **Privilege Escalation (TA0004)** attempt. An adversary is attempting to inject and execute arbitrary code within the highly privileged `DHCPServer` service, bypassing many security controls.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **User**: {User}\\n* **Process Name**: {ProcessName}\\n* **Process Image**: {Image}\\n* **Command Line**: {CommandLine}\\n* **Targeted Registry Key**: {TargetObject}\\n* **New Value (DLL Path/Enabled State)**: {Details}\\n* **Event ID**: {EventID} (Sysmon RegistryValueChange)\\n* **Sysmon Rule Name**: {RuleName}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** Immediately disconnect host '{ComputerName}' from the network to prevent further malicious activity, lateral movement, and the successful execution of the malicious DLL. **DO NOT power off the system.**\\n2.  **FORENSIC IMAGE AND MEMORY DUMP:** Perform a full forensic disk image and a memory dump of '{ComputerName}'. This is crucial to preserve evidence, identify the malicious DLL, and understand the initial compromise vector.\\n3.  **REVERT REGISTRY MODIFICATION:** Immediately revert the malicious registry change. \\n    * For `CalloutDlls`: Delete the added DLL path value. \\n    * For `CalloutEnabled`: Set the value back to '0' or 'False' if it was changed from default. \\n    **WARNING:** This must be done carefully to avoid system instability if critical system components were altered. Use `regedit.exe` or `reg.exe delete` with caution.\\n4.  **IDENTIFY AND ANALYZE MALICIOUS DLL:** If a DLL path was specified in '{Details}', locate the DLL file. Obtain its cryptographic hash and immediately check it against threat intelligence sources (e.g., VirusTotal, Any.Run). Perform static and dynamic analysis to understand its functionality and capabilities.\\n5.  **INVESTIGATE PROCESS AND USER:** Investigate the '{ProcessName}' (`{Image}`) that performed the modification and its full command line (`{CommandLine}`). Determine how this process gained the necessary privileges to modify these critical registry keys. Investigate the '{User}' account for signs of compromise.\\n6.  **THREAT HUNT FOR RELATED ACTIVITY:** Search for other IOCs across your environment. Look for: \\n    * Initial access vectors (e.g., phishing, vulnerable services, RDP brute-force) leading to this modification. \\n    * Other persistence mechanisms. \\n    * Lateral movement attempts. \\n    * Attempts to restart the DHCP service or any related Event ID 1033 (DHCP Callout DLL Loaded) alerts.\\n7.  **ENHANCE SECURITY CONTROLS:** Review and strengthen access controls on critical registry keys and system services. Ensure robust logging and monitoring is in place for registry modifications and service configurations.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the registry modification event."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname where the registry modification occurred."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the process made the registry change."
+      },
+      {
+        "name": "ProcessName",
+        "required": true,
+        "description": "The name of the process that modified the registry."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to the process image that modified the registry."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line of the process that modified the registry."
+      },
+      {
+        "name": "TargetObject",
+        "required": true,
+        "description": "The full registry key path that was modified."
+      },
+      {
+        "name": "Details",
+        "required": true,
+        "description": "The new value written to the registry key (e.g., the DLL path or enabled state)."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Sysmon Event ID (expected to be 13)."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "name": "Process Hollowing - Anomalous Parent Process Detected",
+  "description": "Detecta la técnica de Process Hollowing mediante la identificación de procesos críticos del sistema (como lsass.exe, services.exe o wininit.exe) que han sido iniciados por padres no autorizados. El hollowing consiste en crear un proceso legítimo en estado suspendido, vaciar su memoria y reemplazarla con código malicioso para ocultar la actividad tras la identidad de un binario confiable de Windows.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "privilege_escalation",
+    "process_hollowing",
+    "T1055.012",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta Crítica de Evasión de Defensas! Se ha detectado una anomalía en la jerarquía de procesos del host **{host}**. El proceso del sistema **{image}** fue iniciado por un padre inusual: **{parent_command}**. Esta discrepancia es característica de **Process Hollowing** (**MITRE ATT&CK T1055.012**), donde un atacante secuestra un proceso legítimo para ejecutar malware de forma encubierta. Dado que estos procesos suelen tener altos privilegios, la integridad del sistema está gravemente comprometida. Se recomienda el aislamiento inmediato del equipo y realizar un análisis forense de la memoria para identificar el código inyectado.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se detectó el proceso con padre anómalo."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "El proceso crítico de Windows que ha sido secuestrado (ej. lsass.exe)."
+    },
+    {
+      "name": "parent_command",
+      "required": true,
+      "description": "El comando o proceso padre que inició el proceso crítico de forma sospechosa."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario bajo la cual se está ejecutando el proceso."
+    }
+  ]
+}

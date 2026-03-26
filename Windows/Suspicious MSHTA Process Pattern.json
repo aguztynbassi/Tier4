@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Suspicious MSHTA Process Pattern",
+    "description": "Detects suspicious `mshta.exe` process patterns, including:\n  * Binary run from a non-default path.\n  * Execution of HTML applications (HTA) masquerading as non-HTA files.\n  * MSHTA.exe with suspicious parent processes",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "execution",
+      "system binary proxy execution",
+      "Mshta",
+      "Native API",
+      "TA0005",
+      "TA0002",
+      "T1218.005",
+      "T1106",
+      "Windows",
+      "mshta",
+      "hta"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: Suspicious `mshta.exe` activity detected on host '{host}' by user '{user}'. This legitimate Windows binary is exhibiting highly suspicious behavior, including (but not limited to) being launched from a non-standard path ('{process_path}'), by a suspicious parent process ('{parent_process_name}'), or executing a file without a typical HTA/HTM extension. This pattern is often indicative of an adversary attempting to execute malicious code and bypass security controls. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **Parent Process Name**: {parent_process_name}\n* **User**: {user}\n* **Host**: {host}\n\n**IMMEDIATE AND URGENT ACTION REQUIRED:** This is a critical security incident. Isolate the affected system immediately. Analyze the full command line and any associated files to identify the malicious payload. Investigate the parent process and any network connections. This activity is a strong indicator of an active threat and potential system compromise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Windows Security Event ID for Process Creation (4688)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was executed, which should be 'mshta.exe'."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the mshta.exe executable. Will be a non-standard path if triggered by process_path_condition."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute mshta.exe."
+      },
+      {
+        "name": "parent_process_name",
+        "required": true,
+        "description": "The name of the parent process that launched mshta.exe (e.g., cmd.exe, powershell.exe)."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which mshta.exe was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

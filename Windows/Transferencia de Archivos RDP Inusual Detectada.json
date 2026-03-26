@@ -1,0 +1,86 @@
+[
+  {
+    "name": "Transferencia de Archivos RDP Inusual Detectada",
+    "description": "Se ha detectado una transferencia de archivos de gran tamaño a través de una sesión de Escritorio Remoto (RDP), lo que podría indicar exfiltración de datos o movimiento lateral no autorizado.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "exfiltration",
+      "lateral movement",
+      "remote services access",
+      "TA0010",
+      "TA0008",
+      "T1021.001",
+      "Windows",
+      "RDP",
+      "File Transfer",
+      "Large Data Transfer"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "ALERTA DE SEVERIDAD ALTA: Transferencia de Archivos RDP Inusual Detectada.\n\nSe ha observado una transferencia de {bytes_transferred} bytes a través de una sesión RDP interactiva (LogonType 10) en el host '{host}' por el usuario '{user}' desde la dirección IP '{source_address}' a las '{timestamp}'. Este volumen inusual de datos transferidos podría indicar un intento de exfiltración de datos o el uso malicioso de RDP.\n\n**Detalles del Evento:**\n* **Fecha/Hora**: {timestamp}\n* **Host (Servidor RDP)**: {host}\n* **Usuario de la Sesión RDP**: {user}\n* **Dominio del Usuario**: {domain}\n* **IP de Origen**: {source_address}\n* **Puerto de Origen**: {source_port}\n* **Bytes Transferidos**: {bytes_transferred}\n* **Tipo de Inicio de Sesión**: {LogonType}\n* **IP de Destino (Servidor RDP)**: {destination_address}\n* **Puerto de Destino (Servidor RDP)**: {destination_port}\n* **ID de Sesión RDP**: {session_id}\n\n**ACCIONES RECOMENDADAS (PRIORIDAD ALTA):**\n\n1.  **Investigar el Usuario y la Sesión:** Contacte inmediatamente al usuario '{user}' para verificar la legitimidad de la transferencia de archivos. Pregunte si estaba transfiriendo archivos grandes y por qué.\n2.  **Análisis de Contenido:** Si es posible y hay herramientas de inspección (ej. DLP), intente identificar el tipo y el contenido de los archivos transferidos. Esto es crucial para confirmar la exfiltración de datos sensibles.\n3.  **Análisis de la Conexión RDP:** Investigue la `source_address` de la conexión. ¿Es una IP interna o externa? ¿Es esperada para este usuario? Verifique si la sesión RDP tenía acceso a recursos sensibles en el servidor.\n4.  **Aislamiento del Host/Usuario:** Si la actividad es sospechosa, aísle el host '{host}' y/o deshabilite la cuenta de usuario '{user}' para contener la amenaza.\n5.  **Análisis Forense:** Realice un análisis forense exhaustivo del host '{host}' para identificar el malware, la persistencia, las credenciales comprometidas y cualquier otra actividad post-explotación. Examine el portapapeles RDP y el historial de transferencia de archivos.\n6.  **Bloqueo de IPs/Usuarios:** Si se confirma actividad maliciosa, bloquee la `source_address` en los perímetros de red y considere implementar políticas de acceso más estrictas para RDP.\n7.  **Revisar Logs Adicionales:** Correlacione esta alerta con logs de seguridad de Windows (Event ID 4624/4625 para inicios/fallos de sesión), logs de creación de procesos, logs de acceso a archivos y logs de red para construir una línea de tiempo completa del incidente.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the RDP session activity."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname of the RDP server where the event occurred."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The username associated with the RDP session."
+      },
+      {
+        "name": "domain",
+        "required": false,
+        "description": "The domain of the user, if available."
+      },
+      {
+        "name": "source_address",
+        "required": true,
+        "description": "The source IP address of the RDP connection."
+      },
+      {
+        "name": "source_port",
+        "required": false,
+        "description": "The source port of the RDP connection."
+      },
+      {
+        "name": "destination_address",
+        "required": false,
+        "description": "The destination IP address (RDP server)."
+      },
+      {
+        "name": "destination_port",
+        "required": false,
+        "description": "The destination port (e.g., 3389)."
+      },
+      {
+        "name": "bytes_transferred",
+        "required": true,
+        "description": "The amount of data transferred in bytes."
+      },
+      {
+        "name": "LogonType",
+        "required": true,
+        "description": "The Windows logon type (expected to be 10 for interactive remote)."
+      },
+      {
+        "name": "session_id",
+        "required": false,
+        "description": "The ID of the RDP session, if available."
+      }
+    ]
+  }
+]

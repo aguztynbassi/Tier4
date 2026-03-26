@@ -1,0 +1,44 @@
+{
+  "name": "Data Copied to Removable Storage Device",
+  "description": "Detecta cuando un usuario copia o modifica archivos en un dispositivo de almacenamiento removible (USB, disco externo, etc.) desde un host crítico. Esta alerta utiliza la auditoría de acceso a objetos de Windows para identificar operaciones de 'WriteData' o 'AppendData' hacia dispositivos que no son discos fijos, indicando una posible exfiltración física de información sensible.",
+  "tags": [
+    "security",
+    "exfiltration",
+    "insider_threat",
+    "dlp",
+    "removable_media",
+    "usb_write",
+    "T1052.001",
+    "event_4663"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EXFILTRACIÓN FÍSICA! Se ha detectado una operación de escritura de archivos hacia un dispositivo removible en el host crítico **{host}**. El usuario **{user}** ha realizado una acción de **{access}** sobre un objeto de almacenamiento externo. Bajo la técnica de **Exfiltration over Physical Medium** (**MITRE ATT&CK T1052.001**), este evento puede representar el robo de propiedad intelectual o datos sensibles. Se recomienda verificar de inmediato la naturaleza de los archivos copiados y la política de uso de medios extraíbles.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo (perteneciente a CRITICAL_HOSTS) donde se realizó la copia."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la transferencia de archivos."
+    },
+    {
+      "name": "object_name",
+      "required": true,
+      "description": "La ruta o nombre del archivo que fue copiado al dispositivo."
+    },
+    {
+      "name": "access",
+      "required": true,
+      "description": "El tipo de acceso detectado (WriteData o AppendData)."
+    }
+  ]
+}

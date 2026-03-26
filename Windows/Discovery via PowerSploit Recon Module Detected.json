@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Discovery via PowerSploit Recon Module Detected",
+    "description": "Detects the execution of specific PowerSploit Reconnaissance module scripts. Adversaries may abuse these modules to perform discovery and gather information about the target environment. You **must** update the `powersploit_recon_modules` list with the relevant module names or patterns used in your environment.",
+    "tags": [
+      "security",
+      "detection",
+      "windows",
+      "powershell",
+      "discovery",
+      "execution",
+      "command and scripting interpreter",
+      "process discovery",
+      "remote system discovery",
+      "TA0002",
+      "TA0007",
+      "T1059",
+      "T1059.001",
+      "T1057",
+      "T1018"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Execution of a PowerSploit Reconnaissance module script detected. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **User** {user}, **Process Name** {process_name}, **Script Block** {script_block}. Investigate this activity to determine if it is a legitimate administrative action or an adversary performing discovery in your environment.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "PowerShell Script Block Logging Event ID (e.g., 4104)."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the PowerShell script was executed."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The process executing PowerShell (e.g., powershell.exe)."
+      },
+      {
+        "name": "script_block",
+        "required": true,
+        "description": "The content of the PowerShell script block."
+      }
+    ]
+  }
+]

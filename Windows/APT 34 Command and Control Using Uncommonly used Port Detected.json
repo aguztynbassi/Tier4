@@ -1,0 +1,48 @@
+{
+  "name": "APT 34 Command and Control Using Uncommonly used Port Detected",
+  "description": "Detecta tráfico de red hacia infraestructura conocida del grupo APT 34 (OilRig) a través de puertos no estándar. Los adversarios utilizan esta técnica para evadir firewalls y proxies que no realizan inspección profunda de paquetes (DPI) o que tienen políticas de salida excesivamente permisivas.",
+  "tags": [
+    "security",
+    "command_and_control",
+    "apt34",
+    "oilrig",
+    "T1571",
+    "non_standard_port",
+    "defense_evasion"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta Crítica! Se ha detectado una conexión sospechosa vinculada a **APT 34 (OilRig)**. El host interno **{source_address}** (Usuario: **{user}**) está intentando comunicarse con el destino malicioso **{destination_host}** (**{destination_address}**) utilizando el puerto no convencional **{destination_port}**. Esta actividad es un fuerte indicador de **Mando y Control (C2)** utilizando puertos no estándar (**MITRE ATT&CK T1571**) para evadir la detección perimetral. Se recomienda el aislamiento inmediato del host y la revisión de las reglas de salida del firewall.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "Dirección IP del equipo interno que intenta la conexión."
+    },
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "Dirección IP de destino identificada como parte de la infraestructura de APT 34."
+    },
+    {
+      "name": "destination_host",
+      "required": true,
+      "description": "Nombre de dominio malicioso asociado al servidor C2."
+    },
+    {
+      "name": "destination_port",
+      "required": true,
+      "description": "El puerto no estándar detectado en la comunicación."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "Usuario que inició la sesión en el momento de la detección del tráfico."
+    }
+  ]
+}

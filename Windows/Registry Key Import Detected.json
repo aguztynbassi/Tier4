@@ -1,0 +1,64 @@
+[
+  {
+    "name": "Registry Key Import Detected",
+    "description": "Detects the import of registry keys using `regedit.exe`. Adversaries can use this to add malicious keys for persistence or other malicious purposes. Importing registry data is a less common legitimate activity, making it a strong indicator of potential abuse.",
+    "tags": [
+      "security",
+      "detection",
+      "persistence",
+      "modify registry",
+      "TA0005",
+      "T1112",
+      "Windows",
+      "regedit",
+      "registry",
+      "persistence",
+      "reg_import"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: Registry key import detected on host '{host}' by user '{user}'. The `regedit.exe` process at '{process_path}' was executed with command line '{command_line}', indicating the import of registry keys. This is a critical indicator of potential malicious activity, as adversaries often modify the registry for persistence, defense evasion, or privilege escalation. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**IMMEDIATE AND URGENT ACTION REQUIRED:** This is a critical security incident. Isolate the affected system immediately. Examine the `.reg` file being imported to determine its content and purpose. Investigate the source of this file and any other associated activities. Conduct a thorough forensic analysis to identify the initial compromise vector, any persistence mechanisms established, and further malicious activity. This alert signifies a high-priority threat.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Windows Security Event ID for Process Creation (4688)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was executed, which should be 'regedit.exe'."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the regedit.exe executable."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute regedit.exe, including import flags and a .reg file."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which regedit.exe was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

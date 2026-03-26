@@ -1,0 +1,37 @@
+{
+    "name": "Potential Intrusion Detected",
+    "description": "This prompt is designed to help investigate a potential intrusion detected by an Intrusion Detection System (IDS) or Intrusion Prevention System (IPS). The prompt is broad and requires specific details from the IDS/IPS alert to be effective. It is used to analyze the source and destination of the traffic, the nature of the intrusion, and the host involved to determine the severity and scope of the event.",
+    "tags": [
+        "security",
+        "detection",
+        "TA0011",
+        "TA0005",
+        "T1090",
+        "T1211"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the security event labeled 'Intrusion' at `{timestamp}`. The event was triggered by a detection from an IDS/IPS device. Analyze the source address `{source_address}` and destination address `{destination_address}` to identify any known malicious IPs. Review the associated alert details and logs from the IDS/IPS to understand the nature of the detected intrusion. Provide a summary of the event, the potential impact, and recommend immediate response actions.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the intrusion was detected."
+        },
+        {
+            "name": "source_address",
+            "required": true,
+            "description": "The source IP address of the potential intrusion."
+        },
+        {
+            "name": "destination_address",
+            "required": true,
+            "description": "The destination IP address of the potential intrusion."
+        }
+    ]
+}

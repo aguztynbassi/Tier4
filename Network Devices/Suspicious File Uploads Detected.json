@@ -1,0 +1,60 @@
+{
+  "name": "Suspicious File Uploads Detected",
+  "description": "A large file upload has been detected, which could indicate data exfiltration. Immediate investigation is required to determine the legitimacy and potential impact.",
+  "tags": [
+    "security",
+    "detection",
+    "high",
+    "network",
+    "web_server",
+    "http",
+    "data_exfiltration",
+    "TA0010",
+    "T1048.003"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "HIGH SEVERITY ALERT: Suspicious File Upload Detected.\\n\\nA large file upload of {bytes_uploaded} bytes for '{file_name}' was observed from source IP {source_ip} to destination IP {destination_ip} at {Timestamp}. The upload was performed by user '{user}' to URL '{url}'. This could indicate data exfiltration.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Source IP**: {source_ip}\\n* **Destination IP**: {destination_ip}\\n* **User**: {user}\\n* **File Name**: {file_name} (if available)\\n* **Bytes Uploaded**: {bytes_uploaded}\\n* **URL**: {url}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY):**\\n\\n1.  **IMMEDIATE NETWORK SEGMENTATION/BLOCK:** If the destination IP is external and unknown, immediately block traffic to/from {destination_ip} at the network perimeter (firewall/proxy). If the source host is internal, consider isolating it from the network.\\n2.  **VERIFY LEGITIMACY:** Immediately contact the user '{user}' and relevant business owners/application owners to verify if this large file upload was legitimate and authorized. Gather context regarding the purpose of the upload and the nature of the '{file_name}'. Be highly skeptical if the user claims ignorance or if the file seems unrelated to their role.\\n3.  **ANALYZE FILE CONTENT (if possible):** If your proxy or web server logs can provide insights into the file's content or allow for retrieval, analyze '{file_name}' for sensitive data, malware, or suspicious content. This may require forensic steps.\\n4.  **INVESTIGATE SOURCE HOST & USER:** If the transfer is deemed suspicious, investigate the source host associated with {source_ip} and the user account '{user}' for signs of compromise (e.g., malware infection, unusual processes, other network connections, recent unauthorized access).\\n5.  **INVESTIGATE DESTINATION:** Analyze the destination URL '{url}' and IP {destination_ip}. Is it a known legitimate service (e.g., cloud storage, business partner portal) or an unknown/suspicious external IP/domain? Conduct OSINT on the destination.\\n6.  **THREAT HUNT:** Search your network and web server logs for other large file uploads, unusual network connections, or other indicators of compromise related to data exfiltration.\\n7.  **CONTAINMENT & ERADICATION:** If confirmed as exfiltration, follow your organization's incident response plan for data breach, including containment, eradication, and recovery steps.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of the file upload event."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account associated with the file upload."
+    },
+    {
+      "name": "source_ip",
+      "required": true,
+      "description": "The source IP address from which the upload originated."
+    },
+    {
+      "name": "destination_ip",
+      "required": true,
+      "description": "The destination IP address to which the file was uploaded."
+    },
+    {
+      "name": "bytes_uploaded",
+      "required": true,
+      "description": "The size of the uploaded file in bytes."
+    },
+    {
+      "name": "file_name",
+      "required": false,
+      "description": "The name of the file that was uploaded (if available)."
+    },
+    {
+      "name": "url",
+      "required": true,
+      "description": "The URL to which the file was uploaded."
+    }
+  ]
+}

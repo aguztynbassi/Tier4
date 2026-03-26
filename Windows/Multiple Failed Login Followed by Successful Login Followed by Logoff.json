@@ -1,0 +1,39 @@
+{
+  "name": "Credential Access: Brute Force Success and Quick Logoff",
+  "description": "Detecta una secuencia de eventos de seguridad donde un usuario tiene múltiples fallos de autenticación seguidos de un inicio de sesión exitoso y un cierre de sesión posterior. Este patrón es un indicador de alta fidelidad de un ataque de fuerza bruta o 'password spraying' que ha tenido éxito, sugiriendo que el atacante logró comprometer la cuenta y posiblemente realizó acciones de corta duración antes de salir del sistema.",
+  "tags": [
+    "security",
+    "credential_access",
+    "brute_force",
+    "valid_accounts",
+    "privilege_escalation",
+    "account_compromise",
+    "T1110",
+    "T1078"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Compromiso de Cuenta Detectado! El usuario **{User}** ha tenido éxito tras múltiples fallos de inicio de sesión desde la dirección **{SourceAddress}**, seguido de un cierre de sesión inmediato. Bajo las técnicas de **Brute Force** (**T1110**) y **Valid Accounts** (**T1078**), esto indica que un atacante ha descifrado la credencial y ha accedido al sistema. Se requiere el bloqueo inmediato de la cuenta y el restablecimiento de contraseña.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "User",
+      "required": true,
+      "description": "El nombre de la cuenta de usuario comprometida."
+    },
+    {
+      "name": "SourceAddress",
+      "required": true,
+      "description": "La dirección IP de origen desde donde se originaron los intentos de inicio de sesión."
+    },
+    {
+      "name": "host",
+      "required": false,
+      "description": "El equipo o servidor donde ocurrió la secuencia de eventos."
+    }
+  ]
+}

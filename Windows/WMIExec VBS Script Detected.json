@@ -1,0 +1,43 @@
+{
+  "name": "WMIExec VBS Script Detected",
+  "description": "Detecta la ejecución de scripts VBScript a través de `cscript.exe` o `wscript.exe` utilizando el parámetro `/shell`. Este comportamiento es característico de herramientas de movimiento lateral como `wmiexec.py` (Impacket), que utilizan WMI para ejecutar comandos en sistemas remotos y devolver la salida a través de archivos temporales o el registro.",
+  "tags": [
+    "security",
+    "execution",
+    "lateral_movement",
+    "wmiexec",
+    "vbs",
+    "T1059.005",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Ejecución Remota! En el host **{host}**, el motor de scripts **{image}** ha ejecutado un archivo VBS con el argumento `/shell`. La línea de comandos completa fue: **{command}**. Este patrón es un indicador altamente fiable de actividad de **WMIExec** (**MITRE ATT&CK T1059.005**), utilizada por atacantes para la ejecución remota de comandos tras obtener credenciales. El evento fue iniciado por el usuario **{user}**. Se requiere una inspección inmediata del origen de la conexión de red y de los procesos iniciados posteriormente.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del sistema donde se detectó la ejecución del script."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "El ejecutable del motor de scripts utilizado (cscript.exe o wscript.exe)."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos que incluye el script .vbs y el parámetro /shell."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "Cuenta de usuario bajo la cual se ejecutó el proceso."
+    }
+  ]
+}

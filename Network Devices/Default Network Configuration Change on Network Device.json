@@ -1,0 +1,39 @@
+{
+  "name": "Network: Core Device Configuration Change Detected",
+  "description": "Detecta cualquier modificación, creación, eliminación o desactivación en la configuración de dispositivos de red críticos (routers, switches, firewalls). Los atacantes modifican la configuración de red para establecer persistencia, crear puertas traseras mediante port knocking, desactivar funciones de seguridad o facilitar la exfiltración de datos mediante la redirección de tráfico.",
+  "tags": [
+    "security",
+    "network_infrastructure",
+    "configuration_change",
+    "persistence",
+    "defense_evasion",
+    "T1562",
+    "T1098",
+    "T1112"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE CONFIGURACIÓN: Cambio en Dispositivo de Red! Se ha detectado una modificación en la configuración del activo **{host}**. Bajo la técnica de **Modify System Process** (**MITRE ATT&CK T1543.003**) y **Account Manipulation** (**T1098**), este cambio podría indicar un intento de un atacante por debilitar la postura de seguridad o establecer persistencia en el hardware de red. Se recomienda validar inmediatamente si el cambio corresponde a una ventana de mantenimiento autorizada.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El dispositivo de red (IP o Hostname) donde se detectó el cambio."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario o cuenta administrativa que realizó la modificación."
+    },
+    {
+      "name": "command",
+      "required": false,
+      "description": "El comando específico ejecutado (ej. 'no access-list', 'crypto isakmp key')."
+    }
+  ]
+}

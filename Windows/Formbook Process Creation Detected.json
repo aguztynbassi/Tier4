@@ -1,0 +1,57 @@
+[
+  {
+    "name": "Formbook Process Creation Detected",
+    "description": "Detects Formbook-like process executions that inject code and attempt to delete the dropper from temporary or desktop locations.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "process injection",
+      "malware",
+      "Formbook",
+      "TA0005",
+      "T1055",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A Formbook-like process creation was detected, showing signs of code injection and dropper deletion. This is a high-risk indicator of malware activity. Event Details: **Timestamp** {timestamp}, **Process ID** {process_id}, **Parent Process ID** {parent_process_id}, **User** {user}, **Image** {image}, **Command Line** {command_line}. Investigate this critical event immediately for signs of malware infection and system compromise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "process_id",
+        "required": true,
+        "description": "The ID of the newly created process."
+      },
+      {
+        "name": "parent_process_id",
+        "required": true,
+        "description": "The ID of the parent process that created the new process."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process was created."
+      },
+      {
+        "name": "image",
+        "required": true,
+        "description": "The full path to the executable image of the created process."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line of the created process, including deletion attempts."
+      }
+    ]
+  }
+]

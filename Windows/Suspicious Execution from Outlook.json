@@ -1,0 +1,38 @@
+{
+  "name": "Suspicious Execution from Outlook",
+  "description": "Detection of suspicious processes launched by Outlook, which could indicate a malicious mail rule, or the `EnableUnsafeClientMailRules` registry key being used to execute code. This is a common execution and defense evasion technique.",
+  "tags": [
+    "security",
+    "execution",
+    "defense_evasion",
+    "command_and_scripting_interpreter",
+    "t1059",
+    "t1202",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a suspicious process, **{command}**, was launched by the **`outlook.exe`** parent process. The command line contains patterns associated with the `EnableUnsafeClientMailRules` registry key, which is a strong indicator of **Execution** and **Defense Evasion** (**MITRE ATT&CK T1059**). An adversary may be using a malicious mail rule to execute code. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious rule or process. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The full command line of the suspicious process."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+[
+  {
+    "name": "DLL Loaded Via AllocConsole and RunDLL32",
+    "description": "Detects DLL loading through the AllocConsole function and rundll32.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "trusted developer utilities proxy execution",
+      "TA0005",
+      "T1127",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "High-severity alert: Suspicious DLL loading detected via `rundll32.exe` and `AllocConsole` function. This technique is often used for defense evasion and could indicate malicious code execution. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Process GUID**: {process_guid}\n* **Process Path**: {process_path}\n* **Command Line**: {process_command_line}\n* **User**: {user}\n\n**Immediately investigate this activity.** This is a strong indicator of compromise and may involve an attacker attempting to execute arbitrary code.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "process_guid",
+        "required": true,
+        "description": "The unique identifier of the `rundll32.exe` process."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the `rundll32.exe` executable."
+      },
+      {
+        "name": "process_command_line",
+        "required": true,
+        "description": "The full command line used, containing both a DLL reference and 'allocconsole'."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which `rundll32.exe` was executed."
+      }
+    ]
+  }
+]

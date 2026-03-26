@@ -1,0 +1,106 @@
+{
+  "name": "Excessive SMTP Connections from Single Source (Potential Spam/Compromise)",
+  "description": "Detects an unusually high number of SMTP connections from the same source IP within a short timeframe, indicating email scanning, spamming, mass phishing, or a compromised host sending malicious email.",
+  "tags": [
+    "security",
+    "detection",
+    "high",
+    "mail_server",
+    "firewall",
+    "ids_ips",
+    "command_and_control",
+    "exfiltration",
+    "spam",
+    "compromised_host",
+    "email_abuse",
+    "TA0011",
+    "TA0010",
+    "T1071",
+    "T1071.003"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "HIGH SEVERITY ALERT: Excessive SMTP Connections Detected from Single Source!\\n\\n**An unusually high volume of SMTP connections ({SIEM_COUNT_OF_EVENTS} connections) originating from '{SourceIp}' has been detected within the last {SIEM_TIMEFRAME} at {Timestamp}.** This pattern is a strong indicator of active **spamming, mass phishing attempts, or a compromised host** attempting to send large volumes of malicious email. This activity aligns with **Command and Control (TA0011)** or potentially **Exfiltration (TA0010)** via email protocols (T1071.003).\\n\\n**Event Details (from SIEM correlation):**\\n* **Timestamp of First Connection**: {SIEM_FIRST_EVENT_TIMESTAMP}\\n* **Timestamp of Last Connection**: {SIEM_LAST_EVENT_TIMESTAMP}\\n* **Source IP**: {SourceIp}\\n* **Targeted Mail Server IP**: {DestinationIp}\\n* **Targeted Port**: {DestinationPort} (Expected 25, 465, or 587)\\n* **Number of Connections**: {SIEM_COUNT_OF_EVENTS}\\n* **Time Window**: {SIEM_TIMEFRAME}\\n* **Protocol**: {Protocol} (Expected TCP)\\n* **User (if authenticated)**: {User}\\n* **Example Subject (if available)**: {Subject}\\n* **Example Sender (if available)**: {From}\\n* **Example Recipient (if available)**: {To}\\n* **Rule Name**: {RuleName}\\n\\nThis incident represents potential abuse of your email infrastructure or a compromised internal system. Immediate investigation is crucial to prevent further abuse and damage.\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (HIGH PRIORITY - RESPOND PROMPTLY):**\\n\\n1.  **BLOCK SOURCE IP:** If '{SourceIp}' is an external source and clearly malicious, immediately block it at your perimeter firewall/email gateway.\\n2.  **INTERNAL HOST INVESTIGATION (if SourceIp is internal):** If '{SourceIp}' is an internal host, immediately isolate it from the network. This indicates a likely compromise. Begin forensic acquisition and analyze the host for malware, malicious processes, or unauthorized software. Check its local mail logs if applicable.\\n3.  **MAIL SERVER LOG ANALYSIS:** \\n    * Examine detailed mail server logs (MTA logs) for '{SourceIp}' to understand the nature of the outbound email traffic. Look for: \\n        * High volumes of emails to unusual or external domains.\\n        * Unusual sender/recipient patterns.\\n        * Signs of spam content or phishing attempts.\\n        * Specific error codes indicating delivery issues or rejections.\\n    * Pay attention to '{User}' if an authenticated user is involved.\\n4.  **VALIDATE LEGITIMACY:** \\n    * Determine if the excessive connections are legitimate (e.g., a planned marketing campaign, automated system reports). If so, consider whitelisting this activity in your SIEM correlation rule.\\n    * However, be highly skeptical of high volume from individual sources, even if claimed legitimate, unless fully verified.\\n5.  **EMAIL GATEWAY/DLP REVIEW:** Review your email gateway or Data Loss Prevention (DLP) solution logs for high volumes of outbound email from '{SourceIp}' and for any blocked malicious content or sensitive data exfiltration attempts.\\n6.  **THREAT INTELLIGENCE:** Perform threat intelligence lookups on '{SourceIp}' and any identified email subjects/content for associations with known spam campaigns, phishing kits, or botnets.\\n7.  **SENDER POLICY FRAMEWORK (SPF)/DKIM/DMARC:** Ensure your email authentication mechanisms (SPF, DKIM, DMARC) are correctly configured and enforced to prevent spoofing and identify unauthorized senders.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of one of the SMTP connection events (e.g., the most recent one)."
+    },
+    {
+      "name": "SourceIp",
+      "required": true,
+      "description": "The IP address of the client initiating the SMTP connection."
+    },
+    {
+      "name": "DestinationIp",
+      "required": true,
+      "description": "The IP address of the receiving mail server."
+    },
+    {
+      "name": "DestinationPort",
+      "required": true,
+      "description": "The destination port (expected 25, 465, or 587 for SMTP)."
+    },
+    {
+      "name": "Protocol",
+      "required": false,
+      "description": "The network protocol (expected TCP)."
+    },
+    {
+      "name": "User",
+      "required": false,
+      "description": "The authenticated user associated with the SMTP traffic, if available."
+    },
+    {
+      "name": "Subject",
+      "required": false,
+      "description": "The email subject line, if available from mail server logs."
+    },
+    {
+      "name": "From",
+      "required": false,
+      "description": "The sender's email address, if available from mail server logs."
+    },
+    {
+      "name": "To",
+      "required": false,
+      "description": "The recipient's email address, if available from mail server logs."
+    },
+    {
+      "name": "EventID",
+      "required": false,
+      "description": "The specific Event ID from the log source, if applicable."
+    },
+    {
+      "name": "RuleName",
+      "required": false,
+      "description": "The name of the Sigma rule that triggered the event, if applicable."
+    },
+    {
+      "name": "SIEM_COUNT_OF_EVENTS",
+      "required": true,
+      "description": "The aggregated count of SMTP connections by the SIEM (e.g., 75)."
+    },
+    {
+      "name": "SIEM_TIMEFRAME",
+      "required": true,
+      "description": "The time window over which the events were counted (e.g., '1 minute')."
+    },
+    {
+      "name": "SIEM_FIRST_EVENT_TIMESTAMP",
+      "required": true,
+      "description": "The timestamp of the first event in the correlated group."
+    },
+    {
+      "name": "SIEM_LAST_EVENT_TIMESTAMP",
+      "required": true,
+      "description": "The timestamp of the last event in the correlated group."
+    }
+  ]
+}

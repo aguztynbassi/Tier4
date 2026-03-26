@@ -1,0 +1,39 @@
+{
+  "name": "Execution: DotNetToJScript Artifacts in UsageLogs",
+  "description": "Detecta la creación de archivos de log en el directorio UsageLogs de .NET asociados a intérpretes de comandos y scripts de Windows. Los atacantes utilizan herramientas como DotNetToJScript para encapsular payloads de .NET dentro de archivos JScript o VBScript, permitiendo la ejecución de malware directamente en memoria. La creación de estos logs revela que procesos como wscript.exe o mshta.exe han cargado el entorno de ejecución de .NET, lo cual es un comportamiento altamente sospechoso.",
+  "tags": [
+    "security",
+    "execution",
+    "defense_evasion",
+    "dot_net_to_jscript",
+    "memory_injection",
+    "usage_logs",
+    "T1059",
+    "sysmon_event_11"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EJECUCIÓN MEMORIA: DotNetToJScript Detectado! Se ha detectado la creación de un log de uso inusual para **{file}** en el host **{host}**. Bajo la técnica de **Command and Scripting Interpreter** (**MITRE ATT&CK T1059**), esto indica que un script está ejecutando código .NET malicioso en memoria. Se requiere el análisis inmediato de los scripts activos y el aislamiento del host.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se identificó el artefacto de log."
+    },
+    {
+      "name": "file",
+      "required": true,
+      "description": "El nombre del archivo de log detectado (ej. wscript.exe.log)."
+    },
+    {
+      "name": "path",
+      "required": true,
+      "description": "La ruta completa del directorio UsageLogs donde se creó el archivo."
+    }
+  ]
+}

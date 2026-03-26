@@ -1,0 +1,42 @@
+{
+  "name": "Query Registry Network Connection Detected",
+  "description": "Detecta instancias en las que la herramienta de línea de comandos `reg.exe` inicia una conexión de red mientras realiza operaciones de consulta. Los adversarios utilizan esta técnica para recopilar información de configuración, versiones de software y políticas de seguridad de sistemas remotos, facilitando el reconocimiento para futuras etapas del ataque.",
+  "tags": [
+    "security",
+    "discovery",
+    "registry_enumeration",
+    "remote_reconnaissance",
+    "T1012",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Reconocimiento de Red! Se ha detectado que **reg.exe** está realizando consultas de registro remotas desde el host **{host}** hacia la dirección **{destination_address}**. El uso de `reg query` con conexiones de red es una técnica típica de **Query Registry** (**MITRE ATT&CK T1012**) para el descubrimiento de activos y configuraciones en la red interna. La actividad fue iniciada por el usuario **{user}**. Se recomienda investigar si el host de origen está intentando mapear vulnerabilidades o buscar software de seguridad en otros nodos de la red.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del sistema de origen que ejecuta la consulta remota."
+    },
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "La dirección IP del sistema remoto que está siendo consultado."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa utilizada (ej. reg query \\\\RemoteHost\\HKLM\\...). "
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que ejecuta la herramienta reg.exe."
+    }
+  ]
+}

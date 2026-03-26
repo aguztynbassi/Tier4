@@ -1,0 +1,38 @@
+{
+  "name": "WMI Backdoor Exchange Transport Agent Detected",
+  "description": "Detecta la ejecución de procesos secundarios anómalos por parte de `EdgeTransport.exe`. Este comportamiento sugiere la presencia de un backdoor instalado como un Agente de Transporte de Exchange o mediante la suscripción a eventos WMI. Los atacantes utilizan esta técnica para lograr persistencia y escalada de privilegios dentro del ecosistema de correo corporativo.",
+  "tags": [
+    "security",
+    "persistence",
+    "privilege_escalation",
+    "exchange_server",
+    "wmi_event_subscription",
+    "T1546.003",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta Crítica de Persistencia en Exchange! Se ha detectado que el proceso **EdgeTransport.exe** ha iniciado un proceso hijo sospechoso: **{image}** en el host **{host}**. En un entorno saludable, el servicio de transporte de Exchange no debería spawnear procesos de consola o ejecutables externos. Esta actividad es un indicador de **Event Triggered Execution: WMI Event Subscription** (**MITRE ATT&CK T1546.003**) o de un agente de transporte malicioso. El usuario asociado es **{user}**. Se requiere una auditoría inmediata de los agentes de transporte instalados y de los consumidores de eventos WMI en el servidor.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del servidor Exchange donde se detectó el proceso hijo."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "El nombre del proceso inesperado iniciado por EdgeTransport.exe (ej. cmd.exe, powershell.exe)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de sistema o servicio bajo la cual se ejecuta el proceso."
+    }
+  ]
+}

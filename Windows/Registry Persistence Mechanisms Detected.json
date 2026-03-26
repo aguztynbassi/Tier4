@@ -1,0 +1,57 @@
+{
+    "name": "Registry Persistence Mechanisms Detected",
+    "description": "Detection of a process attempting to establish persistence via common registry run keys or startup folders. Adversaries may modify registry keys to maintain execution or as a persistence mechanism. This detection is based on the behavioral analysis of a process writing to a known persistence registry key, which could indicate a malicious attempt to ensure that the code is executed every time a system restarts or a user logs on. This prompt helps investigate the source of the persistence attempt and determine if it's a legitimate system behavior or a malicious one.",
+    "tags": [
+        "TA0003",
+        "T1547",
+        "T1547.001",
+        "security",
+        "detection",
+        "Windows"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the registry persistence attempt at `{timestamp}` on host `{hostname}`. The process `{process_name}` with Process ID `{process_id}` attempted to write to the registry key `{registry_key}`. Analyze the command line (`{command_line}`) for any suspicious arguments and review the user (`{user_name}`) associated with the activity. Determine if this is a legitimate system behavior or a malicious attempt to establish persistence. Provide a summary of your findings and recommend immediate mitigation steps.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        },
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname where the registry persistence attempt was detected."
+        },
+        {
+            "name": "process_name",
+            "required": true,
+            "description": "The name of the process involved in the registry persistence attempt."
+        },
+        {
+            "name": "process_id",
+            "required": true,
+            "description": "The Process ID of the process involved in the registry persistence attempt."
+        },
+        {
+            "name": "registry_key",
+            "required": true,
+            "description": "The registry key that was written to."
+        },
+        {
+            "name": "command_line",
+            "required": true,
+            "description": "The full command line of the process involved in the registry persistence attempt."
+        },
+        {
+            "name": "user_name",
+            "required": true,
+            "description": "The user account under which the process was executed."
+        }
+    ]
+}

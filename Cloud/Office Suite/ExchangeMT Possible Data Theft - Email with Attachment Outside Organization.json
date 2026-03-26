@@ -1,0 +1,57 @@
+{
+  "name": "ExchangeMT Possible Data Theft - Email with Attachment Outside Organization",
+  "description": "Detects emails with attachments being sent to recipients outside the organization's domain, which could indicate data exfiltration. This rule focuses on identifying emails with significant data sizes (attachments) being sent externally.",
+  "tags": [
+    "security",
+    "detection",
+    "exfiltration",
+    "collection",
+    "exfiltration over C2 channel",
+    "email collection",
+    "TA0010",
+    "TA0009",
+    "T1041",
+    "T1114",
+    "Office Suite"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "Possible data theft detected: Email with a large attachment sent to an external recipient. Event Details: **Timestamp** {Timestamp}, **Sender** {sender}, **Recipient** {recipient}, **Subject** {subject}, **Data Size** {data_size} bytes, **Attachment Name** {attachment_name}. Investigate this high-risk exfiltration attempt immediately.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of the email sending event."
+    },
+    {
+      "name": "sender",
+      "required": true,
+      "description": "The email address of the sender."
+    },
+    {
+      "name": "recipient",
+      "required": true,
+      "description": "The email address of the recipient (outside the organization)."
+    },
+    {
+      "name": "subject",
+      "required": true,
+      "description": "The subject of the email."
+    },
+    {
+      "name": "data_size",
+      "required": true,
+      "description": "The size of the email, including attachments, in bytes."
+    },
+    {
+      "name": "attachment_name",
+      "required": true,
+      "description": "The name of the attachment, if available."
+    }
+  ]
+}

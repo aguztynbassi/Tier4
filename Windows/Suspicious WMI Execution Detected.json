@@ -1,0 +1,42 @@
+{
+  "name": "Suspicious WMI Execution Detected",
+  "description": "Detection of suspicious WMI commands, including antivirus product enumeration and remote process creation. Adversaries often use WMI for various malicious activities such as reconnaissance, execution, and defense evasion.",
+  "tags": [
+    "security",
+    "execution",
+    "wmi",
+    "T1047",
+    "sysmon",
+    "windows_processes"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "An alert has been triggered on the host **{host}**: a process, **{process}**, executed a suspicious WMI command line: **{command}**. This activity is a strong indicator of **Suspicious WMI Execution** (**MITRE ATT&CK T1047**), which can be used for reconnaissance, remote execution, or defense evasion. Immediate investigation is required to determine the legitimacy of this action and to determine if it is related to a possible security incident. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "process",
+      "required": true,
+      "description": "The name of the process that executed the command, which is expected to be 'wmic.exe'."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The full command line that was executed."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Execution of Renamed PaExec",
+    "description": "Detects the execution of PaExec, even when renamed, by using a combination of product name and Imphash.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "masquerading",
+      "tool",
+      "T1572",
+      "TA0005",
+      "T1036",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Renamed PaExec detected executing, indicating potential defense evasion or unauthorized remote execution. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **Image Path** {Image}, **Parent Image Path** {ParentImage}, **Command Line** {CommandLine}, **User** {User}, **Product** {Product}, **Imphash** {Imphash}, **Computer** {Computer}. Investigate this high-risk activity immediately for signs of malicious remote administration or lateral movement.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for Process Creation (1)."
+      },
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path of the executed file."
+      },
+      {
+        "name": "ParentImage",
+        "required": true,
+        "description": "The full path of the parent process."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line used to execute the process."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the process was executed."
+      },
+      {
+        "name": "Product",
+        "required": true,
+        "description": "The product name associated with the executable, often 'PAExec'."
+      },
+      {
+        "name": "Imphash",
+        "required": true,
+        "description": "The Imphash of the executable, a unique identifier."
+      },
+      {
+        "name": "Computer",
+        "required": true,
+        "description": "The computer on which the event occurred."
+      }
+    ]
+  }
+]

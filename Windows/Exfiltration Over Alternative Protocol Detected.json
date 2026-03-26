@@ -1,0 +1,44 @@
+{
+  "name": "Exfiltration: Data Transfer to Cloud Storage via Alternative Protocol",
+  "description": "Detecta la transferencia de datos hacia servicios de almacenamiento en la nube o infraestructuras externas no autorizadas utilizando protocolos web a través del Proxy. Los atacantes aprovechan que el tráfico hacia la nube suele estar permitido para exfiltrar archivos comprimidos, bases de datos o propiedad intelectual, evadiendo los controles de fuga de datos (DLP) tradicionales que no inspeccionan el volumen o el destino del tráfico.",
+  "tags": [
+    "security",
+    "exfiltration",
+    "cloud_storage_abuse",
+    "data_theft",
+    "alternative_protocol",
+    "proxy_monitoring",
+    "T1048",
+    "network_security"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Posible Exfiltración de Datos! Se ha detectado una transferencia de datos desde **{source_address}** hacia una IP de servicio en la nube (**{destination_address}**) a través del Proxy. Bajo la técnica de **Exfiltration Over Alternative Protocol** (**MITRE ATT&CK T1048**), este comportamiento sugiere el robo de información institucional. Se requiere el bloqueo inmediato de la conexión y la auditoría del host de origen.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección IP interna que está enviando los datos."
+    },
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "La dirección IP externa de destino (identificada como aplicación de nube)."
+    },
+    {
+      "name": "host",
+      "required": false,
+      "description": "El nombre del equipo asociado a la dirección IP de origen."
+    },
+    {
+      "name": "user",
+      "required": false,
+      "description": "El usuario autenticado en el Proxy que inició la transferencia."
+    }
+  ]
+}

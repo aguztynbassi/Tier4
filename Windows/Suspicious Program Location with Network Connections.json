@@ -1,0 +1,31 @@
+{
+  "name": "Suspicious Program Location with Network Connections",
+  "description": "Detects network connections from programs running in suspicious file system locations. Adversaries often place malicious executables in non-standard directories to evade detection. This is a common defense evasion technique.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "masquerading",
+    "T1036",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a process, **{image}**, running from a suspicious location (**{image}**), is attempting to establish a network connection. This is a strong indicator of **Defense Evasion** (**MITRE ATT&CK T1036**), where an adversary is attempting to hide malicious activity in a non-standard file system location. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious process.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "The process image that is attempting to establish the connection."
+    }
+  ]
+}

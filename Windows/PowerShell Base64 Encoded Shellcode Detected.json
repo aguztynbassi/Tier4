@@ -1,0 +1,40 @@
+{
+  "name": "PowerShell Base64 Encoded Shellcode Detected",
+  "description": "Detecta la presencia de shellcode codificado en Base64 dentro de comandos de PowerShell. Esta técnica es utilizada por adversarios para cargar payloads binarios directamente en la memoria (fileless malware), evadiendo la detección de antivirus basados en firmas de archivos y facilitando el establecimiento de canales de mando y control (C2).",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "execution",
+    "shellcode",
+    "powershell",
+    "metasploit",
+    "cobalt_strike",
+    "T1059.001",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta Crítica de Ejecución de Shellcode! Se ha detectado un comando de PowerShell en el host **{host}** que contiene una firma de shellcode en Base64 (**AAAAYInlM**). Según la técnica de **Masquerading** (**MITRE ATT&CK T1036**), este es un indicador de un ataque 'fileless' donde el código malicioso se inyecta directamente en la memoria. El evento fue iniciado por el usuario **{user}**. Se recomienda el aislamiento inmediato del host y la captura de un volcado de memoria (RAM dump) para analizar el payload inyectado antes de que el proceso sea finalizado.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se detectó el shellcode en la línea de comandos."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "Cuenta de usuario que ejecutó el comando de PowerShell sospechoso."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que contiene la cadena Base64 identificada."
+    }
+  ]
+}

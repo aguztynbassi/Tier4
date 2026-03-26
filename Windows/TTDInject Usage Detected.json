@@ -1,0 +1,57 @@
+[
+  {
+    "name": "TTDInject Usage Detected",
+    "description": "Detects the execution of `ttdinject.exe`, a component of Time Travel Debugging (TTD). While a legitimate tool, its presence and execution in non-development environments can be indicative of suspicious or malicious activity.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "obfuscated files or information",
+      "trusted developer utilities proxy execution",
+      "TA0005",
+      "T1127",
+      "Windows",
+      "Sysmon"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Medium-severity alert: Execution of `ttdinject.exe` detected on host '{host}' by user '{user}'. `ttdinject.exe` is a legitimate Time Travel Debugging (TTD) component, but its presence and execution in a non-development environment can be highly suspicious and may indicate malicious activity, potentially related to defense evasion or code injection. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity.** Determine if the execution of `ttdinject.exe` is legitimate in your environment. If not, investigate the process that launched it and any related network connections. This could be an indicator of compromise or an attempt to analyze malicious code without triggering traditional security controls.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Process Creation (1)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was created, which should be 'ttdinject.exe'."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute ttdinject.exe."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

@@ -1,0 +1,38 @@
+{
+  "name": "AD Domain Trust Discovery Detected",
+  "description": "Detecta actividades de enumeración de relaciones de confianza entre dominios de Active Directory. Los adversarios utilizan esta técnica para identificar otros dominios accesibles desde el host comprometido, facilitando el movimiento lateral a través de la infraestructura y la posible escalada de privilegios a nivel de bosque.",
+  "tags": [
+    "security",
+    "discovery",
+    "active_directory",
+    "domain_trust",
+    "lateral_movement",
+    "T1482",
+    "event_4624"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Reconocimiento de Dominio! Se ha detectado actividad de enumeración de confianza en el host **{host}**. El usuario **{TargetUserName}** ha iniciado una sesión de red (**Logon Type {logon_type}**) que involucra consultas a dominios externos o locales. Bajo la técnica de **Domain Trust Discovery** (**MITRE ATT&CK T1482**), este es un paso previo fundamental para intentar un movimiento lateral entre dominios. Se recomienda auditar si la cuenta tiene permisos para consultar la topología del bosque y monitorear intentos de autenticación hacia otros dominios desde este host.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se registró el inicio de sesión para el descubrimiento."
+    },
+    {
+      "name": "TargetUserName",
+      "required": true,
+      "description": "La cuenta de usuario que está realizando las consultas de dominio."
+    },
+    {
+      "name": "logon_type",
+      "required": true,
+      "description": "El tipo de inicio de sesión detectado (3: Red, 8: NetworkCleartext)."
+    }
+  ]
+}

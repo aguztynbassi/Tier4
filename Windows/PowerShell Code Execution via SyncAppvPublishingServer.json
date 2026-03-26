@@ -1,0 +1,64 @@
+[
+  {
+    "name": "PowerShell Code Execution via SyncAppvPublishingServer",
+    "description": "Detects the execution of arbitrary PowerShell commands via SyncAppvPublishingServer.vbs, a technique used by adversaries to bypass security restrictions.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "signed binary proxy execution",
+      "TA0005",
+      "T1216",
+      "T1218",
+      "Windows",
+      "syncappvpublishingserver",
+      "powershell",
+      "vbs"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: Suspicious PowerShell code execution attempt via `SyncAppvPublishingServer.vbs` detected on host '{host}' by user '{user}'. The script appears to be executing arbitrary commands, indicated by the presence of a semicolon (`;`) within the command line '{command_line}'. This is a critical indicator of an adversary attempting to bypass security restrictions and execute malicious PowerShell. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name} (likely wscript.exe or cscript.exe)\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**IMMEDIATE AND URGENT ACTION REQUIRED:** This is a critical security incident. Isolate the affected system immediately. Analyze the full command line to identify the exact PowerShell commands or other payloads being executed. Investigate the source of this script execution (e.g., parent process, network activity) and look for any associated malicious files or persistence mechanisms. Conduct a thorough forensic analysis to determine the full scope of compromise. This alert signifies an active threat and potential system compromise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Windows Security Event ID for Process Creation (4688)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that executed the VBScript (e.g., wscript.exe or cscript.exe)."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the process that executed the VBScript."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute the SyncAppvPublishingServer.vbs script, containing the semicolon (;) indicating chained commands or PowerShell."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the script was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

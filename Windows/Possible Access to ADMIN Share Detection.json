@@ -1,0 +1,39 @@
+{
+  "name": "Lateral Movement: Remote Access to Admin$ Share",
+  "description": "Detecta el acceso remoto al recurso compartido administrativo oculto ADMIN$. Este recurso es comúnmente abusado por atacantes para el movimiento lateral, permitiéndoles subir archivos ejecutables directamente a la carpeta del sistema de Windows para su posterior ejecución remota con privilegios de SYSTEM.",
+  "tags": [
+    "security",
+    "lateral_movement",
+    "smb_abuse",
+    "psexec_activity",
+    "admin_shares",
+    "remote_file_transfer",
+    "T1021.002",
+    "event_5140"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE MOVIMIENTO LATERAL: Acceso a ADMIN$! Se ha detectado una conexión remota al recurso compartido administrativo **ADMIN$** en el host **{host}** por parte del usuario **{user}**. Bajo la técnica de **Windows Admin Shares** (**MITRE ATT&CK T1021.002**), este comportamiento suele preceder a la ejecución remota de malware o herramientas de hacking. Se recomienda investigar inmediatamente la IP de origen y buscar la creación de nuevos servicios en el sistema de destino.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo de destino al que se accedió de forma remota."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que realizó la conexión (excluyendo cuentas de sistema de máquina)."
+    },
+    {
+      "name": "source_address",
+      "required": false,
+      "description": "La dirección IP desde la cual se originó el acceso al recurso compartido."
+    }
+  ]
+}

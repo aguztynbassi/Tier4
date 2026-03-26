@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Suspicious ASP.NET Compiler Execution Detected",
+    "description": "Detects the execution of `aspnet_compiler.exe` from unusual locations. While a legitimate tool, adversaries may use it to execute malicious code or obfuscate their activity. This activity should be investigated.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "trusted developer utility proxy execution",
+      "TA0005",
+      "T1127",
+      "Windows",
+      "aspnet_compiler",
+      "proxy_execution"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Medium-severity alert: Suspicious execution of ASP.NET Compiler (`aspnet_compiler.exe`) detected on host '{host}' by user '{user}'. The process '{process_name}' was executed from an unusual path '{process_path}' with command line '{command_line}'. While `aspnet_compiler.exe` is a legitimate developer tool, adversaries can abuse it to execute malicious code or obfuscate their activity. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity immediately.** Determine if this `aspnet_compiler.exe` execution is legitimate and expected in your environment, especially given its execution path. If not, analyze the command line arguments and any related files for malicious indicators. This could be an attempt at defense evasion or code execution.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Windows Security Event ID for Process Creation (4688)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was executed, which should be 'aspnet_compiler.exe'."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the aspnet_compiler.exe executable. Expected to be an unusual path."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute aspnet_compiler.exe."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which aspnet_compiler.exe was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

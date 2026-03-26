@@ -1,0 +1,44 @@
+{
+  "name": "Windows/Unix: Unauthorized DNS or Hosts File Modification",
+  "description": "Detecta cambios no autorizados en la configuración de resolución de nombres del sistema, incluyendo la edición del archivo 'hosts' en Windows/Unix y la modificación de servidores DNS en 'resolv.conf'. Los atacantes utilizan estas técnicas para interceptar tráfico de red, redirigir usuarios a sitios de phishing y bloquear la comunicación de agentes de seguridad con sus servidores de actualización.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "dns_hijacking",
+    "botnet",
+    "persistence",
+    "command_and_control",
+    "T1562",
+    "T1090"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD: Modificación de Resolución de Nombres! Se ha detectado un intento de escritura o modificación en archivos críticos de red (**{file}** / **{object}**) en el host **{host}**. Bajo las técnicas de **Network Denial of Service** (**MITRE ATT&CK T1498**) y **Proxy** (**T1090**), esto indica un posible secuestro de DNS para redirigir tráfico malicioso. Se recomienda verificar la integridad del archivo y el proceso que realizó la modificación.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la modificación de la configuración de red."
+    },
+    {
+      "name": "file",
+      "required": false,
+      "description": "El archivo de configuración de red afectado (ej. /etc/resolv.conf)."
+    },
+    {
+      "name": "object",
+      "required": false,
+      "description": "El objeto del sistema de archivos modificado (ej. el archivo hosts de Windows)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la acción de escritura."
+    }
+  ]
+}

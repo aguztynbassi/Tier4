@@ -1,0 +1,72 @@
+{
+  "name": "Account Privilege Elevation Followed by Restoration",
+  "description": "Detects a sequence of events where a user account is granted elevated privileges (e.g., added to a privileged group, assigned a privilege), followed by the *removal* of those privileges (e.g., removed from the group, privilege revoked) within a short time window. This behavior is highly suspicious and can indicate an attempt to perform privileged actions while minimizing the audit trail.",
+  "tags": [
+    "security",
+    "detection",
+    "high",
+    "persistence",
+    "privilege_escalation",
+    "account_manipulation",
+    "audit_evasion",
+    "TA0003",
+    "TA0004",
+    "T1098",
+    "T1068"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "ALERTA DE ALTA SEVERIDAD: ¡Elevación de Privilegios de Cuenta Seguida de Restauración Detectada!\\n\\n**Se ha detectado una secuencia altamente sospechosa en la que la cuenta de usuario '{target_user_field}' fue brevemente elevada y luego sus privilegios fueron restaurados en el host/plataforma '{ComputerName}' (si aplica).** Este comportamiento es un fuerte indicador de manipulación de cuentas o evasión de auditoría.\\n\\n**Detalles del Incidente:**\\n* **Cuenta Afectada**: '{target_user_field}'\\n* **Host/Plataforma**: '{ComputerName}'\\n* **Timestamp del Evento de Elevación**: {Timestamp_Elevation}\\n* **Timestamp del Evento de Restauración**: {Timestamp_Restoration}\\n* **Usuario que Realizó la Elevación (si aplica)**: '{UserElevation}'\\n* **Usuario que Realizó la Restauración (si aplica)**: '{UserRestoration}'\\n* **Detalles de la Elevación (si aplica)**: '{PrivilegeElevation}' (e.g., añadido al grupo 'Administrators')\\n* **Detalles de la Restauración (si aplica)**: '{PrivilegeRestoration}' (e.g., eliminado del grupo 'Administrators')\\n* **Regla de Detección**: {RuleName}\\n\\nEsta secuencia es altamente indicativa de que un atacante puede haber **elevado temporalmente los privilegios (TA0004)** de una cuenta para realizar acciones sensibles (como el movimiento lateral, la exfiltración de datos o la creación de otros mecanismos de persistencia) y luego **restauró los privilegios (T1098 - Manipulación de Cuenta)** para **evadir la detección** y minimizar el rastro forense. También podría ser un intento de **Persistencia (TA0003)** si se logra establecer otro punto de apoyo durante el período de elevación.\\n\\n**ACCIONES INMEDIATAS RECOMENDADAS (ALTA PRIORIDAD - RESPONDER INMEDIATAMENTE):**\\n\\n1.  **INVESTIGAR LA CUENTA AFECTADA:** Revise exhaustivamente toda la actividad de la cuenta '{target_user_field}' durante el período entre {Timestamp_Elevation} y {Timestamp_Restoration}. Busque actividades inusuales, como: \\n    * Accesos a sistemas sensibles.\\n    * Creación, modificación o eliminación de archivos o registros.\\n    * Creación de nuevas cuentas o cambios en otras cuentas.\\n    * Conexiones de red salientes o entrantes inusuales.\\n2.  **INVESTIGAR LA CUENTA/PROCESO QUE REALIZÓ LOS CAMBIOS:** Determine quién o qué elevó y restauró los privilegios (usuarios '{UserElevation}' y '{UserRestoration}'). ¿Son cuentas de servicio, administradores o usuarios regulares? ¿Fue un proceso o script esperado?\\n3.  **ANÁLISIS FORENSE:** Si la actividad es sospechosa y no se puede atribuir a una acción legítima conocida, inicie un análisis forense (disco y memoria) en el host/plataforma relevante ({ComputerName}) para identificar malware, herramientas o scripts que puedan haber realizado esta manipulación.\\n4.  **REFORZAR CONTROLES DE PRIVILEGIOS:** Revise sus procesos de gestión de privilegios. ¿Existen medidas de control de acceso para evitar elevaciones temporales no autorizadas? Considere la implementación de soluciones de gestión de acceso privilegiado (PAM).\\n5.  **BUSCAR OTROS IOCs:** Busque otros Indicadores de Compromiso (IOCs) en la red y en los sistemas basados en la actividad identificada de la cuenta elevada. El atacante podría haber dejado otros rastros o mecanismos de persistencia.\\n6.  **ESCALAR:** Escalar a los equipos de respuesta a incidentes y de administración de identidades para una investigación y remediación completas.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp_Elevation",
+      "required": true,
+      "description": "The timestamp of the privilege elevation event."
+    },
+    {
+      "name": "Timestamp_Restoration",
+      "required": true,
+      "description": "The timestamp of the privilege restoration event."
+    },
+    {
+      "name": "target_user_field",
+      "required": true,
+      "description": "The user account that had its privileges temporarily elevated."
+    },
+    {
+      "name": "UserElevation",
+      "required": false,
+      "description": "The user account that performed the privilege elevation (if available)."
+    },
+    {
+      "name": "UserRestoration",
+      "required": false,
+      "description": "The user account that performed the privilege restoration (if available)."
+    },
+    {
+      "name": "PrivilegeElevation",
+      "required": false,
+      "description": "Details about the privilege that was elevated (e.g., group name, specific privilege granted)."
+    },
+    {
+      "name": "PrivilegeRestoration",
+      "required": false,
+      "description": "Details about the privilege that was restored/removed."
+    },
+    {
+      "name": "ComputerName",
+      "required": false,
+      "description": "The hostname of the system or platform where the event occurred (if applicable)."
+    },
+    {
+      "name": "RuleName",
+      "required": false,
+      "description": "The name of the Sigma rule that triggered the event, if applicable."
+    }
+  ]
+}

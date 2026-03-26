@@ -1,0 +1,36 @@
+{
+    "name": "RSA SecurID Account Lockout",
+    "description": "User’s account is locked after entering the wrong passcode multiple times in a row. This can be an indication of a brute-force or password spraying attack against a user's account.",
+    "tags": [
+        "TA0006",
+        "T1110",
+        "security",
+        "detection",
+        "RSA Secure ID"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "The user `{user_name}` had their RSA SecurID account locked out at `{timestamp}`. Investigate the failed authentication attempts leading to the lockout, including the source IP address (`{source_address}`) and the number of failed attempts. Determine if this is a legitimate user error or a potential brute-force/password spraying attack. Provide a summary of your findings and recommend immediate actions, such as resetting the user's token or blocking the source IP.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "user_name",
+            "required": true,
+            "description": "The name of the user whose account was locked out."
+        },
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the account lockout occurred."
+        },
+        {
+            "name": "source_address",
+            "required": false,
+            "description": "The source IP address of the failed authentication attempts."
+        }
+    ]
+}

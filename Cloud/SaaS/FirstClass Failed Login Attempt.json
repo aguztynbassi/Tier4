@@ -1,0 +1,54 @@
+{
+  "name": "FirstClass Failed Login Attempt",
+  "description": "Detects failed login attempts to a FirstClass system, which may indicate brute-force attacks or credential stuffing.",
+  "tags": [
+    "security",
+    "detection",
+    "defense evasion",
+    "initial access",
+    "privilege escalation",
+    "brute force",
+    "password guessing",
+    "exploitation for credential access",
+    "valid accounts",
+    "TA0005",
+    "TA0003",
+    "TA0004",
+    "TA0001",
+    "T1110",
+    "T1110.001",
+    "T1212",
+    "T1078",
+    "SaaS"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A failed login attempt to a FirstClass system was detected. This could indicate a brute-force or credential stuffing attack. Event Details: **Timestamp** {timestamp}, **User Name** {user_name}, **Source IP** {source_ip}, **Application** {application}. Investigate this activity to determine if it's a legitimate user error or a malicious attempt to gain unauthorized access.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "timestamp",
+      "required": true,
+      "description": "The timestamp of the failed login attempt."
+    },
+    {
+      "name": "user_name",
+      "required": true,
+      "description": "The username that failed to log in."
+    },
+    {
+      "name": "source_ip",
+      "required": true,
+      "description": "The IP address from which the login attempt originated."
+    },
+    {
+      "name": "application",
+      "required": true,
+      "description": "The application or interface used for the login attempt (e.g., 'FirstClass client', 'web interface')."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "name": "Windows: Persistence via Local Port Monitor Registration",
+  "description": "Detecta intentos de crear o modificar monitores de puerto en el registro de Windows. Los atacantes utilizan esta técnica para cargar DLLs maliciosas a través del servicio Print Spooler. Dado que este servicio se ejecuta como SYSTEM, esta técnica no solo proporciona persistencia entre reinicios, sino que también permite la escalada de privilegios si el atacante tiene permisos de escritura en la llave de registro afectada.",
+  "tags": [
+    "security",
+    "persistence",
+    "privilege_escalation",
+    "windows_registry",
+    "print_spooler_abuse",
+    "T1547.010",
+    "sysmon_event_13"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE PERSISTENCIA CRÍTICA: Monitor de Puerto Detectado! Se ha registrado una modificación en la llave de monitores de impresión en **{target_object}** en el host **{host}**. Bajo la técnica de **Port Monitors** (**MITRE ATT&CK T1547.010**), un atacante podría estar cargando una DLL maliciosa bajo el contexto de **SYSTEM**. Esta es una técnica de persistencia sigilosa que utiliza el servicio de impresión. Se recomienda verificar la integridad de la DLL referenciada y el proceso que realizó el cambio en el registro.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la actividad en el registro."
+    },
+    {
+      "name": "target_object",
+      "required": true,
+      "description": "La ruta completa de la llave de registro del monitor de impresión (bajo Control\\Print\\Monitors)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la modificación."
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "name": "Winlogon Helper DLL/Executable Modification Detected",
+  "description": "Detecta modificaciones en las llaves de registro de Winlogon (Shell, Userinit o Notify). Los adversarios abusan de estos componentes legítimos de Windows para cargar DLLs o ejecutables maliciosos durante el proceso de inicio de sesión. Esta técnica es altamente efectiva para establecer persistencia de largo plazo, ya que el código malicioso se ejecuta en el contexto de un proceso crítico del sistema operativo.",
+  "tags": [
+    "security",
+    "persistence",
+    "winlogon",
+    "registry_modification",
+    "boot_autostart",
+    "T1547.004",
+    "sysmon_event_13"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE PERSISTENCIA CRÍTICA! Se ha detectado una modificación en la llave de registro de Winlogon: **{target_object}** en el host **{host}**. Bajo la técnica de **Winlogon Helper DLL** (**MITRE ATT&CK T1547.004**), este cambio sugiere que un atacante ha configurado un ejecutable o DLL para que se inicie automáticamente con el sistema. Se recomienda verificar el valor asignado en **{details}** y validar si el binario apuntado es una herramienta legítima de administración o un artefacto malicioso.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se realizó la modificación del registro."
+    },
+    {
+      "name": "target_object",
+      "required": true,
+      "description": "La ruta completa de la llave de registro afectada (ej. ...\\Winlogon\\Shell)."
+    },
+    {
+      "name": "details",
+      "required": true,
+      "description": "El nuevo valor asignado (la ruta al archivo malicioso)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la modificación."
+    }
+  ]
+}

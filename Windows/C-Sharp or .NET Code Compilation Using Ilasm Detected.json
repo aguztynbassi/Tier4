@@ -1,0 +1,68 @@
+[
+  {
+    "name": "C-Sharp or .NET Code Compilation Using Ilasm Detected",
+    "description": "Detects the execution of `ilasm.exe` (IL Assembler), a native Microsoft .NET Framework utility. Adversaries can abuse `ilasm.exe` to compile C# or other .NET Intermediate Language (IL) code directly on a compromised system into executables or DLLs. This technique, often referred to as 'compile after delivery,' is a strong indicator of post-exploitation activity, defense evasion, or on-system payload generation, bypassing static signature-based detection.",
+    "tags": [
+      "security",
+      "detection",
+      "medium",
+      "windows",
+      "sysmon",
+      "defense_evasion",
+      "execution",
+      "TA0005",
+      "TA0007",
+      "T1127"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "ALERTA DE SEVERIDAD MEDIA: ¡Compilación de Código .NET con Ilasm Detectada!\\n\\n**Se ha detectado la ejecución inusual de `ilasm.exe` (IL Assembler) en el host '{ComputerName}' a las {Timestamp}.** Este ejecutable, una utilidad legítima de Microsoft .NET Framework, está siendo utilizado fuera de un contexto de desarrollo o sistema esperado, lo que puede indicar actividad post-explotación, evasión de defensas o generación de payloads en el sistema.\\n\\n**Detalles del Evento:**\\n* **Timestamp**: {Timestamp}\\n* **ID de Evento**: {EventID} (Sysmon EventID 1: Creación de Proceso)\\n* **Proceso**: '{Image}'\\n* **Línea de Comandos Completa**: `{CommandLine}`\\n* **Proceso Padre**: '{ParentImage}'\\n* **Usuario Afectado**: '{User}'\\n* **Host Afectado**: '{ComputerName}'\\n* **Regla de Detección**: {RuleName}\\n\\nLa ejecución de `ilasm.exe` por parte de un adversario (técnica 'compile after delivery') permite compilar código .NET directamente en un sistema comprometido. Esto puede ser utilizado para evadir soluciones de seguridad basadas en firmas o para generar ejecutables maliciosos que se adapten al entorno, siendo una técnica de **Evasión de Defensas (TA0005)** y **Ejecución (TA0007)**, específicamente **Ejecución por Proxy de Utilidades de Desarrollo Confiables (T1127)**.\\n\\n**ACCIONES INMEDIATAS RECOMENDADAS (PRIORIDAD MEDIA - INVESTIGAR):**\\n\\n1.  **EVALUAR LA LEGITIMIDAD:** Determine si esta actividad es parte de un proceso legítimo en su entorno. Considere: \\n    * ¿Se trata de un sistema de desarrollo o un servidor de compilación? \\n    * ¿El usuario '{User}' está autorizado y se espera que realice compilaciones en este host? \\n    * ¿El proceso padre '{ParentImage}' o la ruta de '{Image}' ('`{Image}`') corresponden a software de desarrollo o sistemas de gestión de parches/actualizaciones?\\n2.  **ANALIZAR LA LÍNEA DE COMANDOS:** Examine la línea de comandos (`{CommandLine}`) para identificar el archivo fuente de entrada (generalmente un archivo `.il` o `.s`) y el archivo de salida (el ejecutable o DLL compilado). Intente obtener y analizar estos archivos si son sospechosos.\\n3.  **VERIFICAR LA RUTA DE EJECUCIÓN:** Compruebe desde qué ruta se ejecutó `ilasm.exe`. Las rutas no estándar o de usuarios podrían ser un indicador de actividad maliciosa. Las rutas legítimas suelen estar bajo `C:\\Program Files\\Microsoft SDKs\\Windows\\` o `C:\\Windows\\Microsoft.NET\\Framework[64]\\`.\n4.  **REVISAR LA ACTIVIDAD ANTERIOR/POSTERIOR:** Busque cualquier actividad inusual antes o después de la ejecución de `ilasm.exe` en '{ComputerName}'. Esto podría incluir descargas de archivos, creación de scripts, modificaciones de registro o conexiones de red sospechosas.\\n5.  **ANÁLISIS FORENSE (si es necesario):** Si no se puede confirmar la legitimidad, inicie un análisis forense del host '{ComputerName}' para identificar la causa raíz de la actividad, otros indicadores de compromiso y el alcance de cualquier posible compromiso.\\n6.  **ESCALAR:** Escalar al equipo de seguridad si la actividad parece ser maliciosa o si se requiere una investigación más profunda.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Sysmon Event ID (expected to be 1 for process creation)."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to the `ilasm.exe` executable."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line arguments used for `ilasm.exe`."
+      },
+      {
+        "name": "ParentImage",
+        "required": false,
+        "description": "The executable of the parent process that launched `ilasm.exe`."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the `ilasm.exe` process ran."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where `ilasm.exe` was executed."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]

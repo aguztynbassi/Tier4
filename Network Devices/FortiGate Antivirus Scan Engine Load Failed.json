@@ -1,0 +1,45 @@
+{
+  "name": "FortiGate Antivirus Scan Engine Load Failed",
+  "description": "Detects a FortiGate antivirus error indicating that the scan engine failed to load. This can lead to пропускать malware.",
+  "tags": [
+    "security",
+    "detection",
+    "defense evasion",
+    "impair defenses",
+    "disable or modify tools",
+    "TA0005",
+    "T1562",
+    "T1562.001",
+    "Network Devices"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "Critical FortiGate antivirus error: The scan engine failed to load. This severe issue can lead to malware bypassing defenses. Event Details: **Timestamp** {timestamp}, **Log ID** {log_id}, **Message** {message}, **Virtual Domain (VDOM)** {vdom}. Investigate this high-priority alert immediately to restore antivirus functionality and prevent potential infections.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "timestamp",
+      "required": true,
+      "description": "The timestamp of the error event."
+    },
+    {
+      "name": "log_id",
+      "required": true,
+      "description": "The FortiGate log ID for the scan engine load failure (8974)."
+    },
+    {
+      "name": "message",
+      "required": true,
+      "description": "The full error message indicating the scan engine failure."
+    },
+    {
+      "name": "vdom",
+      "required": true,
+      "description": "The Virtual Domain (VDOM) where the error occurred."
+    }
+  ]
+}

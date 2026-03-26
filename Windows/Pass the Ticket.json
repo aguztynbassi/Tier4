@@ -1,0 +1,38 @@
+{
+  "name": "Pass-the-Ticket (PtT) Technique Detected",
+  "description": "Detecta intentos de uso de tickets de Kerberos robados mediante la identificación de códigos de error específicos (0x12 y 0x18) en las solicitudes de tickets de servicio (TGS). Estos errores suelen generarse cuando un adversario intenta utilizar un ticket cuya clave de sesión ha expirado o no coincide con los registros del KDC (Key Distribution Center), lo que es un indicador fuerte de movimiento lateral mediante Pass-the-Ticket.",
+  "tags": [
+    "security",
+    "lateral_movement",
+    "kerberos",
+    "pass_the_ticket",
+    "active_directory",
+    "T1550.003",
+    "event_4769"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Movimiento Lateral (Kerberos)! Se ha detectado un posible ataque de **Pass-the-Ticket** afectando al usuario **{TargetUserName}** desde el host **{IpAddress}**. El Controlador de Dominio registró un error de Kerberos (**{failure_code}**) durante una solicitud de ticket de servicio (TGS). Bajo la técnica **Use Alternate Authentication Material: Pass the Ticket** (**MITRE ATT&CK T1550.003**), esto sugiere que un atacante está intentando reutilizar un ticket robado para acceder a recursos protegidos. Se recomienda invalidar todas las sesiones del usuario afectado y forzar un cambio de contraseña de la cuenta KRBTGT si se sospecha de un Golden Ticket.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "IpAddress",
+      "required": true,
+      "description": "La dirección IP de origen desde la cual se envió el ticket de Kerberos anómalo."
+    },
+    {
+      "name": "TargetUserName",
+      "required": true,
+      "description": "El nombre de la cuenta de usuario asociada al ticket de Kerberos detectado."
+    },
+    {
+      "name": "failure_code",
+      "required": true,
+      "description": "El código de error de Kerberos (ej. 0x12: KDC_ERR_CLIENT_REVOKED o 0x18: KDC_ERR_PREAUTH_FAILED)."
+    }
+  ]
+}

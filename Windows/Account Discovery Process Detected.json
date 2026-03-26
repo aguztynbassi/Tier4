@@ -1,0 +1,37 @@
+{
+  "name": "Account Discovery Process Detected",
+  "description": "Detecta el uso de utilidades del sistema como `dsquery user` para enumerar las cuentas de usuario. Este es un intento de **Descubrimiento** donde un adversario busca cuentas que puedan ser útiles para actividades posteriores.",
+  "tags": [
+    "security",
+    "discovery",
+    "account_discovery",
+    "T1087",
+    "T1087.002",
+    "windows"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "Se ha activado una alerta en el host **{host}**: un proceso se ejecutó con el comando **{command}** para descubrir cuentas de usuario. Esto es un fuerte indicador de **Descubrimiento** (**MITRE ATT&CK T1087**), donde un adversario intenta identificar cuentas válidas. Se requiere una investigación inmediata para determinar la legitimidad de esta acción y asegurar el host afectado. El evento ocurrió bajo el usuario **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del host donde ocurrió el evento."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comando completa que se ejecutó."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que realizó la acción."
+    }
+  ]
+}

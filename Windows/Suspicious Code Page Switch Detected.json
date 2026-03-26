@@ -1,0 +1,41 @@
+{
+  "name": "Suspicious Code Page Switch Detected",
+  "description": "Detection of a code page switch in a command line or batch script to a rare language. Adversaries may use a code page switch to obfuscate their commands and evade security defenses, which is a common defense evasion technique.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "deobfuscate_decode_files_or_information",
+    "T1140",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "An alert has been triggered on the host **{host}**: a process, **{image}**, was executed with a command line that switched the code page to an unusual language: **{command}**. This is a strong indicator of **Defense Evasion** (**MITRE ATT&CK T1140**), where an adversary is attempting to obfuscate a malicious command to bypass security controls. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious process. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "The process image that was executed."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The full command line that was executed with the code page switch."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

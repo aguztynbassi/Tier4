@@ -1,0 +1,61 @@
+[
+  {
+    "name": "Exclusión de Windows Defender Establecida Detectada",
+    "description": "Detecta la adición de una exclusión en el registro de Windows Defender, lo que permite a una entidad eludir el escaneo antivirus de Windows Defender.",
+    "tags": [
+      "security",
+      "detection",
+      "windows",
+      "defense evasion",
+      "impair defenses",
+      "T1562",
+      "T1562.001",
+      "TA0005"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Se ha detectado una exclusión de Windows Defender. Detalles del evento: **Event ID** {EventID}, **Timestamp** {Timestamp}, **Usuario** {User}, **Equipo** {Computer}, **Nombre de la configuración** {SettingName}, **Valor anterior** {OldValue}, **Nuevo valor** {NewValue}. Investiga este cambio para determinar si es una configuración legítima realizada por un administrador o un intento de evadir el escaneo de Windows Defender.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "ID de evento para \"La configuración de Microsoft Defender Antivirus ha cambiado\" (debería ser 5007)."
+      },
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "Marca de tiempo del evento."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "Usuario que realizó el cambio."
+      },
+      {
+        "name": "Computer",
+        "required": true,
+        "description": "Nombre del equipo."
+      },
+      {
+        "name": "SettingName",
+        "required": true,
+        "description": "Nombre de la configuración cambiada (si está disponible)."
+      },
+      {
+        "name": "OldValue",
+        "required": true,
+        "description": "Valor anterior de la configuración (si está disponible)."
+      },
+      {
+        "name": "NewValue",
+        "required": true,
+        "description": "Nuevo valor de la configuración (si está disponible)."
+      }
+    ]
+  }
+]

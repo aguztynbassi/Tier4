@@ -1,0 +1,39 @@
+{
+  "name": "Possible Boot Configuration Modification (BCD)",
+  "description": "Detecta el uso de la herramienta bcdedit.exe para modificar o eliminar datos de la configuración de arranque. Los atacantes emplean esta técnica para deshabilitar las opciones de recuperación de errores (recoveryenabled no) e ignorar fallos en el arranque (ignoreallfailures), impidiendo que el sistema entre en modo de reparación automática después de un ataque destructivo o de cifrado.",
+  "tags": [
+    "security",
+    "impact",
+    "persistence",
+    "defense_evasion",
+    "bcdedit",
+    "anti_recovery",
+    "T1490",
+    "T1542.003"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta Crítica: Desactivación de Recuperación del Sistema! Se ha detectado una modificación sospechosa del BCD mediante **bcdedit.exe** en el host **{host}**. El comando ejecutado intentó configurar **recoveryenabled no** o **ignoreallfailures**, lo cual coincide con la técnica de **Inhibit System Recovery** (**MITRE ATT&CK T1490**). Este es un paso preparatorio común en ataques de Ransomware para evitar que los administradores restauren el sistema. Se recomienda validar inmediatamente si esta acción fue autorizada y revisar la integridad de los archivos en el host afectado.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se detectó la ejecución de bcdedit."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que especifica los parámetros de modificación del arranque."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que invocó el proceso bcdedit.exe."
+    }
+  ]
+}

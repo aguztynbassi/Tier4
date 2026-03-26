@@ -1,0 +1,58 @@
+{
+  "name": "New Domain Registration Detected",
+  "description": "Detection of a new domain registration that could be used for malicious activities, requiring investigation.",
+  "tags": [
+    "security",
+    "detection",
+    "medium",
+    "domain_registration",
+    "resource_development",
+    "TA0042",
+    "T1583.001"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "MEDIUM SEVERITY ALERT: New Domain Registration Detected.\\n\\nA new domain, '{domain_name}', was registered by '{registrant_name}' ('{registrant_email}') via registrar '{registrar}' from IP '{source_ip}' at {Timestamp}. This activity could indicate an adversary setting up infrastructure for future attacks (e.g., phishing, C2). However, it could also be a legitimate business activity.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Domain Name**: {domain_name}\\n* **Registrant Name**: {registrant_name}\\n* **Registrant Email**: {registrant_email}\\n* **Source IP**: {source_ip}\\n* **Registrar**: {registrar}\\n* **Status**: {status}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (MEDIUM PRIORITY):**\\n\\n1.  **VERIFY LEGITIMACY:** Immediately contact relevant internal stakeholders (e.g., IT, Marketing, Brand Protection) to determine if '{domain_name}' was registered by an authorized party within your organization. Check for corresponding internal requests or project documentation.\\n2.  **ANALYZE DOMAIN ATTRIBUTES:** \\n    * **WHOIS Lookup:** Perform a WHOIS lookup for '{domain_name}' to gather more information about the registrant, registration date, and DNS servers. Look for privacy protection services, which can be legitimate but are also favored by adversaries.\\n    * **Registrant Anomaly:** Compare `registrant_name` and `registrant_email` with known organizational contacts. Look for generic, suspicious, or recently created email addresses.\\n    * **Source IP Reputation:** Check the reputation of `source_ip` '{source_ip}' using threat intelligence sources.\\n3.  **MONITOR POST-REGISTRATION ACTIVITY:** Begin monitoring '{domain_name}' for suspicious post-registration activities:\\n    * **DNS Resolution:** Check where the domain resolves. Does it point to suspicious IP addresses or known malicious infrastructure?\\n    * **Web Content:** If accessible, visit the domain (in a sandbox environment!) to inspect its content. Look for phishing pages, malware downloads, or C2 indicators.\\n    * **Email Traffic:** Monitor for any email traffic originating from or destined to '{domain_name}'.\\n4.  **THREAT INTELLIGENCE CROSS-REFERENCE:** Cross-reference '{domain_name}' and `source_ip` '{source_ip}' against known threat intelligence feeds for existing malicious indicators.\\n5.  **BRAND PROTECTION (if applicable):** If the domain is similar to your company's brand or a common typo, consider taking brand protection measures (e.g., registering variations, reporting to domain registrars if clearly malicious).",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of the domain registration event."
+    },
+    {
+      "name": "domain_name",
+      "required": true,
+      "description": "The name of the newly registered domain."
+    },
+    {
+      "name": "registrant_email",
+      "required": true,
+      "description": "The email address of the domain registrant."
+    },
+    {
+      "name": "registrant_name",
+      "required": true,
+      "description": "The name of the domain registrant."
+    },
+    {
+      "name": "source_ip",
+      "required": true,
+      "description": "The IP address from which the domain registration was performed."
+    },
+    {
+      "name": "registrar",
+      "required": true,
+      "description": "The domain registrar used for the registration."
+    },
+    {
+      "name": "status",
+      "required": true,
+      "description": "The registration status of the domain (expected to be 'new')."
+    }
+  ]
+}

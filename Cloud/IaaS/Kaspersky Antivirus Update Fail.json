@@ -1,0 +1,39 @@
+{
+  "name": "Kaspersky: Antivirus Update Process Failure",
+  "description": "Detecta fallos en el proceso de actualización automática de Kaspersky, incluyendo deshabilitación de tareas, errores de red, archivos de actualización corruptos o fallos en componentes específicos. Estos errores pueden ser el resultado de problemas de infraestructura o de un intento deliberado de un atacante por mantener el sistema vulnerable bloqueando la recepción de nuevas firmas de seguridad.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "kaspersky",
+    "update_failure",
+    "network_error",
+    "persistence_preparation",
+    "T1562.001",
+    "endpoint_health"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD: Fallo en la Protección del Endpoint! Se ha detectado un error en el proceso de actualización de Kaspersky en el host **{host}**. El motivo registrado es: **{reason}**. Bajo la técnica de **Impair Defenses** (**MITRE ATT&CK T1562.001**), la interrupción de las actualizaciones es un paso crítico para los atacantes que buscan evitar la detección de sus herramientas. Se recomienda verificar la conectividad de red y confirmar que las tareas de actualización no hayan sido manipuladas localmente.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde falló la actualización."
+    },
+    {
+      "name": "reason",
+      "required": true,
+      "description": "La razón específica del fallo (ej. Error de red, archivos corruptos, actualizaciones deshabilitadas)."
+    },
+    {
+      "name": "source_ip",
+      "required": false,
+      "description": "La dirección IP del servidor de actualizaciones (KSC o servidor público) que falló."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "name": "Possible Network Performance Degradation Detected",
+  "description": "Detecta una alta tasa de errores de red (drops, denies, limit exceeds) en dispositivos de seguridad perimetral en un intervalo de 5 minutos. Este volumen de errores sugiere un ataque de Denegación de Servicio (DoS), un escaneo de puertos masivo o un desbordamiento de las capacidades del dispositivo, lo que impacta directamente en la disponibilidad de los servicios y en la visibilidad del SOC.",
+  "tags": [
+    "availability",
+    "impact",
+    "dos",
+    "network_flood",
+    "firewall_error",
+    "T1498",
+    "network_performance"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Impacto en Red! Se ha detectado una degradación en el rendimiento del dispositivo **{device_ip}** con más de 100 eventos de error en menos de 5 minutos. Bajo la técnica de **Network Denial of Service** (**MITRE ATT&CK T1498**), este comportamiento podría indicar un ataque de saturación destinado a colapsar el firewall o interrumpir las comunicaciones legítimas. Se recomienda revisar el ancho de banda entrante, identificar si el tráfico proviene de múltiples fuentes (DDoS) y verificar la CPU/Memoria del dispositivo afectado.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "device_ip",
+      "required": true,
+      "description": "Dirección IP del firewall, IPS o sensor que reporta la saturación de errores."
+    },
+    {
+      "name": "EventCount",
+      "required": true,
+      "description": "Cantidad de eventos de error o descarte registrados en el intervalo de tiempo."
+    },
+    {
+      "name": "label",
+      "required": false,
+      "description": "Tipo específico de error predominante (ej. Connection Drop, Limit Exceed)."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "name": "Data Staged for Exfiltration Detected",
+  "description": "Detecta la ejecución de utilidades de compresión y archivado en directorios del sistema. Los adversarios utilizan estas herramientas para empaquetar grandes volúmenes de datos recolectados en una ubicación central (staging area), facilitando su transporte y ocultando el contenido real de los archivos mediante el uso de contraseñas o nombres de archivo genéricos antes de la exfiltración.",
+  "tags": [
+    "security",
+    "collection",
+    "data_staging",
+    "compression_tools",
+    "exfiltration_preparation",
+    "T1074",
+    "event_4688"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Preparación de Exfiltración! Se ha detectado el uso de la herramienta de compresión **{process_name}** en el host **{host}**. Bajo la técnica de **Data Staged** (**MITRE ATT&CK T1074**), este comportamiento sugiere que un atacante está empaquetando información sensible en una ubicación temporal. Se recomienda identificar la ruta de destino del archivo comprimido y verificar si el volumen de datos procesado corresponde a una actividad legítima del usuario **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se detectó la actividad de staging."
+    },
+    {
+      "name": "process_name",
+      "required": true,
+      "description": "El nombre del proceso de compresión detectado (ej. rar.exe, 7z.exe, zip.exe, compress.exe)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que inició la compresión de los datos."
+    }
+  ]
+}

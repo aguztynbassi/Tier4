@@ -1,0 +1,34 @@
+{
+  "name": "PowerShell Rundll32 Remote Thread Creation Detected",
+  "description": "Detecta cuando PowerShell intenta crear un hilo en el espacio de memoria de rundll32.exe. Esta técnica de inyección de código permite a los adversarios ejecutar payloads maliciosos ocultos tras un proceso legítimo de Windows (Signed Binary Proxy Execution), dificultando la detección por parte de herramientas de seguridad y facilitando la evasión de firewalls de host.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "privilege_escalation",
+    "process_injection",
+    "remote_thread_creation",
+    "T1218.011",
+    "T1059.001",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta Crítica de Inyección de Código! Se ha detectado que **powershell.exe** ha creado un hilo remoto en **rundll32.exe** en el host **{host}**. Este comportamiento es un indicador técnico de **Signed Binary Proxy Execution: Rundll32** (**MITRE ATT&CK T1218.011**). El atacante está utilizando un proceso firmado de Microsoft para ejecutar código arbitrario en memoria. Se recomienda realizar un volcado de memoria de rundll32.exe inmediatamente para analizar el código inyectado y aislar el host para prevenir comunicaciones de C2.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se detectó la creación del hilo remoto."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que inició el proceso original de PowerShell."
+    }
+  ]
+}

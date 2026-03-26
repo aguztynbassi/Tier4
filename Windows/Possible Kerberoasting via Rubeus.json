@@ -1,0 +1,27 @@
+{
+    "name": "Possible Kerberoasting via Rubeus",
+    "description": "Kerberoasting attack via popular open-source tool Rubeus is detected.",
+    "tags": [
+        "TA0006",
+        "T1558",
+        "T1558.003",
+        "security",
+        "detection",
+        "Windows Sysmon"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the security event: 'Possible Kerberoasting via Rubeus'. Event details: {event_details}",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "event_details",
+            "required": true,
+            "description": "Details of the detected security event, including the original query information: `norm_id=WindowsSysmon event_id=7 -source_image=\"C:\\Windows\\System32\\*\" image IN [\"*\\clr.dll\", \"*\\kerberos.dll\", \"*\\cryptdll.dll\", \"*\\dsparse.dll\"] | chart distinct_count(image) as dc, distinct_list(image) as images | search dc=4`."
+        }
+    ]
+}

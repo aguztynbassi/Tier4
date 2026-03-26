@@ -1,0 +1,37 @@
+{
+  "name": "RDP Over Reverse SSH Tunnel Detected",
+  "description": "Detecta instancias donde el servicio RDP de Windows inicia conexiones hacia la interfaz de loopback (127.0.0.1). Este comportamiento es un indicador altamente fiable de la presencia de un túnel inverso (vía SSH, Plink o herramientas similares), permitiendo a un atacante externo acceder al Escritorio Remoto eludiendo las restricciones del firewall perimetral.",
+  "tags": [
+    "security",
+    "lateral_movement",
+    "command_and_control",
+    "rdp_tunneling",
+    "T1021.001",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Conexión de Red Anómala! Se ha detectado que el servicio RDP (**svchost.exe**) en el host **{host}** está comunicándose con la dirección de loopback **{destination_address}** en el puerto 3389. Este patrón es característico de un **Túnel Inverso** (**MITRE ATT&CK T1021.001**), utilizado para exponer el servicio RDP a un atacante externo a través de una conexión cifrada saliente. El evento fue registrado bajo el usuario **{user}**. Se recomienda identificar procesos de tunneling activos (como `ssh.exe`, `plink.exe` o `chisel`) y terminar las sesiones de red no autorizadas inmediatamente.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del equipo donde se detectó el túnel RDP."
+    },
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "La dirección de loopback (127.* o ::1) utilizada en la conexión."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que inició la conexión (frecuentemente SYSTEM o el usuario comprometido)."
+    }
+  ]
+}

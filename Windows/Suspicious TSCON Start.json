@@ -1,0 +1,36 @@
+{
+  "name": "Suspicious TSCON Start",
+  "description": "Detection of `tscon.exe` process execution with a `LOCAL SYSTEM` user. `tscon.exe` is a legitimate Windows utility to connect to a different session, but its execution by the SYSTEM user is highly suspicious and could indicate an adversary attempting to hijack a session for lateral movement or to bypass security controls.",
+  "tags": [
+    "security",
+    "command_and_control",
+    "remote_access_software",
+    "T1219",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: the process **`tscon.exe`** was executed with the user **`SYSTEM`**. This is a strong indicator of **Remote Access Software** (**MITRE ATT&CK T1219**) where an adversary may be attempting to hijack a legitimate session to maintain remote control over the system. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious process. The event occurred with Event ID **1** and process image **{image}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action, which is expected to be 'SYSTEM'."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "The process image, which is expected to be 'tscon.exe'."
+    }
+  ]
+}

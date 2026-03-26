@@ -1,0 +1,41 @@
+{
+  "name": "Suspicious Process Start Locations Detected",
+  "description": "Detection of processes running from unusual file system locations such as the Recycle Bin or Fonts folder. Adversaries often place malicious executables in these non-standard directories to evade detection, which is a common defense evasion technique.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "masquerading",
+    "T1036",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a process, **{image}**, was launched from a suspicious file system location. This is a strong indicator of **Defense Evasion** (**MITRE ATT&CK T1036**), where an adversary is attempting to hide malicious activity in a non-standard directory. The process was launched with the command line **{command}** under the user **{user}**. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious process.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "The process image that was launched."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The full command line that was executed."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

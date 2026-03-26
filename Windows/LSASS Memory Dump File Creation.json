@@ -1,0 +1,33 @@
+{
+  "name": "Credential Access: LSASS Memory Dump File Created",
+  "description": "Detecta la creación de archivos de volcado de memoria (.dmp) asociados al proceso LSASS. La aparición de estos archivos es una prueba forense de que un atacante ha extraído con éxito los secretos de autenticación del sistema (hashes NTLM, tickets Kerberos) para su análisis fuera de línea. Herramientas como ProcDump generan automáticamente nombres de archivo que incluyen 'lsass', lo que facilita esta detección de alta prioridad.",
+  "tags": [
+    "security",
+    "credential_access",
+    "lsass_dump",
+    "procdump_artifact",
+    "mimikatz_offline",
+    "T1003",
+    "sysmon_event_11"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Archivo de Volcado LSASS Creado! Se ha detectado la creación del archivo **{file}** en el host **{host}**. Bajo la técnica de **OS Credential Dumping** (**MITRE ATT&CK T1003**), esto confirma que la memoria de LSASS ha sido comprometida y las credenciales del sistema están listas para ser exfiltradas o analizadas. Se requiere el aislamiento inmediato del host.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se generó el archivo de volcado de memoria."
+    },
+    {
+      "name": "file",
+      "required": true,
+      "description": "La ruta completa y el nombre del archivo .dmp creado."
+    }
+  ]
+}

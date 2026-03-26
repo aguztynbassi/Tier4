@@ -1,0 +1,40 @@
+{
+  "name": "WastedLocker Ransomware: Infected Host Detected",
+  "description": "Detecta la presencia o ejecución de binarios asociados al ransomware WastedLocker en un host. Esta alerta se dispara cuando el hash de un archivo coincide con la base de datos de inteligencia de amenazas de Evil Corp. WastedLocker es conocido por cifrar archivos utilizando extensiones personalizadas (ej. .wasted) y por intentar deshabilitar copias de seguridad de Shadow Copy antes del cifrado masivo.",
+  "tags": [
+    "security",
+    "impact",
+    "ransomware",
+    "wastedlocker",
+    "evil_corp",
+    "data_encryption",
+    "T1486",
+    "sysmon_event_1",
+    "hash_match"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Ransomware WastedLocker Detectado! Se ha identificado un archivo malicioso en el host **{host}** cuyo hash coincide con la firma de **WastedLocker**. Bajo la técnica de **Data Encrypted for Impact** (**MITRE ATT&CK T1486**), este malware está diseñado para cifrar datos críticos y paralizar las operaciones de la organización. Se requiere el aislamiento inmediato del host de la red para prevenir la propagación lateral y el inicio del cifrado de archivos.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó el hash malicioso."
+    },
+    {
+      "name": "hash",
+      "required": true,
+      "description": "El hash (SHA256/MD5) del archivo detectado que coincide con la lista de WastedLocker."
+    },
+    {
+      "name": "image",
+      "required": false,
+      "description": "La ruta del ejecutable sospechoso detectado por Sysmon."
+    }
+  ]
+}

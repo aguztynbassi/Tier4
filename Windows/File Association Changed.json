@@ -1,0 +1,76 @@
+[
+  {
+    "name": "File Association Changed (Sysmon)",
+    "description": "Detects changes to default file associations in the Windows Registry via Sysmon events (Event IDs 12, 13, 14). Adversaries use this for persistence or privilege escalation, executing malicious code when seemingly innocuous files are opened. Excludes common system accounts to reduce false positives.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "sysmon",
+      "persistence",
+      "privilege_escalation",
+      "defense_evasion",
+      "TA0003",
+      "TA0004",
+      "TA0005",
+      "T1546",
+      "T1546.001"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: File Association Changed (Sysmon Detection)!\\n\\n**A suspicious modification to a Windows file association registry key was detected on host '{ComputerName}' at {Timestamp}.** This change was made by process '{Image}' (PID: {ProcessId}) running under user '{User}'.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Event ID**: {EventID} (Sysmon Registry Event: 12, 13, or 14)\\n* **User Account**: '{User}'\\n* **Process**: '{Image}' (PID: {ProcessId})\\n* **Registry Target Object**: '{TargetObject}' (Specific file association path)\\n* **Details (if available)**: {Details} (e.g., OldValue, NewValue)\\n* **Affected Host**: '{ComputerName}'\\n* **Rule Name**: {RuleName}\\n\\nThis activity is a strong indicator of **Persistence (TA0003)** or **Defense Evasion (TA0005)** using the **Change Default File Association (T1546.001)** technique. Attackers modify how specific file types are handled to execute their malicious code whenever a user opens a seemingly benign file (e.g., a text document, image, or PDF). This can also be used for **Privilege Escalation (TA0004)** if a privileged file type is targeted.\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (HIGH PRIORITY - INVESTIGATE PROMPTLY):**\\n\\n1.  **IMMEDIATE HOST INVESTIGATION:** Investigate '{ComputerName}' to determine the legitimacy and impact of this registry change. Prioritize hosts where this detection is made, especially if '{User}' is not an expected system account.\\n2.  **REGISTRY CHECK:** Manually inspect or use forensic tools to examine the registry key '{TargetObject}' for malicious modifications. Revert any unauthorized changes if confirmed malicious.\\n3.  **PROCESS ANALYSIS:** Investigate the process '{Image}' (PID: {ProcessId}) that made the change. \\n    * Is this a known legitimate application? \\n    * Is it running from an unusual location or with unusual parameters? \\n    * Check its reputation via Virustotal or other intelligence sources.\\n4.  **USER ACCOUNT REVIEW:** If '{User}' is a standard user, investigate if their account has been compromised or if they executed malicious software. Reset credentials if compromise is suspected.\\n5.  **MALWARE SCAN:** Perform a full endpoint malware scan on '{ComputerName}'.\\n6.  **HUNT FOR RELATED ARTIFACTS:** Look for new or modified files on the system that might be associated with the altered file association (e.g., new executables in unusual directories). Check for other persistence mechanisms.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the registry modification event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Sysmon Event ID (12, 13, or 14)."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account that made the registry change."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to the process executable that made the change."
+      },
+      {
+        "name": "ProcessId",
+        "required": true,
+        "description": "The Process ID of the executable that made the change."
+      },
+      {
+        "name": "TargetObject",
+        "required": true,
+        "description": "The full registry key/value path that was modified."
+      },
+      {
+        "name": "Details",
+        "required": false,
+        "description": "Additional details about the registry change (e.g., OldValue, NewValue for EventID 13)."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the event occurred."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]

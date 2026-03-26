@@ -1,0 +1,44 @@
+{
+  "name": "Unix: Brute Force Attack via Non-Existent Users",
+  "description": "Detecta múltiples intentos fallidos de inicio de sesión utilizando nombres de usuario que no están presentes en el sistema. Este patrón es característico de ataques de fuerza bruta automatizados (spraying) donde un atacante o bot intenta adivinar cuentas válidas para ganar acceso inicial al servidor Unix.",
+  "tags": [
+    "security",
+    "credential_access",
+    "brute_force",
+    "unix",
+    "linux",
+    "ssh_attack",
+    "auth_fail",
+    "T1110"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE FUERZA BRUTA! Se ha detectado un volumen inusual de intentos de acceso fallidos en el host **{host}** utilizando usuarios inexistentes. Se han registrado más de 10 intentos para el usuario **{user}**. Bajo la técnica de **Brute Force** (**MITRE ATT&CK T1110**), esto sugiere un ataque coordinado de adivinación de credenciales. Se recomienda bloquear la IP de origen y verificar si existen inicios de sesión exitosos desde la misma dirección IP hacia otros usuarios.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El servidor Unix bajo ataque."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El nombre de usuario (inexistente o inválido) utilizado en el intento de acceso."
+    },
+    {
+      "name": "cnt",
+      "required": true,
+      "description": "El número total de intentos fallidos registrados para ese usuario específico."
+    },
+    {
+      "name": "source_ip",
+      "required": false,
+      "description": "La dirección IP desde donde se originan los intentos de conexión (usualmente extraída de /var/log/auth.log)."
+    }
+  ]
+}

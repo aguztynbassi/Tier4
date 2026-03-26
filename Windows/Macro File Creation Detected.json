@@ -1,0 +1,39 @@
+{
+  "name": "Initial Access: Macro-Enabled Document Creation",
+  "description": "Detecta la creación de archivos de Microsoft Office habilitados para macros en el sistema. Los atacantes utilizan frecuentemente estos formatos (.docm, .xlsm, .xlm) para ocultar scripts de VBA o macros de Excel 4.0 que, al ser ejecutados por el usuario, inician la cadena de infección, realizan el robo de credenciales en memoria o ejecutan comandos de PowerShell para obtener persistencia.",
+  "tags": [
+    "security",
+    "initial_access",
+    "credential_access",
+    "macro_malware",
+    "office_exploitation",
+    "sysmon_event_11",
+    "T1059",
+    "VBA_scripts"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD: Creación de Archivo con Macros! Se ha detectado la creación del archivo **{file}** en el host **{host}**. Bajo la técnica de **Command and Scripting Interpreter** (**MITRE ATT&CK T1059**), este formato de Office es un vector común para la ejecución de código malicioso y el robo de credenciales. Se requiere verificar el origen de la descarga y el proceso creador.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se identificó la creación del documento con macros."
+    },
+    {
+      "name": "file",
+      "required": true,
+      "description": "El nombre y extensión del archivo creado (ej. Factura.xlsm)."
+    },
+    {
+      "name": "path",
+      "required": true,
+      "description": "La ruta completa donde se depositó el archivo (ej. C:\\Users\\...\\Downloads)."
+    }
+  ]
+}

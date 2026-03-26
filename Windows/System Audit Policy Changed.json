@@ -1,0 +1,88 @@
+[
+  {
+    "name": "System Audit Policy Changed",
+    "description": "Detects changes to the system's audit policy configuration. Adversaries may modify audit policies to evade detection by reducing the amount of security logging or to increase logging for specific activities they want to monitor. This rule focuses on Windows Security Event IDs indicating such modifications.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "defense_evasion",
+      "privilege_escalation",
+      "audit_policy",
+      "TA0005",
+      "TA0004",
+      "T1562",
+      "T1562.001",
+      "T1562.002",
+      "T1562.006",
+      "T1484",
+      "T1484.001"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "ALERTA DE ALTA SEVERIDAD: ¡Cambio en la Política de Auditoría del Sistema Detectado!\\n\\n**Se ha detectado una modificación a la política de auditoría del sistema en el host '{ComputerName}' a las {Timestamp}.** Este cambio fue realizado por el usuario '{SubjectUserName}' (Dominio: '{SubjectDomainName}') a través del proceso '{ProcessName}' (PID: {ProcessId}).\\n\\n**Detalles del Evento:**\\n* **Timestamp**: {Timestamp}\\n* **Event ID**: {EventID} (Windows Security Event: 4719, 4902, 4904, 4905)\\n* **Usuario Afectado**: '{TargetUserName}' (si aplica, para 4904)\\n* **Cuenta de Sujeto**: '{SubjectUserName}'\\n* **Dominio del Sujeto**: '{SubjectDomainName}'\\n* **Proceso**: '{ProcessName}' (PID: {ProcessId})\\n* **Tipo de Objeto Cambiado**: '{ObjectType}'\\n* **Nuevo Valor (si aplica)**: '{NewValue}' (para 4904)\\n* **Host Afectado**: '{ComputerName}'\\n* **Regla de Detección**: {RuleName}\\n\\nEsta actividad es un indicador crítico de **Evasión de Defensas (TA0005)** o **Escalada de Privilegios (TA0004)**, ya que un atacante podría estar intentando: \\n* **Deshabilitar o reducir el registro de seguridad (T1562.008)** para ocultar sus actividades.\\n* **Modificar las configuraciones del firewall (T1562.001)** para permitir su acceso.\\n* **Manipular las políticas de grupo (T1484.001)** para afectar el registro en múltiples sistemas.\\n\\n**ACCIONES INMEDIATAS RECOMENDADAS (ALTA PRIORIDAD - INVESTIGAR URGENTEMENTE):**\\n\\n1.  **INVESTIGAR URGENTEMENTE EL HOST:** Investigue '{ComputerName}' para determinar la legitimidad del cambio de política. Priorice esto inmediatamente.\\n2.  **REVISAR LOS CAMBIOS EN LA POLÍTICA DE AUDITORÍA:**\\n    * Para el EventID 4719: Revise qué categorías de auditoría fueron habilitadas o deshabilitadas. Concéntrese en cualquier deshabilitación inesperada de categorías críticas (e.g., inicio de sesión, creación de procesos, cambios de objeto).\\n    * Para el EventID 4904: Examine el `NewValue` para entender qué ajuste específico de subcategoría fue modificado.\\n    * Para EventIDs 4902, 4905, 4906: Verifique si estos cambios corresponden a una actualización de GPO o a una gestión legítima del firewall.\\n3.  **VALIDAR LA CUENTA Y EL PROCESO:**\\n    * ¿Es '{SubjectUserName}' una cuenta de administrador legítima? ¿Se esperaba que esta cuenta realizara dicho cambio?\\n    * Investigue el proceso '{ProcessName}'. ¿Es un proceso del sistema estándar (`svchost.exe`, `gpupdate.exe`) o un ejecutable inusual? Verifique su ubicación y hashes.\\n    * Si la cuenta o el proceso son sospechosos, considere que el host podría estar comprometido y proceda con el aislamiento y el análisis forense.\\n4.  **RESTAURAR LA POLÍTICA DE AUDITORÍA:** Si el cambio no es legítimo, restaure inmediatamente la política de auditoría a la línea base de seguridad conocida. Para cambios de GPO, esto podría requerir una actualización forzada o reversión de GPO.\\n5.  **ANÁLISIS DE LA CADENA DE ATAQUE:** Si el cambio es malicioso, intente identificar la actividad previa que llevó a esta modificación (e.g., intrusión inicial, escalada de privilegios). Busque otros indicadores de compromiso en '{ComputerName}'.\\n6.  **ESCALAR:** Escalar a los equipos de respuesta a incidentes y administradores de sistemas para una investigación y remediación completas.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the audit policy change event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Windows Security Event ID (4719, 4902, 4904, 4905, 4906)."
+      },
+      {
+        "name": "SubjectUserName",
+        "required": true,
+        "description": "The user account that initiated the audit policy change."
+      },
+      {
+        "name": "SubjectDomainName",
+        "required": true,
+        "description": "The domain of the subject user account."
+      },
+      {
+        "name": "ProcessName",
+        "required": false,
+        "description": "The name of the process that made the change."
+      },
+      {
+        "name": "ProcessId",
+        "required": false,
+        "description": "The Process ID of the process that made the change."
+      },
+      {
+        "name": "ObjectType",
+        "required": false,
+        "description": "The type of object that was changed (e.g., 'Audit Policy', 'Audit Setting')."
+      },
+      {
+        "name": "NewValue",
+        "required": false,
+        "description": "The new value of the audit setting (primarily for EventID 4904)."
+      },
+      {
+        "name": "TargetUserName",
+        "required": false,
+        "description": "The target user name if a policy affecting a specific user was changed."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the event occurred."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]

@@ -1,0 +1,39 @@
+{
+  "name": "Defense Evasion: Masquerading via Double File Extension",
+  "description": "Detecta la ejecución de procesos que utilizan extensiones dobles o engañosas (ej. .pdf.exe, .doc.scr). Los atacantes manipulan los nombres de los archivos para que parezcan documentos, imágenes o archivos comprimidos inofensivos, induciendo al usuario a ejecutarlos. Esta técnica es un vector común en campañas de phishing y distribución de malware para evadir la sospecha del usuario y los controles básicos de seguridad.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "masquerading",
+    "phishing_delivery",
+    "double_extension",
+    "sysmon_event_1",
+    "T1036",
+    "user_execution"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EVASIÓN: Extensión de Archivo Engañosa! Se ha detectado la ejecución del proceso **{image}** en el host **{host}**. El nombre del archivo intenta suplantar un formato legítimo (Documento/Imagen) pero se ha ejecutado como un proceso binario. Bajo la técnica de **Masquerading** (**MITRE ATT&CK T1036**), esto es un indicador crítico de compromiso por malware distribuido vía Phishing.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se ejecutó el archivo con extensión simulada."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "La ruta completa y el nombre del ejecutable detectado (ej. C:\\Users\\User\\Downloads\\Reporte.pdf.exe)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que ejecutó el archivo sospechoso."
+    }
+  ]
+}

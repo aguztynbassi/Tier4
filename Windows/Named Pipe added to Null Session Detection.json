@@ -1,0 +1,44 @@
+{
+  "name": "Lateral Movement: Named Pipe Added to Null Session",
+  "description": "Detecta la modificación del registro para permitir que un Named Pipe específico sea accesible a través de una sesión nula (Null Session). Los atacantes utilizan esta configuración para habilitar canales de comunicación remota sin autenticación, permitiendo la ejecución de herramientas de administración o movimiento lateral (como el uso de RPC/Named Pipes) evadiendo los controles de acceso estándar.",
+  "tags": [
+    "security",
+    "lateral_movement",
+    "null_session",
+    "named_pipes",
+    "lanmanserver",
+    "registry_manipulation",
+    "T1021",
+    "sysmon_event_13"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE MOVIMIENTO LATERAL: Null Session Pipe Detectado! Se ha detectado una modificación en **{target_object}** en el host **{host}** mediante el proceso **{image}**. Bajo la técnica de **Remote Services** (**MITRE ATT&CK T1021**), permitir pipes en sesiones nulas facilita el acceso remoto no autenticado a recursos críticos. Se requiere la revisión inmediata de la configuración de LanmanServer.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se habilitó el Named Pipe para sesiones nulas."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "El proceso que realizó la modificación del registro (ej. reg.exe)."
+    },
+    {
+      "name": "target_object",
+      "required": true,
+      "description": "La ruta de la llave de registro modificada (NullSessionPipes)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que ejecutó la modificación."
+    }
+  ]
+}

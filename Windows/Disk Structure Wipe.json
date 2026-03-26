@@ -1,0 +1,43 @@
+{
+  "name": "Disk Structure Wipe Activity Detected",
+  "description": "Detecta el uso de utilidades de administración de discos (diskpart, format) para realizar operaciones de borrado o formateo de particiones. Esta actividad es característica de ataques destructivos o etapas finales de un compromiso donde el adversario busca causar una interrupción del servicio (Impacto) o destruir evidencia forense en el host afectado.",
+  "tags": [
+    "security",
+    "impact",
+    "disk_wipe",
+    "wiper_malware",
+    "data_destruction",
+    "T1561.001",
+    "event_4688"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta Crítica de Destrucción de Datos! Se ha detectado actividad de manipulación de discos mediante **{process_name}** en el host **{host}**. El comando ejecutado sugiere un intento de **Disk Structure Wipe** (**MITRE ATT&CK T1561.001**). Si esta acción no es parte de una tarea de mantenimiento programada, el sistema está siendo objeto de un ataque destructivo que resultará en la pérdida total de datos y la inoperatividad del sistema operativo. Se recomienda apagar el equipo de inmediato para preservar la posibilidad de recuperación forense y revisar el origen de la ejecución.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se inició la utilidad de formateo o particionado."
+    },
+    {
+      "name": "process_name",
+      "required": true,
+      "description": "El ejecutable detectado (ej. diskpart.exe o format.com)."
+    },
+    {
+      "name": "command_line",
+      "required": true,
+      "description": "La línea de comandos completa (ej. diskpart /s script.txt o format C: /q)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario (usualmente con privilegios elevados) que lanzó la operación."
+    }
+  ]
+}

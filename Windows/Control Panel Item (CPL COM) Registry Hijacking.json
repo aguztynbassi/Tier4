@@ -1,0 +1,80 @@
+[
+  {
+    "name": "Control Panel Item (CPL/COM) Registry Hijacking",
+    "description": "Detects suspicious registry modifications related to Control Panel Items (CPLs) or Component Object Model (COM) objects, which adversaries can abuse for persistence, defense evasion, and arbitrary code execution. Malicious modifications to keys under `NameSpace`, `Controls Folder`, or `PropertySheetHandlers` can redirect legitimate Control Panel functions or shell extensions to load and execute malicious DLLs or executables. This allows code execution when a user interacts with the Control Panel or related system features.",
+    "tags": [
+      "security",
+      "detection",
+      "medium",
+      "windows",
+      "sysmon",
+      "defense_evasion",
+      "persistence",
+      "execution",
+      "signed_binary_proxy_execution",
+      "event_triggered_execution",
+      "lolbas",
+      "TA0005",
+      "TA0003",
+      "TA0002",
+      "T1218",
+      "T1218.002",
+      "T1546"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "MEDIUM SEVERITY ALERT: Control Panel Item (CPL/COM) Registry Hijacking Detected!\\n\\n**A suspicious modification to a critical registry key related to Control Panel Items or COM objects has been detected on host '{ComputerName}' at {Timestamp}.** This indicates a potential attempt at **Persistence (TA0003)**, **Defense Evasion (TA0005)**, and **Execution (TA0002)**, often leveraging **Signed Binary Proxy Execution via Control Panel Items (T1218.002)** or **Event Triggered Execution (T1546)**.\\n\\n**Incident Details:**\\n* **Timestamp**: {Timestamp}\\n* **Event ID**: {EventID} (Sysmon EventID 12, 13, or 14 for Registry Activity)\\n* **Modifying Process**: '{Image}'\\n* **Command Line**: `{CommandLine}`\\n* **Target Registry Object**: '{TargetObject}'\\n* **Registry Details/Value Written**: `{Details}`\\n* **User Context**: '{User}'\\n* **Affected Host**: '{ComputerName}'\\n* **Rule Name**: {RuleName}\\n\\nThe modified registry path ('{TargetObject}') such as `NameSpace`, `Controls Folder`, or `PropertySheetHandlers`, combined with suspicious data being written (`{Details}`) (e.g., paths to `DLL`s, `EXE`s in unusual locations, or direct commands), strongly suggests an adversary is attempting to hijack legitimate system functionalities. This allows them to execute malicious code whenever a user interacts with the Control Panel or other shell components.\\n\\n**IMMEDIATE RECOMMENDED ACTIONS (MEDIUM PRIORITY - INVESTIGATE):**\\n\\n1.  **ANALYZE REGISTRY MODIFICATION:** Examine the `TargetObject` (`{TargetObject}`) and `Details` (`{Details}`) fields to understand precisely what was modified. Identify the file path or command that was registered or redirected.\\n2.  **RETRIEVE AND ANALYZE SUSPICIOUS FILES:** If the `Details` field points to a file (e.g., a `.dll` or `.exe` in `C:\\Users\\Public\\`), **retrieve a copy of that file for static and dynamic analysis** in a sandbox environment. Do NOT execute it directly on an analysis workstation.\\n3.  **INVESTIGATE MODIFYING PROCESS & USER:** \\n    * What is the '{Image}' process that made the registry modification? Is it a known legitimate application, or an unknown/suspicious executable?\\n    * Where is it located? \\n    * Check its **digital signature**. \\n    * How was it launched (`{CommandLine}`)? What is its parent process?\\n    * Is the user '{User}' authorized to make such system-level registry changes, or is their account potentially compromised?\\n4.  **CHECK FOR PERSISTENCE:** Confirm if this registry modification has established a persistence mechanism. If so, determine how to safely revert the change after forensic collection.\\n5.  **ENDPOINT SCAN:** Perform a full endpoint security scan on '{ComputerName}' to identify any associated malware or indicators of compromise.\\n6.  **ESCALATE:** Escalate to the security operations center (SOC) or incident response team for further analysis and potential remediation if malicious intent is confirmed.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the registry modification event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Sysmon Event ID (expected to be 12, 13, or 14 for Registry Activity)."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to the executable that modified the registry."
+      },
+      {
+        "name": "CommandLine",
+        "required": false,
+        "description": "The full command line arguments of the process that modified the registry."
+      },
+      {
+        "name": "TargetObject",
+        "required": true,
+        "description": "The full registry key or value path that was modified."
+      },
+      {
+        "name": "Details",
+        "required": true,
+        "description": "The data written to the registry value, crucial for identifying malicious paths or commands."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the registry modification occurred."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the registry modification occurred."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]

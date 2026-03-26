@@ -1,0 +1,37 @@
+{
+  "name": "UAC Bypass via Event Viewer Detected",
+  "description": "Detecta intentos de evadir el Control de Cuentas de Usuario (UAC) mediante el secuestro de la clave de registro asociada al Visor de Eventos (eventvwr.exe). La alerta monitorea la manipulación de la clave 'mscfile' o la ejecución de procesos hijos inusuales por parte de eventvwr.exe que no sean la consola de administración estándar (mmc.exe).",
+  "tags": [
+    "security",
+    "privilege_escalation",
+    "defense_evasion",
+    "uac_bypass",
+    "registry_hijack",
+    "T1548.002"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Escalada de Privilegios! Se ha detectado un posible Bypass de UAC en el host **{host}**. Se observó una modificación sospechosa en la clave de registro **mscfile** o el proceso **eventvwr.exe** inició un proceso hijo inesperado: **{image}**. Esta es una técnica conocida de **Abuse of UAC Mechanism** (**MITRE ATT&CK T1548.002**). Un atacante podría estar intentando obtener privilegios administrativos de forma silenciosa. El evento fue iniciado por el usuario **{user}**. Se recomienda investigar la línea de comandos del proceso hijo y verificar las claves de registro bajo `Software\\Classes\\mscfile`.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se detectó el comportamiento anómalo."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "El nombre del proceso sospechoso detectado (si el evento es de creación de proceso)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que ejecutó la acción."
+    }
+  ]
+}

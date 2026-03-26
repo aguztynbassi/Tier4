@@ -1,0 +1,39 @@
+{
+  "name": "Privileged Group Membership Change Detected",
+  "description": "Detecta la adición o eliminación de usuarios en grupos con privilegios administrativos elevados en Active Directory. Los adversarios manipulan la membresía de estos grupos para obtener acceso persistente, escalar privilegios desde una cuenta estándar o evadir controles de seguridad mediante la creación de nuevas cuentas de administrador 'backdoor'.",
+  "tags": [
+    "security",
+    "persistence",
+    "privilege_escalation",
+    "active_directory",
+    "domain_admins",
+    "backdoor_account",
+    "T1069.002",
+    "event_4728"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Cambio en Grupo Privilegiado! Se ha detectado la adición del usuario **{new_member}** al grupo de alta seguridad **{group_name}**. Bajo la técnica de **Permission Groups Discovery: Domain Groups** (**MITRE ATT&CK T1069.002**), esta acción otorga control total sobre la infraestructura a una cuenta potencialmente comprometida. Se requiere validación inmediata con el equipo de gestión de identidades (IAM) para confirmar si este cambio fue autorizado por un ticket de soporte válido.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "group_name",
+      "required": true,
+      "description": "El nombre del grupo privilegiado afectado (ej. Domain Admins)."
+    },
+    {
+      "name": "new_member",
+      "required": true,
+      "description": "El Distinguished Name (DN) del usuario que fue agregado al grupo."
+    },
+    {
+      "name": "SubjectUserName",
+      "required": true,
+      "description": "La cuenta de administrador que realizó la modificación."
+    }
+  ]
+}

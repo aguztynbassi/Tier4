@@ -1,0 +1,55 @@
+{
+  "name": "Chrome Extension Installed Outside of the Webstore",
+  "description": "Detects the installation of Chrome extensions from sources other than the official Chrome Web Store. This can indicate the presence of malicious extensions that may compromise user data or system security.",
+  "tags": [
+    "security",
+    "detection",
+    "persistence",
+    "browser extensions",
+    "TA0003",
+    "T1176",
+    "Windows",
+    "Linux",
+    "macOS"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "Medium-severity alert: A Chrome extension has been detected that was installed from outside the official Chrome Web Store. This could indicate a potentially malicious extension or an unauthorized installation, posing a risk to user data and system security. Event Details: **Timestamp** {timestamp}, **Extension Name** {name}, **Identifier** {identifier}, **Version** {version}, **Path** {path}, **Installed from Webstore** {columns_from_webstore}. Investigate the legitimacy of this extension and consider its removal if unauthorized or suspicious.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "timestamp",
+      "required": true,
+      "description": "The timestamp of the detection event."
+    },
+    {
+      "name": "name",
+      "required": true,
+      "description": "The name of the Chrome extension."
+    },
+    {
+      "name": "identifier",
+      "required": true,
+      "description": "The unique identifier (ID) of the Chrome extension."
+    },
+    {
+      "name": "version",
+      "required": true,
+      "description": "The version of the Chrome extension."
+    },
+    {
+      "name": "path",
+      "required": true,
+      "description": "The file system path where the Chrome extension is located."
+    },
+    {
+      "name": "columns_from_webstore",
+      "required": true,
+      "description": "Indicates if the extension was installed from the Chrome Web Store ('0' for not from webstore, '1' for from webstore)."
+    }
+  ]
+}

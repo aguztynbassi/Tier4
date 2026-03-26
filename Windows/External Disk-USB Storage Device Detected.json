@@ -1,0 +1,54 @@
+[
+  {
+    "name": "External Disk/USB Storage Device Detected",
+    "description": "Detects the connection of external disk drives or USB storage devices to a system. This can be an early indicator of data exfiltration or malware introduction attempts.",
+    "tags": [
+      "security",
+      "detection",
+      "initial access",
+      "lateral movement",
+      "replication through removable media",
+      "user execution",
+      "TA0001",
+      "TA0008",
+      "T1091",
+      "T1200",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "External disk or USB storage device connection detected. This activity could be an early indicator of data exfiltration or malware introduction. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **User** {User}, **Computer** {Computer}, **Message** {Message}. Investigate immediately for unauthorized device usage or potential threat actor activity.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for external storage device connection (e.g., 6416)."
+      },
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account associated with the device connection."
+      },
+      {
+        "name": "Computer",
+        "required": true,
+        "description": "The computer where the device was connected."
+      },
+      {
+        "name": "Message",
+        "required": true,
+        "description": "The event message, indicating the type of device (e.g., 'USB Mass Storage Device')."
+      }
+    ]
+  }
+]

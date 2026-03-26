@@ -1,0 +1,43 @@
+{
+  "name": "Windows User Account Created via Command Line Detected",
+  "description": "Detecta la creación de cuentas de usuario locales utilizando herramientas de línea de comandos como 'net.exe' o cmdlets de PowerShell. Los adversarios utilizan este método para establecer persistencia en el sistema, permitiéndoles mantener el acceso incluso si las credenciales comprometidas inicialmente son restablecidas. Es un paso común tras obtener privilegios administrativos en un endpoint.",
+  "tags": [
+    "security",
+    "persistence",
+    "execution",
+    "account_creation",
+    "powershell",
+    "T1136.001",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Persistencia! Se ha detectado la creación de una nueva cuenta de usuario en el host **{host}** mediante la línea de comandos. Bajo la técnica de **Create Account: Local Account** (**MITRE ATT&CK T1136.001**), este evento sugiere que un atacante o un proceso malicioso está intentando asegurar acceso permanente al sistema. Se recomienda verificar si el comando fue ejecutado por un administrador autorizado y revisar si la nueva cuenta fue añadida posteriormente a grupos privilegiados.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se creó la cuenta."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que ejecutó el comando de creación (usualmente un administrador o SYSTEM)."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa, incluyendo el nombre del nuevo usuario (ej. net user /add backup_svc)."
+    },
+    {
+      "name": "parent_image",
+      "required": true,
+      "description": "El proceso padre que lanzó la creación (ej. cmd.exe, powershell.exe)."
+    }
+  ]
+}

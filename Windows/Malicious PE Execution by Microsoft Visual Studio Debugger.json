@@ -1,0 +1,74 @@
+[
+  {
+    "name": "Malicious PE Execution by Microsoft Visual Studio Debugger",
+    "description": "Detects the execution of SyncAppvPublishingServer.vbs, potentially to proxy PowerShell code, by processes related to the Microsoft Visual Studio Debugger.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "signed binary proxy execution",
+      "TA0005",
+      "T1218",
+      "Windows",
+      "vsjitdebugger",
+      "devenv",
+      "syncappvpublishingserver",
+      "vbscript"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: Malicious script execution detected on host '{host}' by user '{user}'. The script `SyncAppvPublishingServer.vbs` was executed with command line '{command_line}', potentially proxied by a Microsoft Visual Studio Debugger process '{process_name}' (Path: '{process_path}') or its parent '{parent_process_name}' (Path: '{parent_process_path}'). This is a critical indicator of an adversary attempting to use trusted developer tools for defense evasion and arbitrary code execution, often to proxy malicious PowerShell. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Parent Process Name**: {parent_process_name}\n* **Parent Process Path**: {parent_process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**IMMEDIATE AND URGENT ACTION REQUIRED:** This is a critical security incident. Isolate the affected system immediately. Investigate the full command line of the `SyncAppvPublishingServer.vbs` execution and analyze any associated scripts or binaries for malicious content. Determine if this activity is legitimate for development purposes; however, such direct execution of this VBScript by debugger processes is highly suspicious. Conduct a thorough forensic analysis to identify the initial compromise vector, any persistence mechanisms, and further malicious activity. This alert signifies a high-priority threat.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Windows Security Event ID for Process Creation (4688)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was executed (e.g., cscript.exe or wscript.exe running SyncAppvPublishingServer.vbs)."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the process that executed SyncAppvPublishingServer.vbs."
+      },
+      {
+        "name": "parent_process_name",
+        "required": true,
+        "description": "The name of the parent process, expected to be a Visual Studio debugger component (e.g., vsjitdebugger.exe, vsimmersiveactivatehelper.exe, devenv.exe)."
+      },
+      {
+        "name": "parent_process_path",
+        "required": true,
+        "description": "The full path to the parent process."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute SyncAppvPublishingServer.vbs."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

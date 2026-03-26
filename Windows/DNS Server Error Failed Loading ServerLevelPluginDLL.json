@@ -1,0 +1,52 @@
+[
+  {
+    "name": "DNS Server Error: Failed Loading ServerLevelPluginDLL",
+    "description": "Detects DNS server errors indicating a failure to load a specified plugin DLL from the registry. This could indicate an attempt to install a malicious DLL that the DNS server is now failing to load, possibly due to security protections or corruption.",
+    "tags": [
+      "security",
+      "detection",
+      "windows",
+      "defense evasion",
+      "hijack execution flow",
+      "DLL side-loading",
+      "TA0005",
+      "T1574",
+      "T1574.002"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "DNS server error detected: Failed to load a plugin DLL. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **Message** {message}, **Event Source** {event_source}, **Computer Name** {ComputerName}. Investigate this event for potential attempts to load malicious DLLs into the DNS server process.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID indicating a failure to load a plugin DLL (e.g., 150 or 770)."
+      },
+      {
+        "name": "message",
+        "required": true,
+        "description": "The full event message containing details about the DLL load failure."
+      },
+      {
+        "name": "event_source",
+        "required": true,
+        "description": "The source of the event (should be 'DNS Server')."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      }
+    ]
+  }
+]

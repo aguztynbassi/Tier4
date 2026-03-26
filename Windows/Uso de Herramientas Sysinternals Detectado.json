@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Uso de Herramientas Sysinternals Detectado",
+    "description": "Se ha detectado el uso de herramientas Sysinternals, lo cual puede ser un indicador de actividad maliciosa o de reconocimiento. Estas herramientas son a menudo utilizadas por adversarios para evasión de defensas y recolección de información.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "masquerading",
+      "TA0005",
+      "T1036",
+      "Windows",
+      "Sysmon",
+      "Sysinternals"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "ALERTA DE SEVERIDAD MEDIA: Uso de herramienta Sysinternals detectado en el host '{host}' por el usuario '{user}' en '{timestamp}'.\n\nEl evento se activó debido a la detección de:\n\n* **Aceptación de EULA (Event ID {event_id})**: Modificación del registro '{TargetObject}' a '{Details}', indicando la aceptación de la EULA de una herramienta Sysinternals.\n* **Uso de la Bandera '-accepteula' (Event ID {event_id})**: Ejecución de un proceso '{Image}' con la línea de comandos '{CommandLine}' que incluye la bandera '-accepteula'.\n\nLas herramientas Sysinternals, aunque legítimas, son comúnmente abusadas por adversarios. Esto podría indicar:\n* **Reconocimiento**: El adversario está utilizando herramientas como Procmon o ProcExp para entender el entorno.\n* **Evasión de Defensas**: Usando ejecutables firmados y confiables para evitar la detección.\n* **Escalada de Privilegios**: Algunas herramientas pueden ser usadas en cadenas de ataque para escalar privilegios.\n\n**Detalles del Evento:**\n* **Fecha/Hora**: {timestamp}\n* **ID del Evento**: {event_id}\n* **Proceso Implicado**: {Image}\n* **Línea de Comandos**: {CommandLine}\n* **Objeto de Registro**: {TargetObject}\n* **Detalles del Registro**: {Details}\n* **Usuario**: {user}\n* **Host**: {host}\n* **Nombre de la Regla Sysmon**: {rule_name}\n\n**ACCIONES RECOMENDADAS:**\n\n1.  **Validar Legitimidad**: Contacte al usuario '{user}' o al equipo de TI/Seguridad para verificar si el uso de la herramienta Sysinternals fue legítimo y autorizado para actividades de resolución de problemas o análisis.\n2.  **Análisis de Proceso**: Si el uso es sospechoso, investigue el proceso '{Image}' y su línea de comandos completa. Busque procesos padre inusuales o argumentos de línea de comandos que sugieran actividad maliciosa.\n3.  **Actividad Relacionada**: Correlacione este evento con otras alertas o actividades sospechosas en el host. ¿Se detectaron otras herramientas maliciosas o actividades de reconocimiento alrededor de este momento?\n4.  **Comprobación de Archivos**: Si la herramienta Sysinternals no está en su ubicación esperada (e.g., Program Files, System32), investigue el origen del ejecutable.\n5.  **Control de Aplicaciones**: Considere implementar políticas de control de aplicaciones (e.g., AppLocker, WDAC) para restringir el uso de herramientas Sysinternals solo a usuarios y rutas autorizadas en entornos de producción críticos.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID (1 or 13) that triggered the alert."
+      },
+      {
+        "name": "Image",
+        "required": false,
+        "description": "The process image (executable path) if EventID is 1."
+      },
+      {
+        "name": "CommandLine",
+        "required": false,
+        "description": "The full command line of the process if EventID is 1."
+      },
+      {
+        "name": "TargetObject",
+        "required": false,
+        "description": "The registry key/value path if EventID is 13."
+      },
+      {
+        "name": "Details",
+        "required": false,
+        "description": "The value set for the registry key if EventID is 13."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account associated with the event."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      },
+      {
+        "name": "rule_name",
+        "required": true,
+        "description": "The Sysmon rule name that generated the event, if available."
+      }
+    ]
+  }
+]

@@ -1,0 +1,61 @@
+[
+  {
+    "name": "Execution via Control Panel Items",
+    "description": "Detects the execution of binaries through Control Panel items, a form of Signed Binary Proxy Execution.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "signed binary proxy execution",
+      "Control Panel",
+      "TA0005",
+      "T1218.015",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Suspicious execution via Control Panel item detected, indicating potential Signed Binary Proxy Execution for defense evasion. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **Image Path** {Image}, **Parent Image Path** {ParentImage}, **Command Line** {CommandLine}, **User** {User}, **Computer** {Computer}. Investigate this activity for unauthorized execution or malicious payload delivery.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for Process Creation (1)."
+      },
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path of the executed file (control.exe)."
+      },
+      {
+        "name": "ParentImage",
+        "required": true,
+        "description": "The full path of the parent process."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line used, including 'control' and 'cpl' arguments."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the process was executed."
+      },
+      {
+        "name": "Computer",
+        "required": true,
+        "description": "The computer on which the event occurred."
+      }
+    ]
+  }
+]

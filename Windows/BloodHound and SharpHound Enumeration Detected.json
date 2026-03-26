@@ -1,0 +1,48 @@
+[
+  {
+    "name": "BloodHound and SharpHound Enumeration Detected",
+    "description": "Detects the execution of BloodHound and SharpHound tools or their associated command-line patterns, which are commonly used for extensive Active Directory reconnaissance. Their presence indicates an early-stage attack or a red team engagement, as they are purpose-built for mapping attack paths for privilege escalation and lateral movement.",
+    "tags": [
+      "security",
+      "discovery",
+      "reconnaissance",
+      "T1482",
+      "T1069",
+      "T1087",
+      "T1018",
+      "BloodHound",
+      "SharpHound",
+      "sysmon"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A highly suspicious reconnaissance activity has been detected on the host **{computer_name}**. The process **{image}** executed the command line **{command_line}**, which is a known pattern for the **SharpHound/BloodHound** tools. These tools are used for extensive Active Directory enumeration, mapping relationships, and identifying attack paths for privilege escalation and lateral movement (**MITRE ATT&CK T1087** and **T1069**). This activity is a strong indicator of a malicious actor or an unauthorized red team engagement in the early phases of an attack. The event was triggered under the user **{user}**. Immediate investigation is required to determine the legitimacy of this activity and the extent of the enumeration. This is a critical alert that requires a high-priority response.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "image",
+        "required": true,
+        "description": "The path to the executing binary (e.g., 'SharpHound.exe' or 'powershell.exe')."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line that includes 'SharpHound' or 'BloodHound' keywords."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account that ran the command."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      }
+    ]
+  }
+]

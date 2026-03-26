@@ -1,0 +1,34 @@
+{
+  "name": "Network: Potential Inbound DDoS Attack Detection",
+  "description": "Detecta un volumen masivo de tráfico entrante denegado (>2000 eventos) hacia un único destino en un intervalo breve. Esta actividad sugiere un ataque DDoS coordinado que busca agotar los recursos de red o del host, afectando la disponibilidad de servicios críticos. La regla cubre vectores comunes como inundaciones SYN, UDP, ICMP y ataques de capa de aplicación (HTTP/S).",
+  "tags": [
+    "security",
+    "impact",
+    "availability",
+    "ddos_inbound",
+    "network_flood",
+    "volumetric_attack",
+    "T1498",
+    "T1190"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Posible Ataque DDoS Entrante! Se ha detectado un volumen inusual de tráfico denegado hacia **{destination_address}** proveniente de múltiples fuentes. Bajo la técnica de **Network Denial of Service** (**MITRE ATT&CK T1498**), este comportamiento indica un intento coordinado de saturar la infraestructura. Se recomienda activar los planes de mitigación de DDoS (como scrubbing centers o reglas de rate limiting) y verificar el estado de los servicios afectados.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "La dirección IP o servidor que está recibiendo el ataque."
+    },
+    {
+      "name": "ddos_source",
+      "required": true,
+      "description": "El recuento total de eventos de tráfico denegado detectados hacia el destino."
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+[
+  {
+    "name": "Autorun Registry Key Modification via `reg.exe`",
+    "description": "Detection of `reg.exe` modifying critical Autorun registry keys, indicating a potential persistence attempt.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "persistence",
+      "registry_modification",
+      "TA0003",
+      "T1547",
+      "T1547.001"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: Autorun Registry Key Modification Detected!\\n\\n`reg.exe` was used to modify a critical Windows Autorun registry key on host '{ComputerName}' by user '{User}' via process '{ParentProcessName}' at {Timestamp}. The full command line was: '{CommandLine}'.\\n\\nThis is a strong indicator of a **Persistence (T1547.001)** attempt, where an adversary is trying to establish automatic execution of malicious code upon system startup or user login.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **User**: {User}\\n* **Process Name**: {ProcessName} (`reg.exe`)\\n* **Command Line**: {CommandLine} (showing the registry key and value being added)\\n* **Parent Process**: {ParentProcessName}\\n* **Parent Command Line**: {ParentCommandLine}\\n* **Event ID**: {EventID} (Sysmon Process Creation)\\n* **Sysmon Rule Name**: {RuleName}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** Immediately disconnect host '{ComputerName}' from the network to prevent further malicious activity, lateral movement, or re-establishment of persistence. **DO NOT power off the system.**\\n2.  **FORENSIC IMAGE AND MEMORY DUMP:** Perform a full forensic disk image and a memory dump of '{ComputerName}'. This is crucial to preserve evidence of the compromise and identify the malicious payload.\\n3.  **REMOVE PERSISTENCE MECHANISM:** Immediately remove the malicious entry from the targeted Autorun registry key. **(WARNING: This must be done carefully to avoid system instability if critical system components were altered).** Use `regedit.exe`, `reg.exe delete`, or a specialized forensic tool to remove the added value.\\n4.  **IDENTIFY AND REMOVE MALICIOUS PAYLOAD:** Locate and remove the malicious file that was set to execute via the registry key. Analyze its hash against threat intelligence and perform static/dynamic analysis.\\n5.  **INVESTIGATE USER AND PARENT PROCESS:** Investigate the '{User}' account for signs of compromise (e.g., unauthorized logins, privilege escalation). Examine the '{ParentProcessName}' and its command line '{ParentCommandLine}' to understand how the `reg.exe` command was launched and what initial access vector was used.\\n6.  **REVIEW ACCESS AND PRIVILEGES:** Determine how the attacker gained the necessary privileges to modify these critical registry keys.\\n7.  **THREAT HUNT FOR RELATED ACTIVITY:** Search for other IOCs across your environment. Look for initial access vectors, other persistence mechanisms, lateral movement, data exfiltration, or C2 communication from the compromised host."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname where the registry modification occurred."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account that executed `reg.exe`."
+      },
+      {
+        "name": "ProcessName",
+        "required": true,
+        "description": "The name of the process that executed the command (expected to be `reg.exe`)."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line of `reg.exe`, including the targeted registry key and value."
+      },
+      {
+        "name": "ParentProcessName",
+        "required": false,
+        "description": "The name of the parent process that launched `reg.exe`."
+      },
+      {
+        "name": "ParentCommandLine",
+        "required": false,
+        "description": "The full command line of the parent process."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Sysmon Event ID (expected to be 1)."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sysmon rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]

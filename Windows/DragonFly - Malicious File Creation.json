@@ -1,0 +1,59 @@
+[
+  {
+    "name": "DragonFly - Malicious File Creation",
+    "description": "Detects the creation of files with names and paths known to be associated with the DragonFly APT group. This rule identifies files such as \"TMPprovider*.dll\" and \"sysmain.dll\" (or \"sydmain.dll\") in specific locations.",
+    "tags": [
+      "security",
+      "detection",
+      "windows",
+      "execution",
+      "command and scripting interpreter",
+      "malware",
+      "Karagany",
+      "APT",
+      "DragonFly",
+      "TA0002",
+      "T1059"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Malicious file creation associated with DragonFly APT group detected. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **User** {user}, **Process Name** {process_name}, **File Path** {file_path}, **File Hash** {file_hash}. Investigate this critical activity immediately for signs of compromise by the DragonFly APT group.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the file creation event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for file creation events."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account who created the file."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The process that created the file."
+      },
+      {
+        "name": "file_path",
+        "required": true,
+        "description": "The full path of the created file."
+      },
+      {
+        "name": "file_hash",
+        "required": true,
+        "description": "The file hash of the created file."
+      }
+    ]
+  }
+]

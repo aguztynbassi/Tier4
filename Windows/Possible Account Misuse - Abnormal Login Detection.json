@@ -1,0 +1,38 @@
+{
+  "name": "Identity: Administrative Login Outside Business Hours",
+  "description": "Detecta inicios de sesión exitosos de cuentas administrativas en horarios no laborales (9 PM a 8 AM) o durante fines de semana. También monitorea intentos fallidos debido a restricciones de horario (0xC000006F). Este comportamiento puede indicar el uso de credenciales comprometidas por parte de un atacante o una amenaza interna que intenta evadir la supervisión del equipo de seguridad.",
+  "tags": [
+    "security",
+    "identity_monitoring",
+    "insider_threat",
+    "valid_accounts",
+    "privilege_misuse",
+    "uba",
+    "T1078"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE COMPORTAMIENTO: Acceso Administrativo Anómalo! El usuario de privilegios **{user}** ha iniciado sesión exitosamente en el host **{host}** fuera del horario comercial. Bajo la técnica de **Valid Accounts** (**MITRE ATT&CK T1078**), este acceso fuera de horas podría representar el uso de una cuenta comprometida para realizar cambios no autorizados o exfiltración. Se recomienda validar con el usuario si la actividad corresponde a una tarea de mantenimiento planificada.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario (generalmente administrativa) que realizó el login."
+    },
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo o servidor donde se registró el inicio de sesión."
+    },
+    {
+      "name": "source_address",
+      "required": false,
+      "description": "La dirección IP de origen desde la cual se conectó el usuario."
+    }
+  ]
+}

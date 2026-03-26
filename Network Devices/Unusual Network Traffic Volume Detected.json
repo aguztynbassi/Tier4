@@ -1,0 +1,63 @@
+{
+  "name": "Unusual Network Traffic Volume Detected",
+  "description": "An unusually high volume of outbound network traffic has been detected, which could indicate an attempt at data exfiltration.",
+  "tags": [
+    "security",
+    "detection",
+    "high",
+    "exfiltration",
+    "command and control",
+    "exfiltration over c2 channel",
+    "network",
+    "large data transfer",
+    "unusual traffic",
+    "TA0010",
+    "T1041",
+    "T1071.001"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "HIGH SEVERITY ALERT: Unusual Network Traffic Volume Detected.\n\nAn unusually large volume of outbound network traffic ({bytes} bytes) has been observed from source IP address '{source_ip}' to '{dest_ip}' using protocol '{protocol}' via port '{dest_port}', starting at '{Timestamp}'. This unusual volume of traffic suggests possible data exfiltration or malicious command and control activity.\n\n**Event Details:**\n* **Date/Time**: {Timestamp}\n* **Source**: {source_ip}\n* **Destination**: {dest_ip}\n* **Source Port**: {source_port}\n* **Destination Port**: {dest_port}\n* **Protocol**: {protocol}\n* **Bytes Transferred**: {bytes}\n\n**RECOMMENDED ACTIONS (HIGH PRIORITY):**\n\n1.  **Identify Source and Destination:** Determine which asset (server, workstation, user) the source IP '{source_ip}' and destination IP '{dest_ip}' belong to.\n2.  **Validate Legitimacy:** Contact the owners of the source asset to verify if this data transfer is legitimate and authorized. Inquire about recent activities involving large file transfers (e.g., backups, migrations, synchronizations).\n3.  **Destination Analysis:** Analyze the reputation and purpose of the destination IP address '{dest_ip}'. Check if it's a known destination for legitimate services (e.g., enterprise cloud storage) or if it's associated with malicious activity or suspicious domains.\n4.  **Content Inspection (if possible):** If your firewall, proxy, or IDS allows content inspection (DLP), review the detailed transfer logs to determine what type of data is being sent.\n5.  **Isolation:** If the activity is suspicious, consider isolating the host '{source_ip}' from the network to prevent further data exfiltration.\n6.  **Forensic Analysis:** Conduct a forensic analysis of the source host to search for malware, persistence, compromised credentials, and other indicators of compromise.\n7.  **Destination Blocking:** If the destination is confirmed to be malicious, block the IP address/domain in firewalls and proxies.\n8.  **DLP Policy Review:** If the organization has Data Loss Prevention (DLP) policies, review whether this transfer should have been blocked by them.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of the network traffic event."
+    },
+    {
+      "name": "source_ip",
+      "required": true,
+      "description": "The source IP address of the machine initiating the transfer."
+    },
+    {
+      "name": "dest_ip",
+      "required": true,
+      "description": "The destination IP address of the server receiving the data."
+    },
+    {
+      "name": "source_port",
+      "required": false,
+      "description": "The source port of the network connection."
+    },
+    {
+      "name": "dest_port",
+      "required": false,
+      "description": "The destination port of the network connection."
+    },
+    {
+      "name": "protocol",
+      "required": false,
+      "description": "The network protocol used (e.g., TCP, UDP, HTTP)."
+    },
+    {
+      "name": "bytes",
+      "required": true,
+      "description": "The total number of bytes transferred in the session."
+    }
+  ]
+}

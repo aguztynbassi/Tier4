@@ -1,0 +1,32 @@
+{
+  "name": "Sysmon Configuration Modification Detected",
+  "description": "Detection of a modification in the Sysmon configuration. An adversary might modify the Sysmon configuration to exclude their malicious processes from being logged, which is a common defense evasion technique.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "impair_defenses",
+    "T1562",
+    "T1562.006",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a **Sysmon Configuration Modification** event was detected. The configuration was changed by the user **{user}**. This is a strong indicator of **Defense Evasion** (**MITRE ATT&CK T1562.006**) where an adversary is likely attempting to impair security defenses by altering the Sysmon configuration to avoid detection. Immediate investigation is required to determine the legitimacy of this action and to restore the integrity of the Sysmon configuration. A forensic analysis should be performed to determine what the adversary might be trying to hide.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the Sysmon configuration change."
+    }
+  ]
+}

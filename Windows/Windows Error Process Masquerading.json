@@ -1,0 +1,60 @@
+[
+  {
+    "name": "Windows Error Process Masquerading",
+    "description": "Detection of suspicious network connections made by Windows error reporting processes (WerMgr.exe or WerFault.exe) shortly after their execution. This behavior can indicate masquerading or abuse of these legitimate binaries by adversaries for defense evasion, potentially to exfiltrate data or establish C2 communication.",
+    "tags": [
+      "security",
+      "detection",
+      "windows",
+      "defense evasion",
+      "masquerading",
+      "TA0005",
+      "T1036"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Suspicious network connection detected from a Windows error reporting process. Event Details: **Computer Name** {ComputerName}, **User** {User}, **Image** {Image}, **Command Line** {CommandLine}, **Destination IP** {DestinationIp}, **Destination Port** {DestinationPort}, **Rule Name** {RuleName}. Investigate whether this process is legitimately communicating or if it indicates masquerading or C2 activity.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The name of the host where the event occurred."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the process ran."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The process image (WerMgr.exe or WerFault.exe)."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The command line of the process."
+      },
+      {
+        "name": "DestinationIp",
+        "required": true,
+        "description": "The destination IP address of the network connection."
+      },
+      {
+        "name": "DestinationPort",
+        "required": true,
+        "description": "The destination port of the network connection."
+      },
+      {
+        "name": "RuleName",
+        "required": true,
+        "description": "Sysmon specific field for rule matching."
+      }
+    ]
+  }
+]

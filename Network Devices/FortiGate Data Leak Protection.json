@@ -1,0 +1,73 @@
+{
+  "name": "FortiGate Data Leak Protection",
+  "description": "Detects attempts to exfiltrate sensitive data, as identified by FortiGate's Data Leak Prevention (DLP) features.",
+  "tags": [
+    "security",
+    "detection",
+    "exfiltration",
+    "automated exfiltration",
+    "TA0010",
+    "T1020",
+    "Network Devices"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A Data Leak Prevention (DLP) violation has been detected by FortiGate, indicating an attempt to exfiltrate sensitive data. Event Details: **Timestamp** {timestamp}, **Log ID** {log_id}, **User** {user}, **Source Address** {source_address}, **Destination Address** {destination_address}, **Source Country** {source_country}, **Destination Country** {destination_country}, **File Involved** {file}, **DLP Policy Violated** {policy}, **Severity** {severity}. Investigate this high-priority data exfiltration attempt immediately to prevent data loss and mitigate impact.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "timestamp",
+      "required": true,
+      "description": "The timestamp of the DLP event."
+    },
+    {
+      "name": "log_id",
+      "required": true,
+      "description": "The FortiGate Log ID for the DLP event."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user associated with the data exfiltration attempt."
+    },
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "The source IP address from which the data exfiltration was attempted."
+    },
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "The destination IP address to which the data exfiltration was attempted."
+    },
+    {
+      "name": "source_country",
+      "required": true,
+      "description": "The country of origin for the source IP (enriched via GeoIP)."
+    },
+    {
+      "name": "destination_country",
+      "required": true,
+      "description": "The country of the destination IP (enriched via GeoIP)."
+    },
+    {
+      "name": "file",
+      "required": true,
+      "description": "The name of the file that triggered the DLP rule."
+    },
+    {
+      "name": "policy",
+      "required": true,
+      "description": "The name or ID of the DLP policy that was violated."
+    },
+    {
+      "name": "severity",
+      "required": true,
+      "description": "The severity level reported by FortiGate for the DLP event."
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "name": "Hidden Files and Directories in Volume Shadow Copy Detected",
+  "description": "Detecta la ejecución de procesos o comandos que hacen referencia a rutas dentro de Volume Shadow Copies. Los adversarios utilizan las instantáneas de volumen para ocultar artefactos maliciosos, evadir el escaneo de antivirus y dificultar el análisis forense, ya que los archivos dentro de un Shadow Copy no son visibles en el sistema de archivos activo y requieren herramientas específicas para su acceso.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "persistence",
+    "vss_abuse",
+    "hidden_files",
+    "shadow_copy",
+    "T1564.001",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EVASIÓN: Abuso de VSS! Se ha detectado la ejecución de un proceso involucrando la ruta **{image}** en el host **{host}**. El acceso a archivos dentro de **VolumeShadowCopy** es una técnica de **Hide Artifacts** (**MITRE ATT&CK T1564.001**) utilizada para ocultar malware de los motores de búsqueda y del software de seguridad. Se recomienda investigar qué proceso intentó acceder o ejecutar código desde la instantánea y validar la integridad de las copias de seguridad del sistema.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó el acceso a la ruta de Shadow Copy."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "La ruta del ejecutable o el comando que referencia a \\VolumeShadowCopy\\."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El contexto de usuario que inició la ejecución."
+    },
+    {
+      "name": "parent_image",
+      "required": true,
+      "description": "El proceso padre que lanzó la actividad sospechosa."
+    }
+  ]
+}

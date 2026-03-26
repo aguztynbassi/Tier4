@@ -1,0 +1,64 @@
+[
+  {
+    "name": "Suspicious WSL Bash Execution",
+    "description": "Detects the execution of the `bash` command within the Windows Subsystem for Linux (WSL) using the `-c` argument. This pattern is often used to execute commands directly, and while legitimate in some cases, it can also indicate malicious activity attempting to evade standard Windows defenses. Review alerts to differentiate legitimate WSL usage from potential threats.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "command and scripting interpreter",
+      "TA0005",
+      "T1202",
+      "Windows",
+      "Sysmon",
+      "wsl",
+      "bash",
+      "command_execution"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Medium-severity alert: Suspicious WSL Bash execution detected on host '{host}' by user '{user}'. The `bash` command was executed with the `-c` argument via process '{process_name}' at '{process_path}' with command line '{command_line}'. This method allows direct execution of Linux commands, a common technique used by adversaries for defense evasion or to run malicious payloads. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity immediately.** Determine if this specific WSL bash execution is legitimate and expected within your environment. Analyze the Linux command being executed (within the `-c` argument) for any malicious indicators. Look for unusual scripts, network connections, or file modifications. This could be an indicator of defense evasion, command and control, or initial access.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Process Creation (1)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was executed, which should contain 'bash'."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the bash executable."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute bash, including the '-c' argument."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which bash was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

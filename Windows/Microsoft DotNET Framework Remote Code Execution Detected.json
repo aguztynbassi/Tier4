@@ -1,0 +1,39 @@
+{
+  "name": "Exploitation: Microsoft .NET Framework Remote Code Execution (CVE-2017-8759)",
+  "description": "Detecta la ejecución del compilador de C# (csc.exe) iniciada por Microsoft Word al procesar archivos RTF. Esta anomalía indica la explotación de una vulnerabilidad en el parser de WSDL de .NET Framework, donde un atacante inyecta código malicioso en una definición de servicio web para que el sistema lo compile y ejecute automáticamente, evadiendo las protecciones de macros convencionales.",
+  "tags": [
+    "security",
+    "execution",
+    "vulnerability_exploitation",
+    "cve_2017_8759",
+    "dotnet_framework",
+    "rtf_exploit",
+    "T1204.002",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EXPLOTACIÓN CRÍTICA: CVE-2017-8759 Detectado! Se ha detectado que **WINWORD.exe** ha invocado al compilador **csc.exe** tras abrir un archivo RTF en el host **{host}**. Bajo la técnica de **User Execution** (**MITRE ATT&CK T1204.002**), esto confirma un intento de ejecución de código mediante la explotación de .NET Framework. Se requiere el aislamiento inmediato del host y la recolección del archivo malicioso para análisis.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la actividad de compilación sospechosa desde Word."
+    },
+    {
+      "name": "parent_command",
+      "required": true,
+      "description": "La línea de comandos de Word que incluye la ruta al archivo .rtf malicioso."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "La ruta del compilador de C# ejecutado (ej. C:\\Windows\\Microsoft.NET\\Framework\\...\\csc.exe)."
+    }
+  ]
+}

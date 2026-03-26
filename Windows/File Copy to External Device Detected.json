@@ -1,0 +1,61 @@
+[
+  {
+    "name": "File Copy to External Device Detected",
+    "description": "Detection of files being copied to external devices, indicating potential data exfiltration.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "data_exfiltration",
+      "removable_media",
+      "TA0010",
+      "T1052"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: File Copy to External Device Detected.\\n\\nSuspicious file copy activity was detected to a removable storage device on host '{ComputerName}' by user '{SubjectUserName}' at {Timestamp}. The object '{ObjectName}' of type '{ObjectType}' was accessed with '{Accesses}' rights. This activity strongly indicates potential data exfiltration via removable media.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **User**: {SubjectUserName}\\n* **Accessed Object Name**: {ObjectName}\\n* **Object Type**: {ObjectType}\\n* **Access Type**: {Accesses}\\n* **Event ID**: 4663\\n* **Source IP (if applicable)**: {IpAddress}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (HIGH PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** Disconnect host '{ComputerName}' from the network **immediately** to contain the threat and prevent further data exfiltration or lateral movement. **DO NOT power off the system.**\\n2.  **CONFIRM LEGITIMACY:** Immediately contact '{SubjectUserName}' and their manager/team to verify if this activity was authorized. \\n    * Were they instructed to copy specific data to a removable device? \\n    * Is there a legitimate business reason for this transfer? \\n    * Check any relevant change management requests or data transfer policies.\\n3.  **SEIZE DEVICE:** If the activity is suspicious or unconfirmed, instruct the user to **immediately power down the computer and surrender the removable device**. Secure both for forensic analysis. **Do NOT allow the device to be removed from the premises.**\\n4.  **FORENSIC IMAGE AND MEMORY DUMP:** Perform a full forensic disk image and a memory dump of '{ComputerName}'. This is critical to preserve evidence and identify the scope of compromise.\\n5.  **INVESTIGATE DATA INVOLVED:** Identify what specific data was copied to '{ObjectName}'. Determine its sensitivity and criticality. Assess the potential impact of its exfiltration.\\n6.  **INVESTIGATE USER ACCOUNT:** Thoroughly investigate '{SubjectUserName}' for signs of compromise (e.g., anomalous logins, failed authentications, privilege escalation). Consider a forced password reset for this user.\\n7.  **THREAT HUNT:** Search your environment for other instances of data being copied to removable media or other data exfiltration attempts. Review network logs for unusual outbound connections from '{ComputerName}'.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the file copy event."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname where the file copy was detected."
+      },
+      {
+        "name": "SubjectUserName",
+        "required": true,
+        "description": "The user account who performed the file copy."
+      },
+      {
+        "name": "ObjectName",
+        "required": true,
+        "description": "The full path to the file or directory on the external device that was accessed."
+      },
+      {
+        "name": "ObjectType",
+        "required": true,
+        "description": "The type of object accessed (e.g., 'Removable Storage')."
+      },
+      {
+        "name": "Accesses",
+        "required": true,
+        "description": "The type of access performed (e.g., 'WriteData')."
+      },
+      {
+        "name": "IpAddress",
+        "required": false,
+        "description": "The IP address if the access was remote."
+      }
+    ]
+  }
+]

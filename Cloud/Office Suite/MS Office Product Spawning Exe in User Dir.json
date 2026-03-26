@@ -1,0 +1,45 @@
+{
+  "name": "Initial Access: MS Office Product Spawning Executable in User Directory",
+  "description": "Detecta la ejecución de archivos .exe ubicados en directorios de usuario (como AppData, Local, Temp o Descargas) iniciados directamente por aplicaciones de Microsoft Office. Este comportamiento es un indicador de alta fidelidad de la ejecución de macros maliciosas o la explotación de vulnerabilidades de Office para desplegar payloads de malware (droppers/beacons).",
+  "tags": [
+    "security",
+    "initial_access",
+    "execution",
+    "phishing_payload",
+    "malicious_macros",
+    "office_exploitation",
+    "T1059",
+    "T1202",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE PHISHING: Ejecución desde Office Detectada! Se ha detectado que la aplicación **{parent_image}** ha iniciado el ejecutable **{image}** en el host **{host}**. Bajo la técnica de **Command and Scripting Interpreter** (**MITRE ATT&CK T1059**), este patrón indica un compromiso mediante un documento malicioso. Se requiere el aislamiento inmediato del equipo y el análisis del archivo origen.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se originó la ejecución desde Office."
+    },
+    {
+      "name": "parent_image",
+      "required": true,
+      "description": "La aplicación de Office que lanzó el proceso (ej. WINWORD.EXE, EXCEL.EXE)."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "La ruta completa del ejecutable lanzado en el directorio del usuario."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario afectado por la posible infección."
+    }
+  ]
+}

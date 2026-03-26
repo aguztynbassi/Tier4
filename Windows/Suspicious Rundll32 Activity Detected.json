@@ -1,0 +1,43 @@
+{
+  "name": "Suspicious Rundll32 Activity Detected",
+  "description": "Detects suspicious `rundll32.exe` activity based on command-line arguments. Adversaries may abuse `rundll32.exe` to proxy code executions and avoid triggering security tools that may not monitor the process due to allowlists. This is a common defense evasion and execution technique.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "execution",
+    "proxy_execution",
+    "T1218",
+    "T1218.011",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a suspicious `rundll32.exe` process was detected with the command line **{command}**. This is a strong indicator of **Proxy Execution** (**MITRE ATT&CK T1218.011**) where an adversary is attempting to use a legitimate Windows binary to execute malicious code and evade security defenses. The process was launched by **{parent_process}** under the user **{user}**. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious code.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The full command line of the suspicious rundll32.exe process."
+    },
+    {
+      "name": "parent_process",
+      "required": true,
+      "description": "The parent process that launched rundll32.exe."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

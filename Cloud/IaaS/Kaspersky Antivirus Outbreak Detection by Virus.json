@@ -1,0 +1,33 @@
+{
+  "name": "Kaspersky: Massive Malware Diversity Outbreak Detected",
+  "description": "Detecta una anomalía crítica donde se identifican más de 10 variantes de malware distintas en el entorno. Una alta diversidad de amenazas simultáneas sugiere un compromiso sistémico, el uso de kits de explotación avanzados o una fase de impacto donde el adversario intenta abrumar la capacidad de respuesta del SOC mediante múltiples vectores de ataque.",
+  "tags": [
+    "security",
+    "impact",
+    "kaspersky",
+    "malware_diversity",
+    "threat_hunting",
+    "incident_response",
+    "T1518.001"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EMERGENCIA: Brote de Alta Diversidad! Kaspersky ha detectado más de 10 tipos de amenazas distintas en el host **{host}**. Bajo la técnica de **Software Discovery** (**MITRE ATT&CK T1518.001**), este nivel de actividad indica un compromiso profundo o un ataque coordinado para saturar los controles de seguridad. Se requiere el aislamiento total del host y una revisión de los logs de red para identificar la fuente de esta descarga masiva de malware.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El servidor o estación de trabajo que reporta la multiplicidad de amenazas."
+    },
+    {
+      "name": "DC",
+      "required": true,
+      "description": "El recuento de variantes de virus distintas detectadas (debe ser > 10)."
+    }
+  ]
+}

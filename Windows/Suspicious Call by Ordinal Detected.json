@@ -1,0 +1,37 @@
+{
+  "name": "Suspicious Call by Ordinal Detected",
+  "description": "Detects suspicious calls to DLLs through `rundll32.exe` using an ordinal value instead of a function name. This is a common technique used by adversaries to proxy the execution of malicious code and bypass security tools that may not monitor `rundll32.exe` due to allowlists.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "proxy_execution",
+    "T1218",
+    "T1218.011",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a suspicious process, **`rundll32.exe`**, was executed with a command line that calls a DLL function by ordinal value (**{command}**). This is a strong indicator of **Proxy Execution** (**MITRE ATT&CK T1218.011**) and **Defense Evasion**, where an adversary is attempting to execute malicious code while masquerading as a legitimate process. The event occurred under the user **{user}**. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious code.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The full command line that was executed with rundll32.exe."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

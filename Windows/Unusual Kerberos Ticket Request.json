@@ -1,0 +1,44 @@
+{
+  "name": "Unusual Kerberos Ticket Request Detected",
+  "description": "Detecta solicitudes de tickets de servicio (TGS) que presentan opciones de configuración (flags) atípicas. Los atacantes manipulan estas opciones al forjar tickets (Golden/Silver Tickets) o al realizar ataques de Kerberoasting para evadir protecciones o forzar degradaciones de cifrado. Esta anomalía es un fuerte indicador de la presencia de herramientas de post-explotación en la red.",
+  "tags": [
+    "security",
+    "credential_access",
+    "defense_evasion",
+    "kerberos",
+    "golden_ticket",
+    "silver_ticket",
+    "T1558.001",
+    "event_4769"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Anomalía Kerberos! Se ha detectado una solicitud de ticket TGS con opciones inusuales (**{ticket_options}**) en el host **{host}**. Bajo la técnica de **Steal or Forge Kerberos Tickets** (**MITRE ATT&CK T1558**), este evento sugiere que el usuario **{TargetUserName}** podría estar utilizando un ticket forjado o una herramienta de ataque automatizada. Se recomienda auditar el origen de la solicitud y verificar si el cifrado del ticket ha sido degradado a RC4.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El Controlador de Dominio que procesó la solicitud del ticket."
+    },
+    {
+      "name": "TargetUserName",
+      "required": true,
+      "description": "El nombre del usuario que solicita el acceso al servicio."
+    },
+    {
+      "name": "ServiceName",
+      "required": true,
+      "description": "El servicio específico al que se intenta acceder (SPN)."
+    },
+    {
+      "name": "ticket_options",
+      "required": true,
+      "description": "Los flags hexadecimales de la solicitud que activaron la alerta."
+    }
+  ]
+}

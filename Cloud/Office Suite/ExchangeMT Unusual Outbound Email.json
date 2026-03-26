@@ -1,0 +1,58 @@
+{
+  "name": "ExchangeMT Unusual Outbound Email",
+  "description": "Detects an unusually high volume of emails (more than 60) sent by the same sender within a one-hour timeframe, which can indicate potential email compromise, spamming activity, or data exfiltration.",
+  "tags": [
+    "security",
+    "detection",
+    "command and control",
+    "exfiltration",
+    "collection",
+    "proxy",
+    "exfiltration over C2 channel",
+    "automated exfiltration",
+    "email collection",
+    "TA0011",
+    "TA0010",
+    "TA0009",
+    "T1090",
+    "T1041",
+    "T1020",
+    "T1114",
+    "Office Suite"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "Unusual outbound email volume detected from a single sender, potentially indicating email compromise, spam, or data exfiltration. Event Details: **Timestamp** {Timestamp}, **Sender** {sender}, **Recipient** {recipient}, **Subject** {subject}, **Event ID** {EventID}. Investigate this high-risk activity immediately to determine the cause and mitigate potential threats.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of the email sending event."
+    },
+    {
+      "name": "sender",
+      "required": true,
+      "description": "The email address of the sender."
+    },
+    {
+      "name": "recipient",
+      "required": true,
+      "description": "The email address of the recipient."
+    },
+    {
+      "name": "subject",
+      "required": true,
+      "description": "The subject of the email, if available."
+    },
+    {
+      "name": "EventID",
+      "required": true,
+      "description": "The Event ID for the email sending event."
+    }
+  ]
+}

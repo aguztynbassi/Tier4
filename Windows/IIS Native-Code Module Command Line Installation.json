@@ -1,0 +1,39 @@
+{
+  "name": "Suspicious IIS Native-Code Module Installation",
+  "description": "Detecta el registro de nuevos módulos nativos en IIS mediante la línea de comandos de APPCMD.EXE. Los atacantes utilizan esta técnica para instalar 'IIS backdoors' que operan a nivel de servidor, permitiendo la interceptación de tráfico sensible, bypass de autenticación y persistencia de largo plazo sin necesidad de archivos maliciosos en los directorios web estándar.",
+  "tags": [
+    "security",
+    "persistence",
+    "iis_backdoor",
+    "web_shell",
+    "native_module",
+    "appcmd",
+    "T1505.003",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE PERSISTENCIA EN SERVIDOR WEB! Se ha detectado la instalación de un módulo nativo en IIS mediante el comando **{command}** en el host **{host}**. El uso de módulos personalizados es una técnica avanzada de **Web Shell** (**MITRE ATT&CK T1505.003**) que permite a un atacante controlar el tráfico del servidor a bajo nivel. Se recomienda investigar la DLL asociada al módulo, verificar si el usuario **{user}** realizó un cambio legítimo de configuración y analizar el origen de la ejecución.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El servidor IIS donde se registró el módulo."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa utilizada para la instalación del módulo."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que ejecutó appcmd.exe (usualmente requiere privilegios de administrador)."
+    }
+  ]
+}

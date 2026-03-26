@@ -1,0 +1,45 @@
+{
+  "name": "Impacket: Lateral Movement Execution (WMI/SMB/DCOM)",
+  "description": "Detecta la ejecución remota de comandos característica del framework Impacket. La regla identifica patrones específicos de redirección de comandos (output a 127.0.0.1 o carpetas temporales) lanzados por procesos del sistema como wmiprvse.exe o services.exe. Estas herramientas son el estándar de oro para el movimiento lateral sigiloso en entornos Windows.",
+  "tags": [
+    "security",
+    "lateral_movement",
+    "impacket",
+    "wmiexec",
+    "smbexec",
+    "remote_execution",
+    "T1047",
+    "T1021.003",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE MOVIMIENTO LATERAL: Impacket Detectado! Se ha identificado una ejecución de comando remota en el host **{host}** con un patrón de salida compatible con herramientas como **wmiexec** o **smbexec**. Bajo la técnica de **Windows Management Instrumentation** (**MITRE ATT&CK T1047**), esto indica que un atacante está ejecutando comandos en este host desde otro punto de la red. Se recomienda identificar la IP de origen y auditar el uso de cuentas administrativas en las últimas 24 horas.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El servidor o workstation de destino donde se ejecutó el comando remoto."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos detectada, usualmente conteniendo redirecciones como '> \\\\127.0.0.1\\C$...'."
+    },
+    {
+      "name": "parent_image",
+      "required": true,
+      "description": "El proceso del sistema que engendró el comando (ej. wmiprvse.exe para wmiexec)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta con la que se está realizando la ejecución remota."
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+    "name": "Renamed ZOHO Dctask64 Detected",
+    "description": "Detection of a renamed ZOHO Dctask64 binary. ZOHO Dctask64 is a legitimate utility but has been abused by attackers, specifically the REvil/Sodinokibi ransomware group, for lateral movement. Adversaries may rename it to evade detection. This detection looks for a known hash or file size of ZOHO Dctask64 when executed under a different name.",
+    "tags": [
+        "TA0008",
+        "T1021",
+        "T1036",
+        "T1036.003",
+        "security",
+        "detection",
+        "Windows"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the execution of the renamed ZOHO Dctask64 binary on host `{hostname}` at `{timestamp}`. The original binary was ZOHO Dctask64, but it was executed as `{renamed_binary}`. The command line detected was `{command_line}`. Analyze the user (`{user_name}`) who executed the command and the destination host (`{destination_host}`). Determine if this is a legitimate administrative action or a malicious attempt at lateral movement. Provide a summary of the findings and suggest immediate containment and remediation steps.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname where the renamed ZOHO Dctask64 was executed."
+        },
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        },
+        {
+            "name": "renamed_binary",
+            "required": true,
+            "description": "The new name of the ZOHO Dctask64 binary."
+        },
+        {
+            "name": "command_line",
+            "required": true,
+            "description": "The full command line of the renamed binary."
+        },
+        {
+            "name": "user_name",
+            "required": true,
+            "description": "The user account under which the process was executed."
+        },
+        {
+            "name": "destination_host",
+            "required": false,
+            "description": "The destination host where ZOHO Dctask64 attempted to establish a session."
+        }
+    ]
+}

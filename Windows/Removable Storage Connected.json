@@ -1,0 +1,34 @@
+{
+  "name": "Initial Access: Removable Storage Device Connection Detected",
+  "description": "Detecta la conexión de dispositivos de almacenamiento extraíbles al sistema. Los adversarios pueden utilizar hardware externo para introducir malware en entornos aislados (air-gapped), ejecutar payloads mediante ataques de Rubber Ducky o facilitar la exfiltración de datos sensibles fuera de la monitorización de red tradicional.",
+  "tags": [
+    "security",
+    "initial_access",
+    "hardware_addition",
+    "data_exfiltration",
+    "insider_threat",
+    "usb_detection",
+    "T1200",
+    "win_driver_events"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE ACCESO FÍSICO: Dispositivo Removible Conectado! Se ha detectado la conexión de un nuevo hardware de almacenamiento por el usuario **{user}** en el host **{host}**. Bajo la técnica de **Hardware Additions** (**MITRE ATT&CK T1200**), esto puede representar un vector de entrada de malware o un intento de exfiltración de datos. Se requiere validar si el uso de dispositivos USB está permitido en este equipo.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la conexión del dispositivo USB o externo."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que inició la sesión en el momento de la conexión del hardware."
+    }
+  ]
+}

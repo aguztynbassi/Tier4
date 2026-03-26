@@ -1,0 +1,84 @@
+[
+  {
+    "name": "DLL Side-Loading via Microsoft Defender Binaries",
+    "description": "Detection of a DLL side-loading attempt involving Microsoft Defender executables loading mpclient.dll from a non-standard path.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "dll_side_loading",
+      "defense_evasion",
+      "persistence",
+      "TA0005",
+      "TA0007",
+      "T1574",
+      "T1574.002"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: DLL Side-Loading via Microsoft Defender Binaries Detected.\\n\\nMicrosoft Defender executable ('{ProcessImage}') loaded '{Image}' (mpclient.dll) from a suspicious, non-standard path. This strongly indicates a **DLL side-loading attempt**, likely by an adversary to evade defenses, achieve persistence, or execute malicious code with elevated privileges.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **User**: {User}\\n* **Process that loaded DLL**: {ProcessImage}\\n* **Loaded DLL**: {Image}\\n* **Original DLL Name**: {OriginalFileName}\\n* **Company of Loaded DLL**: {Company}\\n* **Command Line**: {CommandLine}\\n* **Parent Process**: {ParentImage}\\n* **Event ID**: {EventID} (Sysmon ImageLoad)\\n* **Sysmon Rule Name**: {RuleName}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** Immediately disconnect host '{ComputerName}' from the network to prevent further compromise, command and control (C2) communication, or lateral movement. **DO NOT power off the system.**\\n2.  **FORENSIC IMAGE AND MEMORY DUMP:** Perform a full forensic disk image and a memory dump of '{ComputerName}'. This is critical to preserve evidence of the compromise and identify the malicious payload and its activities.\\n3.  **IDENTIFY MALICIOUS DLL:** Analyze the file '{Image}' from the suspicious path. Determine if it is a known malicious DLL by checking its hash against threat intelligence platforms (e.g., VirusTotal, Any.Run) and performing static/dynamic analysis.\\n4.  **INVESTIGATE PARENT PROCESS & COMMAND LINE:** Examine '{ParentImage}' and the full '{CommandLine}' of '{ProcessImage}' for additional clues regarding how the malicious DLL was placed and executed.\\n5.  **HUNT FOR IOCs:** Based on the analysis of the malicious DLL, hunt for associated Indicators of Compromise (IOCs) across your entire environment. Look for network connections, file modifications, registry changes, and other processes launched by the malware.\\n6.  **REVIEW SYSTEM INTEGRITY:** Check the integrity of the legitimate Microsoft Defender binaries and their expected DLLs on the compromised system. Ensure they have not been tampered with.\\n7.  **THREAT HUNT ACROSS NETWORK:** Expand your threat hunt to other systems for similar DLL side-loading attempts, especially those involving legitimate, signed binaries being coerced to load suspicious modules from unusual locations.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the DLL load event."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname where the DLL side-loading occurred."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the process ran."
+      },
+      {
+        "name": "ProcessImage",
+        "required": true,
+        "description": "The full path to the Microsoft Defender executable that loaded the DLL."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to the loaded DLL (mpclient.dll) from the suspicious path."
+      },
+      {
+        "name": "OriginalFileName",
+        "required": false,
+        "description": "The original file name of the loaded DLL."
+      },
+      {
+        "name": "Company",
+        "required": false,
+        "description": "The company name of the loaded DLL."
+      },
+      {
+        "name": "CommandLine",
+        "required": false,
+        "description": "The full command line of the ProcessImage."
+      },
+      {
+        "name": "ParentImage",
+        "required": false,
+        "description": "The parent process of the ProcessImage."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Sysmon Event ID (expected to be 7)."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The Sysmon rule name that triggered the event, if available."
+      }
+    ]
+  }
+]

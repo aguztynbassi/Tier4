@@ -1,0 +1,42 @@
+{
+  "name": "Successful Lateral Movement to Administrator via Pass the Hash using Mimikatz Detected",
+  "description": "Detects a successful 'Pass the Hash' lateral movement attack. This rule identifies a sequence of events where a user logs on with a `Logon Type 9` (NewCredentials), a strong indicator of this attack, followed by the assignment of new privileges, which suggests a compromise of an administrator account.",
+  "tags": [
+    "security",
+    "lateral_movement",
+    "pass_the_hash",
+    "T1550",
+    "T1550.002",
+    "windows_event_log"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: A successful lateral movement attempt to an administrator account was detected using a 'Pass the Hash' technique. A logon event with `Logon Type 9` was observed for user **{user}** ({user_id}) from domain **{domain}**, followed by a privilege assignment. This is a strong indicator of a **Lateral Movement** attack (**MITRE ATT&CK T1550.002**), where an adversary has likely compromised an administrator account. Immediate investigation is required to determine the full scope of the compromise and to reset the credentials of the affected account.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The name of the user account that was compromised."
+    },
+    {
+      "name": "user_id",
+      "required": true,
+      "description": "The user ID of the compromised account."
+    },
+    {
+      "name": "domain",
+      "required": true,
+      "description": "The domain of the compromised account."
+    }
+  ]
+}

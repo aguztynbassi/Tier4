@@ -1,0 +1,38 @@
+{
+  "name": "Network Port Scan Detected",
+  "description": "Detecta intentos de reconocimiento de red donde una única dirección IP de origen contacta a un destino utilizando una gran variedad de puertos en un corto periodo de tiempo. Los adversarios realizan escaneos de puertos para identificar servicios activos, versiones de software y posibles vulnerabilidades antes de lanzar un exploit. Esta alerta es un indicador temprano de una fase de preparación de ataque.",
+  "tags": [
+    "security",
+    "discovery",
+    "reconnaissance",
+    "port_scan",
+    "network_mapping",
+    "T1046",
+    "firewall_logs"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Reconocimiento! Se ha detectado un escaneo de puertos desde la IP **{source_address}** hacia el host **{destination_address}**, alcanzando un total de **{CNT}** puertos distintos. Bajo la técnica de **Network Service Discovery** (**MITRE ATT&CK T1046**), este comportamiento indica un intento de mapear servicios expuestos. Se recomienda bloquear temporalmente la IP de origen y verificar si alguno de los puertos contactados corresponde a servicios críticos no protegidos.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección IP que origina el escaneo (posible atacante)."
+    },
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "El host objetivo que está siendo escaneado."
+    },
+    {
+      "name": "CNT",
+      "required": true,
+      "description": "Número de puertos distintos detectados en el intervalo de tiempo."
+    }
+  ]
+}

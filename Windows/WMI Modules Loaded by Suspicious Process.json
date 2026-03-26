@@ -1,0 +1,42 @@
+{
+  "name": "WMI Modules Loaded by Suspicious Process",
+  "description": "Detecta la carga de bibliotecas críticas de WMI (como fastprox.dll o wmiutils.dll) por parte de ejecutables ubicados en directorios no estándar como ProgramData o carpetas de usuario. Esta técnica es utilizada por malware y frameworks de post-explotación para interactuar con WMI a nivel de API, evitando el uso de herramientas de línea de comandos más visibles como wmic.exe.",
+  "tags": [
+    "security",
+    "execution",
+    "wmi_api",
+    "defense_evasion",
+    "T1047",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "Se ha detectado una **Carga de Módulo WMI Sospechosa** en el host **{host}**. El proceso **{source_image}**, ubicado en una ruta de escritura del usuario, ha cargado la librería de WMI **{image}**. Esta actividad sugiere que un proceso potencialmente malicioso está utilizando la **API de WMI** (**MITRE ATT&CK T1047**) para recolectar información o ejecutar comandos evadiendo la monitorización de procesos estándar. Se recomienda analizar el binario `{source_image}` y verificar si posee una firma digital válida o si ha realizado conexiones de red.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se detectó la carga del módulo."
+    },
+    {
+      "name": "source_image",
+      "required": true,
+      "description": "Ruta completa del ejecutable sospechoso que carga el módulo WMI."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "Nombre de la DLL de WMI cargada (ej. fastprox.dll)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "Cuenta de usuario bajo la cual se ejecuta el proceso."
+    }
+  ]
+}

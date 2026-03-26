@@ -1,0 +1,41 @@
+{
+  "name": "Exfiltration over Cloud Application Detected",
+  "description": "Detecta la exfiltración de datos a una aplicación en la nube, lo que puede ser utilizado por un adversario para desviar los datos a través de un canal diferente al del Comando y Control principal.",
+  "tags": [
+    "security",
+    "exfiltration",
+    "exfiltration_over_cloud_application",
+    "T1048",
+    "proxy_server"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "Se ha activado una alerta crítica en el **{platform}** con la siguiente actividad: se detectó una conexión desde la dirección IP de origen **{source_address}** a una dirección de destino **{destination_address}** asociada con una aplicación en la nube. Este es un fuerte indicador de **Exfiltración** (**MITRE ATT&CK T1048**). Se requiere una investigación inmediata para determinar la legitimidad de esta transferencia de datos y asegurar los sistemas afectados. El evento ocurrió bajo el usuario **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "platform",
+      "required": true,
+      "description": "La plataforma de seguridad donde se generó la alerta (p. ej., Proxy Server)."
+    },
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección IP de origen de la conexión."
+    },
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "La dirección IP de destino de la conexión."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que realizó la acción."
+    }
+  ]
+}

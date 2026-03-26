@@ -1,0 +1,38 @@
+{
+  "name": "Possible SPN Enumeration Detected (Kerberoasting Preparation)",
+  "description": "Detecta el uso de la utilidad setspn.exe para consultar nombres de servicio (SPN) en el dominio. Esta actividad es un precursor común del ataque Kerberoasting, donde los atacantes identifican cuentas de servicio vulnerables para solicitar tickets TGS y realizar ataques de fuerza bruta offline contra las contraseñas de dichas cuentas.",
+  "tags": [
+    "security",
+    "credential_access",
+    "reconnaissance",
+    "kerberoasting",
+    "setspn",
+    "T1558.003",
+    "active_directory"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Reconocimiento de Credenciales! Se ha detectado una enumeración de SPN en el host **{host}**. El usuario **{user}** ejecutó **setspn.exe** con el parámetro de consulta (**-q**). Bajo la técnica de **Steal or Forge Kerberos Tickets: Kerberoasting** (**MITRE ATT&CK T1558.003**), este comportamiento indica que un atacante está buscando cuentas de servicio para extraer y crackear sus contraseñas. Se recomienda investigar si la cuenta del usuario tiene una justificación administrativa para realizar consultas de SPN en todo el dominio.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo desde el cual se lanzó la consulta de SPN."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que ejecutó el comando setspn."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa utilizada (ej. setspn -q */*)."
+    }
+  ]
+}

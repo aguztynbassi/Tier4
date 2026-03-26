@@ -1,0 +1,57 @@
+[
+  {
+    "name": "Remote Thread Created via Ttdinject",
+    "description": "Detects the execution of `ttdinject.exe`, a component of Time Travel Debugging (TTD), to create a remote thread. This behavior is unusual and can indicate malicious activity, such as code injection.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "obfuscated files or information",
+      "trusted developer utilities proxy execution",
+      "TA0005",
+      "T1127",
+      "Windows",
+      "Sysmon"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Medium-severity alert: The `ttdinject.exe` tool, part of Time Travel Debugging, was detected creating a remote thread on host '{host}' by user '{user}'. While a legitimate debugging utility, this behavior is unusual in typical environments and can indicate malicious activity, such as code injection or defense evasion. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity immediately.** Determine if the use of `ttdinject.exe` for remote thread creation is legitimate for your environment. If not, this could be a sign of a sophisticated attack. Examine the command line for clues, and review the target process for injected code or suspicious modules. Isolate the system if malicious intent is confirmed.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Process Creation (1)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was created, which should be 'ttdinject.exe'."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute ttdinject.exe."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

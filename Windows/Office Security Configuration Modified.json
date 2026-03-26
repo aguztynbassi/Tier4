@@ -1,0 +1,63 @@
+[
+  {
+    "name": "Office Security Configuration Modified",
+    "description": "Modification of Microsoft Office security settings in the registry detected, indicating a potential attempt to lower defenses or enable malicious macro execution.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "office",
+      "macro",
+      "defense_evasion",
+      "registry",
+      "TA0005",
+      "T1112"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: Office Security Configuration Modified.\\n\\nA modification to Microsoft Office security settings in the registry (`{TargetObject}`) was detected on host '{Computer}' by user '{User}' via process '{ProcessName}' at {Timestamp}. The `Details` of the change are: {Details}. This indicates a potential attempt by an adversary to reduce defenses or enable malicious macro execution.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {Computer}\\n* **User**: {User}\\n* **Process Name**: {ProcessName}\\n* **Modified Registry Key**: {TargetObject}\\n* **Change Details**: {Details}\\n* **Sysmon Event ID**: 13\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY, especially for AccessVBOM/VBAWarnings):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** If the modification to `AccessVBOM` or `VBAWarnings` is suspicious and unauthorized, disconnect host '{Computer}' from the network immediately to contain potential malicious activity.\\n2.  **VERIFY LEGITIMACY:** \\n    * **For `AccessVBOM` or `VBAWarnings` modifications:** This is highly suspicious. Unless there's a specific, documented, and authorized administrative or development reason for this change, **assume malicious intent.** \\n    * **For `TrustRecords` modifications:** This can be legitimate if a user manually trusts a document. Contact the user '{User}' to determine if they intentionally trusted a document around this time. If the user denies it or cannot explain, treat it as suspicious.\\n3.  **ANALYZE THE SOURCE:** Investigate the '{ProcessName}' that made the registry modification. Is it a legitimate Office application, a known patching tool, or something suspicious (e.g., `cmd.exe`, `powershell.exe`, an unknown executable)? Review the parent process if available.\\n4.  **INSPECT OFFICE DOCUMENTS:** If the modification is related to `TrustRecords`, identify the document that was trusted. Obtain a copy of the document and analyze it for malicious macros or other suspicious content (e.g., submit to a sandbox environment like VirusTotal).\\n5.  **INVESTIGATE USER ACCOUNT:** If the activity is suspicious, investigate the '{User}' account for signs of compromise (e.g., anomalous logins, failed authentications, activity on other hosts). Consider forcing a password reset and enforcing Multi-Factor Authentication (MFA).\\n6.  **SCAN FOR MALWARE:** Perform a full endpoint anti-malware scan on '{Computer}'.\\n7.  **RESET SECURITY SETTINGS:** If the change is unauthorized, revert the Office security settings to their default or enterprise-mandated secure configurations. Ensure Group Policies are enforcing appropriate macro security settings to prevent re-modifications.\\n8.  **FORENSIC ANALYSIS:** If confirmed malicious, conduct a full forensic investigation of '{Computer}' to identify the initial compromise vector, scope of impact, and other Indicators of Compromise (IOCs).",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the registry modification event."
+      },
+      {
+        "name": "Computer",
+        "required": true,
+        "description": "The hostname of the system where the registry modification occurred."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the modification was made."
+      },
+      {
+        "name": "ProcessName",
+        "required": true,
+        "description": "The name of the process that modified the registry."
+      },
+      {
+        "name": "TargetObject",
+        "required": true,
+        "description": "The full path to the modified registry key."
+      },
+      {
+        "name": "Details",
+        "required": false,
+        "description": "Additional details about the registry modification, such as the new value set."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Sysmon Event ID (13)."
+      }
+    ]
+  }
+]

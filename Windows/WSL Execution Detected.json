@@ -1,0 +1,61 @@
+[
+  {
+    "name": "WSL Execution Detected",
+    "description": "Detects the execution of `wsl.exe` with command-line arguments `-e` or `--exec`, indicating the execution of Linux commands. Adversaries may use WSL to execute both Windows and Linux binaries.",
+    "tags": [
+      "security",
+      "detection",
+      "persistence",
+      "command and scripting interpreter",
+      "TA0005",
+      "T1202",
+      "Windows",
+      "WSL",
+      "Linux",
+      "command_execution"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Medium-severity alert: WSL (Windows Subsystem for Linux) execution detected on host '{host}' by user '{user}'. The `wsl.exe` process at '{process_path}' was executed with command line '{command_line}', specifically using `-e` or `--exec` to run a Linux command. This can be abused by adversaries to execute both Windows and Linux binaries, potentially bypassing traditional security controls. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity immediately.** Determine if this WSL execution is legitimate and expected in your environment. If not, analyze the Linux command being executed and the overall context of the activity. This could indicate defense evasion, command and control, or privilege escalation."
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Windows Security Event ID for Process Creation (4688)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was executed, which should be 'wsl.exe'."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the wsl.exe executable."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute wsl.exe, including '-e' or '--exec'."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which wsl.exe was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

@@ -1,0 +1,36 @@
+{
+  "name": "GUI Input Capture Detected",
+  "description": "Detecta la presencia de herramientas de captura de entrada (keyloggers) mediante la monitorización de cambios en el registro o ejecución de procesos sospechosos como `keylogger_directx.exe`. Esta técnica permite a los adversarios recolectar credenciales y otros datos sensibles directamente desde las interacciones del usuario con la interfaz gráfica.",
+  "tags": [
+    "security",
+    "credential_access",
+    "keylogging",
+    "T1056.002",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Robo de Credenciales! Se ha detectado la ejecución o actividad en el registro del proceso **{process}** en el host **{host}**. Este proceso está identificado como una herramienta de **Captura de Entrada** (**MITRE ATT&CK T1056.002**), diseñada para interceptar pulsaciones de teclas y datos de formularios en la GUI. El evento fue registrado bajo el usuario **{user}**. Existe un riesgo inminente de compromiso de cuentas. Se requiere el aislamiento inmediato del equipo y un escaneo completo en busca de malware persistente.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del sistema afectado donde se detectó el keylogger."
+    },
+    {
+      "name": "process",
+      "required": true,
+      "description": "El nombre del ejecutable o proceso que realiza la captura de entrada."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario cuya información podría estar siendo capturada."
+    }
+  ]
+}

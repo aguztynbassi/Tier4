@@ -1,0 +1,39 @@
+{
+  "name": "Defense Evasion: BITSAdmin Download Activity",
+  "description": "Detecta el uso de la utilidad bitsadmin.exe para la creación de trabajos de transferencia o la descarga directa de archivos desde fuentes externas. Los atacantes abusan de BITS para descargar payloads maliciosos de forma asincrónica, aprovechando que el tráfico suele ser ignorado por las defensas perimetrales y que permite mantener la persistencia al reanudar descargas tras reinicios del sistema.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "persistence",
+    "bitsadmin",
+    "living_off_the_land",
+    "lolbins",
+    "T1197",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EVASIÓN: Descarga vía BITSAdmin! Se ha detectado un intento de transferencia de archivos utilizando **bitsadmin.exe** en el host **{host}**. Bajo la técnica de **BITS Jobs** (**MITRE ATT&CK T1197**), este comportamiento es un método clásico para descargar malware de forma persistente y sigilosa. Se recomienda identificar la URL de origen y el destino del archivo para evaluar el posible compromiso del sistema.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se ejecutó el comando de bitsadmin."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que incluye la URL y el destino del archivo (ej. /transfer job_name http://...)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que inició el trabajo de BITS."
+    }
+  ]
+}

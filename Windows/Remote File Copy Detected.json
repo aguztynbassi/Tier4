@@ -1,0 +1,37 @@
+{
+  "name": "Remote File Copy Detected",
+  "description": "Detecta la copia remota de archivos ejecutables o scripts, lo que es una técnica común utilizada por adversarios para preparar sus herramientas o archivos a lo largo de una operación.",
+  "tags": [
+    "security",
+    "lateral_movement",
+    "persistence",
+    "ingress_tool_transfer",
+    "T1105",
+    "windows"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "Se ha activado una alerta en el host **{host}**: se detectó la copia remota de un archivo **{file}**. Esto es un fuerte indicador de **Movimiento Lateral** y **Transferencia de Herramientas** (**MITRE ATT&CK T1105**), donde un adversario está preparando sus herramientas para una intrusión. Se requiere una investigación inmediata para determinar la legitimidad de esta acción y eliminar el archivo malicioso. El evento ocurrió bajo el usuario **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del host donde ocurrió el evento."
+    },
+    {
+      "name": "file",
+      "required": true,
+      "description": "El nombre del archivo que fue copiado."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que realizó la acción."
+    }
+  ]
+}

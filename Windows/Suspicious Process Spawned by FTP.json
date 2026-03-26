@@ -1,0 +1,74 @@
+[
+  {
+    "name": "Suspicious Process Spawned by FTP",
+    "description": "Detects suspicious activity involving ftp.exe, including script execution, renaming, and the spawning of child processes, which can indicate malicious activity.",
+    "tags": [
+      "security",
+      "detection",
+      "execution",
+      "defense evasion",
+      "indirect command execution",
+      "TA0002",
+      "TA0005",
+      "T1202",
+      "Windows",
+      "Sysmon",
+      "FTP"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "MEDIUM-SEVERITY ALERT: Suspicious activity involving `ftp.exe` detected on host '{host}' by user '{user}'.\n\n**Potential Indicators:**\n* `ftp.exe` (`{process_name}` at '{process_path}') was executed with a script file via `command_line`: '{command_line}'.\n* `ftp.exe` (`{process_name}` at '{process_path}') was executed from a non-standard path, indicating potential renaming or relocation.\n* `ftp.exe` at '{parent_process_path}' spawned an unexpected child process '{process_name}' at '{process_path}' with command line '{command_line}'.\n\nThis behavior can indicate an adversary attempting to execute commands, evade defenses, or proxy execution through a legitimate utility. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **Parent Process Name**: {parent_process_name}\n* **Parent Process Path**: {parent_process_path}\n* **User**: {user}\n* **Host**: {host}\n\n**RECOMMENDED ACTION:** Investigate the legitimacy of this `ftp.exe` activity. If `ftp.exe` was used with a script, analyze the content of the script for malicious commands or data transfer. If `ftp.exe` was renamed or executed from an unusual path, investigate the origin of that executable. If `ftp.exe` spawned a child process, determine the purpose and legitimacy of that child process. Look for associated network connections (especially outbound to unusual FTP servers), file modifications, or other abnormal system behavior. If deemed malicious, conduct a thorough forensic analysis to determine the initial compromise vector and any persistence mechanisms.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Process Creation (1)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was executed (e.g., 'ftp.exe' or the child process spawned by it)."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the process executable."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used for the process execution."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      },
+      {
+        "name": "parent_process_name",
+        "required": false,
+        "description": "The name of the parent process (if applicable)."
+      },
+      {
+        "name": "parent_process_path",
+        "required": false,
+        "description": "The full path to the parent process (if applicable)."
+      }
+    ]
+  }
+]

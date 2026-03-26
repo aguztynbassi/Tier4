@@ -1,0 +1,72 @@
+{
+  "name": "Unusual SSH Activity Detected",
+  "description": "Unusually high SSH activity has been detected, which could indicate data exfiltration, a brute-force attempt, or a command and control connection.",
+  "tags": [
+    "security",
+    "detection",
+    "high",
+    "exfiltration",
+    "persistence",
+    "initial access",
+    "exfiltration over alternative protocol",
+    "brute force",
+    "application layer protocol",
+    "TA0010",
+    "TA0003",
+    "TA0001",
+    "T1048.001",
+    "T1110",
+    "T1071.004",
+    "network",
+    "linux",
+    "windows",
+    "ssh",
+    "unusual_behavior",
+    "high_connection_rate"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "HIGH SEVERITY ALERT: Unusual SSH Activity Detected.\n\nAn unusually high volume of SSH connections ({count} connections) from user '{user}' or to destination '{destination_address}' has been observed within a 10-minute period, starting at '{timestamp}'. This activity may indicate data exfiltration, a brute-force attempt to obtain credentials, or the establishment of a command and control channel.\n\n**Aggregated Event Details:**\n* **Period Start Date/Time**: {timestamp}\n* **User**: {user}\n* **Source IP Address**: {source_address}\n* **Destination IP Address**: {destination_address}\n* **Connection Count**: {count}\n* **Protocol**: {protocol}\n* **Status (e.g., success/failure)**: {status}\n\n**RECOMMENDED ACTIONS (HIGH PRIORITY):**\n\n1.  **Investigate User and IPs:** Verify the legitimacy of user '{user}'. Is this a system administrator? Is it a service account? Is this activity expected for this user/IPs? Investigate the reputation of the source IP address '{source_address}' and destination IP address '{destination_address}'.\n2.  **Connection Context:** If logs allow, examine the details of individual SSH sessions (e.g., commands executed, files transferred) that contributed to this high count. What type of data is being transferred?\n3.  **Host Isolation/IP Blocking:** If the activity is suspicious and cannot be justified, isolate the source or destination host from the network, and block the involved IP addresses on perimeter firewalls.\n4.  **Verify Credentials:** If brute force or compromised credentials are suspected, initiate a password rotation for the affected user and consider revoking SSH keys.\n5.  **Forensic Analysis:** Conduct a thorough forensic analysis of the involved host(s) to identify the presence of malware, exfiltration tools, persistence, or post-exploitation activity.\n6.  **Review Additional Logs:** Correlate this alert with other logs (e.g., authentication logs, process logs, endpoint security logs) on the host and network to look for related activities.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "timestamp",
+      "required": true,
+      "description": "The timestamp of the start of the aggregation window."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account involved in the SSH connections."
+    },
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "The source IP address of the SSH connections."
+    },
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "The destination IP address of the SSH connections."
+    },
+    {
+      "name": "count",
+      "required": true,
+      "description": "The number of SSH connections detected within the timeframe."
+    },
+    {
+      "name": "protocol",
+      "required": false,
+      "description": "The network protocol used (e.g., 'ssh')."
+    },
+    {
+      "name": "status",
+      "required": false,
+      "description": "The status of the SSH connection (e.g., 'success', 'failed')."
+    }
+  ]
+}

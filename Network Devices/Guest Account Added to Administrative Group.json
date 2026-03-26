@@ -1,0 +1,85 @@
+{
+  "name": "Guest Account Added to Administrative Group",
+  "description": "Detects the addition of the built-in Windows Guest account to any privileged security group (e.g., Administrators, Domain Admins). This is highly suspicious and indicative of malicious activity like privilege escalation, persistence, or defense evasion, leveraging the Guest account's well-known SID suffix (S-1-5-21-*-501).",
+  "tags": [
+    "security",
+    "detection",
+    "critical",
+    "windows",
+    "privilege_escalation",
+    "persistence",
+    "defense_evasion",
+    "initial_access",
+    "account_manipulation",
+    "TA0004",
+    "TA0003",
+    "TA0005",
+    "TA0001",
+    "T1098",
+    "T1098.002",
+    "T1098.003",
+    "T1548",
+    "T1548.002",
+    "T1078"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "CRITICAL SEVERITY ALERT: Guest Account Added to Administrative Group!\\n\\n**The built-in Windows Guest account ('{MemberName}') with SID '{MemberSid}' was critically added to the highly privileged security group '{TargetGroupName}' (SID: '{TargetGroupSid}') on host '{ComputerName}' at {Timestamp}.**\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Event ID**: {EventID} (Expected 4728, 4732, or 4756)\\n* **Action Performed By**: '{SubjectUserName}' (SID: '{SubjectUserSid}')\\n* **Account Added**: '{MemberName}' (Guest Account)\\n* **Account SID**: '{MemberSid}' (Guest SID suffix: *-501)\\n* **Target Group**: '{TargetGroupName}' (e.g., Administrators, Domain Admins)\\n* **Target Group SID**: '{TargetGroupSid}'\\n* **Affected Host**: '{ComputerName}'\\n* **Rule Name**: {RuleName}\\n\\nThis is a **critical security incident** and a strong indicator of compromise. The Guest account should never have administrative privileges. This activity is a classic sign of **Privilege Escalation (TA0004)**, **Persistence (TA0003)**, or **Defense Evasion (TA0005)** by an attacker who has already gained access to the system.\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **IMMEDIATE ACCOUNT REMOVAL:** Immediately remove the Guest account ('{MemberName}') from the '{TargetGroupName}' group. Ensure the Guest account is also disabled, if not already.\\n2.  **IMMEDIATE HOST ISOLATION:** Isolate '{ComputerName}' from the network to prevent further compromise or lateral movement. Consider initiating a full incident response process.\\n3.  **CREDENTIAL COMPROMISE INVESTIGATION:** \\n    * Investigate how '{SubjectUserName}' (the account that performed the change) gained the necessary privileges to add the Guest account to an administrative group. This account is likely compromised.\\n    * Force a password reset for '{SubjectUserName}' and any other potentially compromised administrative accounts.\\n4.  **FORENSIC ACQUISITION & ANALYSIS:** Begin forensic acquisition (disk and memory) of '{ComputerName}' to identify the initial compromise vector, any malware present, other persistence mechanisms, and evidence of lateral movement.\\n5.  **AUDIT OTHER GROUP MEMBERSHIPS:** Review membership of other critical security groups for any other unauthorized or suspicious additions.\\n6.  **ACTIVE DIRECTORY REVIEW (if applicable):** If '{ComputerName}' is a domain controller or a member server in a domain, audit Active Directory for any recent suspicious account or group changes, particularly related to the Guest account or other high-privilege groups.\\n7.  **THREAT HUNTING:** Proactively hunt for similar activity across your environment, especially focusing on other Guest account activity or unauthorized group modifications.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of the event."
+    },
+    {
+      "name": "EventID",
+      "required": true,
+      "description": "The Windows Event ID (4728, 4732, or 4756)."
+    },
+    {
+      "name": "SubjectUserName",
+      "required": true,
+      "description": "The username of the account that performed the group modification."
+    },
+    {
+      "name": "SubjectUserSid",
+      "required": false,
+      "description": "The SID of the user who performed the action."
+    },
+    {
+      "name": "MemberName",
+      "required": true,
+      "description": "The display name of the account that was added to the group (expected 'Guest')."
+    },
+    {
+      "name": "MemberSid",
+      "required": true,
+      "description": "The SID of the account that was added to the group (expected S-1-5-21-*-501)."
+    },
+    {
+      "name": "TargetGroupName",
+      "required": true,
+      "description": "The name of the administrative group to which the Guest account was added."
+    },
+    {
+      "name": "TargetGroupSid",
+      "required": false,
+      "description": "The SID of the target group."
+    },
+    {
+      "name": "ComputerName",
+      "required": true,
+      "description": "The hostname of the system where the event occurred."
+    },
+    {
+      "name": "RuleName",
+      "required": false,
+      "description": "The name of the Sigma rule that triggered the event, if applicable."
+    }
+  ]
+}

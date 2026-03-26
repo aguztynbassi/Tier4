@@ -1,0 +1,58 @@
+{
+    "name": "Possible Command Prompt Process Hollowing",
+    "description": "This prompt detects a possible process hollowing attempt involving the command prompt (`cmd.exe`). Adversaries inject malicious code into suspended and hollowed processes to evade process-based defenses. The prompt focuses on `cmd.exe` spawning legitimate-looking network utilities like `net.exe`, `nltest.exe`, or `ipconfig.exe` without the typical command-line arguments that indicate interactive use (e.g., '/c' or '/k'). This behavior can be an indicator of a malicious code injection.",
+    "tags": [
+        "security",
+        "detection",
+        "windows",
+        "TA0005",
+        "TA0004",
+        "T1055",
+        "T1055.012"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the security event where the process `{image}` was spawned by the parent process `cmd.exe` (`{parent_image}`). The event occurred at `{timestamp}` on the host `{hostname}`. The command line arguments for the parent (`{parent_command}`) do not include a '/c' or '/k', which is suspicious. Analyze the command line (`{command_line}`) of the child process. Investigate the user (`{user}`) and the context of the activity. Determine if this is a legitimate process execution or a potential process hollowing attempt. Provide a summary of your findings and any recommended actions.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "image",
+            "required": true,
+            "description": "The name of the process that was spawned (e.g., net.exe, nltest.exe)."
+        },
+        {
+            "name": "parent_image",
+            "required": true,
+            "description": "The parent process that initiated the execution (should be cmd.exe)."
+        },
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        },
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname where the event was detected."
+        },
+        {
+            "name": "parent_command",
+            "required": true,
+            "description": "The command line of the parent process (cmd.exe)."
+        },
+        {
+            "name": "command_line",
+            "required": true,
+            "description": "The full command line of the child process."
+        },
+        {
+            "name": "user",
+            "required": true,
+            "description": "The user account under which the process was executed."
+        }
+    ]
+}

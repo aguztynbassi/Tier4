@@ -1,0 +1,44 @@
+{
+  "name": "Windows WebShell Creation Detected",
+  "description": "Detecta la creación de archivos con extensiones ejecutables de servidor (.php, .asp, .jsp, .pl) en directorios de contenido web estático. Los atacantes cargan estos archivos tras explotar una vulnerabilidad en la aplicación web para obtener una interfaz de línea de comandos remota. Esto les permite ejecutar procesos, escalar privilegios y moverse lateralmente, todo bajo el flujo legítimo de tráfico web.",
+  "tags": [
+    "security",
+    "persistence",
+    "web_attack",
+    "webshell",
+    "iis",
+    "apache",
+    "T1505.003",
+    "sysmon_event_11"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE PERSISTENCIA WEB! Se ha detectado la creación del archivo sospechoso **{file}** en la ruta web **{path}** del servidor **{host}**. Bajo la técnica de **Web Shell** (**MITRE ATT&CK T1505.003**), este evento sugiere que un atacante ha logrado escribir código ejecutable en el servidor. Se recomienda inspeccionar el contenido del archivo, revisar los logs del servidor web para identificar la IP de origen y determinar qué vulnerabilidad permitió la carga del archivo.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El servidor web donde se detectó la creación del archivo."
+    },
+    {
+      "name": "file",
+      "required": true,
+      "description": "Nombre del archivo creado (ej. cmd.php, shell.aspx)."
+    },
+    {
+      "name": "path",
+      "required": true,
+      "description": "La ruta completa del directorio donde se alojó la WebShell."
+    },
+    {
+      "name": "image",
+      "required": false,
+      "description": "El proceso que realizó la escritura (ej. w3wp.exe, httpd.exe)."
+    }
+  ]
+}

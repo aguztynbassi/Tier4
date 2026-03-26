@@ -1,0 +1,76 @@
+[
+  {
+    "name": "File Download via IMEWDBLD",
+    "description": "Detects network connections initiated by `IMEWDBLD.exe`. While this executable has legitimate functions related to Microsoft IME, unexpected network activity can indicate suspicious behavior, possibly related to file downloads or other network-based actions by malware.",
+    "tags": [
+      "security",
+      "detection",
+      "command and control",
+      "ingress tool transfer",
+      "TA0011",
+      "T1105",
+      "Windows",
+      "Sysmon"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Medium-severity alert: Unexpected network connection initiated by `IMEWDBLD.exe` on host '{host}' by user '{user}'. While `IMEWDBLD.exe` is a legitimate Microsoft IME component, network activity from it is unusual and could indicate malicious file downloads or command and control communication. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Source IP**: {source_ip}\n* **Source Port**: {source_port}\n* **Destination IP**: {destination_ip}\n* **Destination Port**: {destination_port}\n* **Protocol**: {protocol}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this network connection immediately.** Determine the legitimacy of the connection. If suspicious, block the destination IP/port, isolate the affected system, and conduct a full malware analysis. This activity might be an indicator of compromise (IOC) for malware using `IMEWDBLD.exe` as a proxy.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the network connection event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Network Connection (3)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process making the network connection, which should be 'IMEWDBLD.exe'."
+      },
+      {
+        "name": "source_ip",
+        "required": true,
+        "description": "The source IP address of the connection."
+      },
+      {
+        "name": "source_port",
+        "required": true,
+        "description": "The source port of the connection."
+      },
+      {
+        "name": "destination_ip",
+        "required": true,
+        "description": "The destination IP address of the connection."
+      },
+      {
+        "name": "destination_port",
+        "required": true,
+        "description": "The destination port of the connection."
+      },
+      {
+        "name": "protocol",
+        "required": true,
+        "description": "The network protocol used (e.g., 'tcp', 'udp')."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which IMEWDBLD.exe was running."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

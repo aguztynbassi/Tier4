@@ -1,0 +1,44 @@
+{
+  "name": "Indirect Command Execution via Pcalua or Forfiles",
+  "description": "Detecta la ejecución de comandos a través de binarios de Windows (pcalua.exe o forfiles.exe) que actúan como intermediarios. Los adversarios utilizan estos binarios legítimos para evadir restricciones de ejecución (como AppLocker o WDAC) y para ocultar el origen real de un comando malicioso, rompiendo el árbol de procesos estándar que las herramientas de seguridad suelen monitorear.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "indirect_execution",
+    "living_off_the_land",
+    "pcalua",
+    "forfiles",
+    "T1202",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EVASIÓN: Ejecución Indirecta! Se ha detectado que el binario de sistema **{parent_image}** ha iniciado un proceso hijo en el host **{host}**. Bajo la técnica de **Indirect Command Execution** (**MITRE ATT&CK T1202**), este comportamiento es altamente sospechoso y sugiere un intento de evadir controles de seguridad utilizando herramientas de compatibilidad o gestión de archivos de Windows. Se recomienda investigar la línea de comandos ejecutada y el contexto del usuario **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó el inicio del proceso indirecto."
+    },
+    {
+      "name": "parent_image",
+      "required": true,
+      "description": "El binario intermediario utilizado (ej. pcalua.exe o forfiles.exe)."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa del proceso hijo ejecutado."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que disparó la ejecución."
+    }
+  ]
+}

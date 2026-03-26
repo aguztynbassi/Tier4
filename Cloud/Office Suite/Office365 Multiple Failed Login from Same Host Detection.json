@@ -1,0 +1,39 @@
+{
+  "name": "Identity: Multiple Failed Logins from Single Host",
+  "description": "Detecta múltiples intentos de inicio de sesión fallidos dirigidos a una única cuenta de usuario desde una dirección IP específica. Este patrón es típico de ataques de fuerza bruta o adivinación de contraseñas (dictionary attacks), donde un atacante intenta ganar acceso inicial comprometiendo las credenciales de un usuario mediante la repetición de intentos.",
+  "tags": [
+    "security",
+    "credential_access",
+    "brute_force",
+    "office365",
+    "azure_ad",
+    "login_failure",
+    "T1110",
+    "initial_access"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD: Fuerza Bruta Detectada! Se han registrado **{Cnt}** intentos fallidos de inicio de sesión para el usuario **{user}** desde la IP **{source_address}**. Bajo la técnica de **Brute Force** (**MITRE ATT&CK T1110**), este evento sugiere un intento dirigido de compromiso de cuenta. Se recomienda bloquear la IP de origen y verificar si el usuario ha sido bloqueado por las políticas de Azure Smart Lockout.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario objetivo de los intentos de inicio de sesión."
+    },
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección IP de origen desde donde se originan los fallos."
+    },
+    {
+      "name": "Cnt",
+      "required": true,
+      "description": "El número total de intentos fallidos registrados."
+    }
+  ]
+}

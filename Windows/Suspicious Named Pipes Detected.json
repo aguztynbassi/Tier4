@@ -1,0 +1,37 @@
+{
+  "name": "Suspicious Named Pipes Detected",
+  "description": "Detection of suspicious named pipes. Adversaries often use named pipes for inter-process communication, a technique that can be leveraged for process injection, privilege escalation, or lateral movement. This is a common defense evasion technique.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "privilege_escalation",
+    "process_injection",
+    "T1055",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a suspicious named pipe, **{pipe}**, was detected. This is a strong indicator of an adversary attempting **Process Injection** or **Privilege Escalation** (**MITRE ATT&CK T1055**) by using a named pipe for inter-process communication. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious process. The event occurred with Event ID **{event_id}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "pipe",
+      "required": true,
+      "description": "The name of the suspicious named pipe that was detected."
+    },
+    {
+      "name": "event_id",
+      "required": true,
+      "description": "The Sysmon event ID (17 or 18)."
+    }
+  ]
+}

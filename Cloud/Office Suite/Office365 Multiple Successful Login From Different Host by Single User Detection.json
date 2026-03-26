@@ -1,0 +1,34 @@
+{
+  "name": "Identity: Multi-Source Successful Logins for Single User",
+  "description": "Detecta inicios de sesión exitosos simultáneos o consecutivos para una única cuenta de usuario desde múltiples direcciones IP. Este patrón es indicativo de un compromiso de cuenta donde las credenciales han sido filtradas o los tokens de sesión han sido secuestrados, permitiendo que múltiples actores accedan a la misma cuenta desde diferentes ubicaciones.",
+  "tags": [
+    "security",
+    "identity_threat",
+    "account_compromise",
+    "office365",
+    "azure_ad",
+    "session_hijacking",
+    "T1078",
+    "cloud_security"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Múltiples Sesiones Exitosas! El usuario **{user}** ha iniciado sesión con éxito desde **{DC}** direcciones IP diferentes en un periodo breve. Bajo la técnica de **Valid Accounts** (**MITRE ATT&CK T1078**), esto sugiere un compromiso activo de la cuenta o un secuestro de sesión. Se requiere la revocación inmediata de todos los tokens de acceso y la validación de la actividad con el usuario.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que registró los inicios de sesión exitosos."
+    },
+    {
+      "name": "DC",
+      "required": true,
+      "description": "El conteo de direcciones IP únicas involucradas en los accesos exitosos."
+    }
+  ]
+}

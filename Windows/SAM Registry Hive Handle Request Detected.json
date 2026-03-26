@@ -1,0 +1,46 @@
+{
+    "name": "SAM Registry Hive Handle Request Detected",
+    "description": "Request to SAM registry hive is detected. This is a highly suspicious activity as the SAM hive contains local user password hashes. Attackers often use this technique to dump credentials for lateral movement or privilege escalation.",
+    "tags": [
+        "TA0007",
+        "T1012",
+        "security",
+        "detection",
+        "Windows"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the attempt to access the SAM registry hive on host `{hostname}` at `{timestamp}`. The event was triggered by the process `{process_name}` with Process ID `{process_id}`. Identify the user (`{user_name}`) who initiated this request. Determine if this is a legitimate administrative action or a malicious attempt to steal credentials. Provide a summary of the findings and recommend steps to contain the threat and reset credentials if necessary.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname where the activity was detected."
+        },
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        },
+        {
+            "name": "process_name",
+            "required": true,
+            "description": "The name of the process that attempted to access the SAM hive."
+        },
+        {
+            "name": "process_id",
+            "required": true,
+            "description": "The Process ID of the process that attempted to access the SAM hive."
+        },
+        {
+            "name": "user_name",
+            "required": true,
+            "description": "The user account under which the process was executed."
+        }
+    ]
+}

@@ -1,0 +1,44 @@
+{
+  "name": "Credential Access: Stealthy LSASS Dump via MiniDumpWriteDump API",
+  "description": "Detecta el uso sigiloso de la API MiniDumpWriteDump para volcar la memoria del proceso LSASS. Los atacantes y frameworks de C2 (como SilentTrinity) abusan de las DLLs de depuración legítimas (dbghelp.dll o dbgcore.dll) cargándolas en procesos comunes como msbuild.exe, powershell.exe o svchost.exe para evadir la detección basada en la creación de archivos. Este método permite exfiltrar secretos de autenticación directamente a través de la red o en memoria.",
+  "tags": [
+    "security",
+    "credential_access",
+    "stealth_dump",
+    "minidumpwritedump",
+    "fileless_attack",
+    "lsass_abuse",
+    "T1003",
+    "sysmon_event_7"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD CRÍTICA: Intento de Volcado Sigiloso de LSASS! Se ha detectado que el proceso **{image}** ha cargado la librería de depuración **{source_image}** en el host **{host}**. Bajo la técnica de **OS Credential Dumping** (**MITRE ATT&CK T1003**), esto indica un intento evasivo de extraer credenciales de la memoria utilizando la API MiniDumpWriteDump. Se requiere investigación inmediata de las conexiones de red del proceso.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la carga sospechosa del módulo de depuración."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "El proceso que cargó la DLL (ej. rundll32.exe, msbuild.exe)."
+    },
+    {
+      "name": "source_image",
+      "required": true,
+      "description": "La DLL de depuración cargada (dbghelp.dll o dbgcore.dll)."
+    },
+    {
+      "name": "Signed",
+      "required": false,
+      "description": "Estado de la firma del binario que carga la DLL, útil para identificar ejecutables no firmados o sospechosos."
+    }
+  ]
+}

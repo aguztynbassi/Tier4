@@ -1,0 +1,38 @@
+{
+  "name": "Suspicious Certutil Command Detected",
+  "description": "Detection of suspicious `certutil.exe` execution with command-line arguments often used by adversaries for defense evasion and remote file download. This is a common technique to deobfuscate malicious code or download payloads without triggering standard security tools.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "command_and_control",
+    "trusted_developer_utilities",
+    "T1140",
+    "T1105",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "An alert has been triggered on the host **{host}**: the process **`certutil.exe`** was executed with a suspicious command line: **{command}**. This is a strong indicator of **Defense Evasion** (**MITRE ATT&CK T1140**) or **Remote File Download** (**MITRE ATT&CK T1105**) where an adversary is attempting to use a trusted Windows utility to deobfuscate code or download a payload. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious file. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The full command line that was executed with certutil.exe."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

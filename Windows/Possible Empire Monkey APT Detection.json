@@ -1,0 +1,45 @@
+{
+  "name": "APT: EmpireMonkey Execution via scrobj.dll Hijacking",
+  "description": "Detecta la ejecución sospechosa de componentes de script de Microsoft (scrobj.dll) mediante utilidades legítimas como regsvr32.exe o cutil.exe. Este patrón es característico del grupo APT EmpireMonkey, que utiliza archivos de texto aparentemente inofensivos para cargar scripts maliciosos, permitiendo la ejecución de comandos arbitrarios y la evasión de políticas de restricción de software.",
+  "tags": [
+    "security",
+    "execution",
+    "apt_activity",
+    "empire_monkey",
+    "lotl",
+    "scrobj_abuse",
+    "script_execution",
+    "T1059.001",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE APT: Ejecución de EmpireMonkey! Se ha detectado un comando sospechoso que intenta cargar **scrobj.dll** utilizando un archivo de log en **%APPDATA%**. Bajo la técnica de **PowerShell/Scripting** (**MITRE ATT&CK T1059.001**), este comportamiento indica un intento de ejecución de código fileless para evadir defensas. Se recomienda el aislamiento del host **{host}** y la inspección del archivo logs.txt para identificar el servidor de C2.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la ejecución del comando sospechoso."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que incluye la llamada a scrobj.dll y el archivo .txt."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "El binario utilizado para la ejecución (ej. regsvr32.exe o cutil.exe)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario bajo cuyo contexto se ejecutó el script malicioso."
+    }
+  ]
+}

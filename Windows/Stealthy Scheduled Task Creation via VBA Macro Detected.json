@@ -1,0 +1,38 @@
+{
+  "name": "Stealthy Scheduled Task Creation via VBA Macro Detected",
+  "description": "Detects the creation of scheduled tasks by Microsoft Office applications (`winword.exe`, `excel.exe`, etc.) via `taskschd.dll`. This is a strong indicator of a malicious VBA macro attempting to establish persistence, which is a common persistence and execution technique.",
+  "tags": [
+    "security",
+    "execution",
+    "persistence",
+    "scheduled_task",
+    "T1053",
+    "T1053.005",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: an Office application, **{source_image}**, is attempting to create a scheduled task by loading `taskschd.dll`. This is a strong indicator of a **VBA macro attempting to establish Persistence** (**MITRE ATT&CK T1053.005**). This technique is often used to execute malicious code at a later time or during system startup. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious macro. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "source_image",
+      "required": true,
+      "description": "The Office application that is attempting to create the scheduled task."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

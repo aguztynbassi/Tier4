@@ -1,0 +1,38 @@
+{
+  "name": "Defense Evasion: Network Share Connection Removal",
+  "description": "Detecta la eliminación de conexiones a recursos compartidos o la deshabilitación de carpetas compartidas en el host. Los adversarios utilizan estos comandos para ocultar sus rastros después de haber accedido a datos sensibles o tras haber movido lateralmente herramientas de ataque a través de la red interna.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "anti_forensics",
+    "network_cleanup",
+    "smb_removal",
+    "T1070.005",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EVASIÓN: Limpieza de Conexiones de Red! Se ha detectado la eliminación de un recurso compartido o conexión mediante el comando **{command}** en el host **{host}**. Bajo la técnica de **Indicator Removal** (**MITRE ATT&CK T1070.005**), este comportamiento suele indicar el cierre de una operación maliciosa para evitar la detección forense. Se recomienda investigar las conexiones SMB activas previas a este evento.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se ejecutó la eliminación del recurso compartido."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa (ej. net use /delete, Remove-SmbShare)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la desconexión."
+    }
+  ]
+}

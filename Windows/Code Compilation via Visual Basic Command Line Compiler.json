@@ -1,0 +1,65 @@
+[
+  {
+    "name": "Code Compilation via Visual Basic Command Line Compiler",
+    "description": "Detects successful code compilation using the Visual Basic Command Line Compiler (vbc.exe). While vbc.exe is a legitimate tool, its use to compile code outside of standard development environments is uncommon in most enterprises and can indicate malicious activity, such as adversaries compiling malware to evade defenses. cvtres.exe is a resource file conversion tool that is often used in the compilation process with vbc.exe.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "obfuscated files or information",
+      "compile after delivery",
+      "TA0005",
+      "T1027",
+      "T1027.004",
+      "Windows",
+      "Sysmon",
+      "vbc",
+      "compilation"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Medium-severity alert: Code compilation activity detected on host '{host}' by user '{user}'. The `cvtres.exe` process was launched by `vbc.exe` (Visual Basic Command Line Compiler), which can indicate malicious code compilation outside of a typical development environment, potentially for defense evasion. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Parent Process Name**: {parent_process_name}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity immediately.** Determine if this compilation is legitimate and expected in your environment. If not, analyze the source code being compiled and examine the system for any newly created executables or suspicious files. This could be an adversary compiling malware on the fly to bypass endpoint security solutions.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Process Creation (1)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was created, which should be 'cvtres.exe'."
+      },
+      {
+        "name": "parent_process_name",
+        "required": true,
+        "description": "The name of the parent process, which should be 'vbc.exe'."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute cvtres.exe."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

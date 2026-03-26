@@ -1,0 +1,43 @@
+{
+  "name": "Hidden Files or Directories via Attrib.exe Detected",
+  "description": "Detecta el uso de la herramienta attrib.exe para marcar archivos o directorios con los atributos de 'Oculto' (+h) o 'Sistema' (+s). Los adversarios abusan de esta funcionalidad para ocultar sus herramientas, scripts y payloads en el sistema de archivos, dificultando la detección visual y la respuesta ante incidentes. Es una técnica común de post-explotación para mantener la presencia en el host de manera sigilosa.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "persistence",
+    "hidden_artifacts",
+    "file_manipulation",
+    "T1564.001",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EVASIÓN: Intento de Ocultamiento de Archivos! Se ha detectado que el proceso **attrib.exe** ha sido ejecutado en el host **{host}** con los parámetros **{command}**. Bajo la técnica de **Hidden Files and Directories** (**MITRE ATT&CK T1564.001**), este comportamiento sugiere que un actor de la amenaza está intentando esconder archivos maliciosos de la vista del usuario o de las herramientas de auditoría. Se recomienda inspeccionar los archivos afectados y verificar qué proceso inició este cambio de atributos.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se ejecutó el comando de ocultamiento."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa (ej. attrib +h +s malware.exe)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que ejecutó la instrucción."
+    },
+    {
+      "name": "parent_image",
+      "required": true,
+      "description": "El proceso padre que lanzó attrib.exe (ej. cmd.exe o un script)."
+    }
+  ]
+}

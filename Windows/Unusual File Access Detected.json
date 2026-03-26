@@ -1,0 +1,63 @@
+[
+  {
+    "name": "Unusual File Access Detected",
+    "description": "An unusually high volume of file access has been detected on a Windows system, which could indicate an attempt at data exfiltration or malicious reconnaissance activity.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "file_access",
+      "exfiltration",
+      "unusual_behavior",
+      "TA0010",
+      "T1074.001",
+      "T1020"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: Unusual File Access Detected.\n\nAn unusually high volume of file accesses ({count} accesses) by user '{SubjectUserName}' to file/path '{ObjectName}' on host '{ComputerName}' at '{Timestamp}' has been observed. This access pattern is suspicious and could indicate an attempt at data exfiltration, a malicious process, or reconnaissance activity.\n\n**Aggregated Event Details:**\n* **Timestamp (Start of Period)**: {Timestamp}\n* **Event ID**: {EventID}\n* **Affected User**: {SubjectUserName}\n* **Accessed File Path**: {ObjectName}\n* **Source IP Address (if available)**: {IpAddress}\n* **Access Count**: {count}\n\n**RECOMMENDED ACTIONS (HIGH PRIORITY):**\n\n1.  **Investigate User and Host:** Immediately contact user '{SubjectUserName}' to verify if this activity is legitimate and expected. Ask if they were performing bulk file operations, backups, or synchronizations. Identify the host where the unusual access occurred.\n2.  **File/Path Analysis:** Determine the sensitivity of the files or path accessed. Do they contain sensitive data, credentials, or critical information?\n3.  **Process Analysis:** If possible, identify the process or application that generated these accesses. An unusual process accessing many sensitive files is a strong indicator of compromise. (This would require correlation with Sysmon EventID 1 - Process Creation or EventID 11 - FileCreate).\n4.  **Verify Compromised Credentials:** If the user cannot justify the activity, assume that the credentials for '{SubjectUserName}' are compromised. Initiate a password rotation and review other activities of that account.\n5.  **Host/User Isolation:** If the activity is highly suspicious, isolate the host and/or disable the user account '{SubjectUserName}' to contain the threat.\n6.  **Forensic Analysis:** Perform a thorough forensic analysis of the host to identify malware, persistence, other exfiltrated files, and the scope of the compromise.\n7.  **Review Additional Logs:** Correlate this alert with authentication logs (Event ID 4624/4625), Sysmon logs (e.g., process creation, network access), and firewall/DLP logs to get a complete picture of the incident.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the earliest event in the aggregation window."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Windows Event ID (expected 4663)."
+      },
+      {
+        "name": "SubjectUserName",
+        "required": true,
+        "description": "The username that accessed the file."
+      },
+      {
+        "name": "ObjectName",
+        "required": true,
+        "description": "The full path of the file or directory that was accessed."
+      },
+      {
+        "name": "IpAddress",
+        "required": false,
+        "description": "The source IP address of the access, if available in the log."
+      },
+      {
+        "name": "count",
+        "required": true,
+        "description": "The total count of file access events within the aggregation window."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      }
+    ]
+  }
+]

@@ -1,0 +1,38 @@
+{
+  "name": "User Account Renamed to Machine-Style Account ($)",
+  "description": "Detecta cuando una cuenta de usuario es renombrada para terminar con el caracter '$'. Esta técnica es utilizada por adversarios para evadir la detección y auditorías manuales, intentando que una cuenta de usuario maliciosa se confunda con una cuenta de computadora legítima del dominio. Es una maniobra común tras el compromiso de un administrador de dominio para ocultar cuentas de persistencia.",
+  "tags": [
+    "security",
+    "persistence",
+    "defense_evasion",
+    "account_manipulation",
+    "stealth_account",
+    "T1098",
+    "event_4781"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EVASIÓN: Cambio de Nombre Anómalo! Se ha detectado que la cuenta de usuario ha sido renombrada a **{new_user}** en el dominio **{domain}**. El uso del sufijo '$' es característico de cuentas de máquina y, cuando se aplica a usuarios, sugiere un intento de ocultar la cuenta ante herramientas de auditoría. Bajo la técnica de **Account Manipulation** (**MITRE ATT&CK T1098**), se recomienda verificar quién realizó el cambio (**{user}**) y si existe una justificación técnica válida para este renombre.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "new_user",
+      "required": true,
+      "description": "El nuevo nombre de la cuenta que termina en $."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario (caller_user) que realizó la modificación del nombre."
+    },
+    {
+      "name": "domain",
+      "required": true,
+      "description": "El dominio donde se realizó el cambio."
+    }
+  ]
+}

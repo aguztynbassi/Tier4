@@ -1,0 +1,86 @@
+{
+  "name": "Possible SQL Injection Attack Detected",
+  "description": "Detects attempts to inject SQL code into a web application through user-supplied input found within the URL, resource path, or query parameters, indicating a potential SQL Injection attack.",
+  "tags": [
+    "security",
+    "detection",
+    "high",
+    "web_server",
+    "waf",
+    "proxy",
+    "ids_ips",
+    "initial_access",
+    "discovery",
+    "credential_access",
+    "web_attack",
+    "sql_injection",
+    "injection",
+    "web_vulnerability",
+    "data_exfiltration",
+    "TA0001",
+    "TA0007",
+    "TA0006",
+    "T1190",
+    "T1190.003"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "HIGH SEVERITY ALERT: Possible SQL Injection Attack Detected!\\n\\n**A possible SQL Injection (SQLi) attempt was detected on your web application at {Timestamp} from Source IP '{SourceIp}'.** The malicious pattern was found in the URL: '{Url}'. This indicates an adversary is attempting to exploit a web application vulnerability to manipulate the backend database.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Source IP**: {SourceIp} (Potential Attacker)\\n* **Target Server IP**: {DestinationIp} (Your Web Server)\\n* **Malicious URL/Request**: {Url} (Contains SQLi patterns)\\n* **HTTP Method**: {RequestMethod}\\n* **User Agent**: {UserAgent}\\n* **HTTP Referer**: {HttpReferer} (if available)\\n* **HTTP Response Code**: {ResponseCode} (Check if 200 OK, indicating potential success, or error codes)\\n* **Rule Name**: {RuleName}\\n\\nThis event is a strong indicator of **T1190.003 Web Application Exploitation (SQL Injection)**, a technique used for **Initial Access (TA0001)**, **Discovery (TA0007)** (e.g., database schema), or **Credential Access (TA0006)**. Immediate investigation is required to determine if the attack was successful.\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **BLOCK SOURCE IP:** Immediately block the '{SourceIp}' at your perimeter firewall/WAF to prevent further attack attempts from this source. Consider temporary blocking of the entire subnet if the attack is distributed.\\n2.  **WEB APPLICATION VULNERABILITY ASSESSMENT:** Prioritize a comprehensive vulnerability assessment and code review of the affected web application (especially the page/component associated with '{Url}') to identify and patch the SQL injection vulnerability. **Parameterizing all SQL queries is a critical defense.**\\n3.  **WAF RULE REVIEW/TUNING:** If you have a Web Application Firewall (WAF), ensure that its SQL injection rules are active, up-to-date, and in blocking mode. Review if the WAF successfully blocked this attempt (check `ResponseCode` and WAF logs). If not, update WAF rules to detect this specific pattern.\\n4.  **DATABASE LOG REVIEW:** Examine database logs for '{DestinationIp}' (or the backend database server) around {Timestamp} for any signs of: \\n    * Unusual queries (e.g., `SELECT` on sensitive tables, `UNION ALL`, `XP_CMDSHELL`). \\n    * Errors indicating manipulated queries. \\n    * Changes to data or schema.\\n5.  **THREAT INTELLIGENCE:** Perform threat intelligence lookups on '{SourceIp}' and '{UserAgent}'. Is it a known scanner or malicious actor?\\n6.  **COMPROMISE ASSESSMENT:** If there's any indication of successful exploitation (e.g., abnormal database activity, unexpected data exfiltration, or a `200 OK` response to an obvious injection attempt), initiate a full compromise assessment of the web server and the backend database. Look for web shells, backdoors, new user accounts, or unusual outbound connections.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of the HTTP request."
+    },
+    {
+      "name": "SourceIp",
+      "required": true,
+      "description": "The source IP address of the potential attacker."
+    },
+    {
+      "name": "DestinationIp",
+      "required": false,
+      "description": "The destination IP address of the web server."
+    },
+    {
+      "name": "Url",
+      "required": true,
+      "description": "The full URL of the HTTP request, containing the suspicious pattern."
+    },
+    {
+      "name": "RequestMethod",
+      "required": false,
+      "description": "The HTTP method of the request (GET, POST, etc.)."
+    },
+    {
+      "name": "UserAgent",
+      "required": false,
+      "description": "The user agent string from the HTTP request."
+    },
+    {
+      "name": "HttpReferer",
+      "required": false,
+      "description": "The HTTP Referer header from the request, if available."
+    },
+    {
+      "name": "ResponseCode",
+      "required": false,
+      "description": "The HTTP response code from the server."
+    },
+    {
+      "name": "EventID",
+      "required": false,
+      "description": "The event ID from the log source, if applicable."
+    },
+    {
+      "name": "RuleName",
+      "required": false,
+      "description": "The name of the Sigma rule that triggered the event, if applicable."
+    }
+  ]
+}

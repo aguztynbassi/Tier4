@@ -1,0 +1,39 @@
+{
+  "name": "Kaspersky: Malware Outbreak Detected by Source",
+  "description": "Detecta un brote de malware cuando una misma amenaza es identificada en más de una fuente o host de la red. Esta alerta indica una propagación activa dentro del entorno, lo que sugiere que el malware tiene capacidades de movimiento lateral o que la organización está siendo blanco de una campaña de infección simultánea.",
+  "tags": [
+    "security",
+    "impact",
+    "malware_outbreak",
+    "kaspersky",
+    "virus_detected",
+    "lateral_movement",
+    "T1518.001",
+    "threat_hunting"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE BROTE: Propagación de Malware Detectada! Kaspersky ha reportado la misma amenaza en múltiples fuentes del host **{host}**. Este comportamiento es indicativo de un brote activo y propagación lateral (**MITRE ATT&CK TA0040**). La detección múltiple sugiere que los controles iniciales han sido superados por una variante persistente. Se requiere la contención inmediata de los segmentos de red afectados y un escaneo completo de la infraestructura.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo o servidor de administración de Kaspersky donde se centralizan los eventos."
+    },
+    {
+      "name": "DC",
+      "required": true,
+      "description": "Recuento de fuentes únicas (hosts/usuarios) infectados por la misma amenaza."
+    },
+    {
+      "name": "threat_name",
+      "required": false,
+      "description": "Nombre de la amenaza detectada por Kaspersky (ej. Trojan.Win32.Generic)."
+    }
+  ]
+}

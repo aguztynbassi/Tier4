@@ -1,0 +1,39 @@
+{
+  "name": "Indicator Blocking: Security Filter Driver Unloaded",
+  "description": "Detecta el uso del comando 'fltmc unload' para descargar drivers de filtro del sistema de archivos. Los adversarios con privilegios elevados utilizan esta técnica para deshabilitar la capacidad de monitoreo de herramientas de seguridad (EDRs, AVs, Sysmon) y evitar que sus acciones en el disco sean detectadas o bloqueadas. Es un paso común antes de ejecutar ataques de ransomware o exfiltración masiva de datos.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "impair_defenses",
+    "driver_unloading",
+    "fltmc",
+    "EDR_blindness",
+    "T1562.006",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD CRÍTICA: Sensor Deshabilitado! Se ha detectado la ejecución de **fltmc unload** en el host **{host}** por el usuario **{user}**. Esta acción intenta descargar el driver de filtro **{driver_name}**, lo que efectivamente desactiva el monitoreo de seguridad en tiempo real. Bajo la técnica de **Indicator Blocking** (**MITRE ATT&CK T1562.006**), este es un indicador de que un atacante está preparando el sistema para un ataque sin dejar rastro. Se recomienda la contención inmediata del equipo.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se intentó descargar el driver de filtro."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa utilizada (ej. fltmc unload SysmonDrv)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que ejecutó el comando (usualmente requiere privilegios de administrador)."
+    }
+  ]
+}

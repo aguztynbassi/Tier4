@@ -1,0 +1,54 @@
+[
+  {
+    "name": "DLL Load via LSASS Detected",
+    "description": "Detects the loading of a DLL into the LSASS process using an undocumented registry key. This is a highly suspicious activity, as it can allow an attacker to execute arbitrary code within the LSASS process, potentially leading to credential dumping and complete system compromise.",
+    "tags": [
+      "security",
+      "detection",
+      "windows",
+      "execution",
+      "boot or logon autostart execution",
+      "LSASS memory",
+      "modify registry",
+      "TA0002",
+      "T1547",
+      "T1547.008",
+      "T1112"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Highly suspicious DLL load into LSASS process detected via registry modification. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **Process Name** {process_name}, **Registry Key** {registry_key}, **Registry Value** {registry_value}. Investigate this critical event immediately as it may indicate an attempt at credential dumping or system compromise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "Sysmon Event ID for Registry value set or Registry key value set (e.g., 12 or 13)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The process that modified the registry."
+      },
+      {
+        "name": "registry_key",
+        "required": true,
+        "description": "The registry key that was modified."
+      },
+      {
+        "name": "registry_value",
+        "required": true,
+        "description": "The value set in the registry key."
+      }
+    ]
+  }
+]

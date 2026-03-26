@@ -1,0 +1,81 @@
+[
+  {
+    "name": "CMSTP.exe UAC Bypass via Elevated COM Object",
+    "description": "Detects a specific User Account Control (UAC) bypass technique leveraging `CMSTP.exe` (Connection Manager Profile Installer). This method abuses auto-elevated COM interfaces, typically hosted by `DllHost.exe`, to launch `CMSTP.exe` with elevated privileges without displaying a UAC prompt. Attackers use this to execute malicious payloads (often from `.INF` files) with administrative rights, facilitating privilege escalation and defense evasion against application whitelisting solutions.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "sysmon",
+      "execution",
+      "privilege_escalation",
+      "defense_evasion",
+      "signed_binary_proxy_execution",
+      "abuse_elevation_control_mechanism",
+      "lolbas",
+      "TA0002",
+      "TA0004",
+      "TA0005",
+      "T1218",
+      "T1218.003",
+      "T1548",
+      "T1548.002"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: CMSTP.exe UAC Bypass Detected!\\n\\n**A highly suspicious process creation chain indicating a potential User Account Control (UAC) bypass using `CMSTP.exe` has been detected on host '{ComputerName}' at {Timestamp}.** This is a strong indicator of **Privilege Escalation (TA0004)**, **Defense Evasion (TA0005)**, and **Execution (TA0002)**, specifically abusing **CMSTP (T1218.003)** and **Bypass User Account Control (T1548.002)**.\\n\\n**Incident Details:**\\n* **Timestamp**: {Timestamp}\\n* **Event ID**: {EventID} (Sysmon EventID 1: Process Creation)\\n* **Child Process**: '{Image}'\\n* **Child Command Line**: `{CommandLine}`\\n* **Parent Process**: '{ParentImage}'\\n* **Parent Command Line**: `{ParentCommandLine}`\\n* **User Context**: '{User}'\\n* **Affected Host**: '{ComputerName}'\\n* **Rule Name**: {RuleName}\\n\\nThis alert is triggered by `CMSTP.exe` being launched by `DllHost.exe`, where `DllHost.exe`'s command line contains specific COM object GUIDs (e.g., `{3E5FC7F9-9A51-4367-9063-A120244FBEC7}`). This is a known UAC bypass technique that allows adversaries to execute arbitrary code (often embedded in an `.INF` file specified in CMSTP's command line) with administrative privileges without a UAC prompt. This effectively elevates a low-privileged process to high integrity.\\n\\n**IMMEDIATE RECOMMENDED ACTIONS (HIGH PRIORITY - INVESTIGATE URGENTLY!):**\\n\\n1.  **ANALYZE CMSTP COMMAND LINE & INF FILE:** Examine the `CommandLine` (`{CommandLine}`) of `cmstp.exe`. It will likely point to an `.INF` file. **Immediately retrieve a copy of this `.INF` file for analysis** in a safe environment. This file contains the malicious commands that `cmstp.exe` will execute. \\n2.  **INVESTIGATE PARENT PROCESS & UAC CONTEXT:** \\n    * Confirm `DllHost.exe` as the parent and the presence of the specified COM GUIDs in `ParentCommandLine` (`{ParentCommandLine}`). This confirms the UAC bypass attempt.\\n    * What process launched `DllHost.exe`? Trace the process lineage back to the initial execution point. This will help identify the initial compromise vector.\\n    * Although the user is '{User}', the execution context should be elevated due to the bypass. Confirm the integrity level of the `cmstp.exe` process.\\n3.  **CHECK FOR SUBSEQUENT PROCESSES:** Look for any child processes spawned by `cmstp.exe` immediately after this event. The `.INF` file typically causes `cmstp.exe` to launch a new process (e.g., `powershell.exe`, `cmd.exe`, `rundll32.exe`) with elevated privileges. Investigate these processes thoroughly.\\n4.  **ENDPOINT FORENSICS:** Perform a full forensic analysis on '{ComputerName}' to understand the full scope of the compromise, identify any dropped malware, persistence mechanisms, and lateral movement attempts that might have occurred with elevated privileges.\\n5.  **REVIEW APPLICATION WHITELISTING/UAC POLICIES:** If application whitelisting is in place, review its effectiveness against this bypass. Re-evaluate UAC policies to potentially mitigate similar techniques.\\n6.  **ESCALATE TO INCIDENT RESPONSE LEADERSHIP:** This is a confirmed critical security incident involving privilege escalation. Immediately escalate to your incident response team leadership for coordinated action.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Sysmon Event ID (expected to be 1 for Process Creation)."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to the child executable (expected to be `cmstp.exe`)."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line arguments of `cmstp.exe`, likely including the path to an `.INF` file."
+      },
+      {
+        "name": "ParentImage",
+        "required": true,
+        "description": "The full path to the parent executable (expected to be `DllHost.exe`)."
+      },
+      {
+        "name": "ParentCommandLine",
+        "required": true,
+        "description": "The full command line of `DllHost.exe`, containing the specific COM GUIDs."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the process ran."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the event occurred."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]

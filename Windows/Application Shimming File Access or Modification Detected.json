@@ -1,0 +1,57 @@
+[
+  {
+    "name": "Application Shimming File Access or Modification Detected",
+    "description": "Detects suspicious file accesses or modifications to Application Shimming database files (`.sdb`) and associated registry keys, or the execution of `sdbinst.exe`. Adversaries can leverage Windows Application Shimming for persistence, privilege escalation, and defense evasion by installing custom shim databases that can redirect execution or inject DLLs into processes.",
+    "tags": [
+      "security",
+      "persistence",
+      "privilege_escalation",
+      "defense_evasion",
+      "T1546",
+      "T1546.011",
+      "sysmon",
+      "windows_processes",
+      "windows_registry"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A critical security event has been detected on the host **{computer_name}**: suspicious activity related to **Application Shimming** (**MITRE ATT&CK T1546.011**) has occurred. The process **{image}**, running under user **{user}**, either executed `sdbinst.exe` with the command line **{command_line}**, or a malicious shim database file (`.sdb`) was created or modified at **{target_filename}**, or a related registry key was modified at **{target_object}**. This technique is a known method for achieving **persistence**, **privilege escalation**, and **defense evasion**. The use of Application Shimming for non-legitimate purposes is highly malicious. Immediate investigation is required to determine the purpose of this activity. Treat this as a confirmed security incident until proven otherwise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "image",
+        "required": false,
+        "description": "The process that performed the activity, if a process creation event was detected."
+      },
+      {
+        "name": "command_line",
+        "required": false,
+        "description": "The command line of the sdbinst.exe process."
+      },
+      {
+        "name": "target_filename",
+        "required": false,
+        "description": "The path to the SDB file that was created or modified."
+      },
+      {
+        "name": "target_object",
+        "required": false,
+        "description": "The registry key that was modified."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the activity occurred."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      }
+    ]
+  }
+]

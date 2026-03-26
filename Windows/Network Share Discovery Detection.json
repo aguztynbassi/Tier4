@@ -1,0 +1,38 @@
+{
+  "name": "Discovery: Network Share Enumeration Detected",
+  "description": "Detecta el uso de herramientas legítimas del sistema como net.exe y cmdlets de PowerShell para listar recursos compartidos en la red. Los adversarios utilizan estos comandos para identificar servidores de archivos, backups y otros activos críticos que puedan ser explotados o utilizados para propagar ransomware y malware dentro de la red interna.",
+  "tags": [
+    "security",
+    "discovery",
+    "network_enumeration",
+    "smb_shares",
+    "lateral_movement_prep",
+    "T1135",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE RECONOCIMIENTO: Enumeración de Recursos Compartidos! Se ha detectado la ejecución del comando **{command}** en el host **{host}**. Bajo la técnica de **Network Share Discovery** (**MITRE ATT&CK T1135**), este comportamiento suele ser un precursor del movimiento lateral o la exfiltración de datos. Se recomienda investigar si el usuario **{user}** tiene razones operativas para realizar este descubrimiento.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se ejecutó el comando de descubrimiento."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa (ej. net view, net share o Get-SmbShare)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la consulta de red."
+    }
+  ]
+}

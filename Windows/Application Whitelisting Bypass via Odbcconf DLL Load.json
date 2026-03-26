@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Application Whitelisting Bypass via Odbcconf DLL Load",
+    "description": "Detects suspicious execution of `odbcconf.exe`, a legitimate Windows utility, abused to bypass application whitelisting and execute arbitrary DLLs. Adversaries leverage `odbcconf.exe` as a trusted, signed binary to proxy code execution while evading security controls.",
+    "tags": [
+      "security",
+      "defense_evasion",
+      "execution",
+      "proxy_execution",
+      "T1218",
+      "T1218.008",
+      "lolbas",
+      "sysmon",
+      "windows_processes"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A critical alert has been triggered on the host **{computer_name}**: the process `odbcconf.exe` executed the command line **{command_line}**, which contains patterns indicative of **Signed Binary Proxy Execution** (**MITRE ATT&CK T1218.008**). This technique is a known method for bypassing application whitelisting and executing arbitrary code. The parent process was **{parent_image}** and the user was **{user}**. While `odbcconf.exe` is a legitimate tool, its use to load DLLs from suspicious locations is highly malicious. Immediate investigation is required to determine the legitimacy of this activity and the purpose of the DLL being loaded. This is a high-confidence alert for a security incident.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line that includes arguments for odbcconf.exe."
+      },
+      {
+        "name": "parent_image",
+        "required": true,
+        "description": "The parent process that launched odbcconf.exe."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process ran."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      }
+    ]
+  }
+]

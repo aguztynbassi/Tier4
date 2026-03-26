@@ -1,0 +1,30 @@
+{
+    "name": "RDP Connection Inititated from Suspicious Country",
+    "description": "Initiation of RDP connection from a domain controller is detected.",
+    "tags": [
+        "TA0005",
+        "TA0003",
+        "TA0004",
+        "TA0001",
+        "T1078",
+        "T1078.002",
+        "security",
+        "detection",
+        "Windows"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the security event: 'RDP Connection Inititated from Suspicious Country'. Event details: {event_details}",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "event_details",
+            "required": true,
+            "description": "Details of the detected security event, including the original query information: `norm_id=WinServer event_source=\"Microsoft-Windows-TerminalServices-RemoteConnectionManager\" event_id=1149 -eventxml.param3 IN HOMENET | rename eventxml.param3 as source_address | process geoip(source_address) as country | search country IN SUSPICIOUS_COUNTRY`."
+        }
+    ]
+}

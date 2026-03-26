@@ -1,0 +1,37 @@
+{
+  "name": "RDP Sensitive Settings Changed",
+  "description": "Detecta modificaciones en claves críticas del registro relacionadas con el servicio de Terminal Services (RDP). Esto incluye la habilitación de conexiones remotas, la configuración de sesiones concurrentes por usuario y la alteración de la ruta de la DLL del servicio, acciones típicas de un adversario para facilitar el acceso persistente o evadir controles de seguridad.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "rdp_configuration",
+    "registry_monitoring",
+    "T1036",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Modificación de Configuración Crítica! Se ha detectado un cambio en los parámetros sensibles de RDP en el host **{host}**. El objeto modificado fue **{target_object}**. Este cambio podría habilitar conexiones remotas previamente denegadas (`fDenyTSConnections`) o alterar la biblioteca del servicio (`ServiceDll`), lo cual es un indicador de la técnica **Masquerading** (**MITRE ATT&CK T1036**) o preparación para movimiento lateral. El evento fue realizado por el usuario **{user}**. Se recomienda revertir el cambio inmediatamente y auditar los logs de inicio de sesión RDP para detectar accesos no autorizados.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se modificó el registro."
+    },
+    {
+      "name": "target_object",
+      "required": true,
+      "description": "La clave o valor del registro específico que fue alterado."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que realizó la modificación en el registro."
+    }
+  ]
+}

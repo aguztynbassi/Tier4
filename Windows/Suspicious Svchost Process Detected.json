@@ -1,0 +1,37 @@
+{
+  "name": "Suspicious Svchost Process Detected",
+  "description": "Detection of a suspicious `svchost.exe` process that is not a child of `services.exe`. This is a strong indicator of an adversary attempting to masquerade as a legitimate system process to evade security defenses and establish persistence.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "masquerading",
+    "T1036",
+    "T1036.005",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a suspicious process, **`svchost.exe`**, was launched by an unexpected parent process, **{parent_image}**. This is a strong indicator of **Masquerading** (**MITRE ATT&CK T1036.005**) and an attempt at **Defense Evasion**. Legitimate `svchost.exe` processes should almost always be a child of `services.exe`. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious process. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "parent_image",
+      "required": true,
+      "description": "The name of the parent process."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

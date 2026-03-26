@@ -1,0 +1,38 @@
+{
+  "name": "PowerShell Network Connections Detected",
+  "description": "Detecta procesos de PowerShell que inician conexiones de red hacia destinos externos al entorno local, operando bajo privilegios de SYSTEM. Este comportamiento es un fuerte indicador de balizamiento (beaconing), descarga de payloads adicionales o exfiltración de información sensible tras un compromiso inicial del sistema.",
+  "tags": [
+    "security",
+    "execution",
+    "command_and_control",
+    "powershell_network",
+    "beaconing",
+    "T1059.001",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Conexión Sospechosa de PowerShell! Se ha detectado que **powershell.exe** ha iniciado una conexión de red desde el host **{host}** hacia la dirección externa **{destination_address}** en el puerto **{destination_port}**. El proceso se está ejecutando como **SYSTEM**, lo cual aumenta significativamente el riesgo de compromiso total. Bajo la técnica de **PowerShell** (**MITRE ATT&CK T1059.001**), este tráfico suele estar vinculado a la descarga de malware o comunicación con servidores C2. Se recomienda bloquear la IP de destino y analizar los scripts de PowerShell ejecutados recientemente en el host afectado.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde PowerShell inició la conexión."
+    },
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "La dirección IP externa hacia la cual se dirigió el tráfico."
+    },
+    {
+      "name": "destination_port",
+      "required": true,
+      "description": "El puerto de destino utilizado (ej. 80, 443, 8080)."
+    }
+  ]
+}

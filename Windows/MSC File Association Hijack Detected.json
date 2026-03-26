@@ -1,0 +1,51 @@
+[
+  {
+    "name": "MSC File Association Hijack Detected",
+    "description": "Detecta la modificación sospechosa de la asociación de archivos por defecto para los archivos de Microsoft Management Console (.msc). Esta técnica es utilizada por adversarios para lograr persistencia o ejecutar código arbitrario modificando las claves de registro bajo 'HKEY_CLASSES_ROOT\\mscfile'.",
+    "tags": [
+      "security",
+      "persistence",
+      "defense_evasion",
+      "execution",
+      "T1546",
+      "T1546.001",
+      "sysmon",
+      "windows_registry"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Se ha detectado una modificación de registro crítica en un host de Windows: el valor de la clave 'HKEY_CLASSES_ROOT\\mscfile\\...' ha sido alterado para apuntar a un ejecutable malicioso como `powershell.exe`, `cmd.exe` o un script. Este evento indica un posible **secuestro de la asociación de archivos MSC**, una técnica de persistencia documentada en la matriz **MITRE ATT&CK (T1546.001)**. El evento de registro (Sysmon Event ID 13) muestra que el proceso **{image}** modificó la clave **{target_object}** con el valor **{details}** bajo el contexto del usuario **{user}** en el host **{computer_name}**. Se recomienda investigar de inmediato el proceso y el usuario involucrados, y revertir la clave de registro a su valor legítimo por defecto (`mmc.exe`).",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "image",
+        "required": true,
+        "description": "El proceso que modificó el registro."
+      },
+      {
+        "name": "target_object",
+        "required": true,
+        "description": "La ruta completa a la clave/valor de registro modificada."
+      },
+      {
+        "name": "details",
+        "required": true,
+        "description": "El nuevo valor establecido en el registro."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "El contexto de usuario del proceso que realizó el cambio."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "El nombre del equipo donde ocurrió el evento."
+      }
+    ]
+  }
+]

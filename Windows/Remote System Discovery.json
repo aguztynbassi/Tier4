@@ -1,0 +1,41 @@
+{
+    "name": "Remote System Discovery",
+    "description": "Remote system discovery using a system utility like `ping`, `nslookup`, or `net.exe` is detected. Adversaries may use these utilities to discover systems on the network. This detection is triggered when an unusual number of discovery commands are executed from a single host, which could indicate a reconnaissance phase of an attack. It's often followed by lateral movement or other malicious activities. This prompt helps investigate the source of the discovery activity and determine if it's a legitimate administrative task or a malicious reconnaissance.",
+    "tags": [
+        "TA0007",
+        "T1018",
+        "security",
+        "detection",
+        "Windows"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the remote system discovery activity from host `{hostname}` at `{timestamp}`. The command line detected was `{command_line}` executed by the user `{user_name}`. Determine if this is a legitimate administrative action or a malicious reconnaissance attempt. Provide a summary of your findings, including the number of hosts scanned and the outcome of the discovery. Recommend immediate containment and remediation steps.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname of the system where the discovery activity was detected."
+        },
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        },
+        {
+            "name": "command_line",
+            "required": true,
+            "description": "The full command line of the process (e.g., ping, nslookup, net.exe)."
+        },
+        {
+            "name": "user_name",
+            "required": true,
+            "description": "The user account under which the process was executed."
+        }
+    ]
+}

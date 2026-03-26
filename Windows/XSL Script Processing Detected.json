@@ -1,0 +1,43 @@
+{
+  "name": "XSL Script Processing Detected",
+  "description": "Detecta intentos de bypass de control de aplicaciones mediante la ejecución de scripts embebidos en archivos XSL (Extensible Stylesheet Language). Incluye la detección de 'Squiblytwo', donde se utiliza WMIC para invocar scripts maliciosos, y el uso de la utilidad msxsl.exe para ejecutar código arbitrario.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "squiblytwo",
+    "wmic",
+    "msxsl",
+    "T1220",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Evasión de Defensas! Se ha detectado un posible ataque de **XSL Script Processing** en el host **{host}**. El proceso **{process}** fue ejecutado con la línea de comandos: **{command}**. Este comportamiento indica un intento de ejecutar scripts ocultos en archivos de hojas de estilo para evadir listas blancas de aplicaciones (**MITRE ATT&CK T1220**). El evento fue generado por el usuario **{user}**. Se recomienda investigar la procedencia del archivo XSL referenciado y auditar cualquier conexión de red saliente iniciada por WMIC o MSXSL.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del sistema donde se detectó el procesamiento del script XSL."
+    },
+    {
+      "name": "process",
+      "required": true,
+      "description": "El binario utilizado para la ejecución (wmic.exe o msxsl.exe)."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que incluye el parámetro /format o la llamada al archivo XSL."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que ejecutó el comando."
+    }
+  ]
+}

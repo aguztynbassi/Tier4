@@ -1,0 +1,38 @@
+{
+  "name": "SolarisLDAP User Account Lockout Detected",
+  "description": "Detects a user account lockout event in Solaris LDAP. Account lockouts can be a sign of an adversary attempting to brute-force a password, a legitimate user with a forgotten password, or a misconfigured service attempting to authenticate with incorrect credentials. This is a common reconnaissance and defense evasion technique.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "privilege_escalation",
+    "brute_force",
+    "T1078",
+    "T1548",
+    "solaris_ldap"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "An alert has been triggered on the host **{host}**: a user account, **{user}**, has been locked out in Solaris LDAP. This event is a strong indicator of a **Brute-Force Attack** or an attempt to bypass security controls. Immediate investigation is required to determine the cause of the lockout and to secure the affected account. The event occurred at **{log_ts}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The name of the user account that was locked out."
+    },
+    {
+      "name": "log_ts",
+      "required": true,
+      "description": "The timestamp of the event."
+    }
+  ]
+}

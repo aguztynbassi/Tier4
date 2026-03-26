@@ -1,0 +1,41 @@
+{
+  "name": "Suspicious Remote Thread Created",
+  "description": "Detection of suspicious processes creating remote threads in other processes. This technique is often used by malware to inject code, hide malicious activity within a legitimate process, and achieve privilege escalation. The event provides information on the source and target process, as well as the code that will run in the new thread.",
+  "tags": [
+    "security",
+    "privilege_escalation",
+    "process_injection",
+    "T1055",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a suspicious process, **{source_image}**, created a remote thread in the target process **{target_image}**. The event indicates that malicious code may have been injected into the target process. This is a strong indicator of **Process Injection** (**MITRE ATT&CK T1055**) and an attempt at **Privilege Escalation**. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious code. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "source_image",
+      "required": true,
+      "description": "The process image that created the remote thread."
+    },
+    {
+      "name": "target_image",
+      "required": true,
+      "description": "The process image where the remote thread was created."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

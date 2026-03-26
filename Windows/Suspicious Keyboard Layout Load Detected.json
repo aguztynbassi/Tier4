@@ -1,0 +1,41 @@
+{
+  "name": "Suspicious Keyboard Layout Load Detected",
+  "description": "Detection of the installation or loading of a suspicious keyboard layout. Adversaries may use a custom or foreign keyboard layout to execute commands or scripts that would not be detected by standard security tools, which is a common defense evasion technique.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "masquerading",
+    "T1036",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "An alert has been triggered on the host **{host}**: a suspicious keyboard layout was loaded into the registry. The target object is **{target_object}**, and the suspicious detail is **{detail}**. This is a strong indicator of **Defense Evasion** (**MITRE ATT&CK T1036**), where an adversary is attempting to use a custom or foreign keyboard layout to execute malicious code. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious registry entry. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "target_object",
+      "required": true,
+      "description": "The full path of the registry key that was modified."
+    },
+    {
+      "name": "detail",
+      "required": true,
+      "description": "The value written to the registry key."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

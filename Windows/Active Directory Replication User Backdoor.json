@@ -1,0 +1,46 @@
+[
+  {
+    "name": "Active Directory Replication User Backdoor (DCSync Permissions)",
+    "description": "Detects a potential Active Directory backdoor where the `nTSecurityDescriptor` attribute of a domain object is modified to grant Active Directory replication permissions to a user or computer account. This modification enables the granted account to perform DCSync attacks, allowing an adversary to extract credential hashes for all domain users.",
+    "tags": [
+      "security",
+      "persistence",
+      "defense_evasion",
+      "credential_access",
+      "T1222",
+      "T1003.003",
+      "DCSync",
+      "windows_ad"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A critical alert has been triggered on the Domain Controller **{computer_name}**: the **`nTSecurityDescriptor`** attribute on the Active Directory object **{object_dn}** was modified by the user **{subject_user_name}**. The change includes the addition of one or more of the following replication permissions: `Replicating Directory Changes` or `Replicating Directory Changes All`, indicated by the GUID(s) in the `AttributeValue` of **{attribute_value}**. This highly suspicious activity is a known technique for creating a **DCSync backdoor** (**MITRE ATT&CK T1003.003**), which allows an attacker to steal all domain user credentials. Immediate action is required to investigate the legitimacy of this change and to revoke the permissions. This is a high-confidence alert for a severe security incident and should be treated as a confirmed compromise until proven otherwise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "subject_user_name",
+        "required": true,
+        "description": "The user account that initiated the modification."
+      },
+      {
+        "name": "object_dn",
+        "required": true,
+        "description": "The distinguished name of the Active Directory object whose permissions were modified."
+      },
+      {
+        "name": "attribute_value",
+        "required": true,
+        "description": "The value of the `nTSecurityDescriptor` attribute, containing the GUIDs of the replication rights."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The hostname of the Domain Controller where the event occurred."
+      }
+    ]
+  }
+]

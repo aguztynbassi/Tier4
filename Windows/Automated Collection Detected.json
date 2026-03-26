@@ -1,0 +1,37 @@
+{
+  "name": "Automated Collection Detected",
+  "description": "Detecta el uso de scripts y comandos automatizados (PowerShell, WMIC, CMD) diseñados para recopilar información del sistema de forma masiva. Esta actividad incluye la búsqueda recursiva de archivos, listado de procesos y servicios, y la copia sistemática de datos, lo cual es indicativo de la fase de Recolección de un adversario.",
+  "tags": [
+    "security",
+    "collection",
+    "automation",
+    "powershell",
+    "T1119",
+    "windows_server"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "Se ha detectado una posible **Recolección Automatizada de Datos** en el host **{host}**. El log de PowerShell (EventID 4104) registró la ejecución del siguiente bloque de script sospechoso: **{command}**. Este script utiliza comandos como `Get-ChildItem -Recurse` o `wmic` para enumerar sistemáticamente recursos del sistema, lo cual coincide con la técnica **MITRE ATT&CK T1119**. El evento fue generado por el usuario **{user}**. Se recomienda investigar si se han exfiltrado archivos o si se trata de un script de inventario legítimo pero inusualmente agresivo.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del servidor o estación de trabajo donde se ejecutó el script."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "El contenido del bloque de script o comando detectado por el registro de eventos."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que ejecutó la tarea de recolección."
+    }
+  ]
+}

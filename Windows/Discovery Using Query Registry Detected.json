@@ -1,0 +1,39 @@
+{
+  "name": "Discovery: Registry Enumeration via Reg Query",
+  "description": "Detecta la ejecución del comando 'reg query' para consultar llaves y valores del Registro de Windows. Los adversarios utilizan esta técnica para recolectar información sobre la configuración del sistema, software instalado, parches de seguridad faltantes, configuraciones de red y posibles secretos o credenciales almacenados de forma insegura en el registro.",
+  "tags": [
+    "security",
+    "discovery",
+    "reconnaissance",
+    "registry_discovery",
+    "enumeration",
+    "lolbins",
+    "T1012",
+    "win_server_event"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE RECONOCIMIENTO: Consulta de Registro Detectada! El usuario **{user}** ha ejecutado el comando **{command}** en el host **{host}**. Bajo la técnica de **Query Registry** (**MITRE ATT&CK T1012**), este comportamiento indica una búsqueda activa de configuraciones sensibles o vulnerabilidades en el sistema. Se requiere validar la legitimidad de esta operación.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se realizó la consulta del Registro de Windows."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa ejecutada (ej. reg query HKLM\\Software\\...). "
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que inició la actividad de descubrimiento en el registro."
+    }
+  ]
+}

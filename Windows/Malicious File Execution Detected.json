@@ -1,0 +1,40 @@
+{
+  "name": "Execution: Malicious Scripting via WSH (wscript/cscript)",
+  "description": "Detecta la ejecución de scripts sospechosos (.jse, .vbe, .js, .vba) utilizando los motores legítimos de Windows Script Host. Los atacantes utilizan estas extensiones para evadir filtros de correo y ejecutar payloads ofuscados que inician la cadena de infección, a menudo realizando conexiones de red para descargar malware adicional o estableciendo persistencia mediante cambios en el registro.",
+  "tags": [
+    "security",
+    "execution",
+    "windows_script_host",
+    "wscript",
+    "cscript",
+    "vbs_malware",
+    "obfuscation",
+    "T1059",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EJECUCIÓN SOSPECHOSA: Script Malicioso detectado! Se ha detectado que **{image}** está ejecutando el archivo **{command}** en el host **{host}**. Bajo la técnica de **Command and Scripting Interpreter** (**MITRE ATT&CK T1059**), esto sugiere un intento de ejecución de código malicioso mediante Windows Script Host. Se requiere el análisis inmediato del script y el aislamiento del host.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se inició la ejecución del script."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "La ruta del intérprete utilizado (wscript.exe o cscript.exe)."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que incluye la ruta al archivo de script sospechoso."
+    }
+  ]
+}

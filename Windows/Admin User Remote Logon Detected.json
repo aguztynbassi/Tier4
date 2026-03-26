@@ -1,0 +1,45 @@
+[
+  {
+    "name": "Admin User Remote Logon Detected",
+    "description": "Detects a successful remote logon (logon type 10) using the Negotiate authentication package by administrative users whose names follow the 'Admin-*' pattern. This could indicate a legitimate administrative activity or an attacker using a compromised administrative account.",
+    "tags": [
+      "security",
+      "initial_access",
+      "persistence",
+      "privilege_escalation",
+      "defense_evasion",
+      "T1078",
+      "windows_logon"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A successful remote logon (type 10) was detected on the host **{workstation_name}**. The logon was performed by an administrative user, **{target_user_name}**, from the IP address **{ip_address}**. The authentication package used was **{authentication_package_name}**. This activity is a potential indicator of **Initial Access** or **Lateral Movement** using a valid administrative account (**MITRE ATT&CK T1078**). While this may be a legitimate administrative action, it is also a common technique for adversaries. Immediate verification of this logon with the user or IT administrator is required to confirm its legitimacy. This event should be treated as a high-priority alert until a benign explanation is confirmed.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "target_user_name",
+        "required": true,
+        "description": "The administrative user account that logged on remotely."
+      },
+      {
+        "name": "ip_address",
+        "required": true,
+        "description": "The source IP address from which the logon originated."
+      },
+      {
+        "name": "authentication_package_name",
+        "required": true,
+        "description": "The authentication package used for the logon."
+      },
+      {
+        "name": "workstation_name",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      }
+    ]
+  }
+]

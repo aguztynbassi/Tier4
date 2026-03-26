@@ -1,0 +1,55 @@
+{
+  "name": "SMB Data Exfiltration Detected",
+  "description": "A large file transfer over SMB has been detected, which could indicate data exfiltration attempts.",
+  "tags": [
+    "security",
+    "detection",
+    "high",
+    "network",
+    "data_exfiltration",
+    "smb",
+    "large_transfer",
+    "TA0010",
+    "T1048.002"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "HIGH SEVERITY ALERT: SMB Data Exfiltration Detected.\\n\\nA large SMB transfer of {bytes_transferred} bytes was observed from '{source_address}' to '{destination_address}' by user '{user}' (if available) at {Timestamp}. The transferred file name was '{file_name}' (if available). This unusually large transfer volume may indicate a data exfiltration attempt.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Source Address**: {source_address}\\n* **Destination Address**: {destination_address}\\n* **User**: {user} (if available)\\n* **File Name**: {file_name} (if available)\\n* **Bytes Transferred**: {bytes_transferred}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY):**\\n\\n1.  **IMMEDIATE NETWORK ISOLATION/BLOCK:** If the destination is an external or untrusted host, immediately block SMB traffic to/from '{destination_address}' at your network perimeter. If the source host is internal and appears compromised, consider isolating it from the network.\\n2.  **VERIFY LEGITIMACY:** Contact the user '{user}' (if identified) and relevant system owners for '{source_address}' and '{destination_address}' to determine if this large file transfer was legitimate and authorized. **Assume malicious intent unless definitively proven otherwise** by documented and expected operational activity.\\n3.  **FILE CONTENT ANALYSIS:** If the '{file_name}' is available, and it's safe to do so, obtain a copy of the file for analysis. Examine its content, type, and sensitivity. Look for PII, financial data, intellectual property, or other sensitive information.\\n4.  **INVESTIGATE SOURCE AND DESTINATION:** Investigate both '{source_address}' and '{destination_address}'. Check their compromise status, recent activity, and network connections. Is the destination an unusual location for such a transfer?\\n5.  **USER ACCOUNT INVESTIGATION:** If a user is identified, investigate '{user}' for signs of account compromise (e.g., unusual login times, failed authentication attempts, activity on other machines). Consider forcing a password reset and enforcing Multi-Factor Authentication (MFA).\\n6.  **FORENSIC ANALYSIS:** Conduct a thorough forensic analysis of the source host ({source_address}) to identify any malware, persistence mechanisms, or other indicators of compromise related to the suspected exfiltration.\\n7.  **THREAT HUNT:** Search your environment for other large SMB transfers, especially to external destinations or from unusual source systems. Look for similar file names or user activities.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of the SMB transfer."
+    },
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "The source IP address of the SMB transfer."
+    },
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "The destination IP address of the SMB transfer."
+    },
+    {
+      "name": "user",
+      "required": false,
+      "description": "The user account involved in the SMB transfer, if available."
+    },
+    {
+      "name": "file_name",
+      "required": false,
+      "description": "The name of the file transferred via SMB, if available."
+    },
+    {
+      "name": "bytes_transferred",
+      "required": true,
+      "description": "The amount of bytes transferred during the SMB connection."
+    }
+  ]
+}

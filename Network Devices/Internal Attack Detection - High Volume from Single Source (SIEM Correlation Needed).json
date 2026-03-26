@@ -1,0 +1,113 @@
+{
+  "name": "Internal Attack Detection - High Volume from Single Source (SIEM Correlation Needed)",
+  "description": "Detects a high number of attack or intrusion alerts originating from the same internal source IP and targeting the same internal destination IP within a short timeframe, indicating lateral movement, a compromised host, or an insider threat.",
+  "tags": [
+    "security",
+    "detection",
+    "high",
+    "network",
+    "firewall",
+    "ids_ips",
+    "ndr",
+    "lateral_movement",
+    "internal_threat",
+    "compromised_host",
+    "network_attack",
+    "execution",
+    "discovery",
+    "impact",
+    "TA0008",
+    "TA0002",
+    "TA0007",
+    "TA0040",
+    "T1021",
+    "T1046",
+    "T1498",
+    "T1499"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "HIGH SEVERITY ALERT: Internal Attack Detected - High Volume from Single Source!\\n\\n**A high volume of internal attack patterns ({SIEM_COUNT_OF_EVENTS} events) originating from '{SourceIp}' and targeting '{DestinationIp}' has been detected within the last {SIEM_TIMEFRAME} at {Timestamp}.** This is a strong indicator of **Lateral Movement (TA0008)**, a **compromised host** actively spreading threats, or potentially an **insider threat**.\\n\\n**Event Details (from SIEM correlation):**\\n* **Timestamp of First Event**: {SIEM_FIRST_EVENT_TIMESTAMP}\\n* **Timestamp of Last Event**: {SIEM_LAST_EVENT_TIMESTAMP}\\n* **Attacking Source IP**: {SourceIp}\\n* **Targeted Destination IP**: {DestinationIp}\\n* **Number of Attacks Detected**: {SIEM_COUNT_OF_EVENTS}\\n* **Time Window**: {SIEM_TIMEFRAME}\\n* **Example Attack Type**: {AttackType} (e.g., 'SQL Injection', 'Shellcode', 'Port Scan')\\n* **Protocol**: {Protocol}\\n* **Destination Port**: {DestinationPort}\\n* **Action**: {Action} (e.g., 'detected', 'alerted', 'intrusion')\\n* **Reporting Device**: {DeviceName} (Rule ID: {RuleId})\\n* **Rule Name**: {RuleName}\\n\\nThis incident represents a significant internal security breach. Immediate containment and investigation are critical to prevent further damage.\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** Isolate '{SourceIp}' from the network immediately. If '{DestinationIp}' is a critical asset or also showing signs of compromise, consider its isolation as well.\\n2.  **FORENSIC ACQUISITION & ANALYSIS:** \\n    * Begin forensic acquisition (disk and memory) of '{SourceIp}' to identify the malware, tools, or methods used for the internal attack. \\n    * Simultaneously, analyze '{DestinationIp}' for signs of successful compromise (e.g., new processes, modified files, unusual network connections).\\n3.  **NETWORK TRAFFIC ANALYSIS:** Review detailed network flow data and IDS/IPS logs related to traffic between '{SourceIp}' and '{DestinationIp}' for the full scope of the attack patterns and targeted ports/services.\\n4.  **IDENTIFY ROOT CAUSE:** Determine how '{SourceIp}' was initially compromised. Was it via a phishing email, vulnerable external service, or another internal infection? \\n5.  **THREAT HUNTING:** Based on the detected `AttackType` and any IOCs found during initial analysis, actively hunt for similar activity or presence of compromise on other internal systems. This indicates potential **Lateral Movement (TA0008)** across your network.\\n6.  **CREDENTIAL COMPROMISE CHECK:** If lateral movement is confirmed, investigate for credential theft on '{SourceIp}' that may have enabled access to '{DestinationIp}'. Consider resetting credentials for any accounts used on '{SourceIp}'.\\n7.  **SEGMENTATION REVIEW:** Assess your internal network segmentation. Were these two hosts in the same segment? Should they have been able to communicate with these attack patterns? Implement or enhance segmentation as needed.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of one of the internal attack events (e.g., the most recent one)."
+    },
+    {
+      "name": "SourceIp",
+      "required": true,
+      "description": "The source IP address of the attacking internal host."
+    },
+    {
+      "name": "DestinationIp",
+      "required": true,
+      "description": "The destination IP address of the targeted internal host."
+    },
+    {
+      "name": "SourcePort",
+      "required": false,
+      "description": "The source port of the connection associated with the attack, if available."
+    },
+    {
+      "name": "DestinationPort",
+      "required": false,
+      "description": "The destination port of the connection associated with the attack, if available."
+    },
+    {
+      "name": "Protocol",
+      "required": false,
+      "description": "The network protocol used in the attack (e.g., TCP, UDP), if available."
+    },
+    {
+      "name": "AttackType",
+      "required": true,
+      "description": "The name/type of the detected attack signature/pattern (e.g., 'SQL Injection', 'Shellcode')."
+    },
+    {
+      "name": "Action",
+      "required": true,
+      "description": "The action taken by the security device (e.g., 'detected', 'alerted', 'intrusion')."
+    },
+    {
+      "name": "RuleId",
+      "required": false,
+      "description": "The ID of the IDS/IPS rule that triggered the alert, if available."
+    },
+    {
+      "name": "DeviceName",
+      "required": false,
+      "description": "The name of the IDS/IPS device reporting the alert, if available."
+    },
+    {
+      "name": "RuleName",
+      "required": false,
+      "description": "The name of the Sigma rule that triggered the event, if applicable."
+    },
+    {
+      "name": "SIEM_COUNT_OF_EVENTS",
+      "required": true,
+      "description": "The count of internal attack events aggregated by the SIEM (e.g., 15)."
+    },
+    {
+      "name": "SIEM_TIMEFRAME",
+      "required": true,
+      "description": "The time window over which the events were counted (e.g., '5 minutes')."
+    },
+    {
+      "name": "SIEM_FIRST_EVENT_TIMESTAMP",
+      "required": true,
+      "description": "The timestamp of the first event in the correlated group."
+    },
+    {
+      "name": "SIEM_LAST_EVENT_TIMESTAMP",
+      "required": true,
+      "description": "The timestamp of the last event in the correlated group."
+    }
+  ]
+}

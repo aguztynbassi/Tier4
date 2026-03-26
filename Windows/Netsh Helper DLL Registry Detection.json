@@ -1,0 +1,38 @@
+{
+  "name": "Persistence: Netsh Helper Registry Modification",
+  "description": "Detecta la creación, modificación o renombrado de llaves de registro dentro de la ruta de Netsh. Los atacantes manipulan estas llaves para registrar DLLs maliciosas (helpers) que se cargan automáticamente en el proceso netsh.exe, permitiendo la ejecución de código persistente y la evasión de defensas al operar bajo un binario legítimo de Windows.",
+  "tags": [
+    "security",
+    "persistence",
+    "registry_integrity",
+    "netsh_helper",
+    "stealth_persistence",
+    "T1546.007",
+    "sysmon_registry"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE PERSISTENCIA: Modificación de Registro Netsh! Se ha detectado una alteración en la llave de configuración de Netsh (**{target_object}**) en el host **{host}**. Bajo la técnica de **Netsh Helper DLL** (**MITRE ATT&CK T1546.007**), esto indica el registro de un nuevo módulo de ayuda que garantiza la persistencia del atacante. Es urgente verificar la procedencia de la DLL registrada y el proceso responsable del cambio.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la manipulación del registro de Netsh."
+    },
+    {
+      "name": "target_object",
+      "required": true,
+      "description": "La ruta específica de la llave de registro que fue modificada o creada."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la acción sobre el registro."
+    }
+  ]
+}

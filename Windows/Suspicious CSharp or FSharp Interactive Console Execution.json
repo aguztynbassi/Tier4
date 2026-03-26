@@ -1,0 +1,41 @@
+{
+  "name": "Suspicious CSharp or FSharp Interactive Console Execution",
+  "description": "Detection of the execution of CSharp or FSharp interactive consoles (`csi.exe` or `fsi.exe`) by scripting utilities. This is a highly suspicious activity, as adversaries may use these consoles to execute code and bypass security defenses.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "trusted_developer_utilities",
+    "T1127",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a suspicious process, **{image}**, was launched by a scripting utility, **{parent_image}**. This activity is a strong indicator of **Trusted Developer Utilities Proxy Execution** (**MITRE ATT&CK T1127**) where an adversary is attempting to bypass security controls by using a legitimate tool to execute malicious code. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious process. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "The name of the suspicious process ('csi.exe' or 'fsi.exe')."
+    },
+    {
+      "name": "parent_image",
+      "required": true,
+      "description": "The name of the parent scripting utility process."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

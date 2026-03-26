@@ -1,0 +1,102 @@
+{
+  "name": "Network Performance Degradation - High Volume of Network Errors (SIEM Correlation Needed)",
+  "description": "Detects a high volume of network-related error events originating from a single security device within a short timeframe, indicating potential Denial-of-Service (DoS) attack, network outage, misconfiguration, or device overload.",
+  "tags": [
+    "security",
+    "detection",
+    "high",
+    "network",
+    "firewall",
+    "ids_ips",
+    "router",
+    "switch",
+    "impact",
+    "availability",
+    "do_s",
+    "network_failure",
+    "misconfiguration",
+    "resource_exhaustion",
+    "TA0040",
+    "T1498"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "HIGH SEVERITY ALERT: Network Performance Degradation - High Volume of Network Errors Detected!\\n\\n**A significantly high volume of network error events ({SIEM_COUNT_OF_EVENTS} errors) from network security device '{DeviceIp}' (or '{DeviceName}') within a short timeframe ({SIEM_TIMEFRAME}) has been detected at {Timestamp}.** This indicates severe network performance degradation or a potential **Denial-of-Service (DoS) attack (T1498 - Network Denial of Service)**, network outage, or device overload.\\n\\n**Event Details (from SIEM correlation):**\\n* **Timestamp of First Event**: {SIEM_FIRST_EVENT_TIMESTAMP}\\n* **Timestamp of Last Event**: {SIEM_LAST_EVENT_TIMESTAMP}\\n* **Reporting Device IP**: {DeviceIp}\\n* **Reporting Device Name**: {DeviceName} (if available)\\n* **Number of Errors**: {SIEM_COUNT_OF_EVENTS}\\n* **Time Window**: {SIEM_TIMEFRAME}\\n* **Example Action/Type**: {Action} / {Type} (e.g., 'dropped' / 'packet_drop', 'denied' / 'limit_exceeded')\\n* **Associated Source IP**: {SourceIp} (if available from one of the errors)\\n* **Associated Destination IP**: {DestinationIp} (if available from one of the errors)\\n* **Associated Destination Port**: {DestinationPort} (if available from one of the errors)\\n* **Rule Name**: {RuleName}\\n\\nThis incident is a critical indicator of **Impact (TA0040)** on network availability. Immediate investigation is required to identify the root cause and restore network stability.\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **VALIDATE NETWORK STATUS:** Immediately check the status of the affected network segment and the reporting security device ('{DeviceIp}'). Look for: \\n    * **Device Health:** High CPU, memory, or interface utilization on the firewall/IDS/router. \\n    * **Network Connectivity:** Test connectivity to critical systems within the affected segment.\\n2.  **IDENTIFY THE SOURCE OF THE ERRORS:** Analyze the correlated error events to determine if there's a common `SourceIp` or `DestinationIp` causing the high volume of errors. \\n    * If a specific `SourceIp` is overwhelming the network, investigate it for compromise or misconfiguration. \\n    * If a specific `DestinationIp` is being targeted, investigate that system for a DoS attack or service failure.\\n3.  **REVIEW DEVICE CONFIGURATION:** Check recent configuration changes on '{DeviceIp}' that might have introduced a misconfiguration leading to excessive errors.\\n4.  **ACTIVATE DDoS MITIGATION (if applicable):** If the pattern indicates a DoS attack (e.g., a single source overwhelming a target), activate your organization's DDoS mitigation procedures (rate limiting, blackholing, cloud-based protection). \\n5.  **NETWORK TRAFFIC ANALYSIS:** If possible, perform packet capture (PCAP) on the affected network segment to analyze the nature of the traffic causing the errors.\\n6.  **ESCALATE TO NETWORK TEAM:** Engage your network operations team to assist with troubleshooting network infrastructure, device health, and potential DoS mitigation.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of one of the network error events (e.g., the most recent one)."
+    },
+    {
+      "name": "DeviceIp",
+      "required": true,
+      "description": "The IP address of the reporting firewall/IDS/network device."
+    },
+    {
+      "name": "DeviceName",
+      "required": false,
+      "description": "The hostname of the reporting device, if available."
+    },
+    {
+      "name": "Action",
+      "required": true,
+      "description": "The action or status recorded for the error (e.g., 'error', 'denied', 'dropped')."
+    },
+    {
+      "name": "Type",
+      "required": true,
+      "description": "The type or reason for the error (e.g., 'connection_error', 'packet_drop', 'limit_exceeded')."
+    },
+    {
+      "name": "SourceIp",
+      "required": false,
+      "description": "The source IP of the traffic associated with the error, if available from one of the errors."
+    },
+    {
+      "name": "DestinationIp",
+      "required": false,
+      "description": "The destination IP of the traffic associated with the error, if available from one of the errors."
+    },
+    {
+      "name": "DestinationPort",
+      "required": false,
+      "description": "The port associated with the error, if available from one of the errors."
+    },
+    {
+      "name": "EventID",
+      "required": false,
+      "description": "The specific event ID from the log source, if applicable."
+    },
+    {
+      "name": "RuleName",
+      "required": false,
+      "description": "The name of the Sigma rule that triggered the event, if applicable."
+    },
+    {
+      "name": "SIEM_COUNT_OF_EVENTS",
+      "required": true,
+      "description": "The count of network error events aggregated by the SIEM (e.g., 1200)."
+    },
+    {
+      "name": "SIEM_TIMEFRAME",
+      "required": true,
+      "description": "The time window over which the events were counted (e.g., '5 minutes')."
+    },
+    {
+      "name": "SIEM_FIRST_EVENT_TIMESTAMP",
+      "required": true,
+      "description": "The timestamp of the first event in the correlated group."
+    },
+    {
+      "name": "SIEM_LAST_EVENT_TIMESTAMP",
+      "required": true,
+      "description": "The timestamp of the last event in the correlated group."
+    }
+  ]
+}

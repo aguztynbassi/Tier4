@@ -1,0 +1,44 @@
+{
+  "name": "Windows Failed Login Followed by Account Lockout",
+  "description": "Detecta una secuencia donde un intento de inicio de sesión fallido es seguido inmediatamente por el bloqueo de la cuenta de usuario. Esta correlación es un indicador típico de ataques de fuerza bruta o adivinación de contraseñas, donde el atacante agota el número de intentos permitidos por la política de seguridad del dominio o del host local.",
+  "tags": [
+    "security",
+    "credential_access",
+    "brute_force",
+    "account_lockout",
+    "initial_access",
+    "T1110",
+    "event_4625",
+    "event_4740"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD: Bloqueo de Cuenta tras Fallos! Se ha detectado que la cuenta del usuario **{User}** ha sido bloqueada en el host **{ComputerName}** tras varios intentos fallidos desde la dirección de origen **{SourceAddress}**. Bajo la técnica de **Brute Force** (**MITRE ATT&CK T1110**), este patrón sugiere un ataque activo de adivinación de credenciales. Se recomienda investigar el origen de la conexión y verificar si el bloqueo fue provocado por una actividad legítima o un intento de compromiso.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "User",
+      "required": true,
+      "description": "El nombre de la cuenta de usuario afectada."
+    },
+    {
+      "name": "SourceAddress",
+      "required": true,
+      "description": "La dirección IP o nombre del equipo desde donde se originaron los intentos fallidos."
+    },
+    {
+      "name": "ComputerName",
+      "required": true,
+      "description": "El nombre del equipo donde se registró el bloqueo de la cuenta."
+    },
+    {
+      "name": "Domain",
+      "required": true,
+      "description": "El dominio de la cuenta afectada."
+    }
+  ]
+}

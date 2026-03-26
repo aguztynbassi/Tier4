@@ -1,0 +1,43 @@
+{
+  "name": "Phishing Email Indicators Detected",
+  "description": "Detecta correos electrónicos sospechosos que contienen palabras clave asociadas con el robo de credenciales o campañas de phishing conocidas. Los adversarios utilizan el correo electrónico para entregar payloads maliciosos, enlaces a sitios de recolección de credenciales o para realizar ingeniería social, siendo este el método principal para evadir el perímetro de seguridad técnico mediante el factor humano.",
+  "tags": [
+    "security",
+    "initial_access",
+    "phishing",
+    "social_engineering",
+    "credential_theft",
+    "T1566",
+    "email_gateway"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Intento de Phishing! Se ha detectado un correo electrónico sospechoso dirigido al usuario **{recipient}** con el asunto **{subject}**. Bajo la técnica de **Phishing** (**MITRE ATT&CK T1566**), este mensaje contiene indicadores de ingeniería social destinados a capturar credenciales o distribuir malware. Se recomienda bloquear el remitente **{sender}**, purgar el mensaje de todos los buzones de la organización y verificar si el usuario interactuó con enlaces o archivos adjuntos.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "sender",
+      "required": true,
+      "description": "Dirección de correo electrónico del remitente sospechoso."
+    },
+    {
+      "name": "recipient",
+      "required": true,
+      "description": "Dirección de correo electrónico del empleado objetivo."
+    },
+    {
+      "name": "subject",
+      "required": true,
+      "description": "Asunto del correo electrónico detectado."
+    },
+    {
+      "name": "attachment_name",
+      "required": false,
+      "description": "Nombre de cualquier archivo adjunto sospechoso detectado."
+    }
+  ]
+}

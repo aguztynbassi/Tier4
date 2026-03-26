@@ -1,0 +1,44 @@
+{
+  "name": "WMI DLL Loaded by Microsoft Office Product",
+  "description": "Detecta cuando aplicaciones de Microsoft Office (Word, Excel, PowerPoint, Outlook) cargan librerías dinámicas (DLLs) asociadas con WMI. Este comportamiento es típico de documentos maliciosos que utilizan macros de VBA para interactuar con la infraestructura de administración de Windows (WMI) con el fin de evadir detecciones basadas en procesos hijos y ejecutar código malicioso o recolectar información del sistema de forma sigilosa.",
+  "tags": [
+    "security",
+    "execution",
+    "defense_evasion",
+    "vba_macro",
+    "office_malware",
+    "wmi_load",
+    "T1204.002",
+    "sysmon_event_7"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE MACRO MALICIOSA! La aplicación **{source_image}** ha cargado la librería de sistema **{image}** en el host **{host}**. Bajo la técnica de **User Execution: Malicious File** (**MITRE ATT&CK T1204.002**), este comportamiento indica que un documento de Office está utilizando WMI para ejecutar comandos ocultos. Se recomienda aislar el equipo, identificar el documento abierto recientemente por el usuario **{user}** y analizar si existen conexiones de red inusuales iniciadas por el proceso de Office.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la carga de la DLL."
+    },
+    {
+      "name": "source_image",
+      "required": true,
+      "description": "El proceso de Office responsable (ej. winword.exe)."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "La DLL de WMI específica que fue cargada."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que abrió el documento malicioso."
+    }
+  ]
+}

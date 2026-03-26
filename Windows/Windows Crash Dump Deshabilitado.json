@@ -1,0 +1,60 @@
+[
+  {
+    "name": "Windows Crash Dump Deshabilitado",
+    "description": "Se detecta que la configuración del registro de volcado de memoria de Windows está deshabilitada. Esto puede ser un intento de un adversario para evadir la detección y la capacidad de análisis forense.",
+    "tags": [
+      "security",
+      "detection",
+      "windows",
+      "defense evasion",
+      "modify registry",
+      "TA0005",
+      "T1112"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Se ha detectado la deshabilitación del volcado de memoria de Windows. Detalles del evento: **Timestamp** {Timestamp}, **Event ID** {EventID}, **Usuario** {User}, **Equipo** {Computer}, **Nombre del proceso** {ProcessName}, **Objeto de destino** {TargetObject}, **Detalles** {Details}. Investiga esta modificación del registro para determinar si es una configuración legítima de seguridad o un intento de evadir la detección y el análisis forense.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "La marca de tiempo del evento."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "Sysmon Event ID para Registry Value Set (debería ser 13)."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "Usuario que realizó el cambio."
+      },
+      {
+        "name": "Computer",
+        "required": true,
+        "description": "Nombre del equipo."
+      },
+      {
+        "name": "ProcessName",
+        "required": true,
+        "description": "Proceso que realiza la modificación."
+      },
+      {
+        "name": "TargetObject",
+        "required": true,
+        "description": "La clave de registro modificada."
+      },
+      {
+        "name": "Details",
+        "required": true,
+        "description": "Detalles de la modificación (nuevo valor)."
+      }
+    ]
+  }
+]

@@ -1,0 +1,38 @@
+{
+  "name": "PowerShell Script Run in AppData Detected",
+  "description": "Detecta la ejecución de PowerShell cuando invoca scripts o comandos almacenados en las carpetas AppData\\Local o AppData\\Roaming. Este comportamiento es común en ataques de phishing y malware, donde el código malicioso se oculta en perfiles de usuario para evadir restricciones de escritura en carpetas de sistema y establecer persistencia sin requerir privilegios elevados.",
+  "tags": [
+    "security",
+    "execution",
+    "defense_evasion",
+    "powershell",
+    "appdata_execution",
+    "T1059.001",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Ejecución Sospechosa en AppData! Se ha detectado que **powershell.exe** está ejecutando código desde una ruta de usuario protegida en el host **{host}**. El comando completo es: **{command}**. Según la técnica de **Command and Scripting Interpreter: PowerShell** (**MITRE ATT&CK T1059.001**), este es un método frecuente para ejecutar payloads de malware que han sido descargados silenciosamente en el perfil del usuario **{user}**. Se recomienda inspeccionar el archivo mencionado en la ruta de AppData y verificar si existen tareas programadas que lo invoquen.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se detectó la ejecución."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos que contiene la ruta hacia AppData."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario bajo la cual se está ejecutando el script."
+    }
+  ]
+}

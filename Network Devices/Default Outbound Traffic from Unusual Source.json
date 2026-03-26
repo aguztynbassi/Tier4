@@ -1,0 +1,39 @@
+{
+  "name": "Outbound Traffic from Unusual Source Detected",
+  "description": "Detecta conexiones de red salientes originadas desde hosts internos que han sido identificados como fuentes inusuales (servidores críticos, bases de datos o dispositivos IoT). Los adversarios suelen utilizar estos sistemas, a menudo menos monitoreados a nivel de aplicación, para establecer canales de C2 o exfiltrar datos sensibles fuera de la red corporativa.",
+  "tags": [
+    "security",
+    "command_and_control",
+    "exfiltration",
+    "unusual_source",
+    "network_egress",
+    "T1041",
+    "T1090",
+    "firewall_logs"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Conexión Saliente Anómala! Se ha detectado tráfico desde la fuente restringida **{source_address}** hacia el destino externo **{destination_address}**. Bajo las técnicas de **Exfiltration Over C2 Channel** (**T1041**) y **Proxy** (**T1090**), este evento sugiere que un host crítico podría estar bajo control externo o siendo utilizado para extraer información. Se recomienda verificar la legitimidad del tráfico, identificar el proceso que origina la conexión y bloquear la comunicación en el firewall perimetral de inmediato.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección IP interna definida en la lista de fuentes inusuales."
+    },
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "La dirección IP externa de destino fuera de la red local."
+    },
+    {
+      "name": "destination_port",
+      "required": false,
+      "description": "El puerto de destino utilizado para la conexión (ej. 443, 80, 53)."
+    }
+  ]
+}

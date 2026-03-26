@@ -1,0 +1,38 @@
+{
+  "name": "Defense Evasion: Executable and Script File Deletion",
+  "description": "Detecta la eliminación de archivos con extensiones ejecutables o de scripting (.exe, .bat). Los adversarios suelen borrar sus herramientas de ataque, scripts de configuración o archivos temporales de staging para eliminar evidencia forense, evadir la detección por parte de escáneres de seguridad y obstaculizar los esfuerzos de respuesta ante incidentes.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "anti_forensics",
+    "file_deletion",
+    "indicator_removal",
+    "T1070.004",
+    "win_server_event_4660"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EVASIÓN: Eliminación de Archivos Detectada! El usuario **{user}** ha eliminado el archivo **{file}** en el host **{host}**. Bajo la técnica de **File Deletion** (**MITRE ATT&CK T1070.004**), este comportamiento es típico de un atacante intentando borrar huellas tras una intrusión. Se recomienda verificar si el archivo eliminado era un binario conocido o una herramienta de administración no autorizada.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la eliminación del archivo."
+    },
+    {
+      "name": "file",
+      "required": true,
+      "description": "El nombre o ruta del archivo que fue eliminado."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la acción de borrado."
+    }
+  ]
+}

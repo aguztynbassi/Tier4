@@ -1,0 +1,32 @@
+{
+  "name": "Sysmon Driver Unload Detected",
+  "description": "Detection of a Sysmon driver unload event. This could be an adversary's attempt to disable Sysmon's monitoring capabilities, which is a common defense evasion technique.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "impair_defenses",
+    "T1562",
+    "T1562.001",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a **Sysmon Driver Unload** event was detected with Event ID **255** and ID `DriverCommunication`. This is a strong indicator of **Defense Evasion** (**MITRE ATT&CK T1562.001**) where an adversary is likely attempting to impair security defenses by interfering with the Sysmon driver to prevent logging of their malicious activities. Immediate investigation is required to determine the legitimacy of this action and to restore the integrity of the Sysmon service.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "id",
+      "required": true,
+      "description": "The ID associated with the event, which is expected to be 'DriverCommunication'."
+    }
+  ]
+}

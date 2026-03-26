@@ -1,0 +1,68 @@
+[
+  {
+    "name": "User Directory File Time-Stomping Detected",
+    "description": "Detection of unusual modification of file creation timestamps in user directories, a common defense evasion technique used by attackers to hide malicious activity.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "defense_evasion",
+      "timestomp",
+      "file_integrity",
+      "TA0005",
+      "T1070",
+      "T1070.006"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: User Directory File Time-Stomping Detected.\\n\\nThe creation timestamp of file '{TargetFilename}' on host '{Computer}' was modified by process '{Image}', under user '{User}' at '{Timestamp}' (Old Time: '{OldCreationUtcTime}', New Time: '{CreationUtcTime}'). This time-stomping activity is a strong indicator of defense evasion, where an attacker attempts to hide the true age of malicious files.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {Computer}\\n* **User**: {User}\\n* **Process**: {Image}\\n* **Affected File**: {TargetFilename}\\n* **Old Creation Time**: {OldCreationUtcTime}\\n* **New Creation Time**: {CreationUtcTime}\\n* **Event ID**: {EventID}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (HIGH PRIORITY):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** Disconnect host '{Computer}' from the network immediately to prevent further compromise or lateral movement.\\n2.  **VERIFY LEGITIMACY:** Cross-reference the '{Image}' process and '{TargetFilename}' with known legitimate activities in your environment. Time-stomping by benign applications is rare, even with the existing whitelist. If it's a known legitimate application, ensure it is up-to-date and behaving as expected.\\n3.  **FORENSIC ANALYSIS:** Conduct a full forensic investigation of '{Computer}'. Focus on:\\n    * The '{TargetFilename}' itself: Analyze its content, origin, and purpose. Is it a known malicious file? Is it part of a legitimate application?\\n    * The '{Image}' process: Investigate its parent process, command line arguments, and overall activity. Is this process known or suspicious?\\n    * Look for other indicators of compromise (IOCs) such as suspicious process creation, network connections, or persistence mechanisms on the host.\\n    * Examine surrounding events for initial access vectors or subsequent attacker actions.\\n4.  **USER ACCOUNT INVESTIGATION:** Investigate the '{User}' account for signs of compromise (e.g., unusual login times, failed authentications, activity on other hosts). Consider forcing a password reset and enforcing Multi-Factor Authentication (MFA).\\n5.  **THREAT HUNT:** Search for similar time-stomping events or other defense evasion techniques across other systems in your environment to identify widespread compromise or active campaigns.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Sysmon Event ID, expected to be 2 for FileTimeChange."
+      },
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp when the file's creation time was modified."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account that initiated the file time-stomp."
+      },
+      {
+        "name": "Computer",
+        "required": true,
+        "description": "The hostname of the system where the event occurred."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The process that performed the file time-stomp."
+      },
+      {
+        "name": "TargetFilename",
+        "required": true,
+        "description": "The full path to the file whose creation time was modified."
+      },
+      {
+        "name": "CreationUtcTime",
+        "required": true,
+        "description": "The new UTC creation time of the file."
+      },
+      {
+        "name": "OldCreationUtcTime",
+        "required": true,
+        "description": "The original UTC creation time of the file."
+      }
+    ]
+  }
+]

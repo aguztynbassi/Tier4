@@ -1,0 +1,45 @@
+{
+  "name": "Windows: Local Account and User Discovery Activity",
+  "description": "Detecta el uso de herramientas nativas de Windows para enumerar cuentas de usuario, sesiones activas y credenciales almacenadas. Esta actividad es característica de la fase de reconocimiento local post-compromiso, donde un atacante busca identificar cuentas con privilegios elevados o usuarios conectados para planificar el movimiento lateral o la escalada de privilegios dentro del host.",
+  "tags": [
+    "security",
+    "discovery",
+    "enumeration",
+    "reconnaissance",
+    "local_accounts",
+    "lolbins",
+    "T1087.001",
+    "T1033",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE RECONOCIMIENTO: Enumeración de Cuentas Locales! Se ha detectado actividad de descubrimiento en el host **{host}** mediante el comando **{command}** ejecutado por **{user}**. Bajo las técnicas de **Account Discovery** (**MITRE ATT&CK T1087**) y **System Owner Discovery** (**T1033**), este comportamiento indica que un atacante está mapeando la superficie de ataque local para identificar vectores de escalada. Se recomienda verificar si esta actividad coincide con tareas de mantenimiento legítimas o si proviene de un proceso sospechoso.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se ejecutaron los comandos de descubrimiento."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa detectada (ej. net user, whoami, wmic useraccount)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que inició la enumeración."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "El ejecutable utilizado para el descubrimiento (ej. net.exe, whoami.exe)."
+    }
+  ]
+}

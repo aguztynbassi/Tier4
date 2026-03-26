@@ -1,0 +1,59 @@
+[
+  {
+    "name": "Execution via Windows Scripting Host Component Detected",
+    "description": "Detects the execution of scripts using the Windows Scripting Host (WSH) component, which can indicate malicious script activity.",
+    "tags": [
+      "security",
+      "detection",
+      "execution",
+      "command and scripting interpreter",
+      "Visual Basic Script",
+      "JavaScript",
+      "TA0002",
+      "T1059",
+      "T1059.005",
+      "T1059.007",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Suspicious script execution detected via Windows Scripting Host (WSH) component. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **Image Path** {Image}, **Image Loaded** {ImageLoaded}, **User** {User}, **Computer** {Computer}. Investigate this activity for potential malicious script execution.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for Image Load (7)."
+      },
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The path of the process loading the WSH component."
+      },
+      {
+        "name": "ImageLoaded",
+        "required": true,
+        "description": "The path of the loaded WSH component DLL (e.g., wshom.ocx, scrrun.dll, vbscript.dll, jscript.dll, dispex.dll)."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the process was executed."
+      },
+      {
+        "name": "Computer",
+        "required": true,
+        "description": "The computer on which the event occurred."
+      }
+    ]
+  }
+]

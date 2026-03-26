@@ -1,0 +1,38 @@
+{
+  "name": "Possible Process Hollowing Image Loading",
+  "description": "Detecta la carga de librerías críticas de autenticación (samlib.dll o WinSCard.dll) por parte de procesos que normalmente no requieren estas funciones, como notepad.exe. Esta actividad es un indicador técnico clave de 'Process Hollowing' o inyección de código, donde un atacante oculta su payload dentro de un proceso legítimo para realizar la extracción de credenciales o manipulación de la cuenta SAM.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "privilege_escalation",
+    "process_hollowing",
+    "credential_access",
+    "T1055.012",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta Crítica de Inyección de Código! Se ha detectado que el proceso **{source_image}** ha cargado la librería sospechosa **{image}** en el host **{host}**. Este comportamiento coincide con técnicas de **Process Hollowing** (**MITRE ATT&CK T1055.012**). El atacante ha inyectado código en un proceso legítimo para acceder a funciones de autenticación de Windows de forma sigilosa. Se requiere la terminación inmediata del proceso y la investigación de posibles volcados de memoria (RAM dumps) realizados por el usuario **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se detectó la carga anómala de la DLL."
+    },
+    {
+      "name": "source_image",
+      "required": true,
+      "description": "El proceso que realizó la carga de la librería (ej. notepad.exe)."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "La librería cargada (samlib.dll o WinSCard.dll)."
+    }
+  ]
+}

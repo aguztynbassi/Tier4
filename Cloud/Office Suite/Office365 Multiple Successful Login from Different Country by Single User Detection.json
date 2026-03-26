@@ -1,0 +1,39 @@
+{
+  "name": "Identity: Multi-Country Successful Login (Impossible Travel)",
+  "description": "Detecta múltiples inicios de sesión exitosos para una única cuenta de usuario originados desde diferentes países. Este patrón sugiere un compromiso de cuenta, donde las credenciales están siendo utilizadas por actores de amenazas en diferentes ubicaciones geográficas, o el uso de proxies/VPNs para evadir políticas de acceso condicional basadas en ubicación.",
+  "tags": [
+    "security",
+    "identity_threat",
+    "impossible_travel",
+    "office365",
+    "azure_ad",
+    "initial_access",
+    "T1078",
+    "cloud_security"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE IDENTIDAD: Viaje Imposible Detectado! El usuario **{user}** ha registrado inicios de sesión exitosos desde **{DC}** países diferentes en un periodo breve. Bajo la técnica de **Valid Accounts** (**MITRE ATT&CK T1078**), este comportamiento es un fuerte indicador de compromiso de credenciales o secuestro de sesión. Se recomienda la revocación inmediata de tokens de sesión y el bloqueo preventivo de la cuenta.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que registró los inicios de sesión sospechosos."
+    },
+    {
+      "name": "DC",
+      "required": true,
+      "description": "El número total de países distintos desde los cuales se originaron las conexiones."
+    },
+    {
+      "name": "countries",
+      "required": false,
+      "description": "Lista de los países detectados en la geolocalización de las IPs."
+    }
+  ]
+}

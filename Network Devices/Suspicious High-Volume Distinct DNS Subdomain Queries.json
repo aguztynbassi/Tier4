@@ -1,0 +1,102 @@
+{
+  "name": "Suspicious High-Volume Distinct DNS Subdomain Queries (Candidate for Tunneling)",
+  "description": "Detects an excessive number of distinct subdomains queried for the same main domain by a single source IP within a short timeframe. This is a strong indicator of DNS tunneling for Command and Control (C2) or data exfiltration. This rule requires SIEM correlation to count and alert on the aggregated events (e.g., >10 distinct subdomains per SourceIp and MainDomain in 60 seconds).",
+  "tags": [
+    "security",
+    "detection",
+    "high",
+    "dns_server",
+    "firewall",
+    "ids",
+    "network",
+    "command_and_control",
+    "exfiltration",
+    "dns_tunneling",
+    "TA0011",
+    "TA0010",
+    "T1071",
+    "T1071.004",
+    "T1568",
+    "T1568.002"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "HIGH SEVERITY ALERT: Potential DNS Tunneling - High Volume of Distinct Subdomain Queries Detected!\\n\\n**An unusually high number of distinct DNS subdomain queries from '{SourceIp}' targeting the main domain '{SIEM_MAIN_DOMAIN_EXTRACTED}' has been detected within the last {SIEM_TIMEFRAME} at {Timestamp} (total distinct queries: {SIEM_COUNT_OF_DISTINCT_QUERIES}).** This pattern is a strong indicator of **DNS tunneling (T1071.004)**, a technique commonly used by adversaries for **Command and Control (TA0011)** or **data exfiltration (TA0010)**.\\n\\n**Event Details (from SIEM correlation):**\\n* **Timestamp of First Query**: {SIEM_FIRST_EVENT_TIMESTAMP}\\n* **Timestamp of Last Query**: {SIEM_LAST_EVENT_TIMESTAMP}\\n* **Source IP**: {SourceIp} (Internal Host: {ComputerName})\\n* **Targeted DNS Server IP**: {DestinationIp}\\n* **Main Domain Involved**: {SIEM_MAIN_DOMAIN_EXTRACTED}\\n* **Number of Distinct Subdomains**: {SIEM_COUNT_OF_DISTINCT_QUERIES} (e.g., more than 10)\\n* **Time Window**: {SIEM_TIMEFRAME}\\n* **Example Query Name**: {QueryName}\\n* **Example Query Type**: {QueryType}\\n* **Protocol**: {Protocol} (Expected UDP/TCP)\\n* **Rule Name**: {RuleName}\\n\\nDNS tunneling allows attackers to send and receive data by encoding it within legitimate-looking DNS requests and responses, often bypassing traditional security controls. This alert signifies a high probability of a compromised host communicating maliciously.\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (HIGH PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** Isolate '{SourceIp}' from the network immediately. This host is highly likely to be compromised and actively involved in malicious communication.\\n2.  **DNS QUERY ANALYSIS:** Review the full DNS query logs for '{SourceIp}' to identify the complete list of distinct subdomains. Look for: \\n    * **Randomly generated, gibberish-like subdomains** (e.g., `aj23dksl.malicious.com`) indicative of encoded data or Domain Generation Algorithms (DGAs).\\n    * **Queries to suspicious or unknown main domains.**\\n    * **Unusual query types** (e.g., TXT, MX, SRV records often used in tunneling beyond simple A records).\\n3.  **FORENSIC ACQUISITION & ANALYSIS:** Begin forensic acquisition (disk and memory) of '{SourceIp}' to identify the malware or tools responsible for the DNS tunneling, its C2 infrastructure, and any exfiltrated data.\\n4.  **NETWORK TRAFFIC ANALYSIS:** Examine network flow data and packet captures (if available) for '{SourceIp}' to look for corresponding outbound connections to the observed DNS servers or other suspicious activity.\\n5.  **THREAT INTELLIGENCE:** Perform threat intelligence lookups on '{SIEM_MAIN_DOMAIN_EXTRACTED}' and any suspicious subdomains to check for associations with known malware families or C2 infrastructure.\\n6.  **DNS INFRASTRUCTURE REVIEW:** Consider implementing DNS sinkholing or advanced DNS filtering to prevent future DNS tunneling attempts and to detect anomalous DNS traffic more effectively.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of one of the DNS query events (e.g., the most recent one)."
+    },
+    {
+      "name": "SourceIp",
+      "required": true,
+      "description": "The IP address of the client making the DNS query."
+    },
+    {
+      "name": "DestinationIp",
+      "required": true,
+      "description": "The IP address of the DNS server being queried."
+    },
+    {
+      "name": "DestinationPort",
+      "required": false,
+      "description": "The destination port (expected 53)."
+    },
+    {
+      "name": "QueryName",
+      "required": true,
+      "description": "The full DNS query string (e.g., 'a_long_encoded_string.malicious.com')."
+    },
+    {
+      "name": "QueryType",
+      "required": false,
+      "description": "The DNS query type (e.g., A, AAAA, TXT, CNAME)."
+    },
+    {
+      "name": "Protocol",
+      "required": false,
+      "description": "The transport protocol (expected UDP/TCP)."
+    },
+    {
+      "name": "ComputerName",
+      "required": false,
+      "description": "The hostname of the source if available."
+    },
+    {
+      "name": "RuleName",
+      "required": false,
+      "description": "The name of the Sigma rule that triggered the event, if applicable."
+    },
+    {
+      "name": "SIEM_MAIN_DOMAIN_EXTRACTED",
+      "required": true,
+      "description": "The main domain extracted by the SIEM from the QueryName (e.g., 'example.com' from 'sub.example.com')."
+    },
+    {
+      "name": "SIEM_COUNT_OF_DISTINCT_QUERIES",
+      "required": true,
+      "description": "The aggregated count of distinct QueryNames (subdomains) by the SIEM (e.g., 15)."
+    },
+    {
+      "name": "SIEM_TIMEFRAME",
+      "required": true,
+      "description": "The time window over which the events were counted (e.g., '60 seconds')."
+    },
+    {
+      "name": "SIEM_FIRST_EVENT_TIMESTAMP",
+      "required": true,
+      "description": "The timestamp of the first event in the correlated group."
+    },
+    {
+      "name": "SIEM_LAST_EVENT_TIMESTAMP",
+      "required": true,
+      "description": "The timestamp of the last event in the correlated group."
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Network: Netsh Port Forwarding / Proxy Detection",
+  "description": "Detecta el uso de la utilidad netsh para configurar redirecciones de puertos IPv4. Esta técnica es utilizada por adversarios para establecer túneles de red (pivoting) que les permiten alcanzar sistemas internos no expuestos directamente o para tunelizar tráfico de C2 a través de hosts de confianza, evadiendo controles de segmentación de red.",
+  "tags": [
+    "security",
+    "lateral_movement",
+    "command_and_control",
+    "pivoting",
+    "netsh_abuse",
+    "proxy",
+    "network_tunneling",
+    "T1090",
+    "T1210"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE RED: Configuración de Proxy/PortForwarding! Se ha detectado el uso de **netsh.exe** para crear una redirección de puerto (**{command}**) en el host **{host}**. Bajo la técnica de **Proxy** (**MITRE ATT&CK T1090**), esto indica que el sistema está siendo configurado como un puente para mover tráfico hacia otros activos internos o externos. Se requiere validar el puerto de escucha y la dirección de destino de inmediato.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se ejecutó el comando netsh para alterar el flujo de red."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que define la dirección y puerto de escucha (listenaddress/listenport) y el destino (connectaddress/connectport)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la modificación de la interfaz de red."
+    }
+  ]
+}

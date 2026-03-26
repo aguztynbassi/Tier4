@@ -1,0 +1,43 @@
+{
+  "name": "ZOHO Dctask64 Process Injection Detected",
+  "description": "Detecta posibles intentos de inyección de procesos utilizando el binario legítimo `dctask64.exe` de ZOHO. La alerta se activa cuando este proceso se ejecuta sin sus argumentos de línea de comandos habituales, lo que indica que un adversario podría estar utilizando la técnica de Process Hollowing para enmascarar malware dentro de un proceso confiable y firmado.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "process_injection",
+    "zoho",
+    "manageengine",
+    "T1055",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta Crítica de Evasión de Defensas! Se ha detectado la ejecución anómala de **{image}** en el host **{host}**. El proceso fue iniciado con la línea de comandos: **{command}**, la cual carece de los parámetros legítimos esperados de ZOHO Desktop Central. Esta anomalía es un fuerte indicador de **Inyección de Procesos** (**MITRE ATT&CK T1055**). El evento está asociado al usuario **{user}**. Se requiere aislamiento inmediato del endpoint y un volcado de memoria (memory dump) del proceso sospechoso para su análisis forense.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del servidor o equipo afectado."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "El nombre y ruta del ejecutable (usualmente dctask64.exe)."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos utilizada para lanzar el proceso (que en este caso es anómala)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta bajo la cual se ejecutó el proceso inyectado."
+    }
+  ]
+}

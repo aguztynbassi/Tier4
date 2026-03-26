@@ -1,0 +1,39 @@
+{
+  "name": "Persistence: Malicious or Suspicious Service Installation",
+  "description": "Detecta la creación de nuevos servicios en Windows que utilizan nombres o ejecutables asociados con herramientas de ataque conocidas. Los adversarios instalan servicios para ejecutar comandos con privilegios de SYSTEM, establecer persistencia que sobreviva a reinicios o facilitar el movimiento lateral (ej. mediante el uso de PsExec/PAExec). Esta técnica es un indicador de alta fidelidad de una intrusión activa.",
+  "tags": [
+    "security",
+    "persistence",
+    "privilege_escalation",
+    "lateral_movement",
+    "credential_dumping",
+    "T1543.003",
+    "T1569.002",
+    "event_7045"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE PERSISTENCIA: Servicio Malicioso Instalado! Se ha detectado la creación del servicio **{service}** en el host **{host}**. Bajo la técnica de **Create or Modify System Process: Windows Service** (**MITRE ATT&CK T1543.003**), esto indica que un atacante ha logrado privilegios administrativos para establecer persistencia o realizar movimiento lateral. Se requiere auditoría inmediata del ejecutable del servicio.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se instaló el nuevo servicio sospechoso."
+    },
+    {
+      "name": "service",
+      "required": true,
+      "description": "El nombre del servicio o la ruta del ejecutable registrado (ej. mssecsvc2.0, DumpSvc.exe)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta que realizó la instalación del servicio, vital para identificar el origen de la ejecución remota."
+    }
+  ]
+}

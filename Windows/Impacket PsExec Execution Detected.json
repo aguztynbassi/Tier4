@@ -1,0 +1,68 @@
+[
+  {
+    "name": "Impacket PsExec Execution Detected",
+    "description": "PsExec execution via Impacket has been detected, indicating potential lateral movement or post-exploitation activity.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "psexec",
+      "impacket",
+      "lateral_movement",
+      "tool_transfer",
+      "TA0008",
+      "T1570"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: Impacket PsExec Execution Detected.\\n\\nSuspicious access to `RemCom` named pipes associated with PsExec was detected on host '{ComputerName}' by user '{User}' from IP '{SourceAddress}' at {Timestamp}. Access to the 'IPC$' share with `RelativeTargetName` '{RelativeTargetName}' (EventID {EventID}, AccessMask: {AccessMask}) is a strong indicator that the Impacket PsExec utility is being used for lateral movement or remote code execution.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **User**: {User}\\n* **Source IP Address**: {SourceAddress}\\n* **Shared Resource**: {ShareName}\\n* **Accessed Named Pipe**: {RelativeTargetName}\\n* **Event ID**: {EventID}\\n* **Access Mask**: {AccessMask}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (HIGH PRIORITY - RESPOND IMMEDIATELY):**\\n\\n1.  **ISOLATE SOURCE HOST:** If '{SourceAddress}' is an internal host, **immediately** isolate it from the network to contain the threat and prevent further lateral movement. **DO NOT power off the system.**\\n2.  **INVESTIGATE SOURCE HOST:** Perform a thorough forensic analysis of the '{SourceAddress}' host to identify the process that initiated the PsExec access, the initial intrusion method, other tools present, and the attacker's objectives.\\n3.  **INVESTIGATE AFFECTED HOST:** Investigate the '{ComputerName}' host for:\\n    * New processes created or services installed after the PsExec access.\\n    * Artifacts of PsExec execution (e.g., the `PSEXESVC.exe` or `RemComSvc.exe` service in Task Manager).\\n    * Registry or system file modifications.\\n4.  **INVESTIGATE USER ACCOUNT:** Investigate the '{User}' account for signs of compromise (e.g., anomalous logins, brute-force attempts, activity on other hosts). Consider an immediate and forced password reset if there are indications of compromise.\\n5.  **NETWORK ANALYSIS:** Review network traffic logs between '{SourceAddress}' and '{ComputerName}' around the event `Timestamp`. Look for unusual connections, suspicious file transfers, or command and control (C2) traffic.\\n6.  **THREAT HUNT:** Search your environment for other instances of `RemCom` pipe access or the use of PsExec/Impacket from other sources or to other destinations. Consider searching for other lateral movement tools.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the named pipe access event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Windows Security Event ID (5145)."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user who attempted or performed the named pipe access."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname where the named pipe access was detected."
+      },
+      {
+        "name": "ShareName",
+        "required": true,
+        "description": "The name of the shared resource accessed ('IPC$')."
+      },
+      {
+        "name": "RelativeTargetName",
+        "required": true,
+        "description": "The name of the specific named pipe accessed (e.g., 'RemCom_stdint')."
+      },
+      {
+        "name": "SourceAddress",
+        "required": true,
+        "description": "The source IP address from which the access originated."
+      },
+      {
+        "name": "AccessMask",
+        "required": true,
+        "description": "The access mask indicating requested/granted permissions."
+      }
+    ]
+  }
+]

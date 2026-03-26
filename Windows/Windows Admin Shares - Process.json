@@ -1,0 +1,43 @@
+{
+  "name": "Windows Admin Shares: Lateral Movement Activity Detected",
+  "description": "Detecta el uso de comandos de red (net.exe) o PowerShell para interactuar con recursos compartidos administrativos ocultos. Los atacantes utilizan estos recursos para el movimiento lateral, permitiéndoles montar unidades remotas, transferir herramientas de post-explotación o enumerar sesiones activas en servidores críticos utilizando credenciales de administrador comprometidas.",
+  "tags": [
+    "security",
+    "lateral_movement",
+    "smb",
+    "admin_shares",
+    "network_reconnaissance",
+    "T1021.002",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE MOVIMIENTO LATERAL: Uso de Admin Shares! Se ha detectado una actividad sospechosa en el host **{host}**. El proceso **{image}** ejecutó un comando para interactuar con recursos compartidos ocultos: **{command}**. Bajo la técnica de **SMB/Windows Admin Shares** (**MITRE ATT&CK T1021.002**), esto sugiere que un atacante con privilegios administrativos está intentando acceder a otros sistemas de la red o transferir archivos maliciosos. Se recomienda auditar las conexiones SMB recientes y validar la legitimidad de la tarea administrativa.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo de origen desde donde se lanzó el comando de red."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "El binario utilizado para la conexión (ej. net.exe, net1.exe o powershell.exe)."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que incluye el uso de recursos como C$, ADMIN$ o IPC$."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que inició la conexión (normalmente una cuenta con privilegios elevados)."
+    }
+  ]
+}

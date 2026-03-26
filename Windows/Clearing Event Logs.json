@@ -1,0 +1,32 @@
+{
+  "name": "Windows Security Event Log Cleared",
+  "description": "Detecta cuando el log de seguridad de Windows ha sido borrado manualmente. Los adversarios ejecutan esta acción para eliminar evidencia de sus actividades, como inicios de sesión no autorizados, creación de procesos maliciosos o escalada de privilegios, dificultando las tareas de respuesta a incidentes y análisis forense.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "anti_forensics",
+    "log_clearing",
+    "T1070.001",
+    "event_1102"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta Crítica: Evasión de Defensas! Se ha detectado el borrado del log de seguridad en el host **{host}**. Bajo la técnica de **Indicator Removal on Host: Clear Windows Event Logs** (**MITRE ATT&CK T1070.001**), esta acción sugiere un intento deliberado de ocultar actividad maliciosa por parte del usuario **{user}**. Se recomienda investigar inmediatamente el historial de comandos previo al borrado y verificar la integridad de otros logs del sistema (System, Application).",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se borraron los logs."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que ejecutó la acción de limpieza (usualmente requiere privilegios de administrador)."
+    }
+  ]
+}

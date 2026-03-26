@@ -1,0 +1,77 @@
+{
+  "name": "FortiGate IPS Events",
+  "description": "Detects intrusion attempts as reported by the FortiGate Intrusion Prevention System (IPS).",
+  "tags": [
+    "security",
+    "detection",
+    "defense evasion",
+    "discovery",
+    "indicator removal",
+    "exploitation for defense evasion",
+    "TA0005",
+    "TA0007",
+    "T1046",
+    "T1211",
+    "Network Devices"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "An Intrusion Prevention System (IPS) event has been reported by FortiGate, indicating a detected intrusion attempt. This is a high-risk security alert. Event Details: **Timestamp** {timestamp}, **Log ID** {log_id}, **User** {user}, **Source Address** {source_address}, **Destination Address** {destination_address}, **Source Country** {source_country}, **Destination Country** {destination_country}, **IPS Signature** {sig_name}, **Severity** {severity}, **Action** {action}. Investigate this critical intrusion attempt immediately to determine its nature and potential impact.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "timestamp",
+      "required": true,
+      "description": "The timestamp of the IPS event."
+    },
+    {
+      "name": "log_id",
+      "required": true,
+      "description": "The FortiGate Log ID for the IPS event."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user associated with the event, if available."
+    },
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "The source IP address of the intrusion attempt."
+    },
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "The destination IP address of the intrusion attempt."
+    },
+    {
+      "name": "source_country",
+      "required": true,
+      "description": "The country of origin for the source IP (enriched via GeoIP)."
+    },
+    {
+      "name": "destination_country",
+      "required": true,
+      "description": "The country of the destination IP (enriched via GeoIP)."
+    },
+    {
+      "name": "sig_name",
+      "required": true,
+      "description": "The name of the IPS signature that detected the intrusion."
+    },
+    {
+      "name": "severity",
+      "required": true,
+      "description": "The severity level of the IPS alert."
+    },
+    {
+      "name": "action",
+      "required": true,
+      "description": "The action taken by the IPS (e.g., 'blocked', 'allowed', 'detected')."
+    }
+  ]
+}

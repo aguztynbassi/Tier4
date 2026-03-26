@@ -1,0 +1,38 @@
+{
+  "name": "Security or Critical Service Stop Detected",
+  "description": "Detecta el uso de 'net stop' o 'sc stop' para detener servicios en el sistema. Los adversarios emplean estos comandos para deshabilitar mecanismos de defensa, como antivirus, EDRs y firewalls, o para detener servicios críticos que bloquean el acceso a archivos específicos (como bases de datos) para su posterior exfiltración o cifrado por ransomware.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "impair_defenses",
+    "service_stop",
+    "antivirus_disable",
+    "T1562.001",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE DESACTIVACIÓN DE DEFENSAS! Se ha detectado un intento de detener un servicio mediante el comando **{command}** en el host **{host}**. Bajo la técnica de **Impair Defenses** (**MITRE ATT&CK T1562.001**), esta actividad sugiere que un atacante está intentando 'cegar' al sistema desactivando componentes de seguridad. Se recomienda verificar de inmediato qué servicio fue afectado y si el usuario **{user}** tiene autorización para realizar tareas de mantenimiento en este servidor.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se ejecutó la detención del servicio."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa (ej. net stop WinDefend o sc stop Sysmon)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que ejecutó la acción (usualmente requiere privilegios de administrador)."
+    }
+  ]
+}

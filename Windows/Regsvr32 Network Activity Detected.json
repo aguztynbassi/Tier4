@@ -1,0 +1,73 @@
+[
+  {
+    "name": "Regsvr32 Network Activity Detected",
+    "description": "Detects network connections and DNS queries initiated via the regsvr32 binary.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "signed binary proxy execution",
+      "rundll32",
+      "regsvr32",
+      "TA0005",
+      "T1218.004",
+      "T1218.010",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Suspicious network activity detected originating from **`regsvr32.exe`**. This activity, which includes network connections or DNS queries, is unusual for this legitimate Windows binary and often indicates defense evasion or malicious execution. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Process GUID**: {process_guid}\n* **Event ID**: {event_id}\n* **User**: {user}\n* **Process Path**: {process_path}\n* **Parent Process Path**: {parent_process_path}\n* **Destination IP**: {network_connection.destination_ip} (if Event ID 3)\n* **Destination Port**: {network_connection.destination_port} (if Event ID 3)\n* **DNS Query Name**: {dns_query.query_name} (if Event ID 22)\n\n**Investigate this event immediately.** Determine if this `regsvr32` activity is legitimate for your environment or if it signals a compromise, possibly involving a signed binary proxy execution technique.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the network connection or DNS query event."
+      },
+      {
+        "name": "process_guid",
+        "required": true,
+        "description": "The unique identifier of the `regsvr32.exe` process."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID (3 for Network Connection, 22 for DNS Query)."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which `regsvr32.exe` was executed."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the `regsvr32.exe` executable."
+      },
+      {
+        "name": "parent_process_path",
+        "required": true,
+        "description": "The full path to the parent process of `regsvr32.exe`."
+      },
+      {
+        "name": "network_connection.destination_ip",
+        "required": false,
+        "description": "The destination IP address if the event is a network connection (Event ID 3)."
+      },
+      {
+        "name": "network_connection.destination_port",
+        "required": false,
+        "description": "The destination port if the event is a network connection (Event ID 3)."
+      },
+      {
+        "name": "dns_query.query_name",
+        "required": false,
+        "description": "The domain name queried if the event is a DNS query (Event ID 22)."
+      }
+    ]
+  }
+]

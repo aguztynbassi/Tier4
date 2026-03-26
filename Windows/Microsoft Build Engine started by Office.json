@@ -1,0 +1,52 @@
+{
+    "name": "Microsoft Build Engine started by Office",
+    "description": "This prompt detects the execution of Microsoft Build Engine (msbuild.exe) by Microsoft Office products. Attackers can use this technique for defense evasion by using a legitimate process to execute malicious code. This activity is often an indicator of a malicious document (e.g., a macro-enabled Office file) attempting to run code on the system.",
+    "tags": [
+        "security",
+        "detection",
+        "windows",
+        "TA0005",
+        "T1127",
+        "T1127.001"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the security event where the process `{image}` was spawned by a parent process from the Microsoft Office suite (`{parent_image}`). The event occurred at `{timestamp}` on the host `{hostname}`. Analyze the command line arguments (`{command_line}`) for any suspicious parameters. Check the reputation of the user `{user}` and the context of the activity. Provide a summary of your findings and determine if this is a legitimate software execution or a potential malicious activity, and suggest mitigation steps.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "image",
+            "required": true,
+            "description": "The name of the process that was executed (should be msbuild.exe)."
+        },
+        {
+            "name": "parent_image",
+            "required": true,
+            "description": "The parent process that initiated the execution, which should be a Microsoft Office application (e.g., winword.exe, excel.exe)."
+        },
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        },
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname where the event was detected."
+        },
+        {
+            "name": "command_line",
+            "required": true,
+            "description": "The full command line of the msbuild.exe process."
+        },
+        {
+            "name": "user",
+            "required": true,
+            "description": "The user account under which the process was executed."
+        }
+    ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "Unusual Active Directory Replication Traffic Detected",
+  "description": "Detecta transferencias de datos inusuales a través del protocolo LDAP/Replicación. Los adversarios utilizan privilegios de replicación de dominio para solicitar datos de cuentas (incluyendo hashes de contraseñas) desde un Controlador de Dominio hacia un host comprometido, simulando ser un DC legítimo. Este comportamiento es característico de ataques tipo DCSync.",
+  "tags": [
+    "security",
+    "exfiltration",
+    "credential_access",
+    "active_directory",
+    "dcsync",
+    "ldap_abuse",
+    "T1048",
+    "network_logs"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta Crítica de Replicación de AD! Se ha detectado un volumen de transferencia de datos inusual (>{bytes_transferred} bytes) desde el Controlador de Dominio hacia el host **{source_ip}** por el puerto 389. Bajo la técnica de **Exfiltration Over Alternative Protocol** (**MITRE ATT&CK T1048**), este evento sugiere un posible ataque de **DCSync**. Un atacante podría estar extrayendo la base de datos de credenciales del dominio. Se recomienda verificar si el host de destino es un DC legítimo y auditar los permisos de replicación de la cuenta involucrada de inmediato.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "source_ip",
+      "required": true,
+      "description": "La dirección IP que recibe los datos de replicación (posible host atacante)."
+    },
+    {
+      "name": "bytes_transferred",
+      "required": true,
+      "description": "Volumen de datos transferidos en la sesión detectada."
+    },
+    {
+      "name": "destination_dc",
+      "required": true,
+      "description": "El Controlador de Dominio desde el cual se están extrayendo los datos."
+    }
+  ]
+}

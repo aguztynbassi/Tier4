@@ -1,0 +1,49 @@
+  {
+    "name": "Account Discovery Detected (Local and Domain)",
+    "description": "Detects common command-line patterns indicating an adversary's attempt to discover local or domain user accounts and group memberships. This reconnaissance activity often involves using built-in Windows utilities like `net.exe` or `powershell.exe` to enumerate users, groups, and cached credentials, which is crucial for subsequent attack phases such as privilege escalation or lateral movement.",
+    "tags": [
+      "security",
+      "discovery",
+      "account_discovery",
+      "T1087",
+      "T1087.001",
+      "T1087.002",
+      "sysmon",
+      "windows_processes"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "An alert has been triggered on the host **{computer_name}**: a process, **{image}**, executed the command line **{command_line}**, which is a common pattern for **Account Discovery** (**MITRE ATT&CK T1087**). This activity indicates that a user or process is attempting to enumerate local or domain accounts and group memberships, which is a key step in the reconnaissance phase of an attack. The activity was initiated by **{parent_image}** under the user **{user}**. While this could be a legitimate administrative action, it is also a strong indicator of a potential security incident. Immediate investigation is required to determine the legitimacy of this activity and if it's related to a possible compromise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "image",
+        "required": true,
+        "description": "The process image (e.g., 'net.exe', 'powershell.exe')."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line executed."
+      },
+      {
+        "name": "parent_image",
+        "required": true,
+        "description": "The parent process that launched the command."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process ran."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The hostname of the system where the event occurred."
+      }
+    ]
+  }

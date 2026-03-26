@@ -1,0 +1,32 @@
+{
+  "name": "Resource: Critical Memory Usage Threshold Exceeded",
+  "description": "Detecta cuando el uso de memoria RAM supera el 90%. En seguridad, este umbral crítico puede indicar la ejecución de procesos de recolección de datos automatizada, el almacenamiento de grandes volúmenes de información en memoria antes de su exfiltración, o la actividad de malware que consume recursos de forma intensiva para degradar las defensas del sistema.",
+  "tags": [
+    "security_monitoring",
+    "resource_exhaustion",
+    "collection",
+    "performance_anomaly",
+    "T1119",
+    "endpoint_health"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE RECURSOS: Memoria Crítica! El uso de memoria en el host **{host}** ha superado el 90% (**{use}%**). Bajo la técnica de **Automated Collection** (**MITRE ATT&CK T1119**), este consumo extremo puede ser indicativo de procesos maliciosos recolectando información o preparando una fase de impacto. Se requiere la revisión inmediata de los procesos con mayor consumo de RAM (Top Consumers) para descartar actividad no autorizada.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El sistema que reporta el uso crítico de memoria."
+    },
+    {
+      "name": "use",
+      "required": true,
+      "description": "El porcentaje exacto de memoria en uso (debe ser > 90)."
+    }
+  ]
+}

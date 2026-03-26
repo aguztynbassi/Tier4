@@ -1,0 +1,39 @@
+{
+  "name": "PowerShell: Kerberoasting Activity Detected (Invoke-Kerberoast)",
+  "description": "Detecta el uso del cmdlet 'Invoke-Kerberoast' en los logs de PowerShell. Esta herramienta se utiliza para solicitar tickets de servicio de Kerberos (TGS) con el fin de realizar ataques de cracking de contraseñas offline. El Kerberoasting es una técnica muy eficaz porque no requiere privilegios administrativos ni interactuar directamente con el proceso LSASS, permitiendo el robo de credenciales de cuentas de servicio de forma sigilosa.",
+  "tags": [
+    "security",
+    "credential_access",
+    "powershell_exploitation",
+    "kerberos",
+    "kerberoasting",
+    "active_directory",
+    "T1558.003",
+    "event_4103"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Intento de Kerberoasting detectado! Se ha identificado el uso de **Invoke-Kerberoast** en el host **{host}** por el usuario **{user}**. Bajo la técnica de **Kerberoasting** (**MITRE ATT&CK T1558.003**), esto indica que un atacante está recolectando tickets de servicio para descifrar contraseñas de cuentas sensibles fuera de línea. Se recomienda investigar el origen de la ejecución y revisar si el usuario implicado tiene razones legítimas para ejecutar herramientas de administración de seguridad.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo desde donde se lanzó el script de PowerShell."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "El comando o script de PowerShell detectado (Invoke-Kerberoast)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que ejecutó el comando."
+    }
+  ]
+}

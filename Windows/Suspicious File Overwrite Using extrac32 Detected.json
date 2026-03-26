@@ -1,0 +1,65 @@
+[
+  {
+    "name": "Suspicious File Overwrite Using extrac32 Detected",
+    "description": "Detects suspicious use of `extrac32.exe` to overwrite files. Adversaries may abuse this legitimate utility to overwrite critical system files as part of an attack, potentially for defense evasion or privilege escalation.",
+    "tags": [
+      "security",
+      "detection",
+      "persistence",
+      "valid accounts",
+      "impair defenses",
+      "TA0005",
+      "T1078",
+      "T1562",
+      "Windows",
+      "extrac32",
+      "file_overwrite",
+      "defense_evasion"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Medium-severity alert: Suspicious file overwrite attempt using `extrac32.exe` detected on host '{host}' by user '{user}'. The process '{process_name}' at '{process_path}' was executed with command line '{command_line}', including common overwrite flags like '/Y' or '/O'. This legitimate utility can be abused by adversaries to overwrite critical system files, potentially leading to defense evasion or privilege escalation. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**Investigate this activity immediately.** Determine if this `extrac32.exe` execution is legitimate and expected behavior in your environment, especially with these overwrite flags. Examine the target file being overwritten and assess any potential impact on system integrity or security controls. This could be an indicator of defense evasion, persistence, or system manipulation.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Windows Security Event ID for Process Creation (4688)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was executed, which should be 'extrac32.exe'."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the extrac32.exe executable."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute extrac32.exe, including overwrite flags."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which extrac32.exe was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

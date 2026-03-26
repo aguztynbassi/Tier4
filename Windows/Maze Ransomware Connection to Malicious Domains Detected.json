@@ -1,0 +1,39 @@
+{
+  "name": "C2: Connection to Maze Ransomware Malicious Domains",
+  "description": "Detecta intentos de conexión o resolución DNS hacia dominios identificados como parte de la infraestructura de Maze. Este ransomware destaca por exfiltrar información antes de cifrarla; por lo tanto, la comunicación con estos dominios suele indicar una etapa avanzada del ataque donde el robo de datos es inminente o está ocurriendo para presionar a la víctima con su publicación.",
+  "tags": [
+    "security",
+    "command_and_control",
+    "ransomware",
+    "maze_threat",
+    "domain_reputation",
+    "double_extortion",
+    "T1090",
+    "dns_monitoring"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Comunicación con Dominio de Maze! El host **{host}** ha intentado acceder al dominio malicioso **{domain}**. Bajo la técnica de **Proxy** (**MITRE ATT&CK T1090**), esto representa una conexión activa con la infraestructura de doble extorsión de Maze. Se requiere el bloqueo inmediato del dominio a nivel de DNS/Proxy y el aislamiento del equipo afectado para prevenir la exfiltración de datos.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo interno que inició la solicitud al dominio malicioso."
+    },
+    {
+      "name": "domain",
+      "required": true,
+      "description": "El nombre de dominio (FQDN) detectado que pertenece a la lista negra de Maze."
+    },
+    {
+      "name": "url",
+      "required": false,
+      "description": "La URL completa solicitada, útil para identificar el recurso específico (ej. un panel de C2 o un endpoint de subida de archivos)."
+    }
+  ]
+}

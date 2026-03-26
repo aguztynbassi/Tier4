@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Clop Ransomware Execution Detected via Hash",
+    "description": "Detects the execution of Clop ransomware binaries on a host by matching known cryptographic hashes of the malware.",
+    "tags": [
+      "security",
+      "detection",
+      "ransomware",
+      "Clop",
+      "malware",
+      "Windows",
+      "Sysmon",
+      "T1486",
+      "TA0008"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Clop ransomware execution has been detected on the host {computer_name}. The process with the hash {hash} was executed by user {user} with command line arguments: '{command_line}'. This is a critical incident indicating that data encryption for impact is occurring or has already occurred. Immediate investigation and incident response are required. Review the parent process '{parent_image}' to understand the initial access vector.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The hostname of the infected system."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user context under which the ransomware executed."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute the process."
+      },
+      {
+        "name": "hash",
+        "required": true,
+        "description": "The hash (e.g., SHA256) of the malicious executable."
+      },
+      {
+        "name": "parent_image",
+        "required": true,
+        "description": "The full path to the parent process that launched the ransomware."
+      }
+    ]
+  }
+]

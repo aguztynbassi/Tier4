@@ -1,0 +1,39 @@
+{
+  "name": "DCSync Credential Dumping Attack Detected",
+  "description": "Detecta intentos de replicación de datos de Active Directory desde hosts no autorizados. Al abusar de los derechos 'DS-Replication-Get-Changes' y 'DS-Replication-Get-Changes-All', un atacante puede extraer hashes de contraseñas (incluyendo NTLM y claves Kerberos) de cualquier usuario del dominio sin dejar rastros en el sistema de archivos del Controlador de Dominio.",
+  "tags": [
+    "security",
+    "credential_access",
+    "active_directory",
+    "dcsync",
+    "mimikatz",
+    "rubeus",
+    "T1003.001",
+    "event_4662"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Ataque DCSync Detectado! Se ha registrado una solicitud de replicación de directorio sospechosa en el Controlador de Dominio **{host}**. El usuario **{SubjectUserName}** ha accedido a propiedades de replicación sensibles. Bajo la técnica de **OS Credential Dumping: LSASS Memory** (**MITRE ATT&CK T1003.001**), este evento indica un intento de extraer hashes de contraseñas de todo el dominio. Se recomienda verificar de inmediato si la cuenta de origen tiene permisos legítimos de replicación y aislar el host desde donde se originó la solicitud.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El Controlador de Dominio que recibió la solicitud de replicación."
+    },
+    {
+      "name": "SubjectUserName",
+      "required": true,
+      "description": "La cuenta de usuario (o computadora) que inició la solicitud de DCSync."
+    },
+    {
+      "name": "ObjectProperties",
+      "required": true,
+      "description": "Los GUIDs de los permisos de replicación consultados (ej. 1131f6aa-9c07-11d1-f79f-00c04fc2dcd2)."
+    }
+  ]
+}

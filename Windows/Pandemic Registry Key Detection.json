@@ -1,0 +1,44 @@
+{
+  "name": "Lateral Movement: Pandemic Implant Registry Activity",
+  "description": "Detecta indicadores de compromiso asociados al implante Pandemic. Este malware convierte servidores de archivos en vectores de infección al interceptar solicitudes SMB y reemplazar archivos legítimos con versiones maliciosas sobre la marcha. La detección se centra en la configuración del servicio del driver malicioso en el registro y el uso de loaddll para cargar componentes del implante.",
+  "tags": [
+    "security",
+    "lateral_movement",
+    "pandemic_implant",
+    "smb_hijacking",
+    "persistence",
+    "patient_zero",
+    "T1105",
+    "sysmon_event_13"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Implante Pandemic Detectado! Se ha identificado actividad en el registro (**{target_object}**) asociada al implante Pandemic en el host **{host}**. Bajo la técnica de **Ingress Tool Transfer** (**MITRE ATT&CK T1105**), este servidor podría estar infectando activamente a otros equipos de la red al troyanizar archivos compartidos. Se requiere el aislamiento inmediato del servidor de archivos y una auditoría de integridad de los binarios servidos vía SMB.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El servidor de archivos donde se detectó la actividad del registro o el comando loaddll."
+    },
+    {
+      "name": "target_object",
+      "required": true,
+      "description": "La ruta de la llave de registro modificada (ej. HKLM\\SYSTEM\\CurrentControlSet\\services\\null\\Instance)."
+    },
+    {
+      "name": "command",
+      "required": false,
+      "description": "La línea de comandos detectada, específicamente si incluye la carga de DLLs sospechosas."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la acción, lo cual puede indicar el compromiso de una cuenta administrativa."
+    }
+  ]
+}

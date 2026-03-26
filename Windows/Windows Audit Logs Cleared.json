@@ -1,0 +1,38 @@
+{
+  "name": "Windows Security Audit Logs Cleared",
+  "description": "Detecta cuando el registro de eventos de seguridad de Windows ha sido borrado. Esta acción es un indicador crítico de actividad maliciosa, ya que los atacantes suelen limpiar los logs para ocultar rastros de intrusión, escalada de privilegios o exfiltración de datos, impidiendo la reconstrucción de la línea de tiempo del incidente.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "anti_forensics",
+    "log_clearing",
+    "T1070.001",
+    "event_1102",
+    "event_104"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Logs de Seguridad Borrados! Se ha detectado que los registros de auditoría han sido limpiados en el host **{host}** por el usuario **{user}**. Bajo la técnica de **Indicator Removal on Host** (**MITRE ATT&CK T1070.001**), esta es una táctica de evasión de defensas extrema utilizada para encubrir un compromiso del sistema. Se requiere una investigación forense inmediata de este host y la revisión de la actividad previa de la cuenta de usuario implicada.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se ejecutó el borrado de los logs."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la acción (normalmente requiere privilegios de administrador)."
+    },
+    {
+      "name": "log_name",
+      "required": false,
+      "description": "El registro específico que fue limpiado (Security, System, Application)."
+    }
+  ]
+}

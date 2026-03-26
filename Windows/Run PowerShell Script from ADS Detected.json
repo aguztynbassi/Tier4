@@ -1,0 +1,42 @@
+{
+    "name": "Run PowerShell Script from ADS Detected",
+    "description": "PowerShell script execution from Alternate Data Stream (ADS) is detected. Attackers often hide malicious scripts in Alternate Data Streams (ADS) to evade detection and maintain persistence.",
+    "tags": [
+        "TA0005",
+        "T1564",
+        "T1564.004",
+        "security",
+        "detection",
+        "Windows Sysmon"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the execution of a PowerShell script from an Alternate Data Stream (ADS) at `{timestamp}` on host `{hostname}`. The command line used was `{command_line}`. Identify the user (`{user_name}`) who initiated this activity and the specific file and stream from which the script was executed. Analyze the contents of the script if possible. Provide a summary of the findings and recommend steps to remove the malicious ADS and contain the threat.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        },
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname where the activity was detected."
+        },
+        {
+            "name": "command_line",
+            "required": true,
+            "description": "The full command line of the PowerShell process."
+        },
+        {
+            "name": "user_name",
+            "required": true,
+            "description": "The user account under which the process was executed."
+        }
+    ]
+}

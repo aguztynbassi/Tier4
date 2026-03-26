@@ -1,0 +1,39 @@
+{
+  "name": "WDigest Clear-Text Credential Storage Enabled",
+  "description": "Detecta la modificación del valor de registro UseLogonCredential en la ruta de WDigest. Esta acción suele ser realizada por adversarios para obligar a Windows a almacenar contraseñas en texto plano en la memoria de LSASS, facilitando enormemente la extracción de credenciales mediante herramientas de post-explotación.",
+  "tags": [
+    "security",
+    "credential_access",
+    "defense_evasion",
+    "registry_modification",
+    "wdigest",
+    "lsass",
+    "T1112",
+    "sysmon_event_13"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Configuración de Texto Plano Detectada! Se ha modificado el valor de **UseLogonCredential** en el host **{host}**. Bajo la técnica de **Modify Registry** (**MITRE ATT&CK T1112**), este cambio debilita la seguridad del sistema al permitir que las contraseñas se almacenen sin cifrar en la memoria. Este es un paso preparatorio común antes de un ataque masivo de robo de credenciales. Se recomienda revertir el cambio y analizar el proceso responsable.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó el cambio en la configuración de seguridad."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la modificación del registro."
+    },
+    {
+      "name": "process_name",
+      "required": false,
+      "description": "El proceso que ejecutó la modificación (ej. reg.exe o powershell.exe)."
+    }
+  ]
+}

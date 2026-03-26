@@ -1,0 +1,73 @@
+[
+  {
+    "name": "Cryptomining Software Development Activity in Code Repository",
+    "description": "Detects activities indicative of cryptomining software development within a code repository (e.g., GitHub, GitLab, Bitbucket). This includes the creation, pushing, or committing of code to repositories or files named after common cryptomining terms or file extensions. This can signal potential malicious activity where an attacker or insider is preparing cryptomining capabilities that could later be deployed on compromised systems for unauthorized resource utilization.",
+    "tags": [
+      "security",
+      "detection",
+      "medium",
+      "resource_development",
+      "cryptomining",
+      "initial_access",
+      "internal_threat",
+      "TA0042",
+      "T1587",
+      "T1587.003"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "ALERTA DE SEVERIDAD MEDIA: ¡Actividad de Desarrollo de Software de Criptominado Detectada en Repositorio de Código!\\n\\n**Se ha detectado actividad sospechosa relacionada con el desarrollo de software de criptominado en el repositorio '{RepoName}' a las {Timestamp}.** La operación '{Operation}' realizada por el usuario '{User}' (desde IP: {SourceIp}, si aplica) sugiere la preparación de capacidades de criptominado, lo cual podría llevar a un uso no autorizado de recursos o ser una fase de **Desarrollo de Recursos (TA0042)** para futuros ataques.\\n\\n**Detalles del Evento:**\\n* **Timestamp**: {Timestamp}\\n* **Usuario**: '{User}'\\n* **IP de Origen**: '{SourceIp}' (si disponible)\\n* **Nombre del Repositorio**: '{RepoName}'\\n* **Operación**: '{Operation}' (e.g., 'create_repository', 'push_code', 'commit')\\n* **Archivos/Detalles Involucrados**: '{FileName}' (o detalles relevantes de '{Details}')\\n* **Mensaje de Commit (si aplica)**: '{CommitMessage}'\\n* **Regla de Detección**: {RuleName}\\n\\nLa detección se basa en la presencia de términos clave asociados con el criptominado en el nombre del repositorio, el nombre de los archivos o en el mensaje de confirmación. Esto se alinea con la técnica **Desarrollar Capacidades: Criptominado (T1587.003)**, donde un adversario (o un usuario interno malintencionado) está construyendo o modificando herramientas para actividades de criptominado ilegítimas.\\n\\n**ACCIONES INMEDIATAS RECOMENDADAS (PRIORIDAD MEDIA - INVESTIGAR):**\\n\\n1.  **INVESTIGAR AL USUARIO:** Contacte al usuario '{User}' para verificar la legitimidad de esta actividad. ¿Está este usuario autorizado para desarrollar o trabajar con software de criptominado? ¿Es parte de un proyecto de investigación, seguridad o desarrollo aprobado?\\n2.  **REVISAR EL CONTENIDO DEL REPOSITORIO:** Examine a fondo el repositorio '{RepoName}'. \\n    * Revise los archivos específicos mencionados ('{FileName}') y el historial de commits. \\n    * Busque archivos binarios, scripts ejecutables, archivos de configuración de pools de minería, y cualquier otro código que pueda ser utilizado para la criptominería.\\n3.  **DETERMINAR LA INTENCIÓN:** Evalúe la intención detrás de esta actividad. ¿Se está desarrollando un minero? ¿Se está modificando un minero existente? ¿Para qué propósito?\\n4.  **REVISAR POLÍTICAS DE USO ACEPTABLE:** Confirme que el desarrollo de software de criptominado está permitido por las políticas de su organización en el entorno de desarrollo. Si no lo está, tome las medidas disciplinarias apropiadas.\\n5.  **BLOQUEAR/RESTRINGIR (si es malicioso):** Si se determina que la actividad es maliciosa o no autorizada, considere las siguientes acciones:\\n    * Bloquear el repositorio o restringir el acceso al mismo.\\n    * Eliminar cualquier código malicioso o no autorizado.\\n    * Bloquear la dirección IP '{SourceIp}' si es externa y sospechosa.\\n6.  **ESCALAR:** Escalar al equipo de seguridad si la actividad es maliciosa o si se necesita una investigación más profunda de una posible amenaza interna.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the code repository activity."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account that performed the code repository activity."
+      },
+      {
+        "name": "SourceIp",
+        "required": false,
+        "description": "The IP address of the user who performed the activity (if logged by the platform)."
+      },
+      {
+        "name": "RepoName",
+        "required": true,
+        "description": "The name of the code repository where the activity occurred."
+      },
+      {
+        "name": "FileName",
+        "required": false,
+        "description": "The name of the file or path that was changed/added, if available and relevant."
+      },
+      {
+        "name": "Operation",
+        "required": true,
+        "description": "The specific operation performed in the code repository (e.g., 'create_repository', 'push_code', 'commit')."
+      },
+      {
+        "name": "CommitMessage",
+        "required": false,
+        "description": "The message associated with the commit, if available."
+      },
+      {
+        "name": "Details",
+        "required": false,
+        "description": "Any additional relevant details about the code repository activity."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]

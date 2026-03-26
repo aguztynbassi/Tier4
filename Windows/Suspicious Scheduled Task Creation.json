@@ -1,0 +1,61 @@
+[
+  {
+    "name": "Suspicious Scheduled Task Creation",
+    "description": "The creation of a scheduled task with suspicious characteristics has been detected, which could indicate an attacker establishing persistence or executing malicious code.",
+    "tags": [
+      "security",
+      "detection",
+      "medium",
+      "windows",
+      "persistence",
+      "scheduled_task",
+      "TA0003",
+      "T1053"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "MEDIUM SEVERITY ALERT: Suspicious Scheduled Task Creation Detected.\\n\\nA suspicious scheduled task named '{TaskName}' was created on host '{ComputerName}' by user '{SubjectUserName}' ('{SubjectDomainName}') at '{Timestamp}'. The task is configured to execute '{TaskCommand}'. This could indicate an adversary attempting to establish persistence or execute code.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **User**: {SubjectUserName} ({SubjectDomainName})\\n* **Task Name**: {TaskName}\\n* **Task Command**: {TaskCommand}\\n* **Event ID**: {EventID}\\n\\n**RECOMMENDED ACTIONS (MEDIUM PRIORITY):**\\n\\n1.  **VERIFY LEGITIMACY:** Immediately contact '{SubjectUserName}' to verify if the creation of this scheduled task is legitimate. If the user is a system administrator, confirm it was an authorized action. Be suspicious if the user claims ignorance or if the task seems unrelated to their role.\n2.  **ANALYZE TASK DETAILS:**\n    * **Task Name:** Is '{TaskName}' a recognized, legitimate name for scheduled tasks in your environment? Look for typos, random characters, or names attempting to impersonate legitimate tasks.\n    * **Task Command:** Carefully analyze '{TaskCommand}'. Is it executing a known legitimate binary or script? Is the path unusual? Does it contain obfuscated commands or suspicious parameters?\n    * **Task Settings:** (Requires manual review in Task Scheduler) Check the trigger (e.g., runs at startup, logon, specific time intervals) and the user context under which it runs.\n3.  **USER ACCOUNT INVESTIGATION:** Investigate the '{SubjectUserName}' account for signs of compromise (e.g., unusual login times, failed authentications, activity on other hosts) if the task is deemed malicious.\n4.  **HOST INVESTIGATION:** If the task is suspicious, investigate host '{ComputerName}' for other signs of compromise, such as unusual process activity, new network connections, or the presence of new files related to the '{TaskCommand}'.\n5.  **THREAT HUNT:** Search your environment for other instances of '{TaskName}' or '{TaskCommand}' being created on other hosts.\n6.  **ERADICATION/REMEDIATION:** If confirmed malicious, delete the scheduled task and proceed with incident response steps for a compromised host.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp when the scheduled task was created."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Windows Security Event ID (expected 4698)."
+      },
+      {
+        "name": "TaskName",
+        "required": true,
+        "description": "The name of the scheduled task that was created."
+      },
+      {
+        "name": "TaskCommand",
+        "required": true,
+        "description": "The command line or executable configured to run by the scheduled task."
+      },
+      {
+        "name": "SubjectUserName",
+        "required": true,
+        "description": "The user account that created the scheduled task."
+      },
+      {
+        "name": "SubjectDomainName",
+        "required": true,
+        "description": "The domain of the user account that created the scheduled task."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the scheduled task was created."
+      }
+    ]
+  }
+]

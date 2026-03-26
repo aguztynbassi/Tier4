@@ -1,0 +1,38 @@
+{
+  "name": "Local User Account Created on Non-Domain Controller",
+  "description": "Detecta la creación de una cuenta de usuario local en un sistema que no actúa como Controlador de Dominio. Los adversarios crean cuentas locales para mantener persistencia 'fuera de banda', evadir las auditorías centralizadas de Active Directory y asegurar una vía de acceso permanente al endpoint. Esta actividad suele ser el paso previo a la escalada de privilegios locales.",
+  "tags": [
+    "security",
+    "persistence",
+    "local_account",
+    "shadow_admin",
+    "endpoint_security",
+    "T1136.001",
+    "event_4720"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Persistencia Local! Se ha detectado la creación de la cuenta de usuario **{target_user}** en el host **{host}**, el cual no es un Controlador de Dominio. Bajo la técnica de **Create Account: Local Account** (**MITRE ATT&CK T1136.001**), este evento podría representar un intento de establecer un acceso secundario persistente fuera de la gestión centralizada. Se recomienda validar si existe un ticket de soporte para esta acción y auditar si la cuenta fue añadida al grupo de Administradores locales.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del servidor o estación de trabajo donde se creó la cuenta."
+    },
+    {
+      "name": "target_user",
+      "required": true,
+      "description": "El nombre de la nueva cuenta de usuario local creada."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta (caller_user) que realizó la creación del usuario."
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+[
+  {
+    "name": "Empire PowerShell Launch Parameters",
+    "description": "Detects suspicious PowerShell command-line parameters commonly used by the Empire post-exploitation framework. These parameters are often used to hide the PowerShell console window, bypass security restrictions, and execute encoded commands.",
+    "tags": [
+      "security",
+      "detection",
+      "execution",
+      "command and scripting interpreter",
+      "PowerShell",
+      "malware",
+      "Empire",
+      "TA0002",
+      "T1059",
+      "T1059.001",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Suspicious PowerShell command-line parameters associated with the Empire post-exploitation framework detected. Event Details: **Timestamp** {Timestamp}, **Event ID** {EventID}, **User** {user}, **Process Name** {process_name}, **Command** {command}. Investigate this high-risk activity immediately for signs of post-exploitation activity.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Event ID for Process Creation (e.g., 1)."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process ran."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process (powershell.exe)."
+      },
+      {
+        "name": "command",
+        "required": true,
+        "description": "The full command line, containing suspicious PowerShell parameters."
+      }
+    ]
+  }
+]

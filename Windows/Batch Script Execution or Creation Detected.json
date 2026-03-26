@@ -1,0 +1,51 @@
+[
+  {
+    "name": "Batch Script Execution or Creation Detected",
+    "description": "Detects the creation or execution of batch scripts (`.bat`, `.cmd`). Adversaries commonly abuse command-line interpreters to execute commands, scripts, or binaries using batch files. This activity can indicate malicious automation, payload delivery, or the execution of basic scripting for various adversarial activities, such as defense evasion, execution, and persistence.",
+    "tags": [
+      "security",
+      "execution",
+      "defense_evasion",
+      "command_and_scripting",
+      "T1059",
+      "T1059.003",
+      "sysmon",
+      "windows_processes"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A suspicious batch script execution or creation has been detected on the host **{computer_name}**. The process **{image}** executed the command line **{command_line}**, which involves a batch script. Alternatively, a new batch script file was created at **{target_filename}**. This activity is a common technique for **Execution** and **Defense Evasion** (**MITRE ATT&CK T1059.003**). While legitimate use of batch scripts is very common, this event requires careful review, especially if it originated from a suspicious location or was executed by an unusual process. The event occurred under the user **{user}**. Investigate the full context of the script to determine its purpose and whether it is a legitimate administrative task or a malicious payload.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "image",
+        "required": true,
+        "description": "The process image for execution (e.g., 'cmd.exe') or the creating process (e.g., 'explorer.exe')."
+      },
+      {
+        "name": "command_line",
+        "required": false,
+        "description": "The full command line of the executing process."
+      },
+      {
+        "name": "target_filename",
+        "required": false,
+        "description": "The name of the created batch file."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account that ran the command or created the file."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      }
+    ]
+  }
+]

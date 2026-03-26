@@ -1,0 +1,44 @@
+{
+  "name": "C2/Exfiltration: Windows System Binary Communication with GitHub",
+  "description": "Detecta ejecutables situados en el directorio de Windows que inician conexiones de red hacia dominios de GitHub o GitHub User Content. Los adversarios utilizan frecuentemente binarios legítimos del sistema (LOLBins) para descargar scripts maliciosos, herramientas de post-explotación o para utilizar GitHub como una plataforma de Comando y Control (C2) y exfiltración, evadiendo así los filtros de reputación de dominio.",
+  "tags": [
+    "security",
+    "persistence",
+    "ingress_tool_transfer",
+    "lolbins",
+    "github_c2",
+    "network_connection",
+    "T1105",
+    "sysmon_event_3"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE TRANSFERENCIA DE HERRAMIENTAS: Conexión de Sistema a GitHub! El binario de Windows **{image}** ha iniciado una conexión hacia **{destination_host}** en el host **{host}**. Bajo la técnica de **Ingress Tool Transfer** (**MITRE ATT&CK T1105**), este comportamiento es típico de atacantes descargando malware adicional o utilizando GitHub como C2. Se requiere la revisión inmediata de la línea de comandos asociada.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde un proceso del sistema intentó acceder a GitHub."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "La ruta completa del ejecutable de Windows (ej. C:\\Windows\\System32\\certutil.exe)."
+    },
+    {
+      "name": "destination_host",
+      "required": true,
+      "description": "El dominio de GitHub contactado (ej. raw.githubusercontent.com)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El contexto de usuario que ejecutó el binario."
+    }
+  ]
+}

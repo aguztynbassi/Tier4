@@ -1,0 +1,46 @@
+{
+  "name": "SysKey Registry Keys Access",
+  "description": "Detection of access operations to specific registry keys used to calculate the SysKey. An adversary may access these keys to retrieve a key used for credential dumping, which is a common discovery and credential access technique.",
+  "tags": [
+    "security",
+    "discovery",
+    "credential_access",
+    "T1012",
+    "windows_registry"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a process accessed a critical **SysKey Registry Key** (**{object_name}**) to retrieve a key used for credential dumping. This activity is a strong indicator of an adversary performing **Discovery** (**MITRE ATT&CK T1012**) in preparation for a **Credential Access** attack. The access was performed under the user **{user}**. Immediate investigation is required to determine the legitimacy of this action and to determine if a credential dumping attack is imminent or has already occurred. The event occurred with Event ID **{event_id}** and the object type **{object_type}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "event_id",
+      "required": true,
+      "description": "The Windows event ID (4656 or 4663)."
+    },
+    {
+      "name": "object_type",
+      "required": true,
+      "description": "The type of object accessed, which should be 'key'."
+    },
+    {
+      "name": "object_name",
+      "required": true,
+      "description": "The name of the registry key that was accessed."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the access."
+    }
+  ]
+}

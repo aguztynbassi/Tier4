@@ -1,0 +1,65 @@
+[
+  {
+    "name": "Suspicious Process Execution via Pester Detected",
+    "description": "Detects code execution via Pester.bat, a PowerShell module for testing, which can be abused for malicious purposes.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "execution",
+      "powershell",
+      "TA0005",
+      "TA0002",
+      "T1059.001",
+      "Windows",
+      "Sysmon",
+      "Pester",
+      "PowerShell"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "MEDIUM-SEVERITY ALERT: Suspicious process execution involving the Pester PowerShell module detected on host '{host}' by user '{user}'. A process '{process_name}' at '{process_path}' was executed with command line '{command_line}', indicating an attempt to leverage Pester for potentially malicious purposes. This activity can be a form of defense evasion or direct execution.\n\nEvent Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**RECOMMENDED ACTION:** Investigate the legitimacy of this Pester execution. Determine if the command line arguments are consistent with normal and authorized use of Pester in your environment. Examine the full command line for any obfuscated or encoded payloads. Look for subsequent suspicious processes, network connections, or file modifications. If the activity is unauthorized or malicious, conduct a thorough forensic analysis to determine the initial compromise vector and any persistence mechanisms. This alert may require tuning to reduce false positives in environments where Pester is heavily used for legitimate purposes.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Process Creation (1)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was executed (e.g., powershell.exe or cmd.exe)."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the executable."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used, indicating Pester execution."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

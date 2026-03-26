@@ -1,0 +1,63 @@
+[
+  {
+    "name": "Proxy Execution via xWizard",
+    "description": "Detects the execution of the `xWizard` tool with a CLSID argument, used to achieve proxy execution. Adversaries can bypass defenses by proxying the execution of malicious content via xWizard.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "system binary proxy execution",
+      "TA0005",
+      "T1218",
+      "Windows",
+      "xWizard",
+      "CLSID",
+      "COM"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: Suspicious proxy execution via `xWizard.exe` detected on host '{host}' by user '{user}'. The process '{process_name}' at '{process_path}' was executed with a `runwizard` command line containing a CLSID (`{command_line}`). This pattern is a strong indicator of an adversary attempting to bypass defenses by leveraging a legitimate Windows tool to execute malicious content. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**IMMEDIATE AND URGENT ACTION REQUIRED:** This is a critical security incident. Isolate the affected system immediately. Analyze the full command line to understand the specific CLSID being invoked and investigate any associated malicious payload. Conduct a thorough forensic analysis to determine the source of this activity and any further compromise. This alert signifies a high-priority threat.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Windows Security Event ID for Process Creation (4688)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was executed, which should be 'xwizard.exe'."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the xwizard.exe executable."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute xwizard.exe, including 'runwizard' and a CLSID."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which xwizard.exe was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

@@ -1,0 +1,39 @@
+{
+  "name": "Exploit: PlugX DLL Side-Loading via Uncommon Service Binaries",
+  "description": "Detecta la ejecución de binarios legítimos (como MsMpEng.exe, rc.exe o chrome_frame_helper.exe) desde directorios no estándar. Este comportamiento es una firma clásica del malware PlugX, que utiliza DLL Side-Loading para ejecutar código malicioso bajo el contexto de un proceso firmado y confiable, evadiendo así la detección de EDRs y antivirus basados en firmas.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "plugx",
+    "dll_side_loading",
+    "hijacking",
+    "apt_activity",
+    "T1574.002",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EVASIÓN: Posible PlugX Detectado! Se ha detectado la ejecución del binario **{image}** desde una ubicación inusual en el host **{host}**. Bajo la técnica de **DLL Side-Loading** (**MITRE ATT&CK T1574.002**), este evento sugiere que un atacante ha suplantado una librería dinámica para cargar malware utilizando un proceso legítimo. Se recomienda el aislamiento inmediato del host y la inspección de todas las DLLs presentes en el directorio de ejecución.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la ejecución sospechosa."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "La ruta completa del ejecutable detectado (ej. C:\\Windows\\Temp\\MsMpEng.exe)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que inició el proceso sospechoso."
+    }
+  ]
+}

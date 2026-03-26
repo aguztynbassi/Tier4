@@ -1,0 +1,45 @@
+{
+  "name": "Weak Encryption or Kerberos Preauth Disabled for User",
+  "description": "Detecta cambios en los atributos de seguridad de una cuenta de usuario que debilitan el cifrado de Kerberos. Esto incluye la habilitación de tipos de cifrado DES o la desactivación de la preautenticación de Kerberos. Los adversarios realizan estos cambios para obtener tickets de servicio que son vulnerables a ataques de cracking de contraseñas fuera de línea.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "credential_access",
+    "active_directory",
+    "kerberos",
+    "kerberoasting",
+    "as_rep_roasting",
+    "T1112",
+    "event_4738"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE DEGRADACIÓN DE CIFRADO! Se ha detectado una modificación sospechosa en el atributo UserAccountControl de la cuenta **{target_user}** en el host **{host}**. El cambio activa tipos de cifrado débiles o deshabilita la preautenticación de Kerberos. Bajo la técnica de **Modify Registry/Configuration** (**MITRE ATT&CK T1112**), esto permite a un atacante realizar ataques de AS-REP Roasting para obtener contraseñas. Se recomienda auditar quién realizó el cambio y revertir la configuración de la cuenta.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El Controlador de Dominio donde se registró el cambio de la cuenta."
+    },
+    {
+      "name": "target_user",
+      "required": true,
+      "description": "La cuenta de usuario que ha sido debilitada."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El administrador o actor que realizó la modificación."
+    },
+    {
+      "name": "user_account_control",
+      "required": true,
+      "description": "El nuevo valor o flags detectados en el atributo UAC (ej. DES_ONLY, DONT_REQ_PREAUTH)."
+    }
+  ]
+}

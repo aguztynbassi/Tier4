@@ -1,0 +1,38 @@
+{
+  "name": "QuarksPwDump Clearing Access History Detected",
+  "description": "Detecta el intento de ocultar rastros tras un volcado de credenciales (Credential Dumping). Específicamente, identifica cuándo se manipulan o eliminan archivos temporales relacionados con la colmena SAM o archivos de volcado (.dmp) en directorios de usuario. Este comportamiento es característico de QuarksPwDump al intentar limpiar el historial de acceso a la base de datos de seguridad local.",
+  "tags": [
+    "security",
+    "credential_access",
+    "defense_evasion",
+    "sam_dump",
+    "quarkspwdump",
+    "T1003.003",
+    "windows"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta Crítica de Robo de Credenciales! Se ha detectado una actividad de limpieza de historial en la colmena SAM dentro del host **{host}**. Se identificó la manipulación del archivo **{hive}**. Este patrón de comportamiento coincide con el uso de herramientas de extracción de hashes como **QuarksPwDump** (**MITRE ATT&CK T1003.003**), indicando un compromiso total de las cuentas locales. El evento fue ejecutado por el usuario **{user}**. Es imperativo realizar un restablecimiento de contraseñas para todas las cuentas del sistema afectado y verificar la existencia de procesos no autorizados en ejecución.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del sistema donde se detectó la manipulación de la colmena SAM."
+    },
+    {
+      "name": "hive",
+      "required": true,
+      "description": "La ruta del archivo temporal o volcado de la SAM que fue manipulado."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario (generalmente con privilegios elevados) que realizó la acción."
+    }
+  ]
+}

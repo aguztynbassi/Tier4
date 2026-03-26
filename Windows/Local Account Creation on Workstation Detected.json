@@ -1,0 +1,39 @@
+{
+  "name": "Windows: Local Account Created on Workstation",
+  "description": "Detecta la creación de una cuenta de usuario local en un sistema Windows que no es un Controlador de Dominio. Los atacantes crean cuentas locales para establecer persistencia, evadir las políticas de bloqueo de cuentas de Active Directory y asegurar el acceso administrativo persistente al host comprometido.",
+  "tags": [
+    "security",
+    "persistence",
+    "account_creation",
+    "backdoor",
+    "windows_security",
+    "local_admin",
+    "T1136.001",
+    "event_4720"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE PERSISTENCIA: Nueva Cuenta Local Detectada! Se ha creado la cuenta **{target_user}** en el host **{host}** por el usuario **{user}**. Bajo la técnica de **Create Account** (**MITRE ATT&CK T1136.001**), la creación de usuarios locales fuera de los Controladores de Dominio es una táctica común para establecer persistencia y evadir controles centrales. Se requiere la validación inmediata de esta cuenta y la revisión de si fue añadida al grupo de Administradores locales.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre de la estación de trabajo donde se creó la cuenta."
+    },
+    {
+      "name": "target_user",
+      "required": true,
+      "description": "El nombre de la nueva cuenta creada."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario o proceso que realizó la creación (ej. System, Administrador)."
+    }
+  ]
+}

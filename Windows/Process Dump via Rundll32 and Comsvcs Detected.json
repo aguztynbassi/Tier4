@@ -1,0 +1,38 @@
+{
+  "name": "Process Dump via Rundll32 and Comsvcs Detected",
+  "description": "Detecta el uso de rundll32.exe para invocar la función de volcado de memoria en comsvcs.dll. Esta técnica es un método nativo de Windows (LOLBin) extremadamente popular entre adversarios para realizar el volcado del proceso LSASS y extraer credenciales de la memoria, evitando el uso de herramientas de hacking externas que podrían ser detectadas por el antivirus.",
+  "tags": [
+    "security",
+    "credential_access",
+    "defense_evasion",
+    "lsass_dump",
+    "lolbin",
+    "T1003.001",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta Crítica de Robo de Credenciales! Se ha detectado un intento de volcado de memoria mediante **rundll32.exe** cargando **comsvcs.dll** en el host **{host}**. La línea de comandos indica el uso de la función **#24/MiniDump**, lo cual es una firma inequívoca de **OS Credential Dumping: LSASS Memory** (**MITRE ATT&CK T1003.001**). Si el proceso objetivo fue LSASS, el atacante ahora podría poseer las credenciales de todos los usuarios con sesión activa. Se requiere el aislamiento inmediato del host y una auditoría completa de los procesos iniciados por el usuario **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se ejecutó el comando de volcado."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que ejecutó el proceso rundll32.exe."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa detectada (ej. rundll32.exe comsvcs.dll, #24 640 C:\\temp\\lsass.dmp full)."
+    }
+  ]
+}

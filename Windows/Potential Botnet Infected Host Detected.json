@@ -1,0 +1,42 @@
+{
+    "name": "Potential Botnet Infected Host Detected",
+    "description": "This prompt is designed to help investigate a host that has been flagged as potentially infected with a botnet. The detection is based on a security appliance (like an IDS/IPS or firewall) detecting traffic patterns or signatures associated with botnet Command and Control (C2) communications. The prompt is used to analyze the source and destination of the traffic, and the host involved to determine the severity and scope of the infection.",
+    "tags": [
+        "security",
+        "detection",
+        "TA0011",
+        "TA0040",
+        "T1090",
+        "T1498"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the security event labeled 'Botnet' at `{timestamp}`. The host `{host}` was flagged as potentially infected with a botnet. The event was triggered by a detection from a security appliance. Analyze the source address `{source_address}` and destination address `{destination_address}` to identify any known malicious IPs or domains. Review the associated alert details to understand the nature of the botnet activity. Provide a summary of the event, the potential impact, and recommend immediate isolation and remediation steps.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the botnet activity was detected."
+        },
+        {
+            "name": "host",
+            "required": true,
+            "description": "The hostname of the potentially infected host."
+        },
+        {
+            "name": "source_address",
+            "required": true,
+            "description": "The source IP address of the suspicious network traffic."
+        },
+        {
+            "name": "destination_address",
+            "required": true,
+            "description": "The destination IP address of the suspicious network traffic."
+        }
+    ]
+}

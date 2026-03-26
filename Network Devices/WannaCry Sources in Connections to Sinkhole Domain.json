@@ -1,0 +1,38 @@
+{
+  "name": "WannaCry Sinkhole Domain Connection Detected",
+  "description": "Detecta intentos de conexión desde la red interna hacia dominios conocidos como 'sinkholes' de WannaCry. Esta actividad es un indicador directo de compromiso, sugiriendo que un host está infectado con el ransomware e intenta consultar el 'kill switch' antes de iniciar el cifrado de archivos o la propagación lateral.",
+  "tags": [
+    "security",
+    "command_and_control",
+    "wannacry",
+    "sinkhole",
+    "kill_switch",
+    "T1090",
+    "firewall"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Balizamiento (Beaconing) de Ransomware! El host **{source_address}** ha intentado conectar con un dominio de sinkhole de WannaCry: **{domain}**. Según el framework de **Proxy** (**MITRE ATT&CK T1090**), esta comunicación indica la presencia activa del malware en la red. Aunque el sinkhole previene el cifrado inmediato, el host está infectado y probablemente intentando propagarse vía SMB (puerto 445) a otros sistemas vulnerables. Se requiere el aislamiento total del equipo y un escaneo completo de vulnerabilidades MS17-010 en el segmento de red.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección IP del host interno infectado."
+    },
+    {
+      "name": "domain",
+      "required": true,
+      "description": "El dominio de sinkhole específico detectado (ej. iuqerfsodpifaposdfjhgosurijfaewrwergwea.com)."
+    },
+    {
+      "name": "url",
+      "required": false,
+      "description": "La URL completa si fue interceptada por un proxy o webserver."
+    }
+  ]
+}

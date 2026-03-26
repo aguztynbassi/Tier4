@@ -1,0 +1,57 @@
+{
+    "name": "Renamed Binary Detected",
+    "description": "Detection of a known binary renamed for defense evasion. Adversaries may rename system utilities to avoid detection by security software or to blend in with legitimate processes. This detection specifically looks for a list of known binaries that have been renamed to evade detection.",
+    "tags": [
+        "TA0005",
+        "T1036",
+        "T1036.003",
+        "security",
+        "detection",
+        "Windows"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the renamed binary detected at `{timestamp}` on host `{hostname}`. The original binary `{original_binary}` was renamed to `{renamed_binary}`. The process ID involved was `{process_id}`. Analyze the command line (`{command_line}`) and the user (`{user_name}`) associated with the activity. Determine if this is a legitimate administrative action or a malicious attempt at defense evasion. Provide a summary of your findings and suggest immediate mitigation steps.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        },
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname where the renamed binary was detected."
+        },
+        {
+            "name": "original_binary",
+            "required": true,
+            "description": "The original name of the binary."
+        },
+        {
+            "name": "renamed_binary",
+            "required": true,
+            "description": "The new name of the binary."
+        },
+        {
+            "name": "process_id",
+            "required": true,
+            "description": "The Process ID of the process that was renamed."
+        },
+        {
+            "name": "command_line",
+            "required": true,
+            "description": "The full command line of the renamed binary."
+        },
+        {
+            "name": "user_name",
+            "required": true,
+            "description": "The user account under which the process was executed."
+        }
+    ]
+}

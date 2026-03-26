@@ -1,0 +1,59 @@
+[
+  {
+    "name": "Excessive Authentication Failures Detected",
+    "description": "More than 100 authentication failures were detected for a single user from a specific IP within 10 minutes, indicating a potential brute-force or password spraying attack.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "credential_access",
+      "brute_force",
+      "password_spraying",
+      "failed_logon",
+      "TA0001",
+      "TA0006",
+      "T1110"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: Excessive Authentication Failures Detected.\\n\\nMore than 100 failed logon attempts for user '{TargetUserName}' from IP '{IpAddress}' were observed on host '{ComputerName}' within a 10-minute timeframe, starting around {TimeCreated}. This strongly indicates a **brute-force attack, password spraying, or credential stuffing attempt** targeting your systems.\\n\\n**Event Details (from aggregated events):**\\n* **Aggregated User Account**: {TargetUserName}\\n* **Aggregated Source IP**: {IpAddress}\\n* **Target Host**: {ComputerName} (This might be a single host or multiple hosts if logs are aggregated centrally)\\n* **Detection Start Time**: {TimeCreated} (Approximate start of the 10-min window)\\n* **Number of Failures**: [Your SIEM's Count Value]\\n* **Logon Type**: {LogonType} (e.g., Network logon - 3)\\n* **SubStatus/Reason**: {SubStatus} (e.g., '0xC000006A' - bad password)\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (PRIORITIZE!):**\\n\\n1.  **BLOCK SOURCE IP:** Immediately block the source IP address '{IpAddress}' at your network perimeter firewall (and internal firewalls if applicable) to stop further logon attempts. Consider adding this IP to a global threat intelligence feed if applicable.\\n2.  **ACCOUNT LOCKOUT/RESET:** If the affected account '{TargetUserName}' is an internal account, **immediately initiate a password reset for '{TargetUserName}'**. If your policy allows for account lockout on excessive failures, verify it has occurred. If not, manually lock the account temporarily.\\n3.  **INVESTIGATE TARGET USER ACCOUNT:** Thoroughly investigate '{TargetUserName}' for any signs of compromise or suspicious activity (e.g., successful logins from other unexpected IPs, unusual activity after this alert). Review password history and recent privilege changes.\\n4.  **INVESTIGATE SOURCE HOST (if internal):** If '{IpAddress}' is an internal IP, isolate the host and perform a forensic analysis. It may be a compromised internal system being used to launch attacks.\\n5.  **REVIEW SUCCESSFUL LOGONS:** Search for any successful logon events (Event ID 4624) for user '{TargetUserName}' or from IP '{IpAddress}' around the time of the failed attempts. A successful logon immediately following many failures is a critical indicator of compromise.\\n6.  **THREAT HUNT:** Search your environment for similar brute-force patterns targeting other user accounts or originating from other suspicious IP addresses.\\n7.  **MULTI-FACTOR AUTHENTICATION (MFA):** If not already implemented, enforce MFA for '{TargetUserName}' and all critical accounts. If MFA is in place, investigate why it might have been bypassed or how the attack attempted to circumvent it.\\n8.  **VULNERABILITY ASSESSMENT:** Review the systems exposed to direct logon attempts (e.g., RDP, SSH, VPN) for any vulnerabilities that could facilitate brute-force attacks.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "TargetUserName",
+        "required": true,
+        "description": "The user account that experienced excessive authentication failures."
+      },
+      {
+        "name": "IpAddress",
+        "required": true,
+        "description": "The source IP address from which the excessive failures originated."
+      },
+      {
+        "name": "ComputerName",
+        "required": false,
+        "description": "The hostname of the system where the logon attempts occurred. (May be singular or indicative of multiple targets if aggregated)."
+      },
+      {
+        "name": "TimeCreated",
+        "required": true,
+        "description": "The timestamp of the first event in the correlated window."
+      },
+      {
+        "name": "LogonType",
+        "required": true,
+        "description": "The logon type involved in the failed attempts (e.g., 3 for Network)."
+      },
+      {
+        "name": "SubStatus",
+        "required": true,
+        "description": "The most common SubStatus code for the failed attempts (e.g., 0xC000006A)."
+      }
+    ]
+  }
+]

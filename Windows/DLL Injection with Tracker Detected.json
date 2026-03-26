@@ -1,0 +1,64 @@
+[
+  {
+    "name": "DLL Injection with Tracker Detected",
+    "description": "Detects DLL injection using tracker.exe, a technique used to bypass application whitelisting.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "process injection",
+      "dynamic-link library injection",
+      "TA0005",
+      "T1055",
+      "T1055.001",
+      "Windows",
+      "tracker.exe",
+      "dll_injection"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: Suspicious `tracker.exe` execution indicative of DLL injection detected on host '{host}' by user '{user}'. The `tracker.exe` process at '{process_path}' was executed with command line '{command_line}', using arguments typically associated with DLL injection or process manipulation (`/d` or `/c`). This is a critical indicator of an adversary attempting to bypass application whitelisting or execute malicious code through process injection. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **User**: {user}\n* **Host**: {host}\n\n**IMMEDIATE AND URGENT ACTION REQUIRED:** This is a critical security incident. Isolate the affected system immediately. Examine the full command line of `tracker.exe` to identify the DLL or code being injected. Investigate the parent process that launched `tracker.exe` and look for any associated malicious files, network connections, or persistence mechanisms. Conduct a thorough forensic analysis to determine the full scope of compromise. This alert signifies an active threat and potential system compromise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Windows Security Event ID for Process Creation (4688)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was executed, which should be 'tracker.exe'."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the tracker.exe executable."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute tracker.exe, including '/d' or '/c'."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which tracker.exe was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      }
+    ]
+  }
+]

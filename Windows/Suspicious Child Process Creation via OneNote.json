@@ -1,0 +1,64 @@
+[
+  {
+    "name": "Suspicious Child Process Creation via OneNote",
+    "description": "Detects the creation of suspicious child processes, execution of binaries from non-default paths, and script file execution through OneNote, which can indicate exploitation or malicious document usage.",
+    "tags": [
+      "security",
+      "detection",
+      "initial access",
+      "execution",
+      "phishing",
+      "scheduled task/job",
+      "TA0001",
+      "TA0002",
+      "T1566.001",
+      "T1053",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "High-severity alert: Suspicious child process created by OneNote, indicating potential exploitation or malicious document usage. This activity could be an initial access attempt or part of a broader attack chain. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process GUID**: {process_guid}\n* **Process Name**: {process_name}\n* **Parent Process Name**: {parent_process_name}\n* **Image**: {image}\n* **Command Line**: {CommandLine}\n\n**Immediately investigate this event** to determine the legitimacy of the OneNote behavior and scan the system for compromise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for Process Creation (1)."
+      },
+      {
+        "name": "process_guid",
+        "required": true,
+        "description": "The unique identifier of the child process."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the child process (e.g., powershell.exe, cmd.exe)."
+      },
+      {
+        "name": "parent_process_name",
+        "required": true,
+        "description": "The name of the parent process, which should be 'onenote.exe'."
+      },
+      {
+        "name": "image",
+        "required": true,
+        "description": "The full path to the executable image of the child process."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line of the child process."
+      }
+    ]
+  }
+]

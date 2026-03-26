@@ -1,0 +1,34 @@
+{
+  "name": "Network: Outbound DDOS / Botnet Activity Detected",
+  "description": "Detecta cuando un número significativo de hosts internos (>100) realizan conexiones simultáneas hacia una misma dirección IP externa. Este comportamiento es característico de los ataques coordinados por botnets (DDoS saliente), donde equipos comprometidos en la red local son utilizados para inundar un objetivo remoto, consumiendo el ancho de banda de salida y poniendo la IP corporativa en listas de reputación negativa.",
+  "tags": [
+    "security",
+    "botnet",
+    "ddos_outbound",
+    "impact",
+    "command_and_control",
+    "network_anomaly",
+    "T1498",
+    "T1090"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Actividad de Botnet Detectada! Se ha identificado un posible ataque DDoS saliente hacia la IP **{destination_address}**. Un total de **{source}** hosts internos están conectándose simultáneamente a este destino. Bajo la técnica de **Network Denial of Service** (**MITRE ATT&CK T1498**), esto sugiere que nuestra red está comprometida y siendo utilizada como parte de una botnet. Se requiere el bloqueo inmediato de la IP de destino y la identificación de los procesos maliciosos en los endpoints afectados.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "La dirección IP externa que está siendo atacada por los hosts internos."
+    },
+    {
+      "name": "source",
+      "required": true,
+      "description": "El recuento total de hosts internos únicos que participan en la conexión hacia el destino."
+    }
+  ]
+}

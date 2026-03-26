@@ -1,0 +1,39 @@
+{
+  "name": "Kaspersky: Multi-Host Threat Outbreak (Statistical Anomaly)",
+  "description": "Detecta cuando una misma amenaza es identificada en múltiples hosts utilizando un análisis de cuantiles para identificar desviaciones estadísticas. Este comportamiento es típico de brotes de malware, gusanos de red o ataques dirigidos que utilizan herramientas de despliegue masivo para infectar la infraestructura simultáneamente.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "malware_outbreak",
+    "kaspersky",
+    "statistical_anomaly",
+    "lateral_movement",
+    "T1562.006",
+    "host_correlation"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE BROTE MULTI-HOST! Se ha detectado la amenaza **{virus}** afectando a un número anómalo de equipos (**{HostCount}** hosts). Bajo la técnica de **Indicator Blocking** (**MITRE ATT&CK T1562.006**), este patrón sugiere un intento coordinado de saturar las defensas o una propagación lateral exitosa. Se requiere una revisión inmediata de los segmentos de red afectados y la validación de si la amenaza está logrando evadir la cuarentena automática en algunos de estos puntos.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "HostCount",
+      "required": true,
+      "description": "El número total de hosts únicos afectados por la misma amenaza."
+    },
+    {
+      "name": "virus",
+      "required": false,
+      "description": "El nombre del malware o amenaza detectada (ej. Worm.Win32.NetSky)."
+    },
+    {
+      "name": "quantile",
+      "required": true,
+      "description": "El valor estadístico que indica que esta cantidad de hosts está fuera de los parámetros normales de detección diaria."
+    }
+  ]
+}

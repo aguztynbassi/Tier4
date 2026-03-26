@@ -1,0 +1,86 @@
+{
+  "name": "Default Accepted Traffic From/To Known Malicious IP Detected",
+  "description": "Detects allowed network connections originating from or destined to known malicious IP addresses. This rule requires a dynamic or regularly updated threat intelligence (TI) feed or blocklist (referred to as `ALERT_BAD_IP` in the detection logic). This detection is crucial for identifying successful Command and Control (C2) communication, initial access attempts, data exfiltration, or interaction with adversary infrastructure.",
+  "tags": [
+    "security",
+    "detection",
+    "critical",
+    "network",
+    "threat_intelligence",
+    "command_and_control",
+    "initial_access",
+    "exfiltration",
+    "TA0011",
+    "TA0001",
+    "TA0010",
+    "T1090",
+    "T1090.001",
+    "T1133",
+    "T1071"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "ALERTA CRÍTICA: ¡Tráfico Aceptado Desde/Hacia IP Maliciosa Conocida Detectado!\\n\\n**Se ha detectado una conexión de red permitida desde '{SourceAddress}' hacia '{DestinationAddress}' (o viceversa) que involucra una dirección IP conocida como maliciosa a las {Timestamp}.**\\n\\n**Detalles del Incidente:**\\n* **Timestamp**: {Timestamp}\\n* **IP de Origen**: '{SourceAddress}'\\n* **Puerto de Origen**: {SourcePort}\\n* **IP de Destino**: '{DestinationAddress}'\\n* **Puerto de Destino**: {DestinationPort}\\n* **Protocolo**: {Protocol}\\n* **Acción del Firewall/IDS/IPS**: '{Action}' (Conexión **permitida**)\\n* **Host Involucrado (si aplica)**: '{ComputerName}'\\n* **Usuario Asociado (si aplica)**: '{User}'\\n* **Línea de Comandos (si aplica)**: '{CommandLine}'\\n* **Regla de Detección**: {RuleName}\\n\\nEsta alerta es de **gravedad CRÍTICA** porque indica que una conexión de red fue exitosa desde o hacia una infraestructura conocida de atacantes. Esto puede significar: \\n* **Comando y Control (C2 - TA0011):** Un sistema comprometido está comunicándose con la infraestructura del atacante.\\n* **Acceso Inicial (TA0001):** Un atacante está intentando obtener acceso a su red.\\n* **Exfiltración de Datos (TA0010):** Se están enviando datos sensibles a un destino controlado por el atacante.\\n* **Comunicación con Servicios Externos Remotos (T1133)** o uso de **Proxy (T1090)** para evadir controles.\\n\\n**ACCIONES INMEDIATAS RECOMENDADAS (PRIORIDAD EXTREMA - ¡RESPONDER AHORA!):**\\n\\n1.  **BLOQUEO INMEDIATO:** Bloquee inmediatamente la dirección IP maliciosa '{SourceAddress}' o '{DestinationAddress}' (la que sea la IP maliciosa detectada) en su firewall perimetral y/o en el nivel de endpoint para evitar más comunicaciones. El bloqueo debe ser bidireccional y persistente.\\n2.  **AISLAMIENTO DEL HOST:** Si el host '{ComputerName}' (o la IP interna involucrada) es parte de su red, aíslelo de inmediato. Está comprometido o involucrado en actividad maliciosa.\\n3.  **ANÁLISIS DE TRÁFICO DETALLADO:** Revise los logs completos del firewall/IDS/IPS para la conexión y los hosts/IPs involucrados. Busque patrones de comunicación, volumen de datos transferidos, puertos inusuales, y otros intentos de conexión desde/hacia la IP maliciosa.\\n4.  **ANÁLISIS FORENSE DEL HOST:** Realice un análisis forense exhaustivo (disco y memoria) en '{ComputerName}' (o el host interno afectado). Busque evidencia de malware, persistencia, otros IOCs, y la causa raíz de la conexión maliciosa.\\n5.  **INTELIGENCIA DE AMENAZAS:** Verifique la reputación de la IP maliciosa en múltiples fuentes de inteligencia de amenazas (Virustotal, AbuseIPDB, etc.) para obtener más contexto y posibles asociaciones con campañas de amenazas conocidas.\\n6.  **INVESTIGAR LA CADENA DE ATAQUE:** Determine cómo se originó esta conexión. ¿Hubo un phishing, una vulnerabilidad explotada, credenciales comprometidas? Trace la actividad del atacante.\\n7.  **ACTUALIZAR TI/BLACKLISTS:** Asegúrese de que sus fuentes de inteligencia de amenazas (`ALERT_BAD_IP`) se actualicen regularmente para mantener la eficacia de esta regla.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of the network connection event."
+    },
+    {
+      "name": "SourceAddress",
+      "required": true,
+      "description": "The source IP address of the network connection."
+    },
+    {
+      "name": "DestinationAddress",
+      "required": true,
+      "description": "The destination IP address of the network connection."
+    },
+    {
+      "name": "SourcePort",
+      "required": false,
+      "description": "The source port of the network connection."
+    },
+    {
+      "name": "DestinationPort",
+      "required": true,
+      "description": "The destination port of the network connection."
+    },
+    {
+      "name": "Protocol",
+      "required": true,
+      "description": "The network protocol (e.g., TCP, UDP, ICMP)."
+    },
+    {
+      "name": "Action",
+      "required": true,
+      "description": "The action taken by the firewall/IDS/IPS (must be an 'allow' or 'accept' action)."
+    },
+    {
+      "name": "ComputerName",
+      "required": false,
+      "description": "The hostname of the system involved in the connection, if available."
+    },
+    {
+      "name": "User",
+      "required": false,
+      "description": "The user context associated with the connection, if available from network logs."
+    },
+    {
+      "name": "CommandLine",
+      "required": false,
+      "description": "The associated process command line, if available from endpoint logs correlated with network events."
+    },
+    {
+      "name": "RuleName",
+      "required": false,
+      "description": "The name of the Sigma rule that triggered the event, if applicable."
+    }
+  ]
+}

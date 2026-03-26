@@ -1,0 +1,43 @@
+{
+  "name": "Kerberoasting Credential Theft Detected",
+  "description": "Detecta solicitudes anómalas de tickets de servicio Kerberos (TGS) destinadas a cuentas de servicio con SPNs. Los adversarios utilizan esta técnica para obtener hashes de contraseñas que luego crackean de forma offline. Es una técnica altamente efectiva porque no requiere privilegios elevados ni interacción directa con el proceso LSASS, abusando de la arquitectura nativa de Kerberos.",
+  "tags": [
+    "security",
+    "credential_access",
+    "kerberos",
+    "kerberoasting",
+    "offline_cracking",
+    "T1558.003",
+    "event_4769"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Kerberoasting! Se ha detectado una solicitud de ticket de servicio sospechosa para la cuenta **{ServiceName}** desde el host **{IpAddress}**. Bajo la técnica de **Steal or Forge Kerberos Tickets: Kerberoasting** (**MITRE ATT&CK T1558.003**), este evento sugiere que un atacante está recolectando tickets para crackear contraseñas de cuentas de servicio. Se recomienda verificar si el usuario **{TargetUserName}** tiene una justificación para acceder a este servicio y auditar la fortaleza de la contraseña de la cuenta afectada.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El Controlador de Dominio que emitió el ticket TGS."
+    },
+    {
+      "name": "TargetUserName",
+      "required": true,
+      "description": "La cuenta de usuario que solicitó el ticket."
+    },
+    {
+      "name": "ServiceName",
+      "required": true,
+      "description": "La cuenta de servicio objetivo (SPN)."
+    },
+    {
+      "name": "TicketEncryptionType",
+      "required": false,
+      "description": "Tipo de cifrado del ticket (el valor 0x17 indica RC4, común en Kerberoasting)."
+    }
+  ]
+}

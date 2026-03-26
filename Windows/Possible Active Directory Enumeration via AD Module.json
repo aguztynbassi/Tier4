@@ -1,0 +1,29 @@
+{
+    "name": "Possible Active Directory Enumeration via AD Module",
+    "description": "Enumeration of Active Directory via PowerShell’s AD module is detected.",
+    "tags": [
+        "TA0002",
+        "TA0007",
+        "T1018",
+        "T1059",
+        "T1059.001",
+        "security",
+        "detection",
+        "Windows"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the security event: 'Possible Active Directory Enumeration via AD Module'. Event details: {event_details}",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "event_details",
+            "required": true,
+            "description": "Details of the detected security event, including the original query information: `norm_id=WinServer event_id=4103 command=\"Get-ADComputer\" payload=\"*DNSHostName*LastLogonDate*\"`."
+        }
+    ]
+}

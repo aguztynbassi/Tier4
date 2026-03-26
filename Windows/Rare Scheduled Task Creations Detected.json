@@ -1,0 +1,37 @@
+{
+  "name": "Rare Scheduled Task Creations Detected",
+  "description": "Detecta la creación de tareas programadas con nombres poco comunes o únicos en la infraestructura. Utiliza una función de agregación para identificar tareas que aparecen en menos de 5 sistemas, lo cual es un indicador de persistencia personalizada por parte de un atacante o el despliegue de malware dirigido.",
+  "tags": [
+    "security",
+    "persistence",
+    "threat_hunting",
+    "scheduled_tasks",
+    "T1053.005",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "Se ha detectado la creación de una **Tarea Programada Inusual** denominada **{task}** en el host **{host}**. Esta tarea ha sido identificada mediante un análisis de frecuencia, apareciendo en muy pocos equipos de la red, lo que sugiere una técnica de **Persistence: Scheduled Task** (**MITRE ATT&CK T1053.005**). Las tareas programadas son un método común para ejecutar malware tras un reinicio del sistema. Se recomienda inspeccionar la línea de comandos de la tarea y el ejecutable asociado para descartar una intrusión.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "task",
+      "required": true,
+      "description": "El nombre de la tarea programada que se ha identificado como rara o única."
+    },
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del sistema donde se registró la creación de la tarea."
+    },
+    {
+      "name": "val",
+      "required": false,
+      "description": "El número de veces que esta tarea aparece en el entorno (frecuencia)."
+    }
+  ]
+}

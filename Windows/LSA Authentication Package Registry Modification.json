@@ -1,0 +1,53 @@
+[
+  {
+    "name": "LSA Authentication Package Registry Modification",
+    "description": "Detects suspicious modifications to registry keys associated with Local Security Authority (LSA) authentication packages. Adversaries abuse this mechanism to achieve persistence and gain credential access by registering malicious DLLs that are loaded by `lsass.exe` at system startup, allowing malicious code to run with SYSTEM privileges.",
+    "tags": [
+      "security",
+      "persistence",
+      "privilege_escalation",
+      "credential_access",
+      "T1547",
+      "T1547.002",
+      "T1547.005",
+      "LSA",
+      "sysmon",
+      "windows_registry"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A critical security event has been detected on the host **{computer_name}**. The registry key **{target_object}**, which is a critical LSA authentication package key, was modified by the process **{image}** under the user **{user}**. This activity is a strong indicator of an **LSA Authentication Package** persistence attack (**MITRE ATT&CK T1547.002**), where an adversary attempts to load a malicious DLL into `lsass.exe` to steal credentials or execute code with SYSTEM privileges. The event details show the new value **{details}**. This is a high-confidence alert for a security incident and requires immediate, high-priority investigation. Treat this as a confirmed compromise until proven otherwise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "target_object",
+        "required": true,
+        "description": "The full path of the registry key or value that was modified."
+      },
+      {
+        "name": "image",
+        "required": true,
+        "description": "The process that performed the registry modification."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account that performed the modification."
+      },
+      {
+        "name": "details",
+        "required": true,
+        "description": "The new value written to the registry key, containing the DLL path or package name."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      }
+    ]
+  }
+]

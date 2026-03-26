@@ -1,0 +1,34 @@
+{
+  "name": "Governance: Detection of Inactive or Dormant User Accounts",
+  "description": "Identifica cuentas de usuario que no han iniciado sesión en el dominio durante más de 30 días. Las cuentas inactivas representan un riesgo significativo, ya que pueden ser comprometidas por adversarios para establecer persistencia, realizar movimientos laterales o exfiltrar datos sin alertar a los propietarios de las cuentas o a los administradores del sistema.",
+  "tags": [
+    "security_hygiene",
+    "governance",
+    "persistence",
+    "dormant_accounts",
+    "active_directory",
+    "identity_management",
+    "T1078",
+    "win_ad_event"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE GESTIÓN DE IDENTIDAD: Cuenta Inactiva Detectada! La cuenta **{sAMAccountName}** ha estado inactiva por **{number_of_days}** días. Bajo la técnica de **Valid Accounts** (**MITRE ATT&CK T1078**), las cuentas durmientes son vectores ideales para la persistencia silenciosa. Se recomienda deshabilitar la cuenta hasta que se valide su necesidad operativa.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "sAMAccountName",
+      "required": true,
+      "description": "El nombre de inicio de sesión de la cuenta identificada como inactiva."
+    },
+    {
+      "name": "number_of_days",
+      "required": true,
+      "description": "Cantidad de días transcurridos desde el último inicio de sesión registrado."
+    }
+  ]
+}

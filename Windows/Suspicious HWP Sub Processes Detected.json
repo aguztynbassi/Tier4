@@ -1,0 +1,46 @@
+{
+  "name": "Suspicious HWP Sub Processes Detected",
+  "description": "Detects suspicious sub-processes of the Hangul Word Processor (Hwp.exe), which could indicate exploitation. Adversaries may use malicious HWP documents to execute code, a common technique for initial access and execution.",
+  "tags": [
+    "security",
+    "execution",
+    "defense_evasion",
+    "initial_access",
+    "command_and_scripting_interpreter",
+    "t1059",
+    "t1202",
+    "t1566",
+    "t1566.001",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a suspicious process, **{image}**, was launched by the Hangul Word Processor (**{parent_image}**). This is a strong indicator of a potential **Exploitation** attempt against the HWP application, which is a common **Initial Access** vector (**MITRE ATT&CK T1566.001**). Immediate investigation is required to determine the legitimacy of this action and to remove the malicious file. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "The name of the suspicious child process."
+    },
+    {
+      "name": "parent_image",
+      "required": true,
+      "description": "The name of the parent process, which is expected to be 'Hwp.exe'."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

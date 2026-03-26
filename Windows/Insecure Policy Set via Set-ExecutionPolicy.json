@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Insecure Policy Set via Set-ExecutionPolicy",
+    "description": "Detects the use of Set-ExecutionPolicy to set insecure policies such as Unrestricted, Bypass, or RemoteSigned.",
+    "tags": [
+      "security",
+      "detection",
+      "execution",
+      "PowerShell",
+      "TA0002",
+      "T1059.001",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "High-severity alert: An insecure PowerShell execution policy was set on a Windows system. This action, often employed by attackers, significantly lowers the system's security posture by allowing the execution of unsigned or remote scripts, potentially enabling malicious code execution. Event Details: **Timestamp** {timestamp}, **Process GUID** {process_guid}, **Process Path** {process_path}, **Command Line** {process_command_line}, **User** {user}. Immediately investigate to determine the legitimacy of this policy change. If unauthorized, revert the policy to a secure state and scan the system for signs of compromise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the PowerShell script block logging event."
+      },
+      {
+        "name": "process_guid",
+        "required": true,
+        "description": "The unique identifier of the process that set the execution policy."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the PowerShell executable or host process."
+      },
+      {
+        "name": "process_command_line",
+        "required": true,
+        "description": "The full command line that includes 'Set-ExecutionPolicy' and an insecure policy like 'Unrestricted', 'Bypass', or 'RemoteSigned'."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account that executed the PowerShell command."
+      }
+    ]
+  }
+]

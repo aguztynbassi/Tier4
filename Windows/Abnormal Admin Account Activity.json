@@ -1,0 +1,38 @@
+{
+  "name": "Abnormal Administrative Account Activity Detected",
+  "description": "Detecta inicios de sesión exitosos de cuentas administrativas desde direcciones IP que no pertenecen a los rangos de confianza de la organización. Esta actividad es un indicador crítico de compromiso de credenciales privilegiadas, sugiriendo que un atacante externo o un insider malintencionado está utilizando una cuenta de administrador para moverse lateralmente o evadir controles de seguridad sin generar alertas de acceso denegado.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "privilege_escalation",
+    "valid_accounts",
+    "admin_abuse",
+    "T1078.001",
+    "event_4624"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Acceso Administrativo No Autorizado! Se ha detectado un inicio de sesión exitoso de la cuenta privilegiada **{account_name}** desde la dirección IP no confiable **{source_address}** en el host **{host}**. Bajo la técnica de **Valid Accounts: Domain Accounts** (**MITRE ATT&CK T1078.001**), este evento indica un riesgo extremo de toma de control del sistema o del dominio. Se recomienda verificar de inmediato la identidad del usuario, confirmar si el acceso fue vía VPN legítima o si se trata de una conexión anómala, y proceder al bloqueo preventivo de la sesión si no se reconoce la actividad.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se registró el inicio de sesión del administrador."
+    },
+    {
+      "name": "account_name",
+      "required": true,
+      "description": "El nombre de la cuenta administrativa que inició la sesión."
+    },
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección IP de origen desde donde se realizó la conexión."
+    }
+  ]
+}

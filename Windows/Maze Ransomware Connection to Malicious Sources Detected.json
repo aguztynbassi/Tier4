@@ -1,0 +1,39 @@
+{
+  "name": "C2: Outbound Connection to Maze Ransomware Infrastructure",
+  "description": "Detecta tráfico de red saliente hacia direcciones IP conocidas por pertenecer a la infraestructura de Comando y Control (C2) de Maze. El ransomware Maze utiliza estas conexiones para recibir instrucciones, descargar módulos de cifrado y, lo más crítico, exfiltrar datos confidenciales de la organización hacia servidores externos para su posterior extorsión.",
+  "tags": [
+    "security",
+    "command_and_control",
+    "ransomware",
+    "maze_c2",
+    "double_extortion",
+    "data_exfiltration",
+    "T1090",
+    "network_traffic"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE RANSOMWARE: Comunicación de C2 Detectada! El host **{source_address}** se ha conectado a una IP de la infraestructura de Maze (**{destination_address}**) ubicada en **{country}**. Bajo la técnica de **Proxy** (**MITRE ATT&CK T1090**), esto indica un compromiso activo con riesgo inminente de exfiltración de datos y cifrado de sistemas. Se requiere el bloqueo inmediato del tráfico y aislamiento del host.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección IP interna del host que intenta comunicarse con el servidor malicioso."
+    },
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "La dirección IP externa catalogada como infraestructura de Maze."
+    },
+    {
+      "name": "country",
+      "required": true,
+      "description": "El país de origen de la IP maliciosa obtenido mediante GeoIP."
+    }
+  ]
+}

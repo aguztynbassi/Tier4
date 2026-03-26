@@ -1,0 +1,38 @@
+{
+  "name": "Persistence: New Local User Created via Net.exe",
+  "description": "Detecta la creación manual de cuentas de usuario locales utilizando net.exe o net1.exe. Los adversarios crean nuevas cuentas para establecer persistencia en el sistema, permitiéndoles reingresar al host sin necesidad de volver a explotar una vulnerabilidad o robar credenciales de usuarios existentes.",
+  "tags": [
+    "security",
+    "persistence",
+    "account_creation",
+    "credential_access",
+    "backdoor_account",
+    "T1136.001",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE PERSISTENCIA: Creación de Usuario! Se ha detectado el comando **{command}** en el host **{host}**. Bajo la técnica de **Create Account** (**MITRE ATT&CK T1136**), la creación de cuentas no autorizadas es un método crítico de persistencia. Se requiere identificar inmediatamente si el usuario creado es un administrador y quién es el usuario **{user}** responsable de la acción.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se registró la creación del nuevo usuario."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que incluye el nombre del nuevo usuario (ej. net user backdoor /add)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario (generalmente con privilegios elevados) que ejecutó la creación de la cuenta."
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Reconnaissance Activity with Nltest",
+    "description": "Detects possible reconnaissance activity via the nltest binary.",
+    "tags": [
+      "security",
+      "detection",
+      "discovery",
+      "system network configuration discovery",
+      "domain trust discovery",
+      "TA0007",
+      "T1016",
+      "T1482",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Suspicious reconnaissance activity involving the **`nltest.exe`** utility has been detected. This tool is often used by attackers to gather information about domain controllers, trusts, and users within an Active Directory environment. While `nltest` can have legitimate uses, its invocation with these specific parameters suggests potential malicious intent. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Process GUID**: {process_guid}\n* **Process Path**: {process_path}\n* **Command Line**: {process_command_line}\n* **User**: {user}\n\n**Investigate this activity.** Determine if the user's actions are legitimate administrative tasks or if this indicates an attacker performing network reconnaissance.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "process_guid",
+        "required": true,
+        "description": "The unique identifier of the process."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the `nltest.exe` executable."
+      },
+      {
+        "name": "process_command_line",
+        "required": true,
+        "description": "The full command line executed, including reconnaissance-related parameters like `/server`, `/query`, `/dclist`, `/domain_trusts`, `/trusted_domains`, `/user`, or `/parentdomain`."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which `nltest.exe` was executed."
+      }
+    ]
+  }
+]

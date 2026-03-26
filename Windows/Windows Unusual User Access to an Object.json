@@ -1,0 +1,39 @@
+{
+  "name": "Unusual User Access to Multiple Objects Detected",
+  "description": "Detecta cuando un usuario accede a más de 10 objetos o archivos distintos en un periodo de tiempo determinado. Este comportamiento es característico de las fases de descubrimiento, donde el atacante busca archivos de configuración, credenciales almacenadas o datos sensibles para su exfiltración. También puede ser un indicador temprano de actividad de ransomware realizando el inventario previo al cifrado.",
+  "tags": [
+    "security",
+    "discovery",
+    "collection",
+    "file_enumeration",
+    "data_theft",
+    "T1083",
+    "T1039",
+    "event_4663"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Descubrimiento de Datos! El usuario **{user}** ha accedido a **{FileAccessed}** objetos distintos en la ruta **{path}**. Bajo las técnicas de **File and Directory Discovery** (**T1083**) y **Data from Local System** (**T1039**), este acceso masivo sugiere una actividad de recolección de información o un escaneo de archivos sensible. Se recomienda verificar si el usuario tiene una necesidad de negocio para este volumen de accesos y revisar si se han realizado copias masivas hacia dispositivos externos o almacenamiento en la nube.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "user",
+      "required": true,
+      "description": "El nombre del usuario que realiza los accesos."
+    },
+    {
+      "name": "path",
+      "required": true,
+      "description": "La ruta o directorio raíz donde se concentran los accesos."
+    },
+    {
+      "name": "FileAccessed",
+      "required": true,
+      "description": "Cantidad de objetos únicos accedidos por el usuario."
+    }
+  ]
+}

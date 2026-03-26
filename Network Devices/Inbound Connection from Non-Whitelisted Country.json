@@ -1,0 +1,76 @@
+{
+  "name": "Inbound Connection from Non-Whitelisted Country",
+  "description": "Detects inbound network connections originating from geographic regions (countries) that are not included in a predefined whitelist, identifying potentially malicious or unauthorized traffic and enforcing geographical access policies.",
+  "tags": [
+    "security",
+    "detection",
+    "medium",
+    "network",
+    "firewall",
+    "ids_ips",
+    "initial_access",
+    "command_and_control",
+    "network_access",
+    "geo_blocking",
+    "unauthorized_access",
+    "TA0001",
+    "TA0011",
+    "T1090",
+    "T1090.002"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "MEDIUM SEVERITY ALERT: Inbound Connection from Non-Whitelisted Country Detected!\\n\\n**An inbound network connection from external IP '{SourceIp}' (Country: {SourceCountryCode}) to internal system '{DestinationIp}' on port {DestinationPort} was detected at {Timestamp}.** The source country '{SourceCountryCode}' is not on your organization's whitelist for inbound connections.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Source IP**: {SourceIp}\\n* **Source Country Code**: {SourceCountryCode}\\n* **Destination IP**: {DestinationIp} (Internal System)\\n* **Destination Port**: {DestinationPort}\\n* **Protocol**: {Protocol}\\n* **Direction**: {Direction} (Expected 'inbound')\\n* **Action**: {Action} (Crucial context: 'allowed' or 'blocked')\\n* **Rule Name**: {RuleName}\\n\\nThis activity may indicate unauthorized access attempts (**Initial Access (TA0001)**), malicious reconnaissance, or attempts to establish **Command and Control (TA0011)** from a geo-blocked region. While not necessarily malicious, it violates defined access policies and warrants investigation.\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (MEDIUM PRIORITY - INVESTIGATE PROMPTLY):**\\n\\n1.  **VALIDATE LEGITIMACY:** \\n    * Determine if this connection is expected. Is there a legitimate business reason for '{SourceIp}' from '{SourceCountryCode}' to connect to '{DestinationIp}'? \\n    * If it's a legitimate connection (e.g., a new partner, remote employee in an unlisted country, or a cloud service with dynamic IPs), update your `whitelist_countries` or `filter_legitimate_sources` in the SIEM rule. **This is critical to reduce false positives.**\\n2.  **BLOCK SUSPICIOUS SOURCES:** If the connection is deemed unauthorized or malicious, immediately block '{SourceIp}' at your perimeter firewall.\\n3.  **NETWORK TRAFFIC ANALYSIS:** If the 'Action' was 'allowed', analyze the traffic for any suspicious activity (e.g., unusual protocols, high data transfer, login attempts, known attack patterns). Even if 'blocked', repeated attempts from the same source warrant closer inspection.\\n4.  **VULNERABILITY ASSESSMENT:** If '{DestinationIp}' is a sensitive system, conduct a vulnerability scan on it to identify any exposed services or weaknesses that might be targeted.\\n5.  **THREAT INTELLIGENCE:** Perform threat intelligence lookups on '{SourceIp}' and '{SourceCountryCode}' for any known associations with malicious activity or threat actors.\\n6.  **GEOIP DATABASE REVIEW:** If you suspect a false positive due to GeoIP inaccuracy, verify the IP address's geographical location using alternative reputable GeoIP services.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "Timestamp",
+      "required": true,
+      "description": "The timestamp of the inbound network connection event."
+    },
+    {
+      "name": "SourceIp",
+      "required": true,
+      "description": "The source IP address of the connection."
+    },
+    {
+      "name": "SourceCountryCode",
+      "required": true,
+      "description": "The 2-letter ISO country code derived from GeoIP lookup of SourceIp."
+    },
+    {
+      "name": "DestinationIp",
+      "required": true,
+      "description": "The destination IP address of the internal system."
+    },
+    {
+      "name": "DestinationPort",
+      "required": true,
+      "description": "The destination port of the connection."
+    },
+    {
+      "name": "Protocol",
+      "required": true,
+      "description": "The protocol of the connection (TCP/UDP)."
+    },
+    {
+      "name": "Direction",
+      "required": true,
+      "description": "The direction of the connection (expected 'inbound')."
+    },
+    {
+      "name": "Action",
+      "required": false,
+      "description": "The action taken by the firewall (e.g., 'allowed', 'blocked')."
+    },
+    {
+      "name": "RuleName",
+      "required": false,
+      "description": "The name of the Sigma rule that triggered the event, if applicable."
+    }
+  ]
+}

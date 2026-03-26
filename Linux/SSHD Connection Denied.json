@@ -1,0 +1,41 @@
+{
+  "name": "SSHD Connection Denied",
+  "description": "Detects 10 denied SSHD connections from the same source IP address within 10 seconds. This is a strong indicator of a brute-force attack or other reconnaissance activities against the SSH service, which could lead to unauthorized access, denial of service, or lateral movement.",
+  "tags": [
+    "security",
+    "lateral_movement",
+    "denial_of_service",
+    "brute_force",
+    "reconnaissance",
+    "T1021",
+    "T1498",
+    "T1499",
+    "firewall",
+    "ids_ips"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a high volume of denied SSH connections (10 connections in 10 seconds) from the source IP address **{source_address}** was detected. This is a strong indicator of a **Brute-Force Attack** or a **Denial of Service** attempt (**MITRE ATT&CK T1498**). Immediate investigation is required to block the malicious IP address and to secure the SSH service. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "The source IP address of the denied connections."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

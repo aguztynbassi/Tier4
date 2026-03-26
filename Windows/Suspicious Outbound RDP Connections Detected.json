@@ -1,0 +1,41 @@
+{
+  "name": "Suspicious Outbound RDP Connections Detected",
+  "description": "Detects non-standard tools connecting to TCP port 3389, which indicates a possible lateral movement attempt. Adversaries may use tools other than the standard `mstsc.exe` to establish RDP connections for remote access and lateral movement.",
+  "tags": [
+    "security",
+    "lateral_movement",
+    "remote_services",
+    "T1210",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "An alert has been triggered on the host **{host}**: a non-standard process, **{image}**, is attempting to establish an outbound RDP connection to **{destination_ip}** on port **3389**. This is a strong indicator of **Lateral Movement** (**MITRE ATT&CK T1210**) where an adversary may be using a malicious tool to gain remote access to another system. Immediate investigation is required to determine the legitimacy of this action and to block the malicious process. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "The process image that is attempting to establish the connection."
+    },
+    {
+      "name": "destination_ip",
+      "required": true,
+      "description": "The destination IP address of the RDP connection."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

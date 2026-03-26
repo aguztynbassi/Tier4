@@ -1,0 +1,39 @@
+{
+  "name": "Lateral Movement: Netsh RDP Port Forwarding Detected",
+  "description": "Detecta el uso del comando netsh para configurar redirecciones de puertos (portproxy) dirigidas al puerto 3389 (RDP). Esta actividad es típica de adversarios que buscan saltar entre segmentos de red (pivoting) o exponer servicios internos hacia el exterior utilizando un host comprometido como puente, evadiendo las restricciones de firewall perimetrales.",
+  "tags": [
+    "security",
+    "lateral_movement",
+    "pivoting",
+    "netsh_abuse",
+    "rdp_proxy",
+    "network_evasion",
+    "T1021.001",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE MOVIMIENTO LATERAL: Redirección RDP Detectada! Se ha ejecutado el comando **{command}** en el host **{host}** para redirigir tráfico hacia el puerto 3389. Bajo la técnica de **Remote Desktop Protocol** (**MITRE ATT&CK T1021.001**), este comportamiento indica que el host está siendo utilizado como un proxy o 'jump box' para alcanzar otros objetivos en la red. Se requiere la revisión inmediata de las conexiones de red establecidas por netsh.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se configuró la redirección de puertos."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa de netsh que especifica el puerto local y la dirección de destino."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la configuración del portproxy."
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+[
+  {
+    "name": "High Volume of File Modification/Deletion in Short Span",
+    "description": "Detects a high volume (30 or more) of file modifications or deletions within a one-minute timeframe. This can indicate ransomware activity, data wiping, or other malicious behavior.",
+    "tags": [
+      "security",
+      "detection",
+      "impact",
+      "data manipulation",
+      "manipulate file content",
+      "transmitted data",
+      "TA0040",
+      "T1565",
+      "T1565.002",
+      "T1565.001",
+      "Windows"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Medium-severity alert: A high volume ({count}) of file modifications or deletions (event IDs {event_id}) by process '{process_name}' triggered by user '{user}' on host '{computer_name}' within a 60-second span. This could indicate ransomware activity, data wiping, or other malicious behavior. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id} (e.g., 11 for modification, 23 for deletion)\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Target File Name**: {target_filename} (This field might represent one of the affected files, or the prompt can indicate it's a high volume across multiple files)\n* **User**: {user}\n* **Computer Name**: {computer_name}\n\n**Immediately investigate this suspicious activity.** Isolate the affected system if confirmed malicious. Review recent user activity, process execution, and network connections to understand the scope and impact. Consider initiating data recovery procedures if data integrity is at risk.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the last detected file modification/deletion event in the sequence."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Sysmon Event ID for the file operation (11 for modification/creation, 23 for deletion)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process performing the high volume of file operations."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the process performing the high volume of file operations."
+      },
+      {
+        "name": "target_filename",
+        "required": true,
+        "description": "The name of a file involved in the high volume of modifications/deletions. (Note: This will likely be one of many, as it's an aggregated alert)."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process performed the file operations."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      },
+      {
+        "name": "count",
+        "required": true,
+        "description": "The total number of file modifications/deletions detected within the specified interval."
+      }
+    ]
+  }
+]

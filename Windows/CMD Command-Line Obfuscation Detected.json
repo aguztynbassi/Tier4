@@ -1,0 +1,83 @@
+[
+  {
+    "name": "CMD Command-Line Obfuscation Detected",
+    "description": "Detects the use of obfuscation techniques within Windows Command Shell (`cmd.exe`) command lines. Adversaries frequently employ special characters like caret (`^`) for escaping, environment variable manipulation, and combinations of `set` and `call` commands to dynamically build and execute payloads. These methods are used to evade detection mechanisms, bypass command-line logging, and hinder analysis of malicious activity, serving as a strong indicator of defense evasion.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "sysmon",
+      "defense_evasion",
+      "execution",
+      "command_and_scripting_interpreter",
+      "obfuscated_files_or_information",
+      "malware",
+      "TA0005",
+      "TA0002",
+      "T1059",
+      "T1059.003",
+      "T1027"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: CMD Command-Line Obfuscation Detected!\\n\\n**A highly suspicious and obfuscated command line within `cmd.exe` has been detected on host '{ComputerName}' at {Timestamp}.** This is a strong indicator of **Defense Evasion (TA0005)** and **Execution (TA0002)**, specifically leveraging **Obfuscated Files or Information (T1027)** and **Windows Command Shell (T1059.003)** abuse.\\n\\n**Incident Details:**\\n* **Timestamp**: {Timestamp}\\n* **Event ID**: {EventID} (Sysmon EventID 1: Process Creation)\\n* **Process**: '{Image}'\\n* **Full Command Line**: `{CommandLine}`\\n* **Parent Process**: '{ParentImage}'\\n* **Parent Command Line**: `{ParentCommandLine}`\\n* **User Context**: '{User}'\\n* **Affected Host**: '{ComputerName}'\\n* **Process GUID**: {ProcessGuid}\\n* **Rule Name**: {RuleName}\\n\\nThe `CommandLine` (`{CommandLine}`) of `cmd.exe` exhibits obfuscation patterns such as caret (`^`) escaping, use of `set` and `call` with variable expansion (`%`), or `for` loops to dynamically construct commands. These techniques are commonly employed by adversaries to hide malicious payloads, bypass command-line logging mechanisms, and evade security controls, making it difficult to understand the true intent of the executed command.\\n\\n**IMMEDIATE RECOMMENDED ACTIONS (HIGH PRIORITY - INVESTIGATE URGENTLY!):**\\n\\n1.  **DE-OBFUSCATE COMMAND LINE:** Attempt to manually or programmatically de-obfuscate the `CommandLine` (`{CommandLine}`). This is the most critical step to understand the true malicious payload or action. Look for how variables are set and then called/executed.\\n2.  **INVESTIGATE INITIATING PROCESS & USER:** \\n    * What is the '{ParentImage}' process, and what was its `ParentCommandLine` (`{ParentCommandLine}`)? How was this obfuscated `cmd.exe` command launched? Was it from an unexpected script, a downloaded file, or a seemingly legitimate process that has been compromised?\\n    * Is the user '{User}' authorized to run such complex and obfuscated commands, or is their account potentially compromised?\\n3.  **ANALYZE DE-OBFUSCATED PAYLOAD:** Once the true command is revealed, determine its purpose:\\n    * **File System Operations:** Is it creating, modifying, or deleting suspicious files?\\n    * **Network Activity:** Is it attempting to connect to external IPs or domains, download additional payloads (`bitsadmin`, `certutil`), or initiate C2 communication?\\n    * **Persistence:** Is it creating new scheduled tasks, services, or modifying registry run keys?\\n    * **Discovery/Lateral Movement:** Is it performing reconnaissance commands or attempting to move laterally?\\n4.  **NETWORK CONNECTIONS:** Check for any outbound network connections initiated by the `cmd.exe` process or its children, especially if the de-obfuscated command involved downloading content or C2 communication.\\n5.  **ENDPOINT FORENSICS:** Perform a full forensic analysis on '{ComputerName}' to understand the full scope of the compromise, identify any dropped malware, persistence mechanisms, and lateral movement attempts.\\n6.  **ESCALATE TO INCIDENT RESPONSE LEADERSHIP:** This is a strong indicator of advanced adversary activity. Immediately escalate to your incident response team leadership for coordinated action.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Sysmon Event ID (expected to be 1 for Process Creation)."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to the executable (expected to be `cmd.exe`)."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line arguments exhibiting obfuscation patterns."
+      },
+      {
+        "name": "ParentImage",
+        "required": false,
+        "description": "The executable of the parent process."
+      },
+      {
+        "name": "ParentCommandLine",
+        "required": false,
+        "description": "The full command line of the parent process."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account under which the process ran."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the command was executed."
+      },
+      {
+        "name": "ProcessGuid",
+        "required": true,
+        "description": "The unique GUID for the process that executed the command."
+      },
+      {
+        "name": "RuleName",
+        "required": false,
+        "description": "The name of the Sigma rule that triggered the event, if applicable."
+      }
+    ]
+  }
+]

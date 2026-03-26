@@ -1,0 +1,38 @@
+{
+  "name": "COM Object Hijacking via TreatAs Registry Key",
+  "description": "Detecta la creación o modificación de la subllave 'TreatAs' dentro de un CLSID en el registro de Windows. Los atacantes utilizan esta técnica para redirigir la activación de objetos COM legítimos hacia sus propios binarios maliciosos. Al ser una forma de secuestro de componentes del sistema, permite obtener persistencia y, en muchos casos, escalada de privilegios al ejecutarse en el contexto de procesos con altos permisos que invocan dichos objetos.",
+  "tags": [
+    "security",
+    "persistence",
+    "privilege_escalation",
+    "com_hijacking",
+    "registry_persistence",
+    "T1546.015",
+    "sysmon_event_12"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SECUESTRO COM! Se ha detectado una modificación sospechosa en la llave de registro **{target_object}** en el host **{host}**. El uso de la subllave **TreatAs** es una técnica avanzada de **COM Hijacking** (**MITRE ATT&CK T1546.015**) utilizada para interceptar llamadas legítimas del sistema y ejecutar código malicioso. Se recomienda identificar qué CLSID está siendo emulado y verificar el binario asociado al objeto atacante para prevenir persistencia profunda en el sistema.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se registró la modificación de la clase COM."
+    },
+    {
+      "name": "target_object",
+      "required": true,
+      "description": "La ruta completa de la llave de registro (CLSID) afectada."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que realizó la modificación (usualmente busca persistencia en HKU)."
+    }
+  ]
+}

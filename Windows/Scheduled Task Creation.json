@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Scheduled Task Creation",
+    "description": "The creation of a new scheduled task has been detected, which might indicate a persistence mechanism established by an attacker.",
+    "tags": [
+      "security",
+      "detection",
+      "medium",
+      "windows",
+      "persistence",
+      "scheduled_task",
+      "TA0003",
+      "T1053",
+      "T1053.005"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "MEDIUM SEVERITY ALERT: Scheduled Task Creation Detected.\\n\\nA new scheduled task '{TaskName}' was created on host '{ComputerName}' by user '{SubjectUserName}' at {Timestamp}. The content of the task is:\\n\\n```xml\\n{TaskContent}\\n```\\n\\nThis activity can be a legitimate administrative action but is also a common persistence technique used by threat actors to execute malicious code.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {ComputerName}\\n* **User**: {SubjectUserName}\\n* **Task Name**: {TaskName}\\n* **Task Content (XML)**: {TaskContent}\\n* **Windows Event ID**: 4698\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (PRIORITY MEDIUM):**\\n\\n1.  **VERIFY LEGITIMACY:** Determine if this scheduled task creation is a legitimate and expected activity. Consult with system administrators, IT operations, or relevant automation teams. Check if it aligns with planned maintenance, software deployments, or system backups.\\n2.  **ANALYZE TASK CONTENT:** Carefully review the `TaskContent` (XML) to understand what action the scheduled task is configured to perform. Pay close attention to the executable paths, command-line arguments, and triggers. Look for: \\n    * Execution of unknown binaries or scripts.\\n    * Scripts downloaded from unusual locations.\\n    * Execution as SYSTEM or other high-privilege accounts.\\n    * Triggers that allow frequent or immediate execution.\\n3.  **INVESTIGATE USER ACCOUNT:** If the `SubjectUserName` is not a known administrative or service account, investigate it for signs of compromise (e.g., anomalous logins, failed authentication attempts, activity on other machines). Consider forcing a password reset and enforcing Multi-Factor Authentication (MFA).\\n4.  **CHECK TASK LOCATION/NAME:** Is the `TaskName` or its location unusual? Malware often uses deceptive names or places tasks in non-standard folders.\\n5.  **HOST FORENSIC ANALYSIS (IF MALICIOUS):** If the task is confirmed to be malicious, proceed with a full forensic investigation of '{ComputerName}' to identify the initial compromise vector, scope of impact, and other Indicators of Compromise (IOCs).\\n6.  **DISABLE/DELETE TASK:** If the task is confirmed malicious, immediately disable or delete the scheduled task to prevent further execution. Be careful not to disrupt critical system functions if legitimate.\\n7.  **THREAT HUNT:** Search your environment for other instances of this `TaskName` or similar `TaskContent` across other systems. Look for other scheduled tasks created by the same `SubjectUserName` or with similar suspicious patterns.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The date and time when the scheduled task was created."
+      },
+      {
+        "name": "ComputerName",
+        "required": true,
+        "description": "The hostname of the system where the task was created."
+      },
+      {
+        "name": "SubjectUserName",
+        "required": true,
+        "description": "The user account that created the scheduled task."
+      },
+      {
+        "name": "TaskName",
+        "required": true,
+        "description": "The name of the scheduled task that was created."
+      },
+      {
+        "name": "TaskContent",
+        "required": true,
+        "description": "The XML content defining the scheduled task's actions and properties."
+      }
+    ]
+  }
+]

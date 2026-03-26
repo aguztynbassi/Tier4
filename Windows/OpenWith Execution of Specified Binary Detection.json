@@ -1,0 +1,43 @@
+{
+  "name": "Defense Evasion: Suspicious OpenWith.exe Execution",
+  "description": "Detecta el uso de OpenWith.exe con parámetros de comando inusuales (como /c) o desde ubicaciones no estándar. Esta técnica de proxy execution permite a un atacante ejecutar archivos o comandos arbitrarios bajo el contexto de un binario firmado por Microsoft, evadiendo defensas que solo monitorean ejecutables no confiables.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "lolbins",
+    "proxy_execution",
+    "openwith_abuse",
+    "T1218",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EVASIÓN: Ejecución sospechosa de OpenWith! Se ha detectado a **OpenWith.exe** ejecutándose con parámetros inusuales (**{command}**) en el host **{host}**. Bajo la técnica de **System Binary Proxy Execution** (**MITRE ATT&CK T1218**), este comportamiento sugiere un intento de ocultar la ejecución de código malicioso detrás de un binario del sistema. Se recomienda verificar el archivo de origen y el proceso padre.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la ejecución sospechosa."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que incluye los parámetros pasados a OpenWith.exe."
+    },
+    {
+      "name": "image_path",
+      "required": true,
+      "description": "La ruta desde la cual se ejecutó el binario (ej. C:\\Windows\\System32 vs carpetas temporales)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que inició la ejecución."
+    }
+  ]
+}

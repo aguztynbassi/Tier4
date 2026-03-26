@@ -1,0 +1,38 @@
+{
+  "name": "Possible Privilege Escalation via Weak Service Permissions",
+  "description": "Detecta intentos de modificar la configuración de servicios de Windows (binPath o FailureCommand) utilizando sc.exe desde un proceso con nivel de integridad medio. Esta técnica permite a un atacante inyectar un ejecutable malicioso en un servicio legítimo para que este se ejecute con privilegios de SYSTEM tras el próximo reinicio, logrando una escalada de privilegios exitosa.",
+  "tags": [
+    "security",
+    "privilege_escalation",
+    "persistence",
+    "service_manipulation",
+    "sc_exe",
+    "T1543.003",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Intento de Escalada de Privilegios! Se ha detectado una modificación de servicio sospechosa mediante **sc.exe** en el host **{host}**. El proceso, iniciado con integridad **Medium**, intentó cambiar la configuración de un servicio mediante el comando: **{command}**. Bajo la técnica de **Create or Modify System Process: Windows Service** (**MITRE ATT&CK T1543.003**), esto indica que un atacante está intentando suplantar el ejecutable de un servicio por uno malicioso para obtener privilegios de **SYSTEM**. Se requiere la revisión inmediata de los permisos del servicio afectado y el aislamiento del host.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "Nombre del equipo donde se detectó el intento de modificación del servicio."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que incluye 'config binPath' o parámetros de 'failure'."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que ejecutó el comando sc.exe."
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Windows Logon Reminder Usage as Launcher",
+    "description": "Detects the use of wlrmdr.exe to launch other executables, a technique used to bypass security restrictions.",
+    "tags": [
+      "security",
+      "detection",
+      "defense evasion",
+      "indirect command execution",
+      "TA0005",
+      "T1202",
+      "Windows",
+      "wlrmdr"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH-SEVERITY ALERT: Suspicious execution of `wlrmdr.exe` (Windows Logon Reminder) detected on host '{host}' by user '{user}'. The process '{process_name}' at '{process_path}' was executed with command line '{command_line}', and its parent process '{parent_process_name}' is not `winlogon.exe`, indicating an attempt to leverage `wlrmdr.exe` as a launcher to bypass security restrictions or achieve indirect command execution. Event Details:\n\n* **Timestamp**: {timestamp}\n* **Event ID**: {event_id}\n* **Process Name**: {process_name}\n* **Process Path**: {process_path}\n* **Command Line**: {command_line}\n* **Parent Process Name**: {parent_process_name}\n* **User**: {user}\n* **Host**: {host}\n\n**IMMEDIATE AND URGENT ACTION REQUIRED:** This is a critical security incident. Isolate the affected system immediately. Examine the full command line of `wlrmdr.exe` to identify what executable or script it is attempting to launch. Investigate the parent process that initiated this `wlrmdr.exe` execution for signs of malicious activity. Conduct a thorough forensic analysis to determine the initial compromise vector, any persistence mechanisms, and further malicious activity. This alert signifies an active threat and potential system compromise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the process creation event."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Windows Security Event ID for Process Creation (4688)."
+      },
+      {
+        "name": "process_name",
+        "required": true,
+        "description": "The name of the process that was executed, which should be 'wlrmdr.exe'."
+      },
+      {
+        "name": "process_path",
+        "required": true,
+        "description": "The full path to the wlrmdr.exe executable."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line used to execute wlrmdr.exe, including any suspicious flags like -s, -f, -t, -m, -a, -u."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which wlrmdr.exe was executed."
+      },
+      {
+        "name": "host",
+        "required": true,
+        "description": "The hostname where the event occurred."
+      },
+      {
+        "name": "parent_process_name",
+        "required": true,
+        "description": "The name of the parent process that launched wlrmdr.exe (should not be winlogon.exe)."
+      }
+    ]
+  }
+]

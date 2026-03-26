@@ -1,0 +1,46 @@
+[
+  {
+    "name": "Active Directory DLLs Loaded by Office Applications",
+    "description": "Detects highly suspicious image loads where Active Directory-related DLLs, specifically `kerberos.dll` or `dsparse.dll`, are loaded by Microsoft Office applications (Word, PowerPoint, Excel, Outlook). This is not a typical behavior for Office applications and may indicate a sophisticated attempt at authentication abuse, credential theft, or an advanced spearphishing attack.",
+    "tags": [
+      "security",
+      "initial_access",
+      "credential_access",
+      "defense_evasion",
+      "T1566",
+      "T1566.001",
+      "sysmon",
+      "windows_image_load"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A critical alert has been triggered on the host **{computer_name}**: the Microsoft Office application **{process_image}** loaded the highly suspicious Active Directory-related DLL **{image}**. This activity is a strong indicator of a **Spearphishing Attachment** attack (**MITRE ATT&CK T1566.001**) or an advanced attempt at **Credential Access**. Legitimate Office applications do not typically load these DLLs. Immediate action is required to isolate the host and perform a full forensic analysis to determine the source of the malicious document and the extent of the compromise. The event occurred under the user **{user}**.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "process_image",
+        "required": true,
+        "description": "The full path to the Office application that loaded the DLL."
+      },
+      {
+        "name": "image",
+        "required": true,
+        "description": "The full path to the Active Directory DLL that was loaded."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process ran."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The hostname of the system where the event occurred."
+      }
+    ]
+  }
+]

@@ -1,0 +1,64 @@
+[
+  {
+    "name": "F-Secure File Infection Detected",
+    "description": "Detects file infections reported by F-Secure Gatekeeper. This indicates that malware has been detected.",
+    "tags": [
+      "security",
+      "detection",
+      "discovery",
+      "indicator removal on host",
+      "file and directory discovery",
+      "TA0007",
+      "T1046",
+      "T1083",
+      "Windows",
+      "Linux",
+      "macOS"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "High-severity F-Secure Gatekeeper alert: A file infection has been detected, indicating active malware presence. Event Details: **Timestamp** {timestamp}, **Event Type** {event_type}, **File Path** {file_path}, **File Name** {file_name}, **Threat Name** {threat_name}, **Action Taken** {action}, **User** {user}. Investigate this critical infection immediately to contain the threat and ensure system integrity.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "timestamp",
+        "required": true,
+        "description": "The timestamp of the file infection detection."
+      },
+      {
+        "name": "event_type",
+        "required": true,
+        "description": "The type of event reported by F-Secure (e.g., 'Threat detected')."
+      },
+      {
+        "name": "file_path",
+        "required": true,
+        "description": "The full path to the infected file."
+      },
+      {
+        "name": "file_name",
+        "required": true,
+        "description": "The name of the infected file."
+      },
+      {
+        "name": "threat_name",
+        "required": true,
+        "description": "The name of the detected malware or threat."
+      },
+      {
+        "name": "action",
+        "required": true,
+        "description": "The action taken by F-Secure (e.g., 'blocked', 'cleaned', 'quarantined')."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user associated with the infected file or system."
+      }
+    ]
+  }
+]

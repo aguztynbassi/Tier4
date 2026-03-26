@@ -1,0 +1,39 @@
+{
+  "name": "Discovery: Security Software Enumeration via Findstr",
+  "description": "Detecta intentos de identificar software de seguridad instalado en el sistema mediante el filtrado de cadenas de texto (findstr). Los adversarios buscan nombres de procesos o servicios vinculados a antivirus y soluciones de detección y respuesta en el endpoint (EDR) para adaptar su malware, evitar defensas conocidas o intentar evadir la monitorización antes de proceder con el ataque.",
+  "tags": [
+    "security",
+    "discovery",
+    "reconnaissance",
+    "security_software_discovery",
+    "edr_evasion",
+    "antivirus_enumeration",
+    "T1518.001",
+    "win_server_event"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE RECONOCIMIENTO: Búsqueda de Software de Seguridad! El usuario **{user}** ha ejecutado el comando **{command}** en el host **{host}**. Bajo la técnica de **Security Software Discovery** (**MITRE ATT&CK T1518.001**), este comportamiento indica que un atacante está perfilando las defensas del host para planificar una evasión. Se requiere intervención inmediata para proteger los procesos del agente de seguridad.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se realizó la búsqueda de software de seguridad."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos ejecutada (ej. tasklist | findstr /i defender)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que inició la actividad de descubrimiento de software de seguridad."
+    }
+  ]
+}

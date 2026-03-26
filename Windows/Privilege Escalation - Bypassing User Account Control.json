@@ -1,0 +1,52 @@
+{
+    "name": "Privilege Escalation - Bypassing User Account Control",
+    "description": "Detection of a process attempting to bypass User Account Control (UAC) to escalate privileges. Adversaries may bypass UAC to execute malicious code with elevated permissions without triggering a UAC prompt. This detection is based on the behavior of known UAC bypass techniques.",
+    "tags": [
+        "TA0004",
+        "T1548",
+        "T1548.002",
+        "security",
+        "detection",
+        "Windows"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the UAC bypass attempt at `{timestamp}` on host `{hostname}`. The process `{process_name}` with Process ID `{process_id}` was involved in the attempt to bypass UAC. Analyze the command line (`{command_line}`) for any suspicious arguments and review the user (`{user}`) associated with the activity. Determine the UAC bypass technique used. Provide a summary of your findings and recommend immediate mitigation steps to prevent this type of privilege escalation.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the event occurred."
+        },
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname where the UAC bypass attempt was detected."
+        },
+        {
+            "name": "process_name",
+            "required": true,
+            "description": "The name of the process involved in the UAC bypass attempt."
+        },
+        {
+            "name": "process_id",
+            "required": true,
+            "description": "The Process ID of the process involved in the UAC bypass attempt."
+        },
+        {
+            "name": "command_line",
+            "required": true,
+            "description": "The full command line of the process involved in the UAC bypass attempt."
+        },
+        {
+            "name": "user",
+            "required": true,
+            "description": "The user account under which the process was executed."
+        }
+    ]
+}

@@ -1,0 +1,38 @@
+{
+  "name": "Protected Storage Service Access Detected",
+  "description": "Detecta el acceso remoto al servicio de almacenamiento protegido a través de recursos compartidos IPC$. Este comportamiento es típico de ataques que buscan abusar de DPAPI para extraer claves de respaldo del dominio desde los Controladores de Dominio, lo que permitiría al atacante descifrar secretos de usuario en toda la infraestructura de Active Directory.",
+  "tags": [
+    "security",
+    "credential_access",
+    "lateral_movement",
+    "dpapi_abuse",
+    "active_directory",
+    "T1021",
+    "windows_server"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta Crítica de Exfiltración de Claves de Dominio! Se ha detectado un acceso sospechoso al objeto **protected_storage** en el host **{host}** a través del recurso compartido **IPC$**. Este patrón es una firma del abuso de **DPAPI** para obtener la clave de respaldo del dominio (**MITRE ATT&CK T1021 / T1555.003**). Un atacante con esta clave puede descifrar contraseñas almacenadas en cualquier equipo del dominio. El acceso fue realizado por el usuario **{user}** desde la dirección de origen **{source_address}**. Se recomienda investigar inmediatamente el host de origen y auditar los privilegios de la cuenta involucrada.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del servidor (usualmente un Controlador de Dominio) que recibió la solicitud de acceso."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario que realizó la solicitud de acceso."
+    },
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección IP desde la cual se inició la conexión remota."
+    }
+  ]
+}

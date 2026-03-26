@@ -1,0 +1,39 @@
+{
+  "name": "Credential Access: Mimikatz Command Line Arguments Detected",
+  "description": "Detecta el uso de argumentos de línea de comandos asociados con Mimikatz. Esta herramienta es el estándar de la industria para el volcado de credenciales de la memoria (LSASS), ataques de Golden/Silver Ticket y manipulación de privilegios. Su detección indica un intento inminente de robo de identidades y movimiento lateral dentro del dominio.",
+  "tags": [
+    "security",
+    "credential_access",
+    "mimikatz",
+    "lsass_dump",
+    "pass_the_hash",
+    "kerberos_attack",
+    "T1003",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Actividad de Mimikatz Detectada! El usuario **{user}** ha ejecutado un comando que contiene argumentos de Mimikatz (**{command}**) en el host **{host}**. Bajo la técnica de **OS Credential Dumping** (**MITRE ATT&CK T1003**), esto representa una amenaza máxima para la integridad de las credenciales del dominio. Se requiere el aislamiento inmediato del host y la invalidación de todas las sesiones de administrador.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó la ejecución de Mimikatz o sus variantes."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos completa que contiene los módulos de Mimikatz (ej. sekurlsa::logonpasswords)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que inició el proceso malicioso."
+    }
+  ]
+}

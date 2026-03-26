@@ -1,0 +1,34 @@
+{
+  "name": "Suspicious Scripting in a WMI Consumer",
+  "description": "Detection of suspicious scripting patterns within WMI event consumers. Adversaries may use WMI event consumers for persistence, executing scripts or commands when a specific event occurs, which is a common execution and defense evasion technique.",
+  "tags": [
+    "security",
+    "execution",
+    "persistence",
+    "defense_evasion",
+    "command_and_scripting_interpreter",
+    "T1059",
+    "T1059.001",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "A critical alert has been triggered on the host **{host}**: a suspicious script was detected in a **WMI Event Consumer**. The destination of the script is **{destination}**, which contains patterns commonly associated with malicious scripting (e.g., PowerShell remote download/execution). This is a strong indicator of **Execution** and **Persistence** (**MITRE ATT&CK T1059.001**) where an adversary is attempting to use WMI for command execution. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious WMI consumer. The event occurred with Event ID **20**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "destination",
+      "required": true,
+      "description": "The content of the script that was detected."
+    }
+  ]
+}

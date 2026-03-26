@@ -1,0 +1,32 @@
+{
+  "name": "Suspicious Kerberos RC4 Ticket Encryption",
+  "description": "Detects Kerberos service ticket requests using the RC4 encryption type. The RC4 encryption type is considered weak and is often used by adversaries to perform Kerberoasting, a credential access technique used to crack service account passwords.",
+  "tags": [
+    "security",
+    "credential_access",
+    "kerberoasting",
+    "T1558",
+    "T1558.003",
+    "windows_event_log"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "An alert has been triggered on the host **{host}**: a suspicious **Kerberos service ticket request** using the weak **RC4 encryption type** was detected. This is a strong indicator of a **Kerberoasting** attack (**MITRE ATT&CK T1558.003**) where an adversary is attempting to crack service account passwords. The event occurred with Event ID **4769** and the user **{user}**. Immediate investigation is required to determine the legitimacy of this action and to change the passwords of any affected service accounts.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that requested the service ticket."
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+[
+  {
+    "name": "AD Object WriteDAC Access Detected",
+    "description": "Detects the use of the WRITE_DAC permission on Active Directory objects. This permission allows modification of the discretionary access control list (DACL), which can be used to escalate privileges or maintain persistence.",
+    "tags": [
+      "security",
+      "defense_evasion",
+      "privilege_escalation",
+      "persistence",
+      "T1222",
+      "windows_ad"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A critical alert has been triggered on the Domain Controller **{hostname}**: the user **{subject_user_name}** attempted to modify the DACL (WRITE_DAC) on the Active Directory object **{object_name}**. This highly suspicious activity, with an `AccessMask` of **{access_mask}**, is a known technique for **Privilege Escalation** or **Persistence** (**MITRE ATT&CK T1222**). An adversary can use this permission to grant themselves or other accounts full control over a critical object, such as a user or group, to achieve their goals. Immediate investigation is required to determine the legitimacy of this action. This event should be treated as a confirmed security incident until proven otherwise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "subject_user_name",
+        "required": true,
+        "description": "The user account that attempted to modify the DACL."
+      },
+      {
+        "name": "object_name",
+        "required": true,
+        "description": "The name of the Active Directory object whose DACL was targeted."
+      },
+      {
+        "name": "access_mask",
+        "required": true,
+        "description": "The AccessMask value associated with the event (0x40000)."
+      },
+      {
+        "name": "hostname",
+        "required": true,
+        "description": "The hostname of the Domain Controller where the event occurred."
+      }
+    ]
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Bypass UAC via CMSTP Detected",
+    "description": "Detects suspicious child processes spawned by an auto-elevated instance of the Microsoft Connection Manager Profile Installer (cmstp.exe). This activity is a strong indicator of an adversary attempting to bypass User Account Control (UAC) to achieve privilege escalation.",
+    "tags": [
+      "security",
+      "privilege_escalation",
+      "defense_evasion",
+      "UAC_bypass",
+      "T1548",
+      "T1548.002",
+      "T1218.003",
+      "sysmon",
+      "windows_processes"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A critical UAC bypass attempt has been detected on the host **{computer_name}**. The process **{image}** was spawned by a parent process, `cmstp.exe`, which is a known technique for **Bypassing User Account Control** (**MITRE ATT&CK T1548.002**). The command line used for the child process was **{command_line}**, and the event occurred under the user **{user}**. This activity is highly suspicious and requires immediate investigation to determine the nature of the child process and its origin. This could be a malicious actor attempting to execute code with elevated privileges.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "image",
+        "required": true,
+        "description": "The child process created by cmstp.exe."
+      },
+      {
+        "name": "command_line",
+        "required": true,
+        "description": "The full command line of the child process."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account under which the process ran."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      }
+    ]
+  }
+]

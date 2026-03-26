@@ -1,0 +1,41 @@
+{
+  "name": "Signed Script Proxy Execution",
+  "description": "Detects the use of signed Windows binaries like `cscript.exe`, `wscript.exe`, `certutil.exe`, and `jjs.exe` to execute scripts. Adversaries may abuse these legitimate tools for proxy execution of malicious code, which is a common defense evasion technique.",
+  "tags": [
+    "security",
+    "defense_evasion",
+    "proxy_execution",
+    "T1216",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "An alert has been triggered on the host **{host}**: a signed Windows binary, **{image}**, was executed with a suspicious command line: **{command}**. This is a strong indicator of **Signed Script Proxy Execution** (**MITRE ATT&CK T1216**), where an adversary is attempting to use a trusted utility to execute malicious code. Immediate investigation is required to determine the legitimacy of this action and to remove the malicious file. The event occurred under the user **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "The name of the host where the event occurred."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "The name of the signed binary that was executed."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "The full command line that was executed."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "The user account that performed the action."
+    }
+  ]
+}

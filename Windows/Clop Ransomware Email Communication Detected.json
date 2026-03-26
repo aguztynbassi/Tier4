@@ -1,0 +1,53 @@
+[
+  {
+    "name": "Clop Ransomware Email Communication Detected",
+    "description": "Detects email communication to or from addresses specifically associated with the Clop ransomware group.",
+    "tags": [
+      "security",
+      "detection",
+      "ransomware",
+      "Clop",
+      "malware",
+      "email",
+      "Exchange",
+      "T1041",
+      "T1114",
+      "T1486"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "Critical security alert: A communication attempt with a known Clop ransomware email address has been detected. The email was sent by '{sender}' and was received by or sent to '{recipient}' with the subject '{subject}'. This is a high-risk indicator of an active Clop incident, potentially involving ransom note delivery or negotiation attempts. Further investigation into the user '{sender}' and the contents of the email is immediately required. The event ID is '{event_id}' and the unique message ID is '{message_id}'.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "sender",
+        "required": true,
+        "description": "The email address of the sender."
+      },
+      {
+        "name": "recipient",
+        "required": true,
+        "description": "The email address of the recipient."
+      },
+      {
+        "name": "subject",
+        "required": true,
+        "description": "The subject of the email."
+      },
+      {
+        "name": "event_id",
+        "required": true,
+        "description": "The Exchange message tracking event ID (e.g., RECEIVE, SEND)."
+      },
+      {
+        "name": "message_id",
+        "required": true,
+        "description": "The unique message identifier for the email."
+      }
+    ]
+  }
+]

@@ -1,0 +1,42 @@
+{
+    "name": "Remote PowerShell Session",
+    "description": "A remote PowerShell session has been established. This can be used for administrative purposes but can also indicate an adversary is remotely interacting with a system. PowerShell Remoting allows commands to be executed on a remote computer and is a common technique used for lateral movement and administration. This detection focuses on the event logs generated when a remote session is created, providing details about the user, source, and destination.",
+    "tags": [
+        "TA0008",
+        "T1021",
+        "T1021.006",
+        "security",
+        "detection",
+        "Windows"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the remote PowerShell session established at `{timestamp}` on the host `{hostname}` from the source IP address `{source_address}`. The session was established by the user `{user_name}`. Determine if this is a legitimate administrative action or a potential malicious activity, such as lateral movement by an attacker. Provide a summary of your findings and recommend immediate mitigation steps, including terminating the session if it is deemed malicious.",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "timestamp",
+            "required": true,
+            "description": "The time the remote session was established."
+        },
+        {
+            "name": "hostname",
+            "required": true,
+            "description": "The hostname of the system where the remote session was established."
+        },
+        {
+            "name": "source_address",
+            "required": true,
+            "description": "The source IP address from which the remote session originated."
+        },
+        {
+            "name": "user_name",
+            "required": true,
+            "description": "The name of the user who established the remote session."
+        }
+    ]
+}

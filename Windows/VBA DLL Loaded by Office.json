@@ -1,0 +1,44 @@
+{
+  "name": "Office: VBA Macro Engine Execution Detected",
+  "description": "Detecta la carga de las librerías del motor de Visual Basic for Applications (VBA) por parte de procesos de Microsoft Office. Este evento es un indicador crítico de que un documento con macros ha sido ejecutado. Dado que el malware suele distribuirse a través de documentos de Office maliciosos, la carga de estas DLLs representa el primer paso técnico en la cadena de infección por phishing.",
+  "tags": [
+    "security",
+    "initial_access",
+    "phishing",
+    "malicious_document",
+    "vba_macro",
+    "office_exploitation",
+    "T1566.001",
+    "sysmon_event_7"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE PHISHING: Ejecución de Macro Detectada! Se ha registrado la carga del motor de VBA (**{image}**) por parte de la aplicación **{source_image}** en el host **{host}**. Este comportamiento indica que el usuario **{user}** ha activado un documento con macros, técnica principal en ataques de **Phishing: Malicious File** (**MITRE ATT&CK T1566.001**). Se recomienda identificar inmediatamente el archivo abierto y analizar si el proceso de Office intenta realizar conexiones de red o generar procesos hijos.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se ejecutó la macro de Office."
+    },
+    {
+      "name": "source_image",
+      "required": true,
+      "description": "El proceso de Office que cargó la DLL (ej. winword.exe, excel.exe)."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "La DLL de VBA específica que fue cargada (ej. VBE7.DLL)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que abrió el documento."
+    }
+  ]
+}

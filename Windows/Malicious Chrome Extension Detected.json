@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Malicious Chrome Extension Detected",
+    "description": "Detects the installation of known malicious Chrome extensions by their IDs.",
+    "tags": [
+      "security",
+      "detection",
+      "persistence",
+      "browser extensions",
+      "TA0003",
+      "T1176",
+      "Windows",
+      "Linux",
+      "macOS"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "High-severity alert: A known malicious Chrome extension has been detected on a system. This indicates potential persistence or malicious activity targeting user Browse. Event Details: **Installed At** {installed_at}, **Extension Name** {name}, **Identifier** {identifier}, **Version** {version}, **Path** {path}. Immediately investigate this malicious extension, determine its origin, and remove it from all affected browsers and systems.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "installed_at",
+        "required": true,
+        "description": "The timestamp when the Chrome extension was installed."
+      },
+      {
+        "name": "name",
+        "required": true,
+        "description": "The name of the detected Chrome extension."
+      },
+      {
+        "name": "identifier",
+        "required": true,
+        "description": "The unique identifier (ID) of the Chrome extension."
+      },
+      {
+        "name": "version",
+        "required": true,
+        "description": "The version of the Chrome extension."
+      },
+      {
+        "name": "path",
+        "required": true,
+        "description": "The file system path where the Chrome extension is located."
+      }
+    ]
+  }
+]

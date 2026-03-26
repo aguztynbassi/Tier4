@@ -1,0 +1,39 @@
+{
+  "name": "Koadic C3: Execution Environment Preparation Detected",
+  "description": "Detecta parámetros de línea de comandos específicos asociados con el framework de post-explotación Koadic. La ejecución silenciosa de 'chcp' a través de cmd.exe es un paso característico que utiliza esta herramienta para normalizar el entorno antes de inyectar sus payloads de JScript/VBScript en memoria, permitiendo el control remoto del sistema sin dejar archivos en el disco.",
+  "tags": [
+    "security",
+    "execution",
+    "koadic",
+    "post_exploitation",
+    "fileless_malware",
+    "c3_framework",
+    "T1218.005",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE HERRAMIENTA DE ATAQUE: Koadic Detectado! Se ha identificado un patrón de ejecución de **Koadic** en el host **{host}**. El proceso **cmd.exe** intentó cambiar la página de códigos silenciosamente con el comando **{command}**, una técnica típica de este framework para preparar la inyección de código malicioso (**MITRE ATT&CK T1218.005**). Existe un riesgo inminente de que el atacante establezca una sesión de Mando y Control (C3). Se recomienda investigar procesos hijos de **mshta.exe** o **rundll32.exe** de inmediato.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó el comando preparatorio de Koadic."
+    },
+    {
+      "name": "command",
+      "required": true,
+      "description": "La línea de comandos detectada (ej. cmd.exe /q /c chcp 65001)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que ejecutó el comando (puede ser un usuario legítimo comprometido)."
+    }
+  ]
+}

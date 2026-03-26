@@ -1,0 +1,51 @@
+[
+  {
+    "name": "AppCert DLLs Registry Modification Detected",
+    "description": "Detects modifications (creation, setting, or deletion) to registry keys under `\\System\\CurrentControlSet\\Control\\Session Manager\\AppCertDlls\\`. This is a highly impactful persistence and privilege escalation technique where adversaries can inject malicious DLLs that are automatically loaded into every process that utilizes `CreateProcess` APIs, providing broad access to system processes.",
+    "tags": [
+      "security",
+      "persistence",
+      "privilege_escalation",
+      "defense_evasion",
+      "T1546",
+      "T1546.009",
+      "sysmon",
+      "windows_registry"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "A critical security event has been detected on the host **{computer_name}**: the registry key **{target_object}**, which is a critical **AppCert DLLs** key, was modified by the process **{image}** under the user **{user}**. This activity is a strong indicator of an **AppCert DLLs** persistence attack (**MITRE ATT&CK T1546.009**), a technique used to inject a malicious DLL into every new process created on the system. The event details show the new value **{details}**. This is a high-confidence alert for a security incident and requires immediate, high-priority investigation. Treat this as a confirmed compromise until proven otherwise.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "target_object",
+        "required": true,
+        "description": "The full path of the registry key or value that was modified."
+      },
+      {
+        "name": "image",
+        "required": true,
+        "description": "The process that performed the registry modification."
+      },
+      {
+        "name": "user",
+        "required": true,
+        "description": "The user account that performed the modification."
+      },
+      {
+        "name": "details",
+        "required": true,
+        "description": "The new value written to the registry key, containing the DLL path."
+      },
+      {
+        "name": "computer_name",
+        "required": true,
+        "description": "The name of the computer where the event occurred."
+      }
+    ]
+  }
+]

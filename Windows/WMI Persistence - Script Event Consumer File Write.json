@@ -1,0 +1,38 @@
+{
+  "name": "WMI Persistence - Script Event Consumer File Write",
+  "description": "Detecta la creación o modificación de archivos por parte del proceso `scrcons.exe`. Dado que este proceso ejecuta scripts directamente desde el repositorio WMI, cualquier escritura en el sistema de archivos es altamente sospechosa y suele indicar que un script de persistencia está descargando malware adicional, recolectando datos o alterando archivos del sistema.",
+  "tags": [
+    "security",
+    "persistence",
+    "wmi",
+    "scrcons",
+    "file_modification",
+    "T1546.003",
+    "sysmon"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡Alerta de Actividad Post-Explotación! Se ha detectado que el consumidor de scripts WMI **scrcons.exe** ha escrito un archivo en el disco: **{file}** en el host **{host}**. El proceso `scrcons.exe` rara vez realiza escrituras de archivos en operaciones legítimas; este comportamiento sugiere que un script de persistencia WMI (**MITRE ATT&CK T1546.003**) está actuando como un dropper o recolector de información. El evento se ejecutó bajo el usuario **{user}**. Se recomienda recuperar el archivo creado para análisis forense e identificar el evento WMI que activó la ejecución del script.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El nombre del servidor o equipo donde se detectó la escritura del archivo."
+    },
+    {
+      "name": "file",
+      "required": true,
+      "description": "La ruta completa del archivo que fue creado o modificado por scrcons.exe."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "La cuenta de usuario asociada a la ejecución del servicio WMI."
+    }
+  ]
+}

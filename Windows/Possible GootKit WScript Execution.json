@@ -1,0 +1,27 @@
+{
+    "name": "Possible GootKit WScript Execution",
+    "description": "GootKit banking trojan’s WScript execution activity is detected.",
+    "tags": [
+        "TA0002",
+        "T1059",
+        "T1059.003",
+        "security",
+        "detection",
+        "Windows"
+    ],
+    "prompts": [
+        {
+            "id": "1",
+            "prompt": "Investigate the security event: 'Possible GootKit WScript Execution'. Event details: {event_details}",
+            "continueOnError": false,
+            "systemCapability": "analyzeSecurityEvent"
+        }
+    ],
+    "parameters": [
+        {
+            "name": "event_details",
+            "required": true,
+            "description": "Details of the detected security event, including the original query information: `norm_id=WinServer event_id=4688 \"process\"=\"*\\wscript.exe\" command=\"*\\APPDATA\\*.js*\"`."
+        }
+    ]
+}

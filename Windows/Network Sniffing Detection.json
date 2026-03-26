@@ -1,0 +1,39 @@
+{
+  "name": "Credential Access: Network Sniffing Activity Detected",
+  "description": "Detecta la ejecución de herramientas de captura de paquetes y análisis de red como Tshark, Tcpdump, y utilidades nativas de Windows como Logman o WPR. Los adversarios emplean estas herramientas para capturar tráfico de red local, permitiéndoles obtener credenciales, secretos de aplicaciones y un mapa detallado de la arquitectura de red interna sin realizar escaneos activos.",
+  "tags": [
+    "security",
+    "credential_access",
+    "discovery",
+    "network_sniffing",
+    "packet_capture",
+    "promiscuous_mode",
+    "T1040",
+    "sysmon_event_1"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD: Sniffing de Red Detectado! Se ha ejecutado una herramienta de captura de tráfico (**{image}**) en el host **{host}**. Bajo la técnica de **Network Sniffing** (**MITRE ATT&CK T1040**), esta actividad puede comprometer la confidencialidad de las credenciales y datos transmitidos en el segmento de red. Se recomienda validar inmediatamente si esta acción corresponde a una tarea de diagnóstico autorizada por el usuario **{user}**.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "host",
+      "required": true,
+      "description": "El equipo donde se detectó el inicio del proceso de captura."
+    },
+    {
+      "name": "image",
+      "required": true,
+      "description": "El nombre del ejecutable detectado (ej. tshark.exe, windump.exe, wpr.exe)."
+    },
+    {
+      "name": "user",
+      "required": true,
+      "description": "El usuario que lanzó la herramienta de captura de red."
+    }
+  ]
+}

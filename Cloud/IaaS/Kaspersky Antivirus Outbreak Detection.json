@@ -1,0 +1,39 @@
+{
+  "name": "Kaspersky: Multiple Threat Outbreak Detection",
+  "description": "Detecta una alta concentración de amenazas detectadas por Kaspersky en el entorno. Esta regla agrupa las detecciones por tipo de virus y nombre de host para identificar patrones de infección masiva. Un aumento repentino en la variedad de amenazas puede indicar una campaña de malware dirigida o el despliegue de un ataque coordinado diseñado para saturar las capacidades de respuesta del antivirus.",
+  "tags": [
+    "security",
+    "impact",
+    "kaspersky",
+    "malware_analysis",
+    "threat_outbreak",
+    "virus_count",
+    "T1518.001",
+    "antivirus_events"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE BROTE DE MALWARE! Kaspersky ha detectado múltiples instancias de la amenaza **{virus}** distribuidas en la red. Bajo la táctica de **Impacto** (**MITRE ATT&CK TA0040**), este volumen de detecciones sugiere una propagación incontrolada o un ataque de gran escala. Se requiere la revisión de la consola centralizada para determinar el alcance total del compromiso y verificar si la desinfección automática ha sido exitosa en todos los puntos finales afectados.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "virus",
+      "required": true,
+      "description": "El nombre técnico de la amenaza identificada (ej. Trojan-Ransom.Win32.Wanna.m)."
+    },
+    {
+      "name": "CNT",
+      "required": true,
+      "description": "La cantidad de hosts únicos que han reportado esta amenaza específica."
+    },
+    {
+      "name": "event_type",
+      "required": true,
+      "description": "El tipo de evento registrado (ej. Threat detected)."
+    }
+  ]
+}

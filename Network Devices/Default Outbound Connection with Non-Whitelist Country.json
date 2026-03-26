@@ -1,0 +1,39 @@
+{
+  "name": "Network: Outbound Connection to Non-Whitelisted Country",
+  "description": "Detecta tráfico de red saliente dirigido a direcciones IP geolocalizadas en países que no figuran en la lista de confianza (WHITELIST_COUNTRY). Este control de geofencing es crítico para identificar comunicaciones de Mando y Control (C2), intentos de exfiltración de datos hacia infraestructuras sospechosas y balizamiento de malware que intenta evadir detecciones basadas únicamente en firmas.",
+  "tags": [
+    "security",
+    "command_and_control",
+    "geofencing",
+    "network_egress",
+    "data_exfiltration",
+    "beaconing",
+    "T1090",
+    "geoip_filter"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE GEOFENCING: Conexión Internacional no Autorizada! Se ha detectado tráfico desde el host interno **{source_address}** hacia una IP en **{country}**, país que no se encuentra en la lista de permitidos. Bajo la técnica de **Proxy** (**MITRE ATT&CK T1090**), este tráfico saliente podría representar una sesión de Mando y Control activa o la exfiltración de información sensible. Se recomienda verificar el proceso que origina la conexión y validar la reputación de la IP de destino.",
+      "continueOnError": false,
+      "systemCapability": "analyzeSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "source_address",
+      "required": true,
+      "description": "La dirección IP interna que inició la conexión."
+    },
+    {
+      "name": "destination_address",
+      "required": true,
+      "description": "La dirección IP externa de destino."
+    },
+    {
+      "name": "country",
+      "required": true,
+      "description": "El país identificado mediante la resolución GeoIP (fuera de la lista blanca)."
+    }
+  ]
+}

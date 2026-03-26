@@ -1,0 +1,65 @@
+[
+  {
+    "name": "Suspicious Netsh DLL Persistence Detected",
+    "description": "Detection of netsh.exe adding a helper DLL, which is a sophisticated persistence technique often used by attackers to maintain access, execute code, or escalate privileges.",
+    "tags": [
+      "security",
+      "detection",
+      "high",
+      "windows",
+      "persistence",
+      "privilege_escalation",
+      "dll_injection",
+      "TA0003",
+      "TA0004",
+      "T1547",
+      "T1547.001",
+      "T1574.002"
+    ],
+    "prompts": [
+      {
+        "id": "1",
+        "prompt": "HIGH SEVERITY ALERT: Suspicious Netsh DLL Persistence Detected.\\n\\n`netsh.exe` was used with command line '{CommandLine}' to add a new helper on host '{Computer}' by user '{User}' at '{Timestamp}'. The parent process was '{ParentImage}'. This activity is highly suspicious and strongly suggests an attacker is attempting to establish persistence or execute malicious code via a Netsh helper DLL.\\n\\n**Event Details:**\\n* **Timestamp**: {Timestamp}\\n* **Host**: {Computer}\\n* **User**: {User}\\n* **Process**: {Image}\\n* **Parent Process**: {ParentImage}\\n* **Command Line**: {CommandLine}\\n* **Event ID**: {EventID}\\n\\n**RECOMMENDED IMMEDIATE ACTIONS (CRITICAL PRIORITY):**\\n\\n1.  **IMMEDIATE HOST ISOLATION:** Disconnect host '{Computer}' from the network immediately to prevent further lateral movement, command and control, or data exfiltration.\\n2.  **VERIFY LEGITIMACY (HIGH SKEPTICISM):** The addition of Netsh helper DLLs is a rare and highly privileged operation. Thoroughly investigate this activity. Determine if it was an explicitly authorized administrative action. **Assume malicious intent unless proven otherwise.**\\n3.  **FORENSIC ANALYSIS:** Conduct a full forensic investigation of '{Computer}'. Focus on:\\n    * Identifying the DLL being added as a Netsh helper from the '{CommandLine}'. Locate and analyze this DLL. Check its reputation (e.g., VirusTotal).\\n    * Examining the registry keys associated with Netsh helpers (e.g., `HKLM\\SOFTWARE\\Microsoft\\Netsh`).\\n    * Analyzing the `netsh.exe` process for loaded modules and unusual network connections.\\n    * Looking for other Indicators of Compromise (IOCs) such as new or modified files, other persistence mechanisms, or unusual process activity.\\n    * Identifying the initial access vector that led to this execution.\\n4.  **USER ACCOUNT INVESTIGATION:** Investigate the '{User}' account for signs of compromise (e.g., unusual login times, failed authentications, activity on other hosts). Consider forcing a password reset and enforcing Multi-Factor Authentication (MFA).\\n5.  **THREAT HUNT:** Search your environment for similar `netsh.exe` executions with `add helper` arguments or other forms of DLL persistence across other systems.",
+        "continueOnError": false,
+        "systemCapability": "analyzeSecurityEvent"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "Timestamp",
+        "required": true,
+        "description": "The timestamp of when the suspicious Netsh helper was added."
+      },
+      {
+        "name": "EventID",
+        "required": true,
+        "description": "The Sysmon Event ID (expected 1)."
+      },
+      {
+        "name": "Image",
+        "required": true,
+        "description": "The full path to the netsh.exe executable."
+      },
+      {
+        "name": "CommandLine",
+        "required": true,
+        "description": "The full command line arguments of netsh.exe, including 'add helper'."
+      },
+      {
+        "name": "User",
+        "required": true,
+        "description": "The user account that executed the netsh command."
+      },
+      {
+        "name": "Computer",
+        "required": true,
+        "description": "The hostname of the system where the event occurred."
+      },
+      {
+        "name": "ParentImage",
+        "required": false,
+        "description": "The full path to the parent process of netsh.exe."
+      }
+    ]
+  }
+]
