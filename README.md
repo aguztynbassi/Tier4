@@ -1,4 +1,4 @@
-# Sentinel Prompt Repository: Precision Threat Detection
+# S.I.D. (Security Incident Detector)
 
 This repository hosts a specialized collection of over **900 structured prompts** designed for elite threat detection and incident response. Each prompt is meticulously engineered to guide security analysts through complex investigations, ensuring no critical detail is overlooked.
 
