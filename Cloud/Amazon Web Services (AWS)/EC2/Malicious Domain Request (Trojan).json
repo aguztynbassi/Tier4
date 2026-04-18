@@ -1,0 +1,34 @@
+{
+  "name": "AWS: Malicious Domain Request (Trojan)",
+  "description": "Detecta intentos de resolución DNS hacia dominios maliciosos conocidos. Este hallazgo indica que un proceso en la instancia EC2 está intentando comunicarse con un servidor C2, un sitio de distribución de malware o una infraestructura de exfiltración. El uso de inteligencia de amenazas actualizada permite identificar estas conexiones incluso si el tráfico es de bajo volumen.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "guardduty",
+    "trojan",
+    "c2_communication",
+    "malicious_domain",
+    "T1071.004",
+    "unauthorized_access"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD: Conexión a Dominio Malicioso! GuardDuty ha detectado el hallazgo **Trojan:EC2/MaliciousDomainRequest** en la instancia **{instance_id}**. Se ha solicitado la resolución del dominio malicioso **{domain_name}**. Bajo la técnica de **Application Layer Protocol: DNS** (**MITRE ATT&CK T1071.004**), esto confirma una comunicación activa de malware con su centro de control.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia que originó la consulta DNS maliciosa."
+    },
+    {
+      "name": "domain_name",
+      "required": true,
+      "description": "El dominio malicioso detectado (ej. malwaredistribution.com)."
+    }
+  ]
+}

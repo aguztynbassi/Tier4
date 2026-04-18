@@ -1,0 +1,39 @@
+{
+  "name": "AWS: Malicious IP Communication Detected (GuardDuty)",
+  "description": "Detecta cuando una instancia EC2 inicia o recibe comunicación desde una dirección IP identificada por AWS como maliciosa. Esta alerta es de alta fidelidad, ya que se basa en bases de datos de reputación de amenazas actualizadas en tiempo real. La comunicación con estas IPs suele indicar que la instancia ha sido comprometida y está intentando contactar a un servidor de Comando y Control (C2) o descargar payloads adicionales.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "guardduty",
+    "malicious_ip",
+    "command_and_control",
+    "beaconing",
+    "T1071",
+    "unauthorized_access"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA AWS: Comunicación con IP Maliciosa! GuardDuty ha detectado el hallazgo **UnauthorizedAccess:EC2/MaliciousIPCaller** en la instancia **{instance_id}**. Se ha registrado tráfico con la IP externa **{remote_ip}**, conocida por actividades maliciosas. Bajo la técnica de **Application Layer Protocol** (**MITRE ATT&CK T1071**), esto es un fuerte indicador de una infección activa por malware o balizamiento (beaconing) de C2.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia de AWS involucrada en la comunicación maliciosa."
+    },
+    {
+      "name": "remote_ip",
+      "required": true,
+      "description": "La dirección IP maliciosa externa detectada por GuardDuty."
+    },
+    {
+      "name": "direction",
+      "required": true,
+      "description": "Dirección del tráfico (INBOUND o OUTBOUND). El tráfico OUTBOUND suele ser más crítico ya que indica una iniciativa del host local."
+    }
+  ]
+}

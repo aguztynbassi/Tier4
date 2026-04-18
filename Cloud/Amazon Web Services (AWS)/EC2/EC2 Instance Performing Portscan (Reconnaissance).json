@@ -1,0 +1,39 @@
+{
+  "name": "AWS: EC2 Instance Performing Portscan (Reconnaissance)",
+  "description": "Detecta cuando una instancia EC2 intenta conectarse de forma sistemática a múltiples puertos en uno o varios hosts de destino. A diferencia del 'PortProbe', aquí la instancia es la agresora. Este comportamiento es típico de herramientas como Nmap, Masscan o scripts de post-explotación, y sugiere que el atacante busca identificar servicios vulnerables para realizar movimientos laterales o expandir su botnet.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "guardduty",
+    "portscan",
+    "reconnaissance",
+    "network_discovery",
+    "T1595.001",
+    "unauthorized_access"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD: Escaneo de Puertos Saliente! GuardDuty ha detectado el hallazgo **Recon:EC2/Portscan** originado en la instancia **{instance_id}**. El host está realizando un escaneo sistemático de puertos contra objetivos remotos. Bajo la técnica de **Active Scanning: Port Scanning** (**MITRE ATT&CK T1595.001**), esto indica que la instancia está comprometida y siendo usada para reconocimiento de red.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia EC2 que está ejecutando el escaneo."
+    },
+    {
+      "name": "dest_ips",
+      "required": false,
+      "description": "Lista de direcciones IP (internas o externas) que están siendo escaneadas."
+    },
+    {
+      "name": "total_probes",
+      "required": false,
+      "description": "Número total de intentos de conexión detectados por GuardDuty."
+    }
+  ]
+}

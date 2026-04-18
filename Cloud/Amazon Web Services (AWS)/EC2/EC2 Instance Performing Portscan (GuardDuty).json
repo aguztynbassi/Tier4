@@ -1,0 +1,39 @@
+{
+  "name": "AWS: EC2 Instance Performing Portscan (GuardDuty)",
+  "description": "Detecta cuando una instancia EC2 intenta conectarse de forma sistemática a múltiples puertos en uno o varios hosts de destino. Este comportamiento es característico de herramientas de escaneo como Nmap o ZGrab. La alerta sugiere que la instancia ha sido comprometida y el atacante está realizando reconocimiento (T1595) para identificar nuevos vectores de ataque o servicios vulnerables en la red.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "guardduty",
+    "portscan",
+    "reconnaissance",
+    "network_discovery",
+    "T1595",
+    "unauthorized_access"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE RECONOCIMIENTO: Escaneo de Puertos Detectado! GuardDuty ha identificado el hallazgo **UnauthorizedAccess:EC2/Portscan** originado en la instancia **{instance_id}**. El host está escaneando múltiples puertos en objetivos remotos. Bajo la técnica de **Active Scanning** (**MITRE ATT&CK T1595**), esto indica que la instancia está siendo usada como base para identificar vulnerabilidades en la infraestructura.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia EC2 que está ejecutando el escaneo."
+    },
+    {
+      "name": "dest_ips",
+      "required": false,
+      "description": "Lista de direcciones IP que están siendo escaneadas por la instancia comprometida."
+    },
+    {
+      "name": "port_range",
+      "required": false,
+      "description": "El rango de puertos detectado en la actividad de escaneo."
+    }
+  ]
+}

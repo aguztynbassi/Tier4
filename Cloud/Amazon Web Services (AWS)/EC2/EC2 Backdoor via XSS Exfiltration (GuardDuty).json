@@ -1,0 +1,39 @@
+{
+  "name": "AWS: EC2 Backdoor via XSS Exfiltration (GuardDuty)",
+  "description": "Detecta cuando una instancia EC2 envía tráfico saliente que contiene patrones típicos de exfiltración de datos mediante Cross-Site Scripting (XSS). A diferencia de un ataque XSS entrante, este hallazgo indica que la instancia ya ha sido explotada o está siendo usada para alojar scripts maliciosos que recolectan y envían información sensible de usuarios (como cookies de sesión o credenciales) a un servidor controlado por el atacante.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "guardduty",
+    "xss_exfiltration",
+    "credential_access",
+    "stealth_c2",
+    "T1539",
+    "T1059.007"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EXFILTRACIÓN: Backdoor XSS Detectado! GuardDuty ha identificado el hallazgo **Backdoor:EC2/XSS** en la instancia **{instance_id}**. Se ha detectado el envío de datos sensibles de aplicaciones hacia **{remote_host}**. Bajo la técnica de **Steal Web Session Cookie** (**MITRE ATT&CK T1539**), esto indica que atacantes están recolectando sesiones de usuarios activamente.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia que aloja la aplicación web comprometida."
+    },
+    {
+      "name": "remote_host",
+      "required": true,
+      "description": "El dominio o IP del atacante donde se están enviando los datos exfiltrados."
+    },
+    {
+      "name": "api_path",
+      "required": false,
+      "description": "La ruta de la URL o API utilizada para la exfiltración."
+    }
+  ]
+}

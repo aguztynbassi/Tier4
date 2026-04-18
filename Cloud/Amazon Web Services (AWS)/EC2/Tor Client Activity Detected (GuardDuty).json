@@ -1,0 +1,39 @@
+{
+  "name": "AWS: Tor Client Activity Detected (GuardDuty)",
+  "description": "Detecta cuando una instancia EC2 realiza conexiones salientes hacia nodos de entrada o salida de la red Tor. El uso de Tor permite a los atacantes anonimizar sus actividades, dificultando el rastreo de la exfiltración de datos o la comunicación con servidores C2. En entornos de nube empresariales, esta actividad suele estar vinculada a malware, minería de criptomonedas o presencia de un actor de amenaza activo.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "guardduty",
+    "tor_client",
+    "defense_evasion",
+    "exfiltration",
+    "T1090.003",
+    "unauthorized_access"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD CRÍTICA: Actividad de Red Tor! GuardDuty ha detectado el hallazgo **UnauthorizedAccess:EC2/TorClient** en la instancia **{instance_id}**. Se ha identificado una conexión saliente hacia un nodo de la red Tor. Bajo la técnica de **Proxy: Tor** (**MITRE ATT&CK T1090.003**), esto sugiere un intento de evasión de defensas o exfiltración de datos. Se requiere aislamiento inmediato y análisis forense.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia de AWS que está originando el tráfico hacia la red Tor."
+    },
+    {
+      "name": "remote_ip",
+      "required": true,
+      "description": "La dirección IP del nodo de la red Tor con el que se estableció la comunicación."
+    },
+    {
+      "name": "local_port",
+      "required": false,
+      "description": "El puerto local desde el cual se originó la conexión, útil para identificar el proceso responsable."
+    }
+  ]
+}

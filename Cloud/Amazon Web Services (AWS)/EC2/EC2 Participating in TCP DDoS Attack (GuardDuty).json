@@ -1,0 +1,40 @@
+{
+  "name": "AWS: EC2 Participating in TCP DDoS Attack (GuardDuty)",
+  "description": "Detecta cuando una instancia EC2 genera un volumen masivo y anómalo de tráfico TCP (como SYN floods o conexiones agotadoras) dirigido a un host externo. Este comportamiento indica que la instancia es parte de una botnet y está siendo utilizada para realizar un ataque de denegación de servicio (DoS). Esto compromete la reputación de las IPs de la cuenta y sugiere una pérdida total del control del host por parte del propietario legítimo.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "guardduty",
+    "ddos",
+    "botnet",
+    "tcp_flood",
+    "resource_hijacking",
+    "T1498",
+    "backdoor"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Instancia EC2 realizando ataque DoS! GuardDuty ha detectado el hallazgo **Backdoor:EC2/DenialOfService.Tcp** en la instancia **{instance_id}**. El host está enviando tráfico TCP masivo hacia un objetivo externo. Bajo la técnica de **Network Denial of Service** (**MITRE ATT&CK T1498**), esto confirma que la instancia ha sido reclutada por una botnet. Se requiere el aislamiento inmediato para evitar la suspensión de la cuenta por abuso.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia EC2 que está originando el ataque DoS."
+    },
+    {
+      "name": "target_ip",
+      "required": true,
+      "description": "La dirección IP de la víctima externa que está siendo atacada."
+    },
+    {
+      "name": "tcp_flags",
+      "required": false,
+      "description": "Banderas TCP detectadas en el ataque (ej. SYN, ACK, RST), útil para identificar el tipo de flood."
+    }
+  ]
+}

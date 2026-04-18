@@ -1,0 +1,39 @@
+{
+  "name": "AWS: Unusual Traffic Volume (Exfiltration/DoS Indicator)",
+  "description": "Detecta una desviación significativa en el volumen de datos transferidos por una instancia EC2 en comparación con su línea base establecida. Un aumento anómalo en el tráfico saliente (Outbound) suele ser un indicador de exfiltración de bases de datos o archivos sensibles, mientras que un aumento en el tráfico entrante (Inbound) puede indicar que la instancia está siendo utilizada como objetivo o nodo de un ataque de denegación de servicio.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "guardduty",
+    "behavioral_anomaly",
+    "exfiltration",
+    "data_theft",
+    "T1020",
+    "T1041"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE ANOMALÍA: Volumen de Tráfico Inusual! GuardDuty ha detectado el hallazgo **Behavior:EC2/TrafficVolumeUnusual** en la instancia **{instance_id}**. Se ha registrado un volumen de datos de **{volume}** que supera la línea base del host. Bajo la técnica de **Automated Exfiltration** (**MITRE ATT&CK T1020**), esto sugiere un posible robo de datos a gran escala.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia que presenta el pico de tráfico."
+    },
+    {
+      "name": "volume",
+      "required": true,
+      "description": "La cantidad de datos transferidos detectada (ej. GBs)."
+    },
+    {
+      "name": "direction",
+      "required": true,
+      "description": "Dirección del tráfico anómalo (Inbound/Outbound)."
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "AWS: Unusual Network Port Activity (Behavioral Anomaly)",
+  "description": "Detecta actividad de red en un puerto que no es consistente con el comportamiento histórico de la instancia EC2. GuardDuty utiliza Machine Learning para establecer una línea base del tráfico; cuando la instancia comienza a comunicarse por un puerto inusual, puede indicar la presencia de un backdoor, un túnel SSH/VPN no autorizado, o un proceso malicioso intentando evadir firewalls mediante el uso de puertos no estándar.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "guardduty",
+    "behavioral_anomaly",
+    "c2_detection",
+    "defense_evasion",
+    "T1571",
+    "unauthorized_access"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE ANOMALÍA: Puerto de Red Inusual! GuardDuty ha detectado el hallazgo **Behavior:EC2/NetworkPortUnusual** en la instancia **{instance_id}**. Se ha registrado tráfico por el puerto **{port}**, el cual no coincide con el perfil histórico del host. Bajo la técnica de **Non-Standard Port** (**MITRE ATT&CK T1571**), esto sugiere un posible canal de C2 o exfiltración encubierta.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia de AWS que muestra el comportamiento anómalo."
+    },
+    {
+      "name": "port",
+      "required": true,
+      "description": "El número de puerto inusual detectado en la comunicación."
+    },
+    {
+      "name": "protocol",
+      "required": true,
+      "description": "El protocolo utilizado (TCP/UDP)."
+    }
+  ]
+}

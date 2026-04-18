@@ -1,0 +1,39 @@
+{
+  "name": "AWS: Unusual DNS over HTTPS (DoH) Activity",
+  "description": "Detecta actividad de DNS sobre HTTPS que es anómala para el perfil de la instancia o que se dirige a resolvers DoH asociados con tácticas de evasión. Al cifrar las consultas DNS dentro de sesiones TLS en el puerto 443, los atacantes pueden establecer canales de Comando y Control (C2) y realizar exfiltración de datos que son invisibles para los firewalls de red tradicionales y los logs de Route 53 Resolver.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "guardduty",
+    "defense_evasion",
+    "doh",
+    "encrypted_c2",
+    "T1572",
+    "T1562.006"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EVASIÓN CRÍTICA: Actividad DoH Inusual! GuardDuty ha detectado el hallazgo **DefenseEvasion:EC2/UnusualDoHActivity** en la instancia **{instance_id}**. Se ha identificado tráfico cifrado hacia el resolver DoH **{doh_endpoint}**. Bajo la técnica de **Protocol Tunneling** (**MITRE ATT&CK T1572**), esto indica un posible canal de comunicación encubierto diseñado para evadir la inspección de red.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia que realiza la actividad DoH."
+    },
+    {
+      "name": "doh_endpoint",
+      "required": true,
+      "description": "La URL o IP del servidor DoH externo utilizado."
+    },
+    {
+      "name": "data_volume",
+      "required": false,
+      "description": "Volumen de datos transferidos a través del canal DoH."
+    }
+  ]
+}

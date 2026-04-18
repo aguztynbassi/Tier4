@@ -1,0 +1,39 @@
+{
+  "name": "AWS: Unusual DNS Resolver (Defense Evasion)",
+  "description": "Detecta cuando una instancia EC2 utiliza un servidor DNS que no es el resolver estándar de la VPC ni un servidor DNS conocido y confiable. Los atacantes utilizan esta técnica para evadir el monitoreo de Route 53, realizar túneles DNS para exfiltración o contactar infraestructuras de Comando y Control (C2) que utilizan algoritmos de generación de dominios (DGA) que podrían ser bloqueados por los filtros estándar de AWS.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "guardduty",
+    "defense_evasion",
+    "dns_tunneling",
+    "stealth_c2",
+    "T1572",
+    "unauthorized_access"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EVASIÓN: Resolver DNS Inusual Detectado! GuardDuty ha identificado el hallazgo **DefenseEvasion:EC2/UnusualDNSResolver** en la instancia **{instance_id}**. El host está enviando consultas DNS hacia el servidor **{resolver_ip}**. Bajo la técnica de **Protocol Tunneling** (**MITRE ATT&CK T1572**), esto indica un intento de evadir los controles de red y establecer comunicación encubierta.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia EC2 que está evadiendo el DNS estándar."
+    },
+    {
+      "name": "resolver_ip",
+      "required": true,
+      "description": "La dirección IP del servidor DNS externo al que se están enviando las consultas."
+    },
+    {
+      "name": "protocol",
+      "required": false,
+      "description": "El protocolo detectado (típicamente UDP/53 o DoH - DNS over HTTPS)."
+    }
+  ]
+}

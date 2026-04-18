@@ -1,0 +1,34 @@
+{
+  "name": "AWS: Malicious Domain Request based on Reputation",
+  "description": "Detecta intentos de conexión hacia dominios con baja reputación. Estos dominios suelen ser infraestructuras de 'usar y tirar' (throw-away) creadas por atacantes para alojar sitios de phishing, scripts de malware de corta duración o puntos de exfiltración. La detección se basa en el análisis de metadatos del dominio, como la fecha de registro, el proveedor de hosting y reportes de la comunidad de seguridad.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "guardduty",
+    "reputation_impact",
+    "phishing",
+    "malicious_domain",
+    "T1566",
+    "T1583.001"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ADVERTENCIA DE REPUTACIÓN: Dominio Sospechoso! GuardDuty ha detectado el hallazgo **Impact:EC2/MaliciousDomainRequest.Reputation** en la instancia **{instance_id}**. Se ha solicitado acceso al dominio **{domain_name}**, clasificado con baja reputación. Bajo la técnica de **Phishing** o **Acquire Infrastructure** (**MITRE ATT&CK T1566/T1583.001**), esto sugiere un contacto con infraestructura de ataque.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia que originó la petición al dominio de baja reputación."
+    },
+    {
+      "name": "domain_name",
+      "required": true,
+      "description": "El dominio con mala reputación detectado."
+    }
+  ]
+}

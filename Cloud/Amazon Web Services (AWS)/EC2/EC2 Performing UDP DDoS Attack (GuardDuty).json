@@ -1,0 +1,40 @@
+{
+  "name": "AWS: EC2 Performing UDP DDoS Attack (GuardDuty)",
+  "description": "Detecta cuando una instancia EC2 genera un volumen masivo de tráfico UDP dirigido a un host o infraestructura externa. Al ser UDP un protocolo sin conexión, este tipo de ataque se utiliza frecuentemente para saturar el ancho de banda de la víctima o para ataques de amplificación (abuso de servicios como DNS, NTP o Memcached). La alerta confirma que el host es parte de una botnet y está bajo el control total de un atacante.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "guardduty",
+    "ddos",
+    "udp_flood",
+    "amplification_attack",
+    "botnet",
+    "T1498.002",
+    "unauthorized_access"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Ataque UDP DoS Detectado! GuardDuty ha identificado el hallazgo **Backdoor:EC2/DenialOfService.Udp** en la instancia **{instance_id}**. El host está emitiendo tráfico UDP anómalo hacia **{target_ip}**. Bajo la técnica de **Reflection Amplification** (**MITRE ATT&CK T1498.002**), esto indica que la instancia está siendo abusada para saturar redes externas. Se requiere bloqueo inmediato de salida.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia de AWS que origina el ataque."
+    },
+    {
+      "name": "target_ip",
+      "required": true,
+      "description": "La dirección IP de la víctima o del reflector externo."
+    },
+    {
+      "name": "dest_port",
+      "required": false,
+      "description": "Puerto destino (ej. 53 para DNS, 123 para NTP), clave para identificar si es un ataque de amplificación."
+    }
+  ]
+}

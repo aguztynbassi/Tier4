@@ -1,0 +1,39 @@
+{
+  "name": "AWS: CryptoCurrency Mining Tool Detected (GuardDuty)",
+  "description": "Detecta la ejecución de software de minería de criptomonedas o la comunicación con pools de minería conocidos. El cryptojacking en la nube es un ataque común donde los actores de amenaza abusan de los recursos de cómputo (CPU/GPU) de la víctima para generar ganancias financieras, lo que resulta en costos operativos masivos y degradación del rendimiento de las aplicaciones legítimas.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "guardduty",
+    "cryptomining",
+    "cryptojacking",
+    "resource_hijacking",
+    "T1496",
+    "unauthorized_access"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE ABUSO: Minería de Criptomonedas Detectada! GuardDuty ha identificado el hallazgo **CryptoCurrency:EC2/BitcoinTool.B** en la instancia **{instance_id}**. Se ha detectado comunicación con un pool de minería. Bajo la técnica de **Resource Hijacking** (**MITRE ATT&CK T1496**), esto indica que atacantes están utilizando tu infraestructura para beneficio económico propio.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia que está realizando la minería."
+    },
+    {
+      "name": "mining_pool_ip",
+      "required": true,
+      "description": "La dirección IP del pool de minería con el que se comunica la instancia."
+    },
+    {
+      "name": "cpu_utilization",
+      "required": false,
+      "description": "Porcentaje de uso de CPU actual en la instancia (típico >90% en minería)."
+    }
+  ]
+}
