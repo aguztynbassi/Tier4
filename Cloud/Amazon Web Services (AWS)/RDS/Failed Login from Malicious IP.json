@@ -1,0 +1,39 @@
+{
+  "name": "RDS: Failed Login from Malicious IP",
+  "description": "Detecta intentos de inicio de sesión fallidos en una base de datos RDS originados desde una dirección IP con mala reputación (nodos de botnets, servidores C2 conocidos o infraestructura de ataque). Este hallazgo es una señal de alerta sobre la exposición de la base de datos y un posible intento de Password Spraying o Brute Force.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "rds",
+    "credential_access",
+    "failed_login",
+    "malicious_ip",
+    "brute_force",
+    "T1110.001"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡INTENTO DE ACCESO MALICIOSO en RDS! GuardDuty ha detectado el hallazgo **MaliciousIPCaller.FailedLogin** en la instancia **{db_instance_id}**. Se registraron fallos de autenticación desde la IP atacante **{malicious_ip}**. Bajo la técnica de **Brute Force** (**MITRE ATT&CK T1110.001**), esto indica un ataque dirigido contra tus activos de datos.",
+      "continueOnError": false,
+      "systemCapability": "analyzeDatabaseSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "db_instance_id",
+      "required": true,
+      "description": "El ID de la instancia de base de datos RDS objetivo."
+    },
+    {
+      "name": "malicious_ip",
+      "required": true,
+      "description": "La dirección IP maliciosa que intenta la conexión."
+    },
+    {
+      "name": "db_user",
+      "required": false,
+      "description": "El nombre de usuario que el atacante intentó utilizar (si está disponible en los logs)."
+    }
+  ]
+}
