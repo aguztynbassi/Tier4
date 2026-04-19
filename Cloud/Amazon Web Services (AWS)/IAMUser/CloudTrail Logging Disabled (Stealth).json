@@ -1,0 +1,34 @@
+{
+  "name": "IAM: CloudTrail Logging Disabled (Stealth)",
+  "description": "Detecta la desactivación o eliminación de un trail de CloudTrail por parte de una identidad de IAM. Esta acción es un indicador de alta confianza de actividad maliciosa destinada a ocultar el rastro de un atacante, permitiendo la persistencia y la exfiltración sin dejar evidencias en los registros de auditoría de la cuenta.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "iam",
+    "stealth",
+    "defense_evasion",
+    "cloudtrail",
+    "T1562.008",
+    "critical_risk"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EVASIÓN: Auditoría desactivada! GuardDuty ha detectado el hallazgo **Stealth:IAMUser/CloudTrailLoggingDisabled**. El usuario **{user_name}** ha apagado el registro de CloudTrail. Bajo la técnica de **Impair Defenses: Disable Cloud Logs** (**MITRE ATT&CK T1562.008**), el atacante está operando a ciegas para el SOC.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "user_name",
+      "required": true,
+      "description": "El nombre del usuario de IAM que desactivó el registro."
+    },
+    {
+      "name": "trail_arn",
+      "required": true,
+      "description": "El ARN del CloudTrail que fue afectado."
+    }
+  ]
+}

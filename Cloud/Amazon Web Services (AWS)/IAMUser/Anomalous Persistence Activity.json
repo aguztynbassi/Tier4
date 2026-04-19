@@ -1,0 +1,34 @@
+{
+  "name": "IAM: Anomalous Persistence Activity",
+  "description": "Detecta intentos de establecer persistencia en una cuenta de AWS mediante comportamientos de API inusuales. Esto incluye la creación de nuevas llaves de acceso, modificación de relaciones de confianza en roles, creación de usuarios o cambios en las políticas de contraseñas realizados por una identidad que habitualmente no ejecuta estas tareas administrativas.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "iam",
+    "persistence",
+    "anomaly_detection",
+    "backdoor",
+    "T1098",
+    "credential_compromise"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE PERSISTENCIA: Intento de Backdoor detectado! GuardDuty ha detectado el hallazgo **Persistence:IAMUser/AnomalousBehavior** para el usuario **{user_name}**. Se identificaron cambios anómalos en la configuración de identidad. Bajo la técnica de **Account Manipulation** (**MITRE ATT&CK T1098**), esto sugiere que un atacante está asegurando su acceso futuro.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "user_name",
+      "required": true,
+      "description": "El nombre del usuario de IAM que está siendo utilizado para crear persistencia."
+    },
+    {
+      "name": "api_calls",
+      "required": false,
+      "description": "Lista de acciones (ej. CreateAccessKey, UpdateAssumeRolePolicy) que dispararon la anomalía."
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "IAM: API Calls from Malicious IP",
+  "description": "Detecta el uso de credenciales de IAM (Access Keys o contraseñas de consola) desde direcciones IP vinculadas a actividades maliciosas confirmadas. Este hallazgo sugiere que las credenciales han sido filtradas y están siendo explotadas activamente por actores de amenaza para reconocimiento, persistencia o exfiltración dentro del entorno de AWS.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "iam",
+    "unauthorized_access",
+    "malicious_ip",
+    "credential_compromise",
+    "T1078.004",
+    "impact"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡INTRUSIÓN CONFIRMADA: Uso de credenciales por IP Maliciosa! GuardDuty ha detectado el hallazgo **UnauthorizedAccess:IAMUser/MaliciousIPCaller** para el usuario **{user_name}**. La IP atacante **{malicious_ip}** está operando en la cuenta. Bajo la técnica de **Valid Accounts: Cloud Accounts** (**MITRE ATT&CK T1078.004**), esto representa un compromiso de identidad crítico.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "user_name",
+      "required": true,
+      "description": "El nombre del usuario de IAM cuyas credenciales están comprometidas."
+    },
+    {
+      "name": "malicious_ip",
+      "required": true,
+      "description": "La dirección IP maliciosa identificada por la inteligencia de amenazas."
+    },
+    {
+      "name": "api_calls",
+      "required": false,
+      "description": "Lista de acciones de API realizadas con éxito por la IP maliciosa."
+    }
+  ]
+}

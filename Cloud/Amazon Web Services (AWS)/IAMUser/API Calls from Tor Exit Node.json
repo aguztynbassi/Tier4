@@ -1,0 +1,39 @@
+{
+  "name": "IAM: API Calls from Tor Exit Node",
+  "description": "Detecta actividad de la API de AWS originada desde la red Tor utilizando credenciales de un usuario de IAM. Este hallazgo sugiere que un actor de amenaza ha obtenido acceso a las Access Keys o a la sesión del usuario y está interactuando con el entorno de AWS de forma anónima para realizar reconocimiento, persistencia o exfiltración de datos.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "iam",
+    "unauthorized_access",
+    "tor_network",
+    "defense_evasion",
+    "credential_compromise",
+    "T1078.004"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD: Acceso vía Tor! GuardDuty ha detectado el hallazgo **UnauthorizedAccess:IAMUser/TorIPCaller** para el usuario **{user_name}**. La IP de origen **{tor_ip}** es un nodo de salida de Tor. Bajo la técnica de **Valid Accounts: Cloud Accounts** (**MITRE ATT&CK T1078.004**), se confirma el uso de credenciales comprometidas bajo anonimato.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "user_name",
+      "required": true,
+      "description": "El nombre del usuario de IAM cuyas credenciales están siendo usadas."
+    },
+    {
+      "name": "tor_ip",
+      "required": true,
+      "description": "La dirección IP de la red Tor detectada."
+    },
+    {
+      "name": "api_calls",
+      "required": false,
+      "description": "Lista de las últimas llamadas a la API realizadas desde Tor."
+    }
+  ]
+}

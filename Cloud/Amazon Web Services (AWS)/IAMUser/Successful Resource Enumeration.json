@@ -1,0 +1,39 @@
+{
+  "name": "IAM: Successful Resource Enumeration",
+  "description": "Detecta una ráfaga de llamadas exitosas a la API destinadas a descubrir recursos y configuraciones dentro de la cuenta de AWS. A diferencia de un error de 'Access Denied', esta alerta confirma que la identidad de IAM tiene los permisos necesarios para listar información crítica y que un actor (probablemente externo) los está utilizando para realizar un reconocimiento exhaustivo del entorno.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "iam",
+    "reconnaissance",
+    "discovery",
+    "successful_enumeration",
+    "T1580",
+    "T1087.004"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡RECONOCIMIENTO EXITOSO: Mapa de infraestructura comprometido! GuardDuty ha detectado el hallazgo **Recon:IAMUser/Enumeration.Successful**. El usuario **{user_name}** ha listado recursos críticos con éxito. Bajo la técnica de **Cloud Infrastructure Discovery** (**MITRE ATT&CK T1580**), el atacante ya conoce la superficie de ataque.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "user_name",
+      "required": true,
+      "description": "El nombre del usuario de IAM que realizó la enumeración exitosa."
+    },
+    {
+      "name": "enumerated_services",
+      "required": false,
+      "description": "Lista de servicios de AWS que fueron mapeados (ej. S3, IAM, Secrets Manager, RDS)."
+    },
+    {
+      "name": "source_ip",
+      "required": true,
+      "description": "La dirección IP desde la cual se realizó el reconocimiento."
+    }
+  ]
+}

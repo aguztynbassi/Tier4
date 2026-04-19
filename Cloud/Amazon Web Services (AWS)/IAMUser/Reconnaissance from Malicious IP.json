@@ -1,0 +1,39 @@
+{
+  "name": "IAM: Reconnaissance from Malicious IP",
+  "description": "Detecta intentos de enumeración de recursos, usuarios y políticas de IAM originados desde una dirección IP identificada como maliciosa por la inteligencia de amenazas. El objetivo del atacante es mapear la superficie de ataque y los privilegios de las credenciales comprometidas para planificar las siguientes fases del ciclo de vida del ataque (privilege escalation o exfiltration).",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "iam",
+    "reconnaissance",
+    "malicious_ip",
+    "discovery",
+    "T1580",
+    "T1087.004"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡INTENTO DE DESCUBRIMIENTO: IP Maliciosa explorando IAM! GuardDuty ha detectado el hallazgo **Recon:IAMUser/MaliciousIPCaller**. La identidad **{user_name}** está siendo operada desde la IP atacante **{malicious_ip}**. Bajo la técnica de **Cloud Infrastructure Discovery** (**MITRE ATT&CK T1580**), se confirma que un actor de amenaza está mapeando tu infraestructura.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "user_name",
+      "required": true,
+      "description": "El nombre del usuario de IAM cuyas credenciales están siendo explotadas."
+    },
+    {
+      "name": "malicious_ip",
+      "required": true,
+      "description": "La dirección IP maliciosa que realiza el reconocimiento."
+    },
+    {
+      "name": "recon_actions",
+      "required": false,
+      "description": "Llamadas específicas de reconocimiento detectadas (ej. ListRoles, DescribeLogGroups, ListBuckets)."
+    }
+  ]
+}
