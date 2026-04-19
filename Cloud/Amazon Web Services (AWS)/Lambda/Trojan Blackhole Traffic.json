@@ -1,0 +1,34 @@
+{
+  "name": "Lambda: Trojan Blackhole Traffic",
+  "description": "Detecta intentos de conexión desde una función Lambda hacia direcciones IP identificadas como sumideros (sinkholes) o agujeros negros de red. Este comportamiento indica que el código de la función o una de sus dependencias contiene un troyano que está intentando comunicarse con un servidor C2 que ha sido neutralizado por autoridades de seguridad.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "lambda",
+    "trojan",
+    "defense_evasion",
+    "command_and_control",
+    "T1548",
+    "serverless_malware"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE TROYANO: Tráfico Blackhole en Lambda! GuardDuty ha detectado el hallazgo **Trojan:Lambda/BlackholeTraffic** en la función **{lambda_function_name}**. La función está intentando contactar infraestructura maliciosa neutralizada. Bajo la técnica de **Non-Application Layer Protocol** (**MITRE ATT&CK T1095**), esto confirma la presencia de código malicioso en el runtime.",
+      "continueOnError": false,
+      "systemCapability": "analyzeLambdaSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "lambda_function_name",
+      "required": true,
+      "description": "El nombre de la función Lambda infectada."
+    },
+    {
+      "name": "blackhole_ip",
+      "required": true,
+      "description": "La dirección IP de destino identificada como blackhole."
+    }
+  ]
+}

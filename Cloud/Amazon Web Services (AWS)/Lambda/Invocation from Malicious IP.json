@@ -1,0 +1,34 @@
+{
+  "name": "Lambda: Invocation from Malicious IP",
+  "description": "Detecta intentos de invocación de funciones Lambda originados desde direcciones IP con mala reputación. Este hallazgo sugiere que un actor de amenaza conocido está intentando interactuar con la función, ya sea para realizar pruebas de vulnerabilidad, inyectar código malicioso o abusar de permisos de IAM comprometidos.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "lambda",
+    "unauthorized_access",
+    "malicious_ip",
+    "initial_access",
+    "T1078",
+    "serverless_attack"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ACCESO NO AUTORIZADO: Invocación Maliciosa! GuardDuty ha detectado el hallazgo **UnauthorizedAccess:Lambda/MaliciousIPCaller** en la función **{lambda_function_name}**. Se registró una llamada desde la IP atacante **{malicious_ip}**. Bajo la técnica de **Valid Accounts: Cloud Accounts** (**MITRE ATT&CK T1078**), esto indica un intento de explotación externa.",
+      "continueOnError": false,
+      "systemCapability": "analyzeLambdaSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "lambda_function_name",
+      "required": true,
+      "description": "El nombre de la función Lambda objetivo."
+    },
+    {
+      "name": "malicious_ip",
+      "required": true,
+      "description": "La dirección IP maliciosa que intentó la invocación."
+    }
+  ]
+}
