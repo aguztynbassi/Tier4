@@ -1,0 +1,38 @@
+{
+  "name": "Runtime: CryptoMiner Execution Detected",
+  "description": "Detecta la ejecución de binarios o scripts diseñados para la minería de criptomonedas. GuardDuty identifica estos procesos mediante firmas de archivos conocidas, patrones de uso de CPU extremadamente altos y constantes, y conexiones de red salientes hacia pools de minería conocidos a través de protocolos como Stratum.",
+  "tags": [
+    "cloud_security",
+    "runtime_monitoring",
+    "impact",
+    "cryptomining",
+    "resource_hijacking",
+    "T1496",
+    "cost_anomaly"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡SECUESTRO DE RECURSOS: Minería de Cripto detectada! GuardDuty ha reportado el hallazgo **Impact:Runtime/CryptoMinerExecuted** en el recurso **{resource_id}**. Se está ejecutando el proceso **{process_name}**. Bajo la técnica de **Resource Hijacking** (**MITRE ATT&CK T1496**), esto representa un impacto financiero y operativo directo.",
+      "continueOnError": false,
+      "systemCapability": "analyzeRuntimeEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "resource_id",
+      "required": true,
+      "description": "ID de la instancia EC2 o nombre del pod afectado."
+    },
+    {
+      "name": "process_name",
+      "required": true,
+      "description": "Nombre del binario de minería detectado (ej. xmrig, kworker_miner)."
+    },
+    {
+      "name": "mining_pool_address",
+      "required": false,
+      "description": "Dirección del pool de minería hacia donde se dirige el tráfico."
+    }
+  ]
+}

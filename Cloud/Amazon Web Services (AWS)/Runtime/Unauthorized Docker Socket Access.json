@@ -1,0 +1,33 @@
+{
+  "name": "Runtime: Unauthorized Docker Socket Access",
+  "description": "Detecta cuando un proceso dentro de un contenedor accede al socket de Unix de Docker. Este acceso permite al contenedor enviar comandos directamente al demonio de Docker, facilitando la creación de nuevos contenedores privilegiados, la lectura de secretos del host o el escape total del aislamiento del contenedor.",
+  "tags": [
+    "cloud_security",
+    "runtime_monitoring",
+    "privilege_escalation",
+    "container_escape",
+    "docker_socket",
+    "T1611",
+    "T1068"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE ESCAPE: Acceso al Socket de Docker! GuardDuty ha detectado el hallazgo **PrivilegeEscalation:Runtime/DockerSocketAccessed** en el recurso **{resource_id}**. Un proceso sospechoso está interactuando con el socket del host. Bajo la técnica de **Escape to Host** (**MITRE ATT&CK T1611**), esto permite un compromiso total de la infraestructura.",
+      "continueOnError": false,
+      "systemCapability": "analyzeRuntimeEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "resource_id",
+      "required": true,
+      "description": "ID del recurso (instancia EC2 o pod) donde se detectó el acceso."
+    },
+    {
+      "name": "process_path",
+      "required": true,
+      "description": "La ruta del binario que intentó acceder al socket (ej. /usr/bin/curl, /tmp/socat)."
+    }
+  ]
+}

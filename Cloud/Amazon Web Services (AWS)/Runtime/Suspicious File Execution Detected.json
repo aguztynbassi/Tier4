@@ -1,0 +1,39 @@
+{
+  "name": "Runtime: Suspicious File Execution Detected",
+  "description": "Detecta archivos con atributos sospechosos en el sistema de archivos del host o contenedor. Los criterios incluyen binarios con alta entropía (posiblemente cifrados o empaquetados), nombres de archivos que imitan procesos legítimos del kernel (ej. kworker en directorios de usuario) o scripts ejecutados desde ubicaciones temporales no estándar.",
+  "tags": [
+    "cloud_security",
+    "runtime_monitoring",
+    "execution",
+    "suspicious_activity",
+    "defense_evasion",
+    "masquerading",
+    "T1036.005",
+    "T1059"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD: Archivo sospechoso en runtime! GuardDuty ha detectado el hallazgo **Execution:Runtime/SuspiciousFile** en el recurso **{resource_id}**. El archivo **{file_path}** presenta anomalías estructurales. Bajo la técnica de **Masquerading** (**MITRE ATT&CK T1036**), esto sugiere un intento de ocultar actividad maliciosa.",
+      "continueOnError": false,
+      "systemCapability": "analyzeRuntimeEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "resource_id",
+      "required": true,
+      "description": "ID de la instancia EC2 o nombre del recurso de cómputo."
+    },
+    {
+      "name": "file_path",
+      "required": true,
+      "description": "Ruta completa del archivo detectado como sospechoso."
+    },
+    {
+      "name": "detection_type",
+      "required": false,
+      "description": "Razón de la sospecha (ej. Masquerading, High Entropy, Sensitive Location)."
+    }
+  ]
+}

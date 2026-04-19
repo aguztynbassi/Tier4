@@ -1,0 +1,39 @@
+{
+  "name": "Runtime: Suspicious Tool Execution",
+  "description": "Detecta la ejecución de herramientas comúnmente asociadas con actividades de hacking y pruebas de penetración. Incluye utilidades para escaneo de red (nmap, zmap), túneles de red (chisel, socat), herramientas de explotación (mimikatz, responder) y scripts de enumeración de entornos cloud.",
+  "tags": [
+    "cloud_security",
+    "runtime_monitoring",
+    "execution",
+    "suspicious_tool",
+    "lateral_movement",
+    "reconnaissance",
+    "T1059",
+    "T1587"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡HERRAMIENTA SOSPECHOSA DETECTADA! GuardDuty ha reportado el hallazgo **Execution:Runtime/SuspiciousTool** en el recurso **{resource_id}**. Se ha ejecutado la herramienta **{tool_name}** en la ruta **{executable_path}**. Bajo la técnica de **Command and Scripting Interpreter** (**MITRE ATT&CK T1059**), esto sugiere una fase activa de ataque.",
+      "continueOnError": false,
+      "systemCapability": "analyzeRuntimeEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "resource_id",
+      "required": true,
+      "description": "ID de la instancia EC2 o nombre del pod afectado."
+    },
+    {
+      "name": "tool_name",
+      "required": true,
+      "description": "El nombre de la herramienta detectada (ej. nmap, socat, linpeas)."
+    },
+    {
+      "name": "executable_path",
+      "required": true,
+      "description": "La ruta completa donde reside el binario sospechoso."
+    }
+  ]
+}
