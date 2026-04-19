@@ -1,0 +1,39 @@
+{
+  "name": "S3: Suspicious Access Pattern (Anomaly)",
+  "description": "Detecta comportamientos de acceso a S3 que son inusuales para el usuario o rol de IAM específico. GuardDuty analiza patrones de acceso históricos (volumen de datos, tipos de llamadas a la API, ubicación geográfica y User-Agent) para identificar posibles exfiltraciones de datos o intentos de acceso no autorizado que logran evadir las reglas de seguridad estáticas.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "s3",
+    "unauthorized_access",
+    "anomaly_detection",
+    "data_exfiltration",
+    "T1530",
+    "machine_learning"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE ANOMALÍA: Patrón de Acceso S3 Sospechoso! GuardDuty ha detectado el hallazgo **UnauthorizedAccess:S3/SuspiciousS3Access**. La identidad **{user_identity}** está realizando acciones que no coinciden con su perfil histórico. Bajo la técnica de **Data from Cloud Storage Object** (**MITRE ATT&CK T1530**), esto puede indicar un compromiso de credenciales o una amenaza interna activa.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "user_identity",
+      "required": true,
+      "description": "El ARN del usuario o rol de IAM que muestra el comportamiento anómalo."
+    },
+    {
+      "name": "anomaly_details",
+      "required": false,
+      "description": "Descripción del factor anómalo (ej. ubicación inusual, volumen de llamadas elevado, herramienta sospechosa)."
+    },
+    {
+      "name": "bucket_name",
+      "required": true,
+      "description": "El nombre del bucket de S3 que está siendo accedido de forma inusual."
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "name": "S3: Account Level Public Access Block Disabled",
+  "description": "Detecta cuando se desactiva la configuración de 'Block Public Access' a nivel de cuenta de AWS. Esta característica actúa como un control maestro que anula cualquier política de bucket o ACL que permita el acceso público. Su desactivación aumenta drásticamente el riesgo de exposición de datos, ya que cualquier error en la configuración individual de un bucket lo hará inmediatamente accesible desde internet.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "s3",
+    "policy_change",
+    "exposure_risk",
+    "misconfiguration",
+    "T1562.001",
+    "defense_evasion"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE CONFIGURACIÓN: Protección Global S3 Desactivada! GuardDuty ha detectado el hallazgo **Policy:S3/AccountPublicAccessBlockDisabled**. Se ha removido el bloqueo de acceso público a nivel de cuenta. Bajo la técnica de **Impair Defenses: Disable or Modify Cloud Firewalls** (**MITRE ATT&CK T1562.001**), esto expone todos los buckets de la cuenta.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "user_identity",
+      "required": true,
+      "description": "La identidad de IAM que realizó el cambio en la política de la cuenta."
+    },
+    {
+      "name": "action_time",
+      "required": true,
+      "description": "Momento exacto en que se desactivó la protección."
+    }
+  ]
+}

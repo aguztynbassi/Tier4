@@ -1,0 +1,39 @@
+{
+  "name": "S3: Discovery from Tor Exit Node",
+  "description": "Detecta llamadas a la API de S3 (como ListBuckets, GetBucketAcl o GetObject) provenientes de la red Tor. Los actores de amenaza utilizan Tor para ocultar su ubicación real y evitar la atribución durante las fases de reconocimiento y enumeración de datos sensibles en la nube.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "s3",
+    "discovery",
+    "tor_network",
+    "anonymization_evasion",
+    "reconnaissance",
+    "T1537"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE ANONIMATO: Acceso S3 vía Tor! GuardDuty ha detectado el hallazgo **Discovery:S3/TorIPCaller**. La IP de salida de Tor **{tor_ip}** está interactuando con S3. Bajo la técnica de **Transfer Data to Cloud Account** (**MITRE ATT&CK T1537**), esto sugiere un intento de enumeración encubierta.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "tor_ip",
+      "required": true,
+      "description": "La dirección IP del nodo de salida de Tor detectada."
+    },
+    {
+      "name": "api_call",
+      "required": true,
+      "description": "La operación de S3 realizada (ej. ListObjects, GetBucketLogging)."
+    },
+    {
+      "name": "user_identity",
+      "required": true,
+      "description": "La identidad de IAM que realizó la llamada (si no fue un acceso anónimo)."
+    }
+  ]
+}

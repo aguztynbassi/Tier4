@@ -1,0 +1,39 @@
+{
+  "name": "S3: Data Exfiltration by Malicious IP",
+  "description": "Detecta la extracción de datos de buckets de S3 por parte de una dirección IP maliciosa conocida. Este hallazgo es de severidad alta porque confirma que un actor de amenaza ha identificado recursos valiosos y posee la autorización (o ha explotado una falta de ella) para descargar objetos, lo que resulta en una pérdida directa de confidencialidad de la información corporativa.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "s3",
+    "exfiltration",
+    "malicious_ip",
+    "data_theft",
+    "T1048",
+    "impact"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE IMPACTO: Exfiltración desde IP Maliciosa! GuardDuty ha detectado el hallazgo **Exfiltration:S3/MaliciousIPCaller**. La IP atacante **{malicious_ip}** está descargando objetos del bucket **{bucket_name}**. Bajo la técnica de **Exfiltration Over Alternative Protocol** (**MITRE ATT&CK T1048**), se confirma una brecha de datos en curso.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "malicious_ip",
+      "required": true,
+      "description": "La dirección IP maliciosa que está extrayendo los datos."
+    },
+    {
+      "name": "bucket_name",
+      "required": true,
+      "description": "El nombre del bucket que está sufriendo la exfiltración."
+    },
+    {
+      "name": "user_identity",
+      "required": true,
+      "description": "La identidad de IAM utilizada para autorizar la extracción."
+    }
+  ]
+}

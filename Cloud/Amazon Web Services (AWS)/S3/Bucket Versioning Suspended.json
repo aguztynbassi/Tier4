@@ -1,0 +1,34 @@
+{
+  "name": "S3: Bucket Versioning Suspended",
+  "description": "Detecta cuando el versionado de un bucket de S3 ha sido suspendido. El versionado permite mantener múltiples variantes de un objeto en el mismo bucket, lo que facilita la recuperación ante eliminaciones accidentales o sobrescrituras maliciosas. Su desactivación es una táctica común de los atacantes para asegurar que el daño causado por un borrado de datos o un ransomware sea irreversible.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "s3",
+    "policy_change",
+    "data_loss_risk",
+    "ransomware_preparation",
+    "T1565.001",
+    "impact"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE RESILIENCIA: Versionado Suspendido! GuardDuty ha detectado el hallazgo **Policy:S3/BucketVersioningSuspended** en el bucket **{bucket_name}**. Se ha desactivado la capacidad de recuperación de objetos. Bajo la técnica de **Data Manipulation: Stored Data Manipulation** (**MITRE ATT&CK T1565.001**), esto facilita un ataque destructivo.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "bucket_name",
+      "required": true,
+      "description": "El nombre del bucket donde se suspendió el versionado."
+    },
+    {
+      "name": "user_identity",
+      "required": true,
+      "description": "La identidad de IAM que realizó el cambio de configuración."
+    }
+  ]
+}

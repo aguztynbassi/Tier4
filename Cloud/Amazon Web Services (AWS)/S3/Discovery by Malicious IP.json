@@ -1,0 +1,39 @@
+{
+  "name": "S3: Discovery by Malicious IP",
+  "description": "Detecta intentos de acceso o enumeración a buckets de S3 provenientes de direcciones IP con mala reputación. Los atacantes realizan llamadas a APIs como ListBuckets o GetBucketAcl desde estas IPs para mapear la infraestructura de almacenamiento y buscar configuraciones incorrectas o datos sensibles expuestos antes de proceder con la exfiltración.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "s3",
+    "discovery",
+    "malicious_ip",
+    "reconnaissance",
+    "T1537",
+    "unauthorized_access"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE RECONOCIMIENTO: Acceso S3 desde IP Maliciosa! GuardDuty ha detectado el hallazgo **Discovery:S3/MaliciousIPCaller**. La IP atacante **{malicious_ip}** ha realizado llamadas a la API de S3. Bajo la técnica de **Transfer Data to Cloud Account** (**MITRE ATT&CK T1537**), esto sugiere una fase de descubrimiento sobre tus buckets.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "malicious_ip",
+      "required": true,
+      "description": "La dirección IP maliciosa que realizó la llamada a la API."
+    },
+    {
+      "name": "api_call",
+      "required": true,
+      "description": "La operación de S3 realizada (ej. ListBuckets, GetObject, PutBucketPolicy)."
+    },
+    {
+      "name": "user_identity",
+      "required": true,
+      "description": "La identidad (IAM User/Role) utilizada para la llamada, si aplica."
+    }
+  ]
+}
