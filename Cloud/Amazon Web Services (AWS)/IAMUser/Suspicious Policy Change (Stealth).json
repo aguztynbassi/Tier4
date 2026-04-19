@@ -1,0 +1,39 @@
+{
+  "name": "IAM: Suspicious Policy Change (Stealth)",
+  "description": "Detecta modificaciones anómalas en las políticas de IAM, como la edición de políticas administradas por el cliente, la adición de permisos 'Allow *' o el debilitamiento de condiciones de restricción. Este hallazgo sugiere que un atacante está intentando obtener privilegios administrativos o evadir restricciones de seguridad establecidas mediante la manipulación de las políticas que rigen el acceso a los recursos.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "iam",
+    "stealth",
+    "defense_evasion",
+    "privilege_escalation",
+    "T1098",
+    "T1548.006"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE MANIPULACIÓN: Cambio de Política de Seguridad! GuardDuty ha detectado el hallazgo **Stealth:IAMUser/PolicyChange**. El usuario **{user_name}** ha modificado una política de IAM de forma anómala. Bajo la técnica de **Abuse Elevation Control Mechanism** (**MITRE ATT&CK T1548.006**), esto indica un intento de escalada de privilegios.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "user_name",
+      "required": true,
+      "description": "El nombre del usuario de IAM que realizó la modificación."
+    },
+    {
+      "name": "policy_arn",
+      "required": true,
+      "description": "El ARN de la política que fue modificada o adjuntada."
+    },
+    {
+      "name": "policy_delta",
+      "required": false,
+      "description": "Diferencia entre la política anterior y la nueva (ej. adición de s3:*)."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "name": "K8s: Successful Anonymous Access",
+  "description": "Detecta llamadas exitosas a la API de Kubernetes realizadas por el usuario 'system:anonymous'. Este hallazgo es crítico, ya que indica que las políticas de RBAC permiten que identidades no autenticadas consulten o manipulen recursos del clúster, lo que puede llevar a la exfiltración de secretos, despliegue de pods maliciosos o compromiso total del plano de control.",
+  "tags": [
+    "kubernetes",
+    "cloud_security",
+    "credential_access",
+    "anonymous_access",
+    "rbac_misconfiguration",
+    "T1556",
+    "initial_access"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Acceso Anónimo Exitoso en K8s! GuardDuty ha detectado que el usuario **system:anonymous** ejecutó acciones exitosas en el clúster **{cluster_name}**. Bajo la técnica de **Abuse Elevation Control Mechanism** (**MITRE ATT&CK T1548**), esto indica una exposición severa del API Server.",
+      "continueOnError": false,
+      "systemCapability": "analyzeKubernetesEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "cluster_name",
+      "required": true,
+      "description": "El nombre del clúster de EKS afectado."
+    },
+    {
+      "name": "api_verb",
+      "required": true,
+      "description": "La acción realizada (ej. list, get, create, patch)."
+    },
+    {
+      "name": "resource",
+      "required": true,
+      "description": "El recurso de Kubernetes accedido (ej. pods, secrets, nodes)."
+    }
+  ]
+}

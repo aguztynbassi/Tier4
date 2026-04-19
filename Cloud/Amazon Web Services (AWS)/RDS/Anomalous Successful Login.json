@@ -1,0 +1,39 @@
+{
+  "name": "RDS: Anomalous Successful Login",
+  "description": "Detecta un inicio de sesión exitoso en una instancia de base de datos que es inconsistente con los patrones de acceso establecidos. Los factores de anomalía incluyen una dirección IP de origen nunca antes vista, un horario de acceso inusual para ese usuario o el uso de una herramienta de base de datos que no pertenece al stack estándar de la empresa.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "rds",
+    "credential_access",
+    "anomalous_behavior",
+    "database_security",
+    "T1078.004",
+    "exfiltration_risk"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ACCESO EXITOSO ANÓMALO en RDS! GuardDuty ha detectado el hallazgo **AnomalousBehavior.SuccessfulLogin** en la instancia **{db_instance_id}**. El usuario **{db_user}** ha ingresado exitosamente desde una ubicación inusual. Bajo la técnica de **Valid Accounts: Cloud Accounts** (**MITRE ATT&CK T1078.004**), esto representa un compromiso de datos inminente.",
+      "continueOnError": false,
+      "systemCapability": "analyzeDatabaseSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "db_instance_id",
+      "required": true,
+      "description": "El ID de la instancia de base de datos RDS afectada."
+    },
+    {
+      "name": "db_user",
+      "required": true,
+      "description": "El nombre del usuario de la base de datos utilizado para el acceso."
+    },
+    {
+      "name": "source_ip",
+      "required": true,
+      "description": "La dirección IP desde la cual se realizó la conexión exitosa."
+    }
+  ]
+}

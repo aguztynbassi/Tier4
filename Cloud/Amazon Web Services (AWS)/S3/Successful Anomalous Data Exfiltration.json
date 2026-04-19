@@ -1,0 +1,39 @@
+{
+  "name": "S3: Successful Anomalous Data Exfiltration",
+  "description": "Indica que se ha completado con éxito una extracción de datos anómala desde un bucket de S3. El motor de Machine Learning de GuardDuty ha validado que los objetos fueron efectivamente descargados o copiados hacia un destino inusual, superando los umbrales de volumen y velocidad habituales para la identidad de IAM involucrada. Este evento confirma una brecha de datos consumada.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "s3",
+    "exfiltration",
+    "data_breach",
+    "successful_attack",
+    "T1041",
+    "impact"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡BRECHA DE DATOS CONFIRMADA! GuardDuty ha detectado el hallazgo **Exfiltration:S3/AnomalousBehavior.Successful**. La identidad **{user_identity}** ha exfiltrado con éxito datos del bucket **{bucket_name}**. Bajo la técnica de **Exfiltration Over C2 Channel** (**MITRE ATT&CK T1041**), se ha verificado la pérdida de activos de información.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "user_identity",
+      "required": true,
+      "description": "El ARN de la identidad de IAM que realizó la exfiltración exitosa."
+    },
+    {
+      "name": "bucket_name",
+      "required": true,
+      "description": "El nombre del bucket comprometido."
+    },
+    {
+      "name": "total_bytes_exfiltrated",
+      "required": false,
+      "description": "El volumen total de datos que GuardDuty estima que fueron extraídos con éxito."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "name": "Runtime: Privilege Escalation to Root",
+  "description": "Detecta cuando un proceso cambia su identificador de usuario (UID) a 0 (root) utilizando métodos anómalos. Esto incluye la explotación de binarios con el bit SUID, vulnerabilidades de kernel (Local Privilege Escalation), o el abuso de configuraciones incorrectas en sudoers.",
+  "tags": [
+    "cloud_security",
+    "runtime_monitoring",
+    "privilege_escalation",
+    "root_access",
+    "host_compromise",
+    "T1068",
+    "T1548.001"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡CRÍTICO: Escalada a Root Detectada! GuardDuty ha reportado el hallazgo **PrivilegeEscalation:Runtime/ElevationToRoot** en el recurso **{resource_id}**. Un proceso ha obtenido privilegios de superusuario de forma no autorizada. Bajo la técnica de **Exploitation for Privilege Escalation** (**MITRE ATT&CK T1068**), el atacante tiene ahora control total del sistema.",
+      "continueOnError": false,
+      "systemCapability": "analyzeRuntimeEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "resource_id",
+      "required": true,
+      "description": "ID de la instancia EC2 o nombre del pod/clúster afectado."
+    },
+    {
+      "name": "executable_path",
+      "required": true,
+      "description": "La ruta del binario que realizó la escalada (ej. /usr/bin/sudo, /tmp/exploit)."
+    },
+    {
+      "name": "process_id",
+      "required": false,
+      "description": "El PID del proceso que escaló privilegios."
+    }
+  ]
+}

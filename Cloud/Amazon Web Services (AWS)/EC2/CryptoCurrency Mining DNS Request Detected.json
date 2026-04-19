@@ -1,0 +1,34 @@
+{
+  "name": "AWS: CryptoCurrency Mining DNS Request Detected",
+  "description": "Detecta intentos de resolución de nombres de dominio (DNS) vinculados a la minería de criptomonedas. Esta alerta indica que un proceso dentro de la instancia EC2 está intentando contactar a un pool de minería. Es una señal crítica de compromiso (Cryptojacking), donde recursos de AWS son abusados para beneficio financiero de un atacante, impactando los costos de facturación y el rendimiento del sistema.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "guardduty",
+    "dns_anomaly",
+    "cryptomining",
+    "resource_hijacking",
+    "T1496",
+    "unauthorized_access"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD: Resolución DNS de Minería! GuardDuty ha detectado el hallazgo **CryptoCurrency:EC2/BitcoinTool.B!DNS** en la instancia **{instance_id}**. Se ha solicitado la resolución del dominio malicioso **{domain_name}**. Bajo la técnica de **Resource Hijacking** (**MITRE ATT&CK T1496**), esto confirma la presencia de un minero intentando conectar a un pool externo.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia que originó la consulta DNS."
+    },
+    {
+      "name": "domain_name",
+      "required": true,
+      "description": "El dominio de minería solicitado (ej. pool.supportxmr.com, nicehash.com)."
+    }
+  ]
+}

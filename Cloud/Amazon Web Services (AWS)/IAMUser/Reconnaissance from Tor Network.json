@@ -1,0 +1,39 @@
+{
+  "name": "IAM: Reconnaissance from Tor Network",
+  "description": "Detecta llamadas a la API de AWS orientadas a la enumeración de recursos y privilegios, originadas desde la red Tor. Este hallazgo sugiere que un actor de amenaza ha obtenido credenciales válidas y está realizando un descubrimiento de activos (buckets, instancias, usuarios) mientras oculta su ubicación real para evadir defensas perimetrales.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "iam",
+    "reconnaissance",
+    "tor_network",
+    "discovery",
+    "T1087",
+    "T1580"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡INTENTO DE RECONOCIMIENTO: Enumeración vía Tor! GuardDuty ha detectado el hallazgo **Recon:IAMUser/TorIPCaller**. El usuario **{user_name}** está siendo utilizado desde la IP **{tor_ip}** para listar recursos. Bajo la técnica de **Cloud Infrastructure Discovery** (**MITRE ATT&CK T1580**), esto indica una fase de preparación para un ataque mayor.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "user_name",
+      "required": true,
+      "description": "El nombre del usuario de IAM involucrado en el reconocimiento."
+    },
+    {
+      "name": "tor_ip",
+      "required": true,
+      "description": "La dirección IP del nodo de salida de Tor detectada."
+    },
+    {
+      "name": "api_calls",
+      "required": false,
+      "description": "Llamadas de enumeración detectadas (ej. ListBuckets, DescribeInstances, GetUser)."
+    }
+  ]
+}

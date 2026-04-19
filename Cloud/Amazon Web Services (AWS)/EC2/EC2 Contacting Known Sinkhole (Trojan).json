@@ -1,0 +1,39 @@
+{
+  "name": "AWS: EC2 Contacting Known Sinkhole (Trojan)",
+  "description": "Detecta tráfico saliente desde una instancia EC2 hacia direcciones IP identificadas como 'sinkholes' de seguridad. Estas IPs son utilizadas por la comunidad de inteligencia de amenazas para interceptar comunicaciones de botnets. El hallazgo confirma que un troyano en la instancia intentó conectar con su infraestructura de C2, lo que indica un compromiso exitoso del host, aunque la conexión específica haya sido interceptada por un sumidero de tráfico.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "guardduty",
+    "trojan",
+    "sinkhole",
+    "botnet_infection",
+    "command_and_control",
+    "T1071"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE INFECCIÓN: Tráfico de Botnet Detectado! GuardDuty ha identificado el hallazgo **Trojan:EC2/BlackholeTraffic** en la instancia **{instance_id}**. El host intentó contactar a la IP sumidero **{sinkhole_ip}**. Bajo la técnica de **Application Layer Protocol** (**MITRE ATT&CK T1071**), esto confirma que la instancia está infectada con malware activo buscando instrucciones.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia infectada."
+    },
+    {
+      "name": "sinkhole_ip",
+      "required": true,
+      "description": "La dirección IP del sumidero (blackhole) que interceptó el tráfico."
+    },
+    {
+      "name": "protocol",
+      "required": false,
+      "description": "El protocolo utilizado (ej. HTTP, IRC, DNS)."
+    }
+  ]
+}

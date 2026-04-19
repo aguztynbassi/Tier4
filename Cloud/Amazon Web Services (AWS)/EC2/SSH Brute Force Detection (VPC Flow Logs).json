@@ -1,0 +1,38 @@
+{
+  "name": "AWS: SSH Brute Force Detection (VPC Flow Logs)",
+  "description": "Detecta patrones de ataque de fuerza bruta dirigidos al puerto 22 (SSH). Se activa cuando una IP externa genera un alto volumen de conexiones 'REJECT' o sesiones de muy corta duración en un intervalo de tiempo reducido. Esto sugiere un escaneo automatizado o un intento de adivinación de contraseñas contra instancias EC2.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "vpc_flow_logs",
+    "brute_force",
+    "ssh",
+    "T1110",
+    "guardduty_map"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD AWS: Fuerza Bruta SSH! Se han detectado múltiples intentos de conexión fallidos desde la IP **{srcaddr}** hacia la instancia **{instance_id}** en el puerto 22. Bajo la técnica de **Brute Force** (**MITRE ATT&CK T1110**), esto indica un ataque activo de recolección de credenciales. Se recomienda revisar los Security Groups y bloquear la IP de origen.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia EC2 que está siendo objetivo del ataque."
+    },
+    {
+      "name": "srcaddr",
+      "required": true,
+      "description": "La dirección IP pública del atacante."
+    },
+    {
+      "name": "action",
+      "required": true,
+      "description": "El estado del flujo (ACCEPT/REJECT). Un alto número de REJECT indica que el Security Group está bloqueando el acceso, pero el ataque persiste."
+    }
+  ]
+}

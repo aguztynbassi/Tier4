@@ -1,0 +1,39 @@
+{
+  "name": "K8s: API Calls from Tor Exit Node",
+  "description": "Detecta actividad en el API Server de Kubernetes originada desde la red Tor. Este hallazgo sugiere que las credenciales de acceso al clúster (como tokens de ServiceAccount o certificados de usuario) han sido comprometidas y están siendo utilizadas por un actor de amenaza externo para interactuar con el clúster de forma anónima.",
+  "tags": [
+    "kubernetes",
+    "cloud_security",
+    "credential_access",
+    "tor_network",
+    "eks",
+    "defense_evasion",
+    "T1550",
+    "T1078.004"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡INTRUSIÓN EN K8S: Acceso vía Tor detectado! GuardDuty ha reportado el hallazgo **CredentialAccess:Kubernetes/TorIPCaller** en el clúster **{cluster_name}**. La IP de origen **{tor_ip}** pertenece a la red Tor. Bajo la técnica de **Valid Accounts: Cloud Accounts** (**MITRE ATT&CK T1078.004**), esto indica un compromiso de identidad en el plano de control.",
+      "continueOnError": false,
+      "systemCapability": "analyzeKubernetesEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "cluster_name",
+      "required": true,
+      "description": "El nombre del clúster de EKS afectado."
+    },
+    {
+      "name": "tor_ip",
+      "required": true,
+      "description": "La dirección IP del nodo de salida de Tor."
+    },
+    {
+      "name": "username",
+      "required": true,
+      "description": "La identidad (ServiceAccount o IAM User) utilizada para la llamada."
+    }
+  ]
+}

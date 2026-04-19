@@ -1,0 +1,34 @@
+{
+  "name": "AWS: Abused Domain Request (Reputation Impact)",
+  "description": "Detecta intentos de comunicación con dominios que han sido identificados por tener una reputación comprometida debido a abusos previos. Esto incluye sitios legítimos que han sido inyectados con malware, servicios de redirección abusados por atacantes o dominios de hosting gratuito utilizados para campañas de phishing. La conexión indica que la instancia está interactuando con infraestructura que actualmente representa un riesgo de seguridad.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "guardduty",
+    "reputation_impact",
+    "abused_domain",
+    "resource_misuse",
+    "T1584",
+    "phishing"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE REPUTACIÓN: Dominio Abusado! GuardDuty ha detectado el hallazgo **Impact:EC2/AbusedDomainRequest.Reputation** en la instancia **{instance_id}**. Se ha registrado tráfico hacia el dominio **{domain_name}**, el cual tiene reportes activos de abuso. Bajo la técnica de **Compromise Infrastructure** (**MITRE ATT&CK T1584**), esto sugiere una interacción con activos legítimos bajo control atacante.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia involucrada en la comunicación."
+    },
+    {
+      "name": "domain_name",
+      "required": true,
+      "description": "El dominio con reportes de abuso detectado."
+    }
+  ]
+}

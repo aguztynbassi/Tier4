@@ -1,0 +1,38 @@
+{
+  "name": "Runtime: Malicious File Executed",
+  "description": "Detecta la ejecución de procesos asociados con malware conocido, herramientas de hacking o scripts maliciosos en tiempo de ejecución. GuardDuty monitorea las llamadas al sistema (syscalls) para identificar cuándo un binario con una firma maliciosa o un comportamiento de amenaza confirmado se inicia en el sistema operativo.",
+  "tags": [
+    "cloud_security",
+    "runtime_protection",
+    "execution",
+    "malware",
+    "compromised_host",
+    "T1204.002",
+    "post_exploitation"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡EJECUCIÓN MALICIOSA DETECTADA! GuardDuty ha reportado el hallazgo **Execution:Runtime/MaliciousFileExecuted** en el recurso **{resource_id}**. Se ha confirmado la ejecución del archivo **{file_path}**. Bajo la técnica de **User Execution: Malicious File** (**MITRE ATT&CK T1204.002**), el sistema está activamente comprometido.",
+      "continueOnError": false,
+      "systemCapability": "analyzeRuntimeEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "resource_id",
+      "required": true,
+      "description": "El ID de la instancia EC2 o el nombre del clúster/pod afectado."
+    },
+    {
+      "name": "file_path",
+      "required": true,
+      "description": "La ruta del archivo malicioso que fue ejecutado."
+    },
+    {
+      "name": "process_id",
+      "required": false,
+      "description": "El PID del proceso malicioso en ejecución."
+    }
+  ]
+}

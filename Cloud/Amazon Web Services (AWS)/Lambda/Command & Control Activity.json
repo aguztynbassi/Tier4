@@ -1,0 +1,34 @@
+{
+  "name": "Lambda: Command & Control Activity",
+  "description": "Detecta cuando una función Lambda interactúa con un servidor de Comando y Control (C&C) conocido. Esto indica que la función ha sido comprometida, probablemente mediante una vulnerabilidad en el código o una dependencia maliciosa, y está siendo utilizada para recibir instrucciones, descargar payloads adicionales o exfiltrar datos del entorno de AWS.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "lambda",
+    "backdoor",
+    "command_and_control",
+    "exfiltration",
+    "T1071",
+    "serverless_security"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡COMPROMISO SERVERLESS: Actividad de C&C detectada! GuardDuty ha reportado el hallazgo **Backdoor:Lambda/C&CActivity.B** en la función **{lambda_function_name}**. Se detectó tráfico hacia un servidor malicioso conocido. Bajo la técnica de **Application Layer Protocol** (**MITRE ATT&CK T1071**), esto confirma un backdoor activo en tu infraestructura serverless.",
+      "continueOnError": false,
+      "systemCapability": "analyzeLambdaSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "lambda_function_name",
+      "required": true,
+      "description": "El nombre de la función Lambda comprometida."
+    },
+    {
+      "name": "remote_host",
+      "required": true,
+      "description": "El dominio o IP del servidor de C2 detectado."
+    }
+  ]
+}

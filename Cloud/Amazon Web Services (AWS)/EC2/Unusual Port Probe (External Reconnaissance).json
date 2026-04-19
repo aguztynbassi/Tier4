@@ -1,0 +1,39 @@
+{
+  "name": "AWS: Unusual Port Probe (External Reconnaissance)",
+  "description": "Detecta intentos de conexión hacia puertos de la instancia EC2 que no han mostrado actividad previa en la línea base de comportamiento. Este hallazgo indica que un actor de amenaza externo está realizando un escaneo selectivo o 'probing' para identificar puertos abiertos, servicios mal configurados o vulnerabilidades de red antes de lanzar un ataque dirigido.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "guardduty",
+    "reconnaissance",
+    "port_probing",
+    "network_discovery",
+    "T1595",
+    "unauthorized_access"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE RECONOCIMIENTO: Sondeo de Puerto Inusual! GuardDuty ha detectado el hallazgo **Recon:EC2/PortProbeUnusual** dirigido a la instancia **{instance_id}**. Se ha registrado tráfico externo intentando acceder al puerto **{port}**. Bajo la técnica de **Active Scanning** (**MITRE ATT&CK T1595**), esto sugiere una fase de descubrimiento previa a una intrusión.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia de AWS que está siendo sondeada."
+    },
+    {
+      "name": "remote_ip",
+      "required": true,
+      "description": "La dirección IP externa que está realizando el sondeo de puertos."
+    },
+    {
+      "name": "port",
+      "required": true,
+      "description": "El puerto inusual que recibió el intento de conexión."
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "IAM: Suspicious Console Login Success",
+  "description": "Detecta un inicio de sesión exitoso en la consola de AWS que se desvía de los patrones establecidos. Los factores de sospecha incluyen una ubicación geográfica nunca antes vista, el uso de navegadores o sistemas operativos inusuales para ese usuario, o un login realizado desde una dirección IP con mala reputación o asociada a redes de anonimización.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "iam",
+    "unauthorized_access",
+    "console_login",
+    "credential_compromise",
+    "T1078.004",
+    "initial_access"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA: Acceso no autorizado a Consola! GuardDuty ha detectado el hallazgo **UnauthorizedAccess:IAMUser/ConsoleLoginSuccess.B** para el usuario **{user_name}**. El acceso fue exitoso pero altamente sospechoso. Bajo la técnica de **Valid Accounts: Cloud Accounts** (**MITRE ATT&CK T1078.004**), esto indica un posible secuestro de sesión o cuenta.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "user_name",
+      "required": true,
+      "description": "El nombre del usuario de IAM que inició sesión."
+    },
+    {
+      "name": "source_ip",
+      "required": true,
+      "description": "La dirección IP desde la cual se realizó el inicio de sesión."
+    },
+    {
+      "name": "location",
+      "required": false,
+      "description": "La ubicación geográfica detectada para ese login."
+    }
+  ]
+}

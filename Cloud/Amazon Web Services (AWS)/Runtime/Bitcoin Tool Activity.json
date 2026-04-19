@@ -1,0 +1,33 @@
+{
+  "name": "Runtime: Bitcoin Tool Activity",
+  "description": "Detecta la ejecución de binarios y utilidades relacionadas con el protocolo Bitcoin. Esto incluye carteras de línea de comandos (CLI wallets), administradores de nodos o herramientas de monitoreo de blockchain. Su presencia en entornos de producción suele ser un indicador de compromiso de recursos para actividades financieras no autorizadas.",
+  "tags": [
+    "cloud_security",
+    "runtime_monitoring",
+    "cryptocurrency",
+    "bitcoin",
+    "resource_hijacking",
+    "T1496",
+    "defense_evasion"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ACTIVIDAD DE CRIPTOACTIVOS: Herramienta Bitcoin detectada! GuardDuty ha reportado el hallazgo **CryptoCurrency:Runtime/BitcoinTool.B** en el recurso **{resource_id}**. Se ha ejecutado la herramienta en la ruta **{executable_path}**. Bajo la técnica de **Resource Hijacking** (**MITRE ATT&CK T1496**), esto indica un uso malicioso de la infraestructura.",
+      "continueOnError": false,
+      "systemCapability": "analyzeRuntimeEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "resource_id",
+      "required": true,
+      "description": "ID de la instancia EC2 o nombre del pod afectado."
+    },
+    {
+      "name": "executable_path",
+      "required": true,
+      "description": "La ruta completa del binario de Bitcoin detectado."
+    }
+  ]
+}

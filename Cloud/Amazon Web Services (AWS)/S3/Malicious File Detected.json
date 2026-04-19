@@ -1,0 +1,39 @@
+{
+  "name": "S3: Malicious File Detected",
+  "description": "Detecta la presencia de malware en objetos cargados en buckets de S3. GuardDuty escanea los archivos utilizando motores de detección de amenazas y análisis de reputación para identificar virus, troyanos, spyware y otros archivos maliciosos. Esta alerta permite prevenir la distribución de malware a través de aplicaciones que utilizan S3 como almacenamiento o la infección de usuarios que descarguen dichos archivos.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "s3",
+    "malware_protection",
+    "trojan",
+    "ransomware",
+    "T1204.002",
+    "initial_access"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡AMENAZA DETECTADA: Archivo Malicioso en S3! GuardDuty ha identificado el hallazgo **Object:S3/MaliciousFile** en el bucket **{bucket_name}**. El objeto **{object_key}** contiene malware confirmado. Bajo la técnica de **Malicious File** (**MITRE ATT&CK T1204.002**), este archivo representa un riesgo crítico de ejecución o propagación.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "bucket_name",
+      "required": true,
+      "description": "El nombre del bucket que contiene el archivo infectado."
+    },
+    {
+      "name": "object_key",
+      "required": true,
+      "description": "La ruta completa (key) del objeto malicioso."
+    },
+    {
+      "name": "malware_family",
+      "required": false,
+      "description": "El nombre de la familia de malware detectada (ej. Eicar-Test-Signature, Emotet)."
+    }
+  ]
+}

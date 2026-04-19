@@ -1,0 +1,39 @@
+{
+  "name": "S3: Unauthorized Access Attempt from Tor",
+  "description": "Detecta intentos fallidos de acceso a recursos de S3 provenientes de nodos de salida de Tor. A diferencia de los hallazgos de descubrimiento, este evento registra denegaciones de acceso (Access Denied), lo que indica que el atacante está intentando realizar operaciones de lectura, escritura o modificación sobre buckets que cuentan con protecciones activas, pero que están siendo blanco de un ataque dirigido.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "s3",
+    "unauthorized_access",
+    "tor_network",
+    "defense_evasion",
+    "T1530",
+    "access_denied"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE INTRUSIÓN: Intento de Acceso no Autorizado vía Tor! GuardDuty ha detectado el hallazgo **UnauthorizedAccess:S3/TorIPCaller**. Un actor anónimo desde la IP **{tor_ip}** ha recibido múltiples errores de 'Access Denied'. Bajo la técnica de **Data from Cloud Storage Object** (**MITRE ATT&CK T1530**), esto indica un intento de explotación de datos fallido.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "tor_ip",
+      "required": true,
+      "description": "La dirección IP del nodo de salida de Tor que recibió la denegación."
+    },
+    {
+      "name": "api_call",
+      "required": true,
+      "description": "La operación de S3 bloqueada (ej. GetObject, PutObject, DeleteBucket)."
+    },
+    {
+      "name": "user_identity",
+      "required": false,
+      "description": "La identidad de IAM que intentó la acción, si la petición estaba firmada."
+    }
+  ]
+}

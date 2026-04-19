@@ -1,0 +1,38 @@
+{
+  "name": "AWS: RDP Brute Force Attack (GuardDuty)",
+  "description": "Detecta intentos masivos y repetitivos de inicio de sesión a través del puerto 3389 (RDP) contra una instancia EC2. GuardDuty identifica este comportamiento analizando los VPC Flow Logs y buscando patrones de comunicación que coinciden con herramientas de ataque automatizadas. Un hallazgo positivo indica que el Security Group permite tráfico RDP desde internet y que un actor de amenaza está intentando adivinar credenciales activamente.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "guardduty",
+    "rdp_bruteforce",
+    "credential_access",
+    "T1110",
+    "unauthorized_access"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA CRÍTICA AWS: Fuerza Bruta RDP! GuardDuty ha detectado el hallazgo **UnauthorizedAccess:EC2/RDPBruteForce** en la instancia **{instance_id}**. El atacante desde la IP **{remote_ip}** está intentando vulnerar el acceso por escritorio remoto. Bajo la técnica de **Brute Force** (**MITRE ATT&CK T1110**), esto puede derivar en un compromiso total del servidor y despliegue de ransomware.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia de AWS (i-xxxxxxxxxxxx) que está bajo ataque."
+    },
+    {
+      "name": "remote_ip",
+      "required": true,
+      "description": "La dirección IP pública del atacante externo detectada por GuardDuty."
+    },
+    {
+      "name": "location",
+      "required": false,
+      "description": "Ubicación geográfica (país/ciudad) de la IP atacante según la inteligencia de AWS."
+    }
+  ]
+}

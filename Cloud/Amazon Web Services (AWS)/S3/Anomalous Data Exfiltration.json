@@ -1,0 +1,39 @@
+{
+  "name": "S3: Anomalous Data Exfiltration",
+  "description": "Detecta un intento de exfiltración de datos basado en un cambio drástico en el comportamiento de salida de objetos de S3. GuardDuty identifica cuando un usuario o rol de IAM descarga una cantidad de datos inusualmente grande, accede a una cantidad masiva de objetos en poco tiempo o utiliza endpoints de red inusuales para mover datos hacia afuera del entorno de AWS.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "s3",
+    "exfiltration",
+    "anomaly_detection",
+    "data_theft",
+    "T1041",
+    "impact"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EXFILTRACIÓN: Robo de Datos en S3! GuardDuty ha detectado el hallazgo **Exfiltration:S3/AnomalousBehavior**. La identidad **{user_identity}** está extrayendo datos del bucket **{bucket_name}** de forma anómala. Bajo la técnica de **Exfiltration Over C2 Channel** (**MITRE ATT&CK T1041**), esto indica una pérdida activa de información sensible.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "user_identity",
+      "required": true,
+      "description": "El ARN de la identidad de IAM responsable de la exfiltración."
+    },
+    {
+      "name": "bucket_name",
+      "required": true,
+      "description": "El nombre del bucket desde donde se están extrayendo los datos."
+    },
+    {
+      "name": "exfiltration_metrics",
+      "required": false,
+      "description": "Detalles sobre el volumen de datos (MB/GB) y la tasa de transferencia detectada."
+    }
+  ]
+}

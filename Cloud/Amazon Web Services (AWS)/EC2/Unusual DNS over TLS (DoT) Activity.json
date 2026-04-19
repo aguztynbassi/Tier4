@@ -1,0 +1,34 @@
+{
+  "name": "AWS: Unusual DNS over TLS (DoT) Activity",
+  "description": "Detecta actividad de DNS sobre TLS (puerto 853) que es anómala para el perfil de la instancia. El uso de DoT cifra las consultas DNS, lo que permite a un atacante evadir la inspección de tráfico de red, el filtrado de DNS Firewall y el registro de auditoría de Route 53. Esta técnica es comúnmente utilizada para establecer canales de Comando y Control (C2) sigilosos o realizar exfiltración de datos fuera del control del administrador de la nube.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "guardduty",
+    "defense_evasion",
+    "dot",
+    "dns_security",
+    "encrypted_c2",
+    "T1572"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE EVASIÓN: Canal DoT Detectado! GuardDuty ha identificado el hallazgo **DefenseEvasion:EC2/UnusualDoTActivity** en la instancia **{instance_id}**. Se ha detectado tráfico DNS cifrado hacia el puerto 853 del resolver **{dot_resolver_ip}**. Bajo la técnica de **Protocol Tunneling** (**MITRE ATT&CK T1572**), esto sugiere un esfuerzo activo por ocultar la actividad de red de la instancia.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia que originó el tráfico DoT."
+    },
+    {
+      "name": "dot_resolver_ip",
+      "required": true,
+      "description": "La dirección IP del servidor DNS externo que acepta conexiones TLS en el puerto 853."
+    }
+  ]
+}

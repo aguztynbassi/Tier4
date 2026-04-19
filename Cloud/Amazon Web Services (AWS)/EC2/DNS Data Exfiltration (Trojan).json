@@ -1,0 +1,39 @@
+{
+  "name": "AWS: DNS Data Exfiltration (Trojan)",
+  "description": "Detecta actividad de red donde el protocolo DNS es abusado para la exfiltración de datos. El malware fragmenta archivos o información sensible y los envía como prefijos en consultas DNS (ej. <data>.attacker.com). Esta técnica es altamente efectiva para evadir firewalls tradicionales, ya que el tráfico DNS suele estar permitido y no se inspecciona el contenido de las consultas de nombres de dominio.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "guardduty",
+    "dns_exfiltration",
+    "trojan",
+    "data_theft",
+    "T1048.003",
+    "command_and_control"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE ROBO DE DATOS: Exfiltración DNS Detectada! GuardDuty ha identificado el hallazgo **Trojan:EC2/DNSDataExfiltration** en la instancia **{instance_id}**. Se ha detectado la transferencia de datos anómalos codificados en consultas DNS hacia el dominio **{malicious_domain}**. Bajo la técnica de **Exfiltration Over Alternative Protocol: DNS** (**MITRE ATT&CK T1048.003**), esto indica una brecha de datos activa.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia que está realizando la exfiltración."
+    },
+    {
+      "name": "malicious_domain",
+      "required": true,
+      "description": "El dominio de destino donde se están reconstruyendo los datos robados."
+    },
+    {
+      "name": "query_volume",
+      "required": false,
+      "description": "Cantidad de consultas inusuales detectadas en el periodo de tiempo."
+    }
+  ]
+}

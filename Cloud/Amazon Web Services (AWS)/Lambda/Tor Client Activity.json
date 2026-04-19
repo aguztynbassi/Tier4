@@ -1,0 +1,34 @@
+{
+  "name": "Lambda: Tor Client Activity",
+  "description": "Detecta cuando una función Lambda actúa como un cliente de la red Tor, estableciendo conexiones con nodos de entrada o autoridades de directorio de Tor. Este hallazgo sugiere que la función ha sido comprometida y está siendo utilizada para realizar actividades anónimas, como el escaneo de redes externas, ataques a otros servicios o la exfiltración de datos sensibles evadiendo controles de seguridad basados en reputación de IP.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "lambda",
+    "unauthorized_access",
+    "tor_network",
+    "anonymization",
+    "defense_evasion",
+    "T1090.003"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE ANONIMIZACIÓN: Cliente Tor en Lambda! GuardDuty ha detectado el hallazgo **UnauthorizedAccess:Lambda/TorClient** en la función **{lambda_function_name}**. La función está conectándose a la red Tor. Bajo la técnica de **Proxy: Multi-hop Proxy** (**MITRE ATT&CK T1090.003**), esto indica un uso malicioso de la infraestructura para evadir atribución.",
+      "continueOnError": false,
+      "systemCapability": "analyzeLambdaSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "lambda_function_name",
+      "required": true,
+      "description": "El nombre de la función Lambda que actúa como cliente Tor."
+    },
+    {
+      "name": "tor_node_ip",
+      "required": true,
+      "description": "La dirección IP del nodo de Tor con el que se estableció la conexión."
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "AWS: EC2 Backdoor Command & Control Activity (GuardDuty)",
+  "description": "Detecta actividad de red consistente con una comunicación de Backdoor. La instancia EC2 está enviando señales de balizamiento (beaconing) a una infraestructura remota para recibir instrucciones. Este hallazgo indica que el host ha sido comprometido exitosamente y un actor de amenaza tiene persistencia, permitiéndole ejecutar comandos, exfiltrar datos o desplegar payloads adicionales de forma remota.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "guardduty",
+    "backdoor",
+    "c2_communication",
+    "persistence",
+    "T1071",
+    "T1573"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD CRÍTICA: Backdoor Detectado! GuardDuty ha identificado el hallazgo **Backdoor:EC2/C&CActivity.B** en la instancia **{instance_id}**. Se ha detectado comunicación de comando y control persistente. Bajo la técnica de **Application Layer Protocol** (**MITRE ATT&CK T1071**), esto confirma que el host está bajo el control de un atacante externo. Se requiere aislamiento inmediato.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia EC2 comprometida."
+    },
+    {
+      "name": "remote_ip",
+      "required": true,
+      "description": "La dirección IP del servidor C&C del atacante."
+    },
+    {
+      "name": "protocol",
+      "required": false,
+      "description": "El protocolo utilizado para la comunicación (ej. TCP, UDP, DNS)."
+    }
+  ]
+}

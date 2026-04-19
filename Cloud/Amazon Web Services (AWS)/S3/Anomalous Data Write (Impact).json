@@ -1,0 +1,40 @@
+{
+  "name": "S3: Anomalous Data Write (Impact)",
+  "description": "Detecta un patrón inusual de creación o modificación de objetos en S3. A diferencia de las operaciones normales, esta anomalía identifica ráfagas de escritura que podrían indicar la carga de malware, el uso del bucket como repositorio de herramientas de ataque o un intento de cifrado de datos (ransomware). GuardDuty emplea Machine Learning para distinguir entre ráfagas de logs legítimas y comportamientos maliciosos.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "s3",
+    "impact",
+    "data_manipulation",
+    "ransomware",
+    "integrity_risk",
+    "T1491",
+    "T1486"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE INTEGRIDAD: Escritura Masiva Anómala en S3! GuardDuty ha detectado el hallazgo **Impact:S3/AnomalousBehavior.Write**. La identidad **{user_identity}** está modificando objetos en el bucket **{bucket_name}** de forma sospechosa. Bajo la técnica de **Data Encrypted for Impact** (**MITRE ATT&CK T1486**), esto podría indicar un ataque de ransomware activo.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "user_identity",
+      "required": true,
+      "description": "El ARN de la identidad que realiza las escrituras anómalas."
+    },
+    {
+      "name": "bucket_name",
+      "required": true,
+      "description": "El nombre del bucket afectado por las modificaciones."
+    },
+    {
+      "name": "write_type",
+      "required": false,
+      "description": "Tipo de operación (ej. Sobrescritura de archivos existentes vs. Creación de nuevos)."
+    }
+  ]
+}

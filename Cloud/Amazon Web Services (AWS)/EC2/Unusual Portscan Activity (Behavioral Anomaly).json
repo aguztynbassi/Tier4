@@ -1,0 +1,34 @@
+{
+  "name": "AWS: Unusual Portscan Activity (Behavioral Anomaly)",
+  "description": "Detecta un comportamiento de escaneo de puertos saliente que se desvía del perfil histórico de la instancia EC2. A diferencia de un escaneo de puertos basado en firmas, esta anomalía identifica herramientas de descubrimiento que intentan evadir detecciones tradicionales mediante el uso de puertos aleatorios o cadencias de escaneo lentas que, no obstante, son inusuales para este host específico.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "guardduty",
+    "behavioral_anomaly",
+    "portscan",
+    "reconnaissance",
+    "T1595.001",
+    "unauthorized_access"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE ANOMALÍA: Escaneo de Puertos Inusual! GuardDuty ha detectado el hallazgo **Recon:EC2/PortscanUnusual** originado en la instancia **{instance_id}**. El host está realizando actividades de reconocimiento que no corresponden a su línea base. Bajo la técnica de **Active Scanning** (**MITRE ATT&CK T1595.001**), esto sugiere que un atacante está mapeando la red desde un sistema previamente comprometido.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia que muestra el cambio de comportamiento."
+    },
+    {
+      "name": "unusual_ports",
+      "required": false,
+      "description": "Lista de puertos detectados que activaron la anomalía conductual."
+    }
+  ]
+}

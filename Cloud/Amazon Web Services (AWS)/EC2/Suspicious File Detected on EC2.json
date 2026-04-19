@@ -1,0 +1,40 @@
+{
+  "name": "AWS: Suspicious File Detected on EC2",
+  "description": "Detecta archivos en volúmenes EBS que presentan características sospechosas mediante análisis heurístico y reputacional. A diferencia de 'MaliciousFile', esta alerta identifica posibles amenazas de día cero (0-day), scripts de post-explotación ofuscados o herramientas de doble uso (dual-use) situadas en ubicaciones atípicas del sistema de archivos, sugiriendo un intento de evasión de defensas.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "guardduty",
+    "malware_protection",
+    "suspicious_file",
+    "defense_evasion",
+    "heuristics",
+    "T1027",
+    "unauthorized_access"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE SEGURIDAD: Archivo Sospechoso Detectado! GuardDuty ha identificado el hallazgo **Execution:EC2/SuspiciousFile** en la instancia **{instance_id}**. Se ha localizado un archivo con características anómalas en **{file_path}**. Bajo la técnica de **Obfuscated Files or Information** (**MITRE ATT&CK T1027**), esto puede indicar un intento de ocultar código malicioso para evadir detecciones tradicionales.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "instance_id",
+      "required": true,
+      "description": "El ID de la instancia donde reside el archivo sospechoso."
+    },
+    {
+      "name": "file_path",
+      "required": true,
+      "description": "La ruta del archivo que disparó la heurística de GuardDuty."
+    },
+    {
+      "name": "threat_intelligence_details",
+      "required": false,
+      "description": "Información adicional sobre por qué el archivo es considerado sospechoso (ej. ofuscación, empaquetado, reputación de dominio relacionada)."
+    }
+  ]
+}

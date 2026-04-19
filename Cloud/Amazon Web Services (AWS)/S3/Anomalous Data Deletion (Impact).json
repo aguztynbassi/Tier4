@@ -1,0 +1,40 @@
+{
+  "name": "S3: Anomalous Data Deletion (Impact)",
+  "description": "Detecta una ráfaga inusual de eliminaciones de objetos en S3. Este hallazgo es un indicador de impacto negativo, sugiriendo que un actor de amenaza está intentando destruir datos críticos, eliminar backups o sabotear aplicaciones. GuardDuty utiliza Machine Learning para distinguir entre procesos de limpieza programados y actividades de borrado maliciosas basadas en la identidad y el patrón de acceso.",
+  "tags": [
+    "cloud_security",
+    "aws",
+    "s3",
+    "impact",
+    "data_deletion",
+    "sabotage",
+    "ransomware",
+    "T1485",
+    "defense_evasion"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE IMPACTO: Borrado Masivo en S3! GuardDuty ha detectado el hallazgo **Impact:S3/AnomalousBehavior.Delete**. La identidad **{user_identity}** está eliminando objetos del bucket **{bucket_name}** de forma anómala. Bajo la técnica de **Data Destruction** (**MITRE ATT&CK T1485**), esto representa un riesgo inminente de pérdida de activos.",
+      "continueOnError": false,
+      "systemCapability": "analyzeCloudSecurityEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "user_identity",
+      "required": true,
+      "description": "El ARN de la identidad responsable de los borrados."
+    },
+    {
+      "name": "bucket_name",
+      "required": true,
+      "description": "El nombre del bucket que está sufriendo la pérdida de datos."
+    },
+    {
+      "name": "deletion_rate",
+      "required": false,
+      "description": "Velocidad o cantidad de objetos eliminados por segundo/minuto."
+    }
+  ]
+}

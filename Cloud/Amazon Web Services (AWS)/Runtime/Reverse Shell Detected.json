@@ -1,0 +1,39 @@
+{
+  "name": "Runtime: Reverse Shell Detected",
+  "description": "Detecta la ejecución de una shell interactiva (ej. /bin/sh, /bin/bash, cmd.exe) cuya entrada y salida estándar están redirigidas a un socket de red. Este comportamiento es característico de un compromiso exitoso donde el atacante toma control remoto del sistema operativo.",
+  "tags": [
+    "cloud_security",
+    "runtime_monitoring",
+    "execution",
+    "reverse_shell",
+    "command_and_control",
+    "post_exploitation",
+    "T1059",
+    "T1071"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡INTRUSIÓN ACTIVA: Reverse Shell detectada! GuardDuty ha reportado el hallazgo **Execution:Runtime/ReverseShell** en el recurso **{resource_id}**. Se ha identificado una conexión interactiva hacia **{remote_ip}**. Bajo la técnica de **Command and Scripting Interpreter** (**MITRE ATT&CK T1059**), el atacante tiene control remoto del host.",
+      "continueOnError": false,
+      "systemCapability": "analyzeRuntimeEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "resource_id",
+      "required": true,
+      "description": "ID del recurso comprometido."
+    },
+    {
+      "name": "remote_ip",
+      "required": true,
+      "description": "La dirección IP del atacante (C2)."
+    },
+    {
+      "name": "executable_path",
+      "required": false,
+      "description": "La shell utilizada (ej. /bin/bash, python, perl)."
+    }
+  ]
+}
