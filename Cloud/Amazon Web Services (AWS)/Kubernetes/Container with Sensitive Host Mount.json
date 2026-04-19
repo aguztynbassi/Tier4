@@ -1,0 +1,39 @@
+{
+  "name": "K8s: Container with Sensitive Host Mount",
+  "description": "Detecta el despliegue de un contenedor que tiene montados directorios sensibles del sistema de archivos del nodo host (ej. /etc, /var/run/docker.sock, /root, /var/lib/kubelet). Este tipo de montaje permite a un atacante acceder a secretos del nodo, manipular procesos del sistema o escapar del contenedor para obtener control total sobre el host físico o virtual.",
+  "tags": [
+    "kubernetes",
+    "cloud_security",
+    "persistence",
+    "privilege_escalation",
+    "container_escape",
+    "hostPath",
+    "T1611",
+    "T1068"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE PERSISTENCIA: Montaje sensible en K8s! GuardDuty ha detectado el hallazgo **Persistence:Kubernetes/ContainerWithSensitiveMount** en el clúster **{cluster_name}**. El pod **{pod_name}** tiene acceso a directorios críticos del host. Bajo la técnica de **Escape to Host** (**MITRE ATT&CK T1611**), esto representa un riesgo de compromiso total del nodo.",
+      "continueOnError": false,
+      "systemCapability": "analyzeKubernetesEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "cluster_name",
+      "required": true,
+      "description": "El nombre del clúster de EKS afectado."
+    },
+    {
+      "name": "pod_name",
+      "required": true,
+      "description": "El nombre del Pod sospechoso."
+    },
+    {
+      "name": "sensitive_path",
+      "required": true,
+      "description": "El directorio del host montado (ej. /proc, /etc, /var/run/secrets)."
+    }
+  ]
+}

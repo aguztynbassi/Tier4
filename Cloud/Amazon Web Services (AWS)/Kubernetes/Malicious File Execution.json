@@ -1,0 +1,39 @@
+{
+  "name": "K8s: Malicious File Execution",
+  "description": "Detecta la creación o ejecución de archivos maliciosos dentro de un contenedor en un clúster de EKS. GuardDuty utiliza inteligencia de amenazas para identificar binarios de minería de criptomonedas, shells reversas, exploits o herramientas de post-explotación que han sido descargados o ejecutados en el sistema de archivos del contenedor.",
+  "tags": [
+    "kubernetes",
+    "cloud_security",
+    "execution",
+    "malware",
+    "eks",
+    "compromised_container",
+    "T1204.002",
+    "T1587.001"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡INTRUSIÓN DETECTADA: Malware en contenedor! GuardDuty ha detectado el hallazgo **Execution:Kubernetes/MaliciousFile** en el clúster **{cluster_name}**. Se identificó el archivo malicioso **{file_path}** en el pod **{pod_name}**. Bajo la técnica de **Malicious File** (**MITRE ATT&CK T1204.002**), esto confirma la ejecución de código no autorizado.",
+      "continueOnError": false,
+      "systemCapability": "analyzeKubernetesEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "cluster_name",
+      "required": true,
+      "description": "El nombre del clúster de EKS afectado."
+    },
+    {
+      "name": "pod_name",
+      "required": true,
+      "description": "El nombre del Pod donde se detectó el archivo."
+    },
+    {
+      "name": "file_path",
+      "required": true,
+      "description": "La ruta completa del archivo malicioso detectado."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "name": "K8s: Privileged Container Started",
+  "description": "Detecta el despliegue de un pod que contiene uno o más contenedores privilegiados. Los contenedores privilegiados pueden acceder a todos los dispositivos del host, eludir las restricciones del kernel y escapar fácilmente del aislamiento para comprometer el nodo subyacente y, potencialmente, todo el clúster.",
+  "tags": [
+    "kubernetes",
+    "cloud_security",
+    "privilege_escalation",
+    "container_escape",
+    "privileged_container",
+    "T1611",
+    "T1068"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ALERTA DE ESCALADA: Contenedor Privilegiado en K8s! GuardDuty ha detectado el hallazgo **PrivilegeEscalation:Kubernetes/PrivilegedContainer** en el clúster **{cluster_name}**. El pod **{pod_name}** se está ejecutando sin restricciones de seguridad. Bajo la técnica de **Escape to Host** (**MITRE ATT&CK T1548.001**), esto facilita un compromiso total del nodo.",
+      "continueOnError": false,
+      "systemCapability": "analyzeKubernetesEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "cluster_name",
+      "required": true,
+      "description": "El nombre del clúster de EKS afectado."
+    },
+    {
+      "name": "pod_name",
+      "required": true,
+      "description": "El nombre del Pod privilegiado."
+    },
+    {
+      "name": "container_image",
+      "required": false,
+      "description": "La imagen utilizada por el contenedor privilegiado."
+    }
+  ]
+}

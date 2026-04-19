@@ -1,0 +1,39 @@
+{
+  "name": "K8s: RDP Brute Force Attack",
+  "description": "Detecta una ráfaga de intentos fallidos de autenticación RDP dirigidos a un recurso del clúster (nodo o pod). Este comportamiento es consistente con ataques de fuerza bruta destinados a comprometer credenciales de Windows para obtener acceso inicial, persistencia o realizar movimientos laterales dentro de la red del clúster.",
+  "tags": [
+    "kubernetes",
+    "cloud_security",
+    "unauthorized_access",
+    "brute_force",
+    "rdp",
+    "initial_access",
+    "T1110.001",
+    "windows_security"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡ATAQUE EN CURSO: Fuerza bruta RDP en K8s! GuardDuty ha detectado el hallazgo **UnauthorizedAccess:Kubernetes/RDPBruteForce** en el clúster **{cluster_name}**. Se han registrado múltiples intentos de acceso fallidos desde la IP **{source_ip}**. Bajo la técnica de **Brute Force: Password Cracking** (**MITRE ATT&CK T1110.001**), este es un intento crítico de compromiso de identidad.",
+      "continueOnError": false,
+      "systemCapability": "analyzeKubernetesEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "cluster_name",
+      "required": true,
+      "description": "El nombre del clúster de EKS afectado."
+    },
+    {
+      "name": "source_ip",
+      "required": true,
+      "description": "La dirección IP externa que origina el ataque de fuerza bruta."
+    },
+    {
+      "name": "target_resource",
+      "required": false,
+      "description": "El recurso específico (IP del Pod o ID del Nodo) que está siendo atacado."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "name": "K8s: SSH Brute Force Attack Detected",
+  "description": "Detecta múltiples intentos fallidos de inicio de sesión SSH contra un recurso del clúster (nodo o pod). Este comportamiento es típico de herramientas automatizadas que prueban credenciales comunes para ganar acceso administrativo al sistema operativo subyacente.",
+  "tags": [
+    "kubernetes",
+    "cloud_security",
+    "unauthorized_access",
+    "brute_force",
+    "ssh",
+    "initial_access",
+    "T1110.001"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡INTENTO DE INTRUSIÓN: Fuerza bruta SSH en K8s! GuardDuty ha detectado el hallazgo **UnauthorizedAccess:Kubernetes/SSHBruteForce** en el clúster **{cluster_name}**. Intentos detectados desde la IP **{source_ip}**. Bajo la técnica de **Brute Force** (**MITRE ATT&CK T1110.001**), este es un riesgo inminente de compromiso de nodo.",
+      "continueOnError": false,
+      "systemCapability": "analyzeKubernetesEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "cluster_name",
+      "required": true,
+      "description": "El nombre del clúster de EKS afectado."
+    },
+    {
+      "name": "source_ip",
+      "required": true,
+      "description": "La dirección IP externa que está realizando el ataque."
+    },
+    {
+      "name": "target_resource",
+      "required": false,
+      "description": "El ID de la instancia EC2 (nodo) o IP del Pod objetivo."
+    }
+  ]
+}

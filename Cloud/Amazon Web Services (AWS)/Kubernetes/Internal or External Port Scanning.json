@@ -1,0 +1,39 @@
+{
+  "name": "K8s: Internal or External Port Scanning",
+  "description": "Detecta ráfagas de intentos de conexión a múltiples puertos en una o varias direcciones IP desde un contenedor. Este comportamiento es característico de herramientas de reconocimiento como nmap o scripts personalizados que buscan identificar servicios activos, bases de datos o endpoints de API vulnerables para realizar movimientos laterales o exfiltración de datos.",
+  "tags": [
+    "kubernetes",
+    "cloud_security",
+    "reconnaissance",
+    "port_scanning",
+    "lateral_movement",
+    "eks",
+    "T1046",
+    "network_discovery"
+  ],
+  "prompts": [
+    {
+      "id": "1",
+      "prompt": "¡RECONOCIMIENTO DE RED: Escaneo de puertos en K8s! GuardDuty ha detectado el hallazgo **Recon:Kubernetes/Portscan** en el clúster **{cluster_name}**. El pod **{pod_name}** está escaneando la red. Bajo la técnica de **Network Service Scanning** (**MITRE ATT&CK T1046**), esto indica una fase activa de descubrimiento de objetivos.",
+      "continueOnError": false,
+      "systemCapability": "analyzeKubernetesEvent"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "cluster_name",
+      "required": true,
+      "description": "El nombre del clúster de EKS afectado."
+    },
+    {
+      "name": "pod_name",
+      "required": true,
+      "description": "El nombre del Pod atacante."
+    },
+    {
+      "name": "target_ips",
+      "required": false,
+      "description": "Lista de IPs que están siendo escaneadas."
+    }
+  ]
+}
